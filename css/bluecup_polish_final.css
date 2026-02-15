@@ -1,0 +1,142 @@
+/* ====================================================================== */
+/* BLUECUP · POLISH FINAL CSS v1                                          */
+/* Nebula Pro + Base Madeira · Mobile‑First Vertical Hard‑Lock            */
+/* Drops in at END of your <style> to beautify + slim things              */
+/* ====================================================================== */
+
+:root{
+  --ink:#e9ecff;
+  --glass:rgba(0,0,0,.38);
+  --glass-2:rgba(0,0,0,.55);
+  --stroke:rgba(255,255,255,.12);
+  --stroke-soft:rgba(255,255,255,.08);
+  --glow:rgba(27,228,255,.22);
+  --glow-strong:rgba(27,228,255,.55);
+  --radius:16px;
+  --radius-sm:12px;
+  --tap:48px;
+}
+
+/* full background continuity */
+html,body{
+  background:
+    radial-gradient(1200px 800px at 10% -10%, rgba(240,0,255,.14), transparent 55%),
+    radial-gradient(1200px 900px at 90% -12%, rgba(0,255,255,.14), transparent 58%),
+    radial-gradient(900px 700px at 50% 120%, rgba(92,255,157,.12), transparent 55%),
+    var(--bg, #050510);
+  background-attachment: fixed;
+}
+
+/* ---------- universal buttons ---------- */
+button, .btn, .appBtn{
+  border:1px solid var(--stroke);
+  background:var(--glass);
+  color:var(--ink);
+  border-radius:var(--radius-sm);
+  padding:.55rem .8rem;
+  min-height:var(--tap); min-width:var(--tap);
+  font-weight:650; letter-spacing:.2px;
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:.45rem;
+  transition:transform .12s ease,border-color .12s ease,background .12s ease,box-shadow .12s ease,opacity .12s ease;
+  box-shadow:0 6px 16px rgba(0,0,0,.45),0 0 0 0 transparent;
+}
+button:hover,.btn:hover,.appBtn:hover{
+  transform:translateY(-1px);
+  border-color:var(--glow-strong);
+  background:rgba(27,228,255,.10);
+  box-shadow:0 10px 22px rgba(0,0,0,.55),0 0 0 3px var(--glow);
+}
+button:active,.btn:active,.appBtn:active{ transform:translateY(0); opacity:.9; }
+
+/* primary / accent */
+.btn.primary,.appBtn.primary{
+  border-color:rgba(92,255,157,.75);
+  background:rgba(92,255,157,.12);
+  box-shadow:0 6px 16px rgba(0,0,0,.45),0 0 0 2px rgba(92,255,157,.18);
+}
+.btn.warn{
+  border-color:rgba(255,120,120,.7);
+  background:rgba(255,120,120,.12);
+}
+
+/* ---------- cards ---------- */
+.card, .panel, .db-card, .dbody-card, .appCard{
+  border:1px solid var(--stroke-soft);
+  background:
+    radial-gradient(900px 520px at 0% 0%, rgba(240,0,255,.06), transparent 55%),
+    radial-gradient(820px 520px at 100% 0%, rgba(0,255,255,.06), transparent 55%),
+    var(--glass);
+  border-radius:var(--radius);
+  box-shadow:0 16px 34px rgba(0,0,0,.55);
+}
+
+/* ---------- orb polish (works with #orb, .orb, .cup, etc.) ---------- */
+#orb,.orb,.cup{
+  border-radius:50%;
+  background:
+    radial-gradient(120% 120% at 30% 25%, rgba(255,255,255,.18), transparent 40%),
+    radial-gradient(140% 130% at 70% 20%, rgba(0,255,255,.20), transparent 55%),
+    radial-gradient(120% 140% at 50% 85%, rgba(240,0,255,.18), transparent 60%),
+    conic-gradient(from 180deg, var(--grad-a,#ff00ff), var(--grad-b,#00ffff), var(--grad-a,#ff00ff));
+  box-shadow:
+    0 0 0 2px rgba(255,255,255,.06) inset,
+    0 0 36px rgba(0,255,255,.22),
+    0 0 80px rgba(240,0,255,.22),
+    0 18px 55px rgba(0,0,0,.85);
+  transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+#orb:active,.orb:active,.cup:active{
+  transform:scale(.98);
+  filter:saturate(1.1);
+}
+
+/* ---------- chat message polish ---------- */
+.chat-message, .msg, .bubble{
+  border-radius:14px;
+  border:1px solid var(--stroke-soft);
+  background:rgba(0,0,0,.35);
+  color:var(--ink);
+  box-shadow:0 10px 24px rgba(0,0,0,.45);
+}
+.chat-message .meta, .msg .meta{
+  opacity:.7; font-size:.78rem;
+}
+
+/* ---------- sliders nebula ---------- */
+input[type="range"]{
+  -webkit-appearance:none; appearance:none;
+  width:100%; height:28px; background:transparent; margin:2px 0 8px;
+}
+input[type="range"]::-webkit-slider-runnable-track{
+  height:6px; border-radius:999px;
+  background:linear-gradient(90deg, var(--grad-a,#ff00ff), var(--grad-b,#00ffff));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),0 2px 8px rgba(0,0,0,.6);
+}
+input[type="range"]::-moz-range-track{
+  height:6px; border-radius:999px;
+  background:linear-gradient(90deg, var(--grad-a,#ff00ff), var(--grad-b,#00ffff));
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.10),0 2px 8px rgba(0,0,0,.6);
+}
+input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none;
+  width:22px; height:22px; border-radius:50%;
+  background:var(--bg,#050510);
+  border:2px solid var(--ink);
+  box-shadow:0 0 0 3px rgba(27,228,255,.25),0 6px 14px rgba(0,0,0,.8);
+  transform:translateY(-8px);
+}
+input[type="range"]::-moz-range-thumb{
+  width:22px; height:22px; border-radius:50%;
+  background:var(--bg,#050510);
+  border:2px solid var(--ink);
+  box-shadow:0 0 0 3px rgba(27,228,255,.25),0 6px 14px rgba(0,0,0,.8);
+}
+
+/* ---------- scrollbars subtle ---------- */
+*::-webkit-scrollbar{ height:8px; width:8px; }
+*::-webkit-scrollbar-thumb{
+  background:rgba(255,255,255,.14);
+  border-radius:999px;
+}
+*::-webkit-scrollbar-track{ background:transparent; }

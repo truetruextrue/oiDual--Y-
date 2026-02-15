@@ -1,0 +1,81 @@
+<style id="TEXT_BEAUTY_V3">
+:root{
+  --txt-card: color-mix(in oklab, var(--panel, #0e1220) 92%, black);
+  --txt-bd: color-mix(in oklab, var(--ink, #e8ecf6) 16%, transparent);
+  --txt-shadow: 0 6px 24px rgba(0,0,0,.25), inset 0 0 0 1px var(--txt-bd);
+  --chip-bg: linear-gradient(42deg, var(--grad-a, #7effa1), var(--grad-b, #67e6ff));
+  --chip-ink: #000;
+  --paren-ink: color-mix(in oklab, var(--ink, #e8ecf6) 92%, white);
+}
+
+/* Tipografia base do texto corrido (aplicamos quando detectado bloco .flow-text) */
+.flow-text p{
+  text-wrap: pretty;
+  line-height: 1.65;
+  letter-spacing: .01em;
+  margin: .65rem 0;
+  hyphens: auto;
+}
+
+/* Heading leve detectado por “Titulo:” */
+.flow-text .kv-head{
+  font-weight: 800;
+  letter-spacing:.02em;
+  margin: 1.2rem 0 .4rem;
+}
+
+/* Parênteses → realce sutil */
+.span-paren{
+  padding: .05rem .35rem;
+  border-radius: .55rem;
+  border: 1px solid var(--txt-bd);
+  color: var(--paren-ink);
+  background: color-mix(in oklab, var(--txt-card) 86%, transparent);
+}
+
+/* Chips (colchetes) clicáveis */
+.chip, .chip-btn{
+  display:inline-grid; place-items:center;
+  padding:.25rem .6rem; border-radius:999px;
+  background: var(--chip-bg); color: var(--chip-ink);
+  font-weight: 700; letter-spacing:.02em;
+  box-shadow: 0 2px 10px rgba(0,0,0,.35);
+  cursor: pointer; user-select: none;
+}
+.chip + .chip{ margin-left:.35rem; }
+
+/* Pergunta → card */
+.q-card{
+  background: var(--txt-card);
+  border: 1px solid var(--txt-bd);
+  box-shadow: var(--txt-shadow);
+  border-radius: 14px;
+  padding: .85rem 1rem;
+  margin: .9rem 0;
+  display:grid; grid-template-columns:auto 1fr; gap:.65rem; align-items:start;
+}
+.q-card .q-ico{
+  inline-size:1.65rem; block-size:1.65rem; border-radius:50%;
+  display:grid; place-items:center; font-weight:800; color:#000;
+  background: var(--chip-bg);
+}
+.q-card .q-body{ line-height:1.55; }
+
+/* Overlay de copiar nas listas (usa .list-card do patch anterior) */
+.list-card{ position:relative; }
+.list-card .copy-badge{
+  position:absolute; top:.35rem; right:.35rem;
+  font-size:.8rem; padding:.2rem .45rem; border-radius:999px;
+  background: color-mix(in oklab, #fff 12%, var(--txt-card));
+  border: 1px solid var(--txt-bd);
+  color: var(--ink, #e8ecf6); opacity:.65; transition:.2s; user-select:none;
+}
+.list-card:hover .copy-badge{ opacity:1; }
+
+/* Área que receberá HTML “desescapado” */
+.raw-html-card{
+  background: var(--txt-card); border: 1px dashed var(--txt-bd);
+  border-radius: 14px; padding: .85rem 1rem; margin: .9rem 0;
+}
+.raw-html-card .raw-note{ color: color-mix(in oklab, var(--ink) 62%, transparent); font-size:.85em; margin-bottom:.35rem; }
+</style>
