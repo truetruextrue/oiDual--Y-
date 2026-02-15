@@ -1,0 +1,92 @@
+
+    :root{
+      --grad-a:#ff52e5; --grad-b:#00c5e5;
+      --fg:#f5f7ff; --mut:rgba(245,247,255,.68);
+      --surface:rgba(15,17,32,.50); --surface-strong:rgba(15,17,32,.88);
+      --bd:1px solid rgba(255,255,255,.12);
+      --ok:#39ffb6; --warn:#ffb86b; --err:#ff6b6b;
+      --r:18px; --r2:22px; --shadow:0 14px 40px rgba(0,0,0,.45);
+      --tabsH:74px; --hdrH:64px; --blur:24px; --ease:cubic-bezier(.22,.61,.36,1);
+    }
+    body[data-theme="medium"]{
+      --grad-a:#2c313c; --grad-b:#1f242d; --fg:#f1f2f5; --mut:rgba(241,242,245,.68);
+      --surface:rgba(44,47,56,.40); --surface-strong:rgba(44,47,56,.75);
+      --bd:1px solid rgba(255,255,255,.06); --ok:#68d391; --warn:#f6ad55; --err:#fc8181;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;color:var(--fg);background:linear-gradient(42deg,var(--grad-a),var(--grad-b)) fixed;
+         font:14px/1.45 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial;
+         -webkit-font-smoothing:antialiased; overflow:hidden;}
+    .fx-trans{transition:transform .16s var(--ease), background .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease), color .25s var(--ease), opacity .25s var(--ease)}
+    .fx-lift:hover{transform:translateY(-1px)} .fx-press:active{transform:translateY(0) scale(.98)}
+    .ring:focus-visible{outline:0; box-shadow:0 0 0 4px rgba(255,255,255,.14)}
+    button,.btn,.ib{background:var(--surface); border:var(--bd); color:var(--fg); font-weight:800; border-radius:12px; cursor:pointer; position:relative}
+    .btn{padding:.58rem .9rem; background:linear-gradient(180deg,#11162a,#0b1122)}
+    .btn.prime{background:linear-gradient(90deg,#a66fff,#6db4ff); color:#0b0f14; border-color:transparent}
+    .ripple{position:absolute; inset:0; overflow:hidden; border-radius:inherit}
+    .ripple>i{position:absolute; border-radius:999px; pointer-events:none; transform:translate(-50%,-50%);
+      background:radial-gradient(closest-side, rgba(255,255,255,.35), rgba(255,255,255,0) 70%); animation:ripple .6s var(--ease) forwards}
+    @keyframes ripple{from{opacity:.55; width:0; height:0} to{opacity:0; width:260px; height:260px}}
+    header.mast{position:relative; height:var(--hdrH); z-index:100; display:flex; align-items:center; gap:10px; padding:0 12px;
+      backdrop-filter:blur(var(--blur)) saturate(130%); background:linear-gradient(180deg, rgba(0,0,0,.28), rgba(0,0,0,0))}
+    .ib{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;box-shadow:var(--shadow)}
+    .title{flex:1;text-align:center;line-height:1}
+    .title h1{margin:0;font-size:18px;letter-spacing:.06em;font-weight:900}
+    .title small{display:block;color:var(--mut);letter-spacing:.1em}
+    main{position:relative;height:100%;padding-top:calc(var(--hdrH)+env(safe-area-inset-top));
+         padding-bottom:calc(var(--tabsH)+env(safe-area-inset-bottom)); overflow:hidden}
+    .view{position:absolute; inset:0; padding:12px 14px; overflow:auto; display:none}
+    .view.active{display:block; animation:fade .18s var(--ease)} @keyframes fade{from{opacity:0; transform:translateY(6px)}}
+    .grid{display:grid; gap:12px; max-width:820px; margin:0 auto}
+    .cards{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:12px}
+    @media (max-width:560px){.cards{grid-template-columns:1fr}}
+    .card{background:var(--surface); border:var(--bd); border-radius:var(--r2); box-shadow:var(--shadow); padding:12px; display:flex; gap:10px; align-items:center; position:relative}
+    .ico{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.06);border:var(--bd)}
+    .mut{color:var(--mut); font-size:12px}
+    /* Chat */
+    #v-chat{padding-bottom:110px}
+    .chat-wrap{display:flex; flex-direction:column; gap:10px; max-width:820px; margin:0 auto}
+    .msg{max-width:82%; padding:10px 12px; border-radius:16px; border:var(--bd); background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+         box-shadow:var(--shadow); position:relative}
+    .msg.user{margin-left:auto; background:linear-gradient(180deg, rgba(166,111,255,.18), rgba(109,180,255,.10))}
+    .msg.bot{margin-right:auto; background:linear-gradient(180deg, rgba(0,0,0,.22), rgba(0,0,0,.06))}
+    .msg .meta{display:flex; gap:8px; align-items:center; color:var(--mut); font-size:11px; margin-top:4px}
+    .msg button.play{border:none; background:transparent; padding:0 4px; opacity:.8}
+    .msg button.play:hover{opacity:1}
+    .chat-input{position:fixed; left:10px; right:10px; bottom:calc(var(--tabsH) + 10px + env(safe-area-inset-bottom));
+      display:flex; gap:8px; align-items:center; background:var(--surface-strong); border:var(--bd); border-radius:18px; padding:8px 10px; box-shadow:var(--shadow); z-index:95}
+    .chat-input input{flex:1; background:transparent; border:0; outline:0; color:var(--fg); font-size:14px}
+    .chat-input .act{display:grid; place-items:center; width:38px; height:38px; border-radius:12px}
+    .chat-empty{opacity:.7; text-align:center; margin-top:12px; font-size:13px}
+    /* Dock and tabbar */
+    .dock{position:fixed; left:10px; right:10px; bottom:calc(var(--tabsH) + 8px + env(safe-area-inset-bottom)); display:flex; gap:8px; flex-wrap:wrap; z-index:80}
+    .badge{display:inline-flex; gap:6px; align-items:center; padding:.38rem .65rem; border:1px solid #ffffff18; background:#0f1428; border-radius:999px; font-weight:800; position:relative}
+    nav.tabbar{position:fixed; left:0; right:0; bottom:env(safe-area-inset-bottom,0); height:var(--tabsH); z-index:90; display:flex; justify-content:center; padding:6px 14px}
+    .tabbar .inner{width:100%; max-width:820px; display:flex; justify-content:space-around; align-items:center; background:var(--surface); border:var(--bd); border-radius:22px; box-shadow:var(--shadow); padding:10px 14px}
+    .tab{flex:1; display:flex; flex-direction:column; align-items:center; gap:6px; color:var(--mut); font-size:11px; font-weight:800; padding:8px; border-radius:14px; cursor:pointer; position:relative}
+    .tab.active{color:var(--fg); background:rgba(255,255,255,.10); box-shadow:0 0 0 2px rgba(255,255,255,.10)}
+    /* Archetype area */
+    .arch-container{position:relative; display:flex; flex-direction:column; align-items:center; gap:8px; justify-content:center; margin-top:24px}
+    .arch-circle{position:relative; width:min(80vw,560px); aspect-ratio:1/1; border-radius:50%; overflow:hidden;
+      border:1px solid rgba(255,255,255,.12); background:radial-gradient(60% 60% at 50% 50%, rgba(0,255,255,.1), rgba(255,255,255,.02)); box-shadow:var(--shadow); transition:transform .18s var(--ease)}
+    .arch-circle.pressed{transform:scale(.96)}
+    .arch-circle iframe{position:absolute; inset:0; width:100%; height:100%; border:0; background:transparent}
+    .arch-switcher{display:flex; gap:6px; align-items:center; background:rgba(15,17,32,.7); border:1px solid rgba(255,255,255,.12); border-radius:999px; padding:4px 8px; backdrop-filter:blur(8px); z-index:70}
+    .arch-switcher select{appearance:none; background:rgba(255,255,255,.06); color:var(--fg); border:1px solid rgba(255,255,255,.12); border-radius:999px; padding:4px 8px; font-size:12px}
+    .arch-menu{position:absolute; top:calc(100% + 10px); left:50%; transform:translateX(-50%); display:none; gap:10px; z-index:70}
+    .arch-menu.show{display:flex}
+    .arch-menu button{border:var(--bd); background:var(--surface); border-radius:12px; padding:6px 8px; display:flex; flex-direction:column; align-items:center; color:var(--fg); font-size:10px}
+    .arch-msg{margin-top:8px; padding:6px 10px; border-radius:12px; background:rgba(15,17,32,.72); color:var(--fg); font-size:13px; max-width:90%; text-align:center; pointer-events:none; opacity:0; transition:opacity .3s ease}
+    .arch-msg.show{opacity:1}
+    .audio-ripple{position:absolute; inset:0; border-radius:50%; pointer-events:auto; z-index:70}
+    #v-home #unoCard{display:none}
+    /* Invert icons for dark themes */
+    header.mast img,
+    .tabbar img,
+    .card .ico img,
+    .session .tools img,
+    .dock img{
+      filter:invert(1) brightness(1.2);
+    }
+  
