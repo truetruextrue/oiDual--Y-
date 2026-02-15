@@ -685,13 +685,15 @@ window.FusionModule.init();`;
                 'ADU': { name: 'Adega Urbana', url: 'https://kodux78k.github.io/oiDual-AdegaUrbana/' },
                 '78F': { name: 'Iframe 78frames', url: 'https://kodux78k.github.io/oiDual-78F/' },
 'KXTZ': { name: 'KxT KBllX', url: 'https://kodux78k.github.io/oiDual-KxT/' },
-'KXDI': { name: 'KxT DI', url: 'https://kodux78k.github.io/oiDual-KxT-di/' },
-'DH0':  { name: 'DH0', url: 'https://kodux78k.github.io/oiDual-H0/' },
+'U87': { name: 'UNo87', url: 'https://kodux78k.github.io/oiDual--Y-/HubUno-87-m0d.html/' },
+'U32': { name: 'UNo32', url: 'https://kodux78k.github.io/oiDual--Y-/HubUno-32-m0d.html/' },
+                'HUF': { name: 'UNoFamily', url: 'https://kodux78k.github.io/oiDual--Y-/UnoFamily-m0d.html/' },
+                'DH0':  { name: 'DH0', url: 'https://kodux78k.github.io/oiDual-H0/' },
 'START': { name: 'starT', url: 'https://kodux78k.github.io/oiDual-starT/' },
 '78K':  { name: '78K ID HOME', url: 'https://kodux78k.github.io/oiDual-idHome/' },
 'NAV':  { name: 'NAV', url: 'https://kodux78k.github.io/oiDual-infodek/' },
 'VWRDI':  { name: 'VwR-di', url: 'https://kodux78k.github.io/oiDual-VwR-di/' },
-'DH10':  { name: 'H0-di', url: 'https://kodux78k.github.io/oiDual-H0/DH0-10.html/' },
+'DH10':  { name: 'H0-di', url: 'https://kodux78k.github.io/oiDual-H0/' },
                 'RESET': 'RESET'
             };
 
