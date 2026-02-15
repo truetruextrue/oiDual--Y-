@@ -45,8 +45,8 @@ body {
   background: var(--bg-deep);
   color: var(--text-main);
   font-family: var(--font-ui);
-  height: 100dvh;
-  overflow: hidden;
+  height: 100vh;
+  overflow: auto;
   display: flex;
   flex-direction: column;
 }
