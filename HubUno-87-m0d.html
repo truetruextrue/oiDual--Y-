@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <title>HUB UNO — Unified Minimal Glow + Revo</title>
+  <meta name="theme-color" content="#0b0f14">
+  
+<link rel="stylesheet" href="kodux78k.github.io/oiDual--Y-/css/HubUno-87.css">  
+
+</head>
+<body>
+  <!-- ===== Header ===== -->
+  <header class="mast">
+    <button class="ib fx-trans fx-press ring" id="btnBack" title="Voltar" aria-label="Voltar">
+    <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/arrow-left.svg" alt="Voltar" width="20" height="20" onerror="this.onerror=null;this.src='icons/arrow-left.svg'">
+      <span class="ripple"></span>
+    </button>
+    <div class="title">
+      <h1>HUB UNO — Monólito + Revo</h1>
+      <small>Dual · Trinity · Minimal · Ultra</small>
+    </div>
+    <button class="ib fx-trans fx-press ring" id="btnDownload" title="Baixar HTML">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/download.svg" alt="Download" width="20" height="20" onerror="this.onerror=null;this.src='icons/download.svg'">
+      <span class="ripple"></span>
+    </button>
+    <button class="ib fx-trans fx-press ring" id="btnHelp" title="Ajuda / Atalhos">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/question-circle.svg" alt="Ajuda" width="20" height="20" onerror="this.onerror=null;this.src='icons/question-circle.svg'">
+      <span class="ripple"></span>
+    </button>
+    <button class="ib fx-trans fx-press ring" id="btnBrain" title="Brain">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/brain.svg" alt="Brain" width="20" height="20" onerror="this.onerror=null;this.src='icons/brain.svg'">
+      <span class="ripple"></span>
+    </button>
+  </header>
+
+  <!-- Âncora para sessões abertas quando o usuário optar por abrir dentro da página -->
+  <section id="sessionsAnchor"></section>
+
+  <!-- Container para fundo personalizado (imagem ou vídeo).  Será preenchido via JS quando o usuário escolher
+       um tema customizado.  Fica no início do body para garantir que fique abaixo de todos os conteúdos -->
+  <div id="custom-bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none"></div>
+
+  <!-- ===== Views ===== -->
+  <main>
+    <!-- HOME -->
+    <section id="v-home" class="view active">
+      <div class="grid">
+          <!-- Saudação / chamada para cadastro. Visível quando o usuário precisa ativar a Dual Infodose ou quando já houver nome salvo -->
+          <div id="greetingCard" class="card fx-trans fx-lift" style="display:none">
+            <div id="greetingMsg" style="font-weight:800"></div>
+          </div>
+        <div id="unoCard" class="card fx-trans fx-lift" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%">
+            <div>
+              <div style="font-weight:900;letter-spacing:.08em">UNO • foco e velocidade</div>
+              <div class="mut">Monólito: Apps embutidos + Viewer + Dock + Atalhos</div>
+            </div>
+            <div class="ico">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/bolt.svg" alt="Energia" width="24" height="24" onerror="this.onerror=null;this.src='icons/bolt.svg'">
+            </div>
+          </div>
+        </div>
+        <!-- Área de Arquétipos incorporada -->
+        <div class="arch-container">
+          <!-- Mover o seletor de arquétipos para fora do círculo.  Ele ficará acima
+               da bolinha e seguirá o layout vertical da arch-container. -->
+          <div class="arch-switcher">
+            <button class="btn fx-trans fx-press ring" id="arch-prev" title="Anterior">
+              <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/chevron-left.svg" alt="Anterior" width="16" height="16" onerror="this.onerror=null;this.src='icons/chevron-left.svg'">
+            </button>
+            <select id="arch-select" title="Escolher arquétipo"></select>
+            <button class="btn fx-trans fx-press ring" id="arch-next" title="Próximo">
+              <img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/chevron-right.svg" alt="Próximo" width="16" height="16" onerror="this.onerror=null;this.src='icons/chevron-right.svg'">
+            </button>
+          </div>
+          <div class="arch-circle">
+            <div id="arch-fadeCover"></div>
+            <div class="arch-dotlogo" title="arquétipo ativo"></div>
+            <!-- Mensagens exibidas dentro da bolinha de arquétipo -->
+            <div id="archMsg" class="arch-msg"></div>
+            <!-- Camada de ripple auditivo inserida dentro do círculo -->
+            <div id="audioRipple" class="audio-ripple"></div>
+            <iframe id="arch-frame" title="Archetype Core" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+          </div>
+        </div>
+        <div class="cards">
+          <button class="card fx-trans fx-press ring" data-nav="apps">
+            <div class="ico">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/folder-open.svg" alt="Apps" width="24" height="24" onerror="this.onerror=null;this.src='icons/folder-open.svg'">
+            </div>
+            <div>
+              <div style="font-weight:800">Apps</div>
+              <div class="mut" id="homeAppsStatus">–</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="stack">
+            <div class="ico">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/layer-group.svg" alt="Stack" width="24" height="24" onerror="this.onerror=null;this.src='icons/layer-group.svg'">
+            </div>
+            <div>
+              <div style="font-weight:800">Stack</div>
+              <div class="mut" id="homeStackStatus">–</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="brain">
+            <div class="ico">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/user.svg" alt="Usuário" width="24" height="24" onerror="this.onerror=null;this.src='icons/user.svg'">
+            </div>
+            <div>
+              <div style="font-weight:800">Usuário</div>
+              <div class="mut" id="homeUserStatus">–</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="home">
+            <div class="ico">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/yin-yang.svg" alt="Arquétipo" width="24" height="24" onerror="this.onerror=null;this.src='icons/yin-yang.svg'">
+            </div>
+            <div>
+              <div style="font-weight:800">Arquétipo</div>
+              <div class="mut" id="homeArchStatus">–</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPS -->
+    <section id="v-apps" class="view">
+      <div class="grid">
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div class="grid" style="gap:8px">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <!-- Removemos a busca e o sort. Agora apenas a opção de abrir dentro e o botão para mostrar locais -->
+              <label class="mut" style="display:inline-flex;gap:6px;align-items:center">
+                <input id="openInside" type="checkbox" checked=""> abrir dentro
+              </label>
+              <button id="btnToggleLocal" class="btn fx-trans fx-press ring">Mostrar Locais<span class="ripple"></span></button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <!-- Aceita arquivos .json além de HTML/TXT para permitir upload de catálogos personalizados -->
+              <input id="fileLocal" type="file" accept=".html,.htm,.txt,.json" multiple="" class="input ring">
+              <button id="btnImport" class="btn fx-trans fx-press ring">Adicionar Locais<span class="ripple"></span></button>
+              <button id="btnExport" class="btn fx-trans fx-press ring">Exportar Locais<span class="ripple"></span></button>
+              <button id="btnClear" class="btn fx-trans fx-press ring">Limpar Locais<span class="ripple"></span></button>
+            </div>
+            <div id="appsCount" class="mut">—</div>
+          </div>
+        </div>
+        <div id="appsWrap" class="apps-wrap"></div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="v-stack" class="view">
+      <div class="grid">
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800; display:flex; align-items:center; gap:8px">
+            Sessões
+            <button id="btnCloseAll" class="btn fx-trans fx-press ring" title="Fechar todas">Fechar todas<span class="ripple"></span></button>
+          </div>
+          <div class="mut">Reabra rápido pelo dock abaixo.</div>
+        </div>
+        <div id="stackWrap" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- BRAIN -->
+    <section id="v-brain" class="view">
+      <div class="grid">
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800">Usuário</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input id="userName" class="input ring" placeholder="Seu nome">
+            <button id="saveName" class="btn prime fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800">OpenRouter</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <select id="model" class="input ring" style="max-width:260px"></select>
+            <input id="sk" class="input ring" placeholder="sk-or-v1-…">
+            <button id="saveSK" class="btn fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+
+          <!-- Tema e Fundo personalizados -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Tema &amp; Fundo</div>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:12px">
+              <label style="display:flex;align-items:center;gap:8px">
+                <span>Escolha o tema:</span>
+                <select id="themeSelect" class="input ring" style="max-width:200px">
+                  <option value="default">Padrão (colorido)</option>
+                  <option value="medium">Cinza médio (tecnológico)</option>
+                  <option value="custom">Personalizado (sua imagem/vídeo)</option>
+                </select>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px">
+                <span>Fundo personalizado:</span>
+                <input id="bgUpload" type="file" accept="image/*,video/*" class="input ring" style="max-width:260px">
+              </label>
+              <div class="mut" style="font-size:11px">Envie uma imagem ou vídeo para usar como plano de fundo quando o tema personalizado estiver selecionado. O fundo será salvo automaticamente no seu navegador.</div>
+            </div>
+          </div>
+
+          <!-- CSS personalizado -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">CSS Personalizado</div>
+            <div style="margin-top:8px">
+              <textarea id="cssCustom" class="input ring" placeholder="CSS personalizado..." rows="4"></textarea>
+              <div style="margin-top:6px; display:flex; gap:8px; flex-wrap:wrap">
+                <button id="applyCSS" class="btn fx-trans fx-press ring">Aplicar CSS<span class="ripple"></span></button>
+                <button id="clearCSS" class="btn fx-trans fx-press ring">Limpar CSS<span class="ripple"></span></button>
+                <button id="downloadCSS" class="btn fx-trans fx-press ring">Baixar CSS<span class="ripple"></span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vozes dos Arquétipos -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800; margin-bottom:6px">Vozes dos Arquétipos</div>
+            <!-- A lista de arquétipos (vozes) não possui interações
+                 para o usuário final, portanto a escondemos para
+                 simplificar a interface. -->
+            <div id="voicesWrap" style="display:none"></div>
+
+          <!-- Preferências de Performance -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Performance</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <select id="selPerf" class="input ring" style="max-width:200px">
+                <option value="low">Low</option>
+                <option value="med">Med</option>
+                <option value="high">High</option>
+              </select>
+              <button id="btnPerf" class="btn fx-trans fx-press ring">Aplicar<span class="ripple"></span></button>
+            </div>
+          </div>
+
+          <!-- Preferências de Voz -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Voz</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <select id="selVoice" class="input ring" style="max-width:200px">
+                <option>Nova</option>
+                <option>Elysha</option>
+                <option>Kaion</option>
+                <option>Serena</option>
+              </select>
+              <button id="btnVoice" class="btn fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+            </div>
+          </div>
+
+          <!-- Logs -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Logs</div>
+            <div class="mut" style="font-size:11px;margin-bottom:4px">Eventos recentes</div>
+            <pre id="logs" style="margin:0;font:12px/1.4 ui-monospace,monospace;color:var(--mut);max-height:140px;overflow:auto"></pre>
+          </div>
+          </div>
+      </div>
+    </section>
+
+    <!-- REVO (Infodose Hub Ultra) -->
+    <section id="v-revo" class="view">
+      <!-- Carrega o conteúdo do Hub Ultra modificado via iframe.  O arquivo index-100_revo_mod.html está no mesmo diretório -->
+      <iframe id="revoEmbed" src="index-100_revo_mod.html" allow="autoplay; clipboard-read; clipboard-write; picture-in-picture; fullscreen" referrerpolicy="no-referrer"></iframe>
+    </section>
+  </main>
+
+  <!-- DOCK & TABS -->
+  <div id="dock" class="dock"></div>
+  <nav class="tabbar">
+    <div class="inner">
+      <button class="tab fx-trans fx-press ring active" data-nav="home">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/house.svg" alt="Home" width="18" height="18" onerror="this.onerror=null;this.src='icons/house.svg'">
+        <span style="display:none">Home</span><span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="apps">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/folder-open.svg" alt="Apps" width="18" height="18" onerror="this.onerror=null;this.src='icons/folder-open.svg'">
+        <span style="display:none">Apps</span><span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="stack">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/layer-group.svg" alt="Stack" width="18" height="18" onerror="this.onerror=null;this.src='icons/layer-group.svg'">
+        <span style="display:none">Stack</span><span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="brain">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/brain.svg" alt="Brain" width="18" height="18" onerror="this.onerror=null;this.src='icons/brain.svg'">
+        <span style="display:none">Brain</span><span class="ripple"></span>
+      </button>
+      <!-- Botão da nova aba Revo -->
+      <button class="tab fx-trans fx-press ring" data-nav="revo">
+<img src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6/svgs/solid/globe.svg" alt="Revo" width="18" height="18" onerror="this.onerror=null;this.src='icons/globe.svg'">
+        <span style="display:none">Revo</span><span class="ripple"></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HELP MODAL -->
+  <div id="modalHelp" class="modal" aria-hidden="true">
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+        <h3 style="margin:0">Ajuda &amp; Atalhos</h3>
+        <button id="closeHelp" class="btn fx-trans fx-press ring">Fechar<span class="ripple"></span></button>
+      </div>
+      <div class="mut" style="margin-top:8px">Navegue mais rápido:</div>
+      <ul>
+        <li><span class="kbd">g</span> then <span class="kbd">h</span> → Home</li>
+        <li><span class="kbd">g</span> then <span class="kbd">a</span> → Apps</li>
+        <li><span class="kbd">g</span> then <span class="kbd">s</span> → Stack</li>
+        <li><span class="kbd">g</span> then <span class="kbd">b</span> → Brain</li>
+        <li><span class="kbd">g</span> then <span class="kbd">r</span> → Revo</li>
+        <li><span class="kbd">Ctrl / Cmd</span> + <span class="kbd">K</span> → Busca</li>
+        <li><span class="kbd">Ctrl / Cmd</span> + <span class="kbd">S</span> → Baixar este HTML</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Catálogo Embutido (Monólito) ===== -->
+  
+
+  
+
+<script  src="kodux78k.github.io/oiDual--Y-/js/UnoAppsArch-87.js"></script> 
+
+  <script  src="kodux78k.github.io/oiDual--Y-/js/UnoHelpers-87.js"></script> 
+
+<!-- <script  src="kodux78k.github.io/oiDual--Y-/js/HubUno-87.js"></script> -->
+
+
+</body></html>

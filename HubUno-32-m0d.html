@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <title>HUB UNO — Home + Chat</title>
+  <meta name="theme-color" content="#0b0f14">
+  
+<link rel="stylesheet" href="kodux78k.github.io/oiDual--Y-/css/HubUno-32.css">  
+</head>
+<body>
+  <header class="mast">
+    <button class="ib fx-trans fx-press ring" id="btnBack" title="Voltar" aria-label="Voltar">
+      <img src="icons/arrow-left.svg" alt="Voltar" width="20" height="20">
+      <span class="ripple"></span>
+    </button>
+    <div class="title"><h1>HUB UNO</h1><small>Dual · Trinity</small></div>
+    <button class="ib fx-trans fx-press ring" id="btnDownload" title="Baixar HTML">
+      <img src="icons/download.svg" alt="Baixar" width="20" height="20">
+      <span class="ripple"></span>
+    </button>
+    <button class="ib fx-trans fx-press ring" id="btnHelp" title="Ajuda / Atalhos">
+      <img src="icons/question.svg" alt="Ajuda" width="20" height="20">
+      <span class="ripple"></span>
+    </button>
+    <button class="ib fx-trans fx-press ring" id="btnBrain" title="Brain">
+      <img src="icons/brain.svg" alt="Brain" width="20" height="20">
+      <span class="ripple"></span>
+    </button>
+  </header>
+  <section id="sessionsAnchor"></section>
+  <div id="custom-bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none"></div>
+  <main>
+    <!-- HOME -->
+    <section id="v-home" class="view active">
+      <div class="grid">
+        <div class="arch-container">
+          <div class="arch-switcher">
+            <button class="btn fx-trans fx-press ring" id="arch-prev" title="Anterior">◀</button>
+            <select id="arch-select" title="Escolher arquétipo"></select>
+            <button class="btn fx-trans fx-press ring" id="arch-next" title="Próximo">▶</button>
+          </div>
+          <div class="arch-circle">
+            <div id="arch-fadeCover"></div>
+            <div id="audioRipple" class="audio-ripple"></div>
+            <iframe id="arch-frame" title="Archetype Core" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe>
+          </div>
+          <div id="archMsg" class="arch-msg"></div>
+          <div id="archMenu" class="arch-menu">
+            <button data-nav="apps"><span>Apps</span></button>
+            <button data-nav="stack"><span>Stack</span></button>
+            <button data-nav="brain"><span>Usuário</span></button>
+            <button data-nav="home"><span>Arquétipo</span></button>
+            <button data-nav="chat"><span>Chat</span></button>
+            <button data-audio="true" id="archAudioBtn"><span>Áudio</span></button>
+          </div>
+        </div>
+        <div class="cards">
+          <button class="card fx-trans fx-press ring" data-nav="apps">
+            <div class="ico"><img src="icons/folder-open.svg" alt="Apps" width="20" height="20"></div>
+            <div><div style="font-weight:800">Apps</div><div class="mut" id="homeAppsStatus">–</div></div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="stack">
+            <div class="ico"><img src="icons/book-open.svg" alt="Stack" width="20" height="20"></div>
+            <div><div style="font-weight:800">Stack</div><div class="mut" id="homeStackStatus">–</div></div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="brain">
+            <div class="ico"><img src="icons/user.svg" alt="Usuário" width="20" height="20"></div>
+            <div><div style="font-weight:800">Usuário</div><div class="mut" id="homeUserStatus">–</div></div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="home">
+            <div class="ico"><img src="icons/yin-yang.svg" alt="Arquétipo" width="20" height="20"></div>
+            <div><div style="font-weight:800">Arquétipo</div><div class="mut" id="homeArchStatus">–</div></div>
+            <span class="ripple"></span>
+          </button>
+        </div>
+      </div>
+    </section>
+    <!-- Apps -->
+    <section id="v-apps" class="view">
+      <div class="grid">
+        <div class="card">Catálogo (simplificado para foco no Chat).</div>
+      </div>
+    </section>
+    <!-- Stack -->
+    <section id="v-stack" class="view">
+      <div class="grid">
+        <div class="card">Sessões aqui.</div>
+        <div id="stackWrap" class="grid"></div>
+      </div>
+    </section>
+    <!-- Brain -->
+    <section id="v-brain" class="view">
+      <div class="grid">
+        <div class="card fx-trans fx-lift">
+          <div style="font-weight:800">Usuário</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input id="userName" class="btn" placeholder="Seu nome" style="flex:1; background:#0f1426; border:var(--bd)">
+            <button id="saveName" class="btn prime fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+        <div class="card fx-trans fx-lift">
+          <div style="font-weight:800">OpenRouter</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <select id="model" class="btn" style="max-width:260px; background:#0f1426; border:var(--bd)"></select>
+            <input id="sk" class="btn" placeholder="sk-or-v1-…" style="flex:1; background:#0f1426; border:var(--bd)">
+            <button id="saveSK" class="btn fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+        <div class="card">
+          <div style="font-weight:800">Logs</div>
+          <pre id="logs" style="margin:0;font:12px/1.4 ui-monospace,monospace;color:var(--mut);max-height:140px;overflow:auto"></pre>
+        </div>
+      </div>
+    </section>
+    <!-- Chat -->
+    <section id="v-chat" class="view">
+      <div class="chat-wrap" id="chatWrap">
+        <div class="chat-empty">Comece uma conversa com seu arquétipo. Toque no ícone de microfone para falar.</div>
+      </div>
+      <div class="chat-input">
+        <button class="act btn fx-trans fx-press ring" id="btnMic" title="Falar">
+          <img src="icons/microphone.svg" alt="Falar" width="20" height="20">
+          <span class="ripple"></span>
+        </button>
+        <input id="chatInput" type="text" placeholder="Digite ou fale com seu arquétipo…">
+        <button class="act btn fx-trans fx-press ring" id="btnSend" title="Enviar">
+          <img src="icons/paper-plane.svg" alt="Enviar" width="20" height="20">
+          <span class="ripple"></span>
+        </button>
+      </div>
+    </section>
+  </main>
+  <div id="dock" class="dock"></div>
+  <nav class="tabbar">
+    <div class="inner">
+      <button class="tab fx-trans fx-press ring active" data-nav="home">
+        <img src="icons/house.svg" alt="Home" width="20" height="20">
+        <span style="display:none">Home</span>
+        <span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="apps">
+        <img src="icons/folder-open.svg" alt="Apps" width="20" height="20">
+        <span style="display:none">Apps</span>
+        <span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="stack">
+        <img src="icons/book-open.svg" alt="Stack" width="20" height="20">
+        <span style="display:none">Stack</span>
+        <span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="chat">
+        <img src="icons/comment-dots.svg" alt="Chat" width="20" height="20">
+        <span style="display:none">Chat</span>
+        <span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="brain">
+        <img src="icons/brain.svg" alt="Brain" width="20" height="20">
+        <span style="display:none">Brain</span>
+        <span class="ripple"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- Apps embed -->
+  
+  
+
+<script  src="kodux78k.github.io/oiDual--Y-/js/HubUno-32.js"></script> 
+
+</body></html>
