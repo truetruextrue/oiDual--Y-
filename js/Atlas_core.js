@@ -80,6 +80,7 @@
     document.addEventListener("DOMContentLoaded", async () => {
 
         await di_.loadModules([
+            "https://kodux78k.github.io/oiDual--Y-/js/di_fusion.js",
             "https://kodux78k.github.io/oiDual--Y-/js/di_state.js",
             "https://kodux78k.github.io/oiDual--Y-/js/di_mood.js",
             "https://kodux78k.github.io/oiDual--Y-/js/di_app.js"
