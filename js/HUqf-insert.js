@@ -1,0 +1,1275 @@
+(function(h,s='#inject-here'){const p=new DOMParser(),c=p.parseFromString(h,'text/html'),f=document.createDocumentFragment(),t=document.querySelector(s)||document.body;Array.from(c.body.childNodes).forEach(n=>f.appendChild(document.importNode(n,true)));t.appendChild(f);Array.from(c.querySelectorAll('script')).forEach(x=>{const n=document.createElement('script');for(const a of x.attributes)n.setAttribute(a.name,a.value);n.textContent=x.textContent;document.body.appendChild(n)})})(`<!DOCTYPE html>
+<html lang="pt-BR" style="--arch-overlay: rgba(64, 158, 255, 0.22);"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+  <title>HUB UNO — PROD (safe)</title>
+  <meta name="theme-color" content="#0b0f14">
+  
+
+
+
+
+
+
+
+
+
+
+
+<!-- PATCH: overlay-css-unify -->
+
+<!-- PATCH: overlay-guardian-css -->
+
+
+
+
+
+
+
+
+
+
+
+<!-- OVERLAY: background-only patch -->
+
+
+
+
+
+  <link rel="manifest" href="./manifest.webmanifest">
+
+
+
+
+
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/Unouno-/css/main387.css"></head>
+<body>
+  <!-- Splash screen displayed on initial load -->
+  
+  <!-- Som do splash: coloque seu arquivo de áudio na pasta especificada e ajuste o caminho abaixo.
+       O som será reproduzido automaticamente quando o splash aparecer. -->
+  <audio id="splashSound" src="Cassettes/Barra Sounds/Suave Underline e Portal.mp3" preload="auto"></audio>
+  <!-- ===== Header ===== -->
+  <header class="mast">
+    <button class="ib fx-trans fx-press ring" id="btnBack" title="Voltar" aria-label="Voltar">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaBack" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <polyline points="15 18 9 12 15 6" stroke="url(#gradNebulaBack)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+</svg><span class="ripple"></span>
+    </button>
+    <div class="title">
+      <h1>HUB UNO</h1>
+      <small>Dual · Trinity</small>
+      <!-- PATCH: Badge indicating 78K is active; hidden by default -->
+      <span id="badge78k" style="display:none;margin-left:8px;font-size:0.75rem;color:#f5f7ff;" title="78K ativo">⚡ 78K ativo</span>
+    </div>
+    <button class="ib fx-trans fx-press ring" id="btnDownload" title="Baixar HTML">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="g1" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M12 3v10" stroke="url(#g1)" stroke-width="2" stroke-linecap="round"></path>
+  <polyline points="7 11 12 16 17 11" stroke="url(#g1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+  <rect x="4" y="18" width="16" height="3" rx="1.5" fill="url(#g1)" opacity=".3"></rect>
+</svg>
+      <span class="ripple"></span>
+    </button>
+    <button class="ib fx-trans fx-press ring" id="btnHelp" title="Ajuda / Atalhos">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="g2" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="10" stroke="url(#g2)" stroke-width="2"></circle>
+  <path d="M9.5 9a2.5 2.5 0 1 1 4.4 1.5c-.6.7-1.4 1-1.9 1.6-.3.3-.5.7-.5 1.4" stroke="url(#g2)" stroke-width="2" stroke-linecap="round"></path>
+  <circle cx="12" cy="18" r="1" fill="url(#g2)"></circle>
+</svg>
+      <span class="ripple"></span>
+    </button>
+    <button class="ib fx-trans fx-press ring" id="btnBrain" title="Brain">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="g3" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M8 6a3 3 0 0 1 6 0 3 3 0 0 1 3 3 3 3 0 0 1 3 3 4 4 0 0 1-4 4H8a4 4 0 0 1-4-4 3 3 0 0 1 3-3 3 3 0 0 1 1-3z" stroke="url(#g3)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+      <span class="ripple"></span>
+    </button>
+  <button class="ib fx-trans fx-press ring" id="btnLS" title="Local Storage" aria-label="Local Storage">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#f5f7ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <ellipse cx="12" cy="5" rx="9" ry="3"></ellipse>
+    <path d="M3 5v7c0 1.7 4 3 9 3s9-1.3 9-3V5"></path>
+    <path d="M3 12c0 1.7 4 3 9 3s9-1.3 9-3"></path>
+  </svg>
+  <span class="ripple"></span>
+</button>
+</header>
+
+  <!-- Âncora para sessões abertas quando o usuário optar por abrir dentro da página -->
+  <section id="sessionsAnchor"></section>
+
+  <!-- Container para fundo personalizado (imagem ou vídeo).  Será preenchido via JS quando o usuário escolher
+       um tema customizado.  Fica no início do body para garantir que fique abaixo de todos os conteúdos -->
+  <div id="custom-bg" style="position:fixed;top:0;left:0;width:100%;height:100%;z-index:-1;overflow:hidden;pointer-events:none"></div>
+
+  <!-- ===== Views ===== -->
+  <main>
+    <!-- HOME -->
+    <section id="v-home" class="view">
+      <div class="grid">
+          <!-- Saudação / chamada para cadastro. Visível quando o usuário precisa ativar a Dual Infodose ou quando já houver nome salvo -->
+          <div id="greetingCard" class="card fx-trans fx-lift" style="display:none">
+            <div id="greetingMsg" style="font-weight:800"></div>
+          </div>
+        <div id="unoCard" class="card fx-trans fx-lift" style="display:none">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;width:100%">
+            <div>
+              <div style="font-weight:900;letter-spacing:.08em">UNO • foco e velocidade</div>
+              <div class="mut">Monólito: Apps embutidos + Viewer + Dock + Atalhos</div>
+            </div>
+            <div class="ico">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="url(#g4)" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="g4" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M13 2L3 14h7l-1 8 10-12h-7l1-8z"></path>
+</svg>
+            </div>
+          </div>
+        </div>
+        <!-- Área de Arquétipos incorporada -->
+        <div class="arch-container">
+          <!-- Mover o seletor de arquétipos para fora do círculo.  Ele ficará acima
+               da bolinha e seguirá o layout vertical da arch-container. -->
+          <div class="arch-switcher">
+            <button class="btn fx-trans fx-press ring" id="arch-prev" title="Anterior">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g5" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <polyline points="15 18 9 12 15 6" stroke="url(#g5)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+</svg>
+            <span class="ripple"></span></button>
+            <select id="arch-select" title="Escolher arquétipo">
+  <option value="./archetypes/atlas.html">atlas.html</option>
+  <option value="./archetypes/nova.html">nova.html</option>
+  <option value="./archetypes/vitalis.html">vitalis.html</option>
+  <option value="./archetypes/pulse.html">pulse.html</option>
+  <option value="./archetypes/artemis.html">artemis.html</option>
+  <option value="./archetypes/serena.html">serena.html</option>
+  <option value="./archetypes/kaos.html">kaos.html</option>
+  <option value="./archetypes/genus.html">genus.html</option>
+  <option value="./archetypes/lumine.html">lumine.html</option>
+  <option value="./archetypes/rhea.html">rhea.html</option>
+  <option value="./archetypes/solus.html">solus.html</option>
+  <option value="./archetypes/aion.html">aion.html</option>
+</select>
+            <button class="btn fx-trans fx-press ring" id="arch-next" title="Próximo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g6" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <polyline points="9 18 15 12 9 6" stroke="url(#g6)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></polyline>
+</svg>
+            <span class="ripple"></span></button>
+          </div>
+          <div class="arch-circle">
+            <div id="arch-fadeCover"></div>
+            <!-- Camada de ripple auditivo fica sobre o conteúdo do círculo -->
+            <div id="audioRipple" class="audio-ripple"></div>
+            <!-- ORB Nebula (WebGL + Partículas) — integrado no HUB -->
+            <div class="orb-wrap" id="orbWrap" aria-label="Orbe Nebula">
+              <canvas id="orb"></canvas>
+              <div class="orb-glow" id="orbGlow"></div>
+              <canvas id="particles"></canvas>
+              <div class="ring"></div>
+              <div class="call" id="orbCall">·</div>
+            </div>
+
+            <iframe id="arch-frame" title="Archetype Core" sandbox="allow-scripts" referrerpolicy="no-referrer" src="./archetypes/atlas.html"></iframe>
+          </div>
+          <!-- Mensagem de feedback aparece fora da bolinha, logo abaixo dela -->
+          <div id="archMsg" class="arch-msg show" style="background: rgba(57, 255, 182, 0.75); color: rgb(11, 15, 20);">Bem-vindo de volta, KODUX. UNO está ao seu lado.</div>
+          <!-- Menu de arquétipos: permite acessar Apps, Stack, Usuário, Revo e Home -->
+          <div id="archMenu" class="arch-menu">
+            <button data-nav="apps">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+  <rect x="14" y="3" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+  <rect x="3" y="14" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+  <rect x="14" y="14" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+</svg><span>Apps</span>
+            <span class="ripple"></span></button>
+            <button data-nav="stack">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="url(#gradNebulaTab)" stroke-width="2" fill="none"></polygon>
+  <polyline points="2 12 12 17 22 12" stroke="url(#gradNebulaTab)" stroke-width="2" fill="none"></polyline>
+  <polyline points="2 17 12 22 22 17" stroke="url(#gradNebulaTab)" stroke-width="2" fill="none"></polyline>
+</svg><span>Stack</span>
+            <span class="ripple"></span></button>
+            <button data-nav="brain">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M8 6a3 3 0 0 1 6 0 3 3 0 0 1 3 3 3 3 0 0 1 3 3 4 4 0 0 1-4 4H8a4 4 0 0 1-4-4 3 3 0 0 1 3-3 3 3 0 0 1 1-3z" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span>Usuário</span>
+            <span class="ripple"></span></button>
+            <button data-nav="home">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M3 10.5L12 3l9 7.5" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M5 10v10h14V10" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span>Arquétipo</span>
+            <span class="ripple"></span></button>
+            <button data-nav="chat">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span>Chat</span>
+            <span class="ripple"></span></button>
+          <button data-audio="true" id="archAudioBtn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g7" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g7)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g7)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+            <span>Áudio</span>
+          <span class="ripple"></span></button>
+          </div>
+        </div><div class="cards">
+          <button class="card fx-trans fx-press ring" data-nav="apps">
+            <div class="ico">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g8" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M3 6h6l2 2h10v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z" stroke="url(#g8)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+            </div>
+            <div>
+              <div style="font-weight:800">Apps</div>
+              <div class="mut" id="homeAppsStatus">15 apps</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="stack">
+            <div class="ico">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="g9" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="url(#g9)" stroke-width="2" fill="none"></polygon>
+  <polyline points="2 12 12 17 22 12" stroke="url(#g9)" stroke-width="2" fill="none"></polyline>
+  <polyline points="2 17 12 22 22 17" stroke="url(#g9)" stroke-width="2" fill="none"></polyline>
+</svg>
+            </div>
+            <div>
+              <div style="font-weight:800">Stack</div>
+              <div class="mut" id="homeStackStatus">0 sessãos</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="brain">
+            <div class="ico">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="g10" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="8" r="4" stroke="url(#g10)" stroke-width="2"></circle>
+  <path d="M4 20a8 5 0 0 1 16 0" stroke="url(#g10)" stroke-width="2" stroke-linecap="round"></path>
+</svg>
+            </div>
+            <div>
+              <div style="font-weight:800">Usuário</div>
+              <div class="mut" id="homeUserStatus">KODUX · padrão</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+          <button class="card fx-trans fx-press ring" data-nav="home">
+            <div class="ico">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g11" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g11)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g11)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+            </div>
+            <div>
+              <div style="font-weight:800">Arquétipo</div>
+              <div class="mut" id="homeArchStatus">atlas</div>
+            </div>
+            <span class="ripple"></span>
+          </button>
+        </div>
+        <!-- Feed de texto da IA -->
+        <div id="iaFeed" aria-live="polite" aria-atomic="false">
+          <div class="status">Toque a bolinha para falar com a IA.</div>
+        </div>
+        
+      </div>
+    </section>
+
+    <!-- APPS -->
+    <section id="v-apps" class="view">
+      <div class="grid">
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div class="grid" style="gap:8px">
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <!-- Removemos a busca e o sort. Agora apenas a opção de abrir dentro e o botão para mostrar locais -->
+              <label class="mut" style="display:inline-flex;gap:6px;align-items:center">
+                <input id="openInside" type="checkbox" checked=""> abrir dentro
+              </label>
+              <button id="btnToggleLocal" class="btn fx-trans fx-press ring">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g12" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M3 6h6l2 2h10v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6z" stroke="url(#g12)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                Mostrar Locais<span class="ripple"></span>
+              </button>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+              <!-- Aceita arquivos .json além de HTML/TXT para permitir upload de catálogos personalizados -->
+              <input id="fileLocal" type="file" accept=".html,.htm,.txt,.json" multiple="" class="input ring">
+              <button id="btnImport" class="btn fx-trans fx-press ring">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g13" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g13)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g13)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                Adicionar Locais<span class="ripple"></span>
+              </button>
+              <button id="btnExport" class="btn fx-trans fx-press ring">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g14" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g14)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g14)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                Exportar Locais<span class="ripple"></span>
+              </button>
+              <button id="btnClear" class="btn fx-trans fx-press ring">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g15" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g15)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g15)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+                Limpar Locais<span class="ripple"></span>
+              </button>
+            </div>
+            <div id="appsCount" class="mut">15 apps</div>
+          </div>
+        </div>
+        <div id="appsWrap" class="apps-wrap"><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Ampara</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g16" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g16)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g16)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%2021s-6-3.5-6-8a4%204%200%200%201%206-3%204%204%200%200%201%206%203c0%204.5-6%208-6%208z%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Serena · Ampara">Serena ·…</div><div class="mut">Acolhimento e suporte emocional.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Arcana</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g17" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g17)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g17)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%203v6M12%2015v6%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%2F%3E%3Cpath%20d%3D%22M19%205l-3%203M5%2019l3-3M5%205l3%203M19%2019l-3-3%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Solus · Arcana">Solus ·…</div><div class="mut">Harmonização energética e meditação.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Brilhare</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g18" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g18)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g18)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M12%202v2M12%2020v2M2%2012h2M20%2012h2M4.9%204.9l1.4%201.4M17.7%2017.7l1.4%201.4M4.9%2019.1l1.4-1.4M17.7%206.3l1.4-1.4%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Lumine · Brilhare">Lumine ·…</div><div class="mut">Inspiração leve e atividades lúdicas.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Cartesius</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g19" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g19)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g19)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M3%2012h18M12%203v18%22%2F%3E%3Cpath%20d%3D%22M5%208c3%202%2011%202%2014%200M5%2016c3-2%2011-2%2014%200%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Atlas · Cartesius">Atlas ·…</div><div class="mut">Planejador estratégico com cronogramas e checklists.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Disruptor</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g20" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g20)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g20)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M4%204l7%207-7%207%22%2F%3E%3Cpath%20d%3D%22M20%204l-7%207%207%207%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Kaos · Disruptor">Kaos ·…</div><div class="mut">Questiona padrões e propõe soluções ousadas.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Evolutia</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g21" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g21)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g21)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M7%2012c0-2.2%201.8-4%204-4%201.2%200%202.3.5%203%201.3M17%2012c0%202.2-1.8%204-4%204-1.2%200-2.3-.5-3-1.3%22%2F%3E%3Cpath%20d%3D%22M3%2012h4M17%2012h4%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Aion · Evolutia">Aion ·…</div><div class="mut">Microações estratégicas e evolução.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Fabricus</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g22" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g22)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g22)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Crect%20x%3D%227%22%20y%3D%227%22%20width%3D%2210%22%20height%3D%2210%22%20rx%3D%222%22%2F%3E%3Cpath%20d%3D%22M7%207l5-3%205%203M17%2017l-5%203-5-3%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Genus · Fabricus">Genus ·…</div><div class="mut">Protótipos e materialização de ideias.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Inspira</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g23" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g23)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g23)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%202v4M12%2018v4M2%2012h4M18%2012h4%22%2F%3E%3Cpath%20d%3D%22M5.6%205.6l2.8%202.8M15.6%2015.6l2.8%202.8M18.4%205.6l-2.8%202.8M8.4%2015.6l-2.8%202.8%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%223%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Nova · Inspira">Nova ·…</div><div class="mut">Criativa que desbloqueia ideias com mapas mentais e exercícios.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Momentum</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g24" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g24)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g24)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2012h4l2-5%204%2010%202-5h6%22%2F%3E%3Cpath%20d%3D%22M13%203l-2%204%203%201-2%204%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Vitalis · Momentum">Vitalis ·…</div><div class="mut">Rotinas físicas, hacks biológicos e motivação.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Naviga</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g25" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g25)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g25)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M3%2012h12%22%2F%3E%3Cpath%20d%3D%22M13%206l6%206-6%206%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Artemis · Naviga">Artemis ·…</div><div class="mut">Explora conhecimentos e rotas de aprendizado.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Outros</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g26" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g26)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g26)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M3%2012h18M12%203v18%22%2F%3E%3Cpath%20d%3D%22M5%208c3%202%2011%202%2014%200M5%2016c3-2%2011-2%2014%200%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Dual_esqueci">Dual_esqueci</div><div class="mut">HTML local</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g27" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g27)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g27)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M3%2012h18M12%203v18%22%2F%3E%3Cpath%20d%3D%22M5%208c3%202%2011%202%2014%200M5%2016c3-2%2011-2%2014%200%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="index_kobllux_voicefix">index_kobllux_voicefix</div><div class="mut">HTML local</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g28" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g28)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g28)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M3%2012h18M12%203v18%22%2F%3E%3Cpath%20d%3D%22M5%208c3%202%2011%202%2014%200M5%2016c3-2%2011-2%2014%200%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="index-100">index-100</div><div class="mut">HTML local</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Raízes</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g29" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g29)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g29)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M12%203v6%22%2F%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%229%22%20r%3D%224%22%2F%3E%3Cpath%20d%3D%22M12%2013v2l-2%202M12%2015l2%202M12%2017v3%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Rhea · Raízes">Rhea ·…</div><div class="mut">Vínculos e memórias emocionais.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div><div class="apps-group"><h3 style="margin: 16px 4px 8px; font-size: 15px; font-weight: 800; color: var(--mut);">Resona</h3><div class="grid"><div class="app-card fx-trans fx-lift"><button class="fav-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g30" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g30)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g30)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button><div class="app-icon"><img alt="" width="24" height="24" src="data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2224%22%20height%3D%2224%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22%2523f5f7ff%22%20stroke-width%3D%222%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%3E%3Cpath%20d%3D%22M2%2012h3l2-4%203%208%202-4h8%22%2F%3E%3Cpath%20d%3D%22M20%208v-3M20%2019v-3%22%2F%3E%3C%2Fsvg%3E"></div><div style="flex: 1 1 0%;"><div class="app-title" title="Pulse · Resona">Pulse ·…</div><div class="mut">Trilhas sonoras e ajuste de som emocional.</div><button class="btn fx-trans fx-press ring">Abrir<span class="ripple"></span></button></div></div></div></div></div>
+      </div>
+    </section>
+
+    <!-- STACK -->
+    <section id="v-stack" class="view">
+      <div class="grid">
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800; display:flex; align-items:center; gap:8px">
+            Sessões
+            <button id="btnCloseAll" class="btn fx-trans fx-press ring" title="Fechar todas">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g31" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g31)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g31)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+              Fechar todas<span class="ripple"></span>
+            </button>
+            <!-- Botão para criar grupos de sessões -->
+            <button id="btnAddGroup" class="btn fx-trans fx-press ring" title="Novo grupo">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g32" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g32)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g32)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+              Novo grupo<span class="ripple"></span>
+            </button>
+            <!-- Botão para enviar um HTML local e abrir como sessão -->
+            <button id="btnStackUpload" class="btn fx-trans fx-press ring" title="Upload HTML">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+
+  <defs>
+    <linearGradient id="g33" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <circle cx="12" cy="12" r="9" stroke="url(#g33)" stroke-width="2"></circle>
+  <path d="M12 7v5l4 2" stroke="url(#g33)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg>
+              Upload HTML<span class="ripple"></span>
+            </button>
+            <input id="stackUpload" type="file" accept=".html,text/html" style="display:none">
+          </div>
+          <div class="mut">Reabra rápido pelo dock abaixo.</div>
+        </div>
+        <!-- Área de grupos e sessões -->
+        <div id="stackWrap" class="grid"></div>
+      </div>
+    </section>
+
+    <!-- BRAIN -->
+    <section id="v-brain" class="view active">
+      <div class="grid">
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800">Usuário</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input id="userName" class="input ring" placeholder="Seu nome">
+            <button id="saveName" class="btn prime fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+        <!-- Configuração do assistente (Dual) -->
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800">Assistente</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+            <input id="assistantName" class="input ring" placeholder="Nome do assistente">
+            <button id="saveAssistant" class="btn prime fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+        <!-- Seleção da voz de boas-vindas -->
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800">Voz do assistente</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <select id="selectVoice" class="input ring" style="max-width:260px"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select>
+            <button id="saveVoice" class="btn fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+        </div>
+        <div class="card fx-trans fx-lift" style="display:block">
+          <div style="font-weight:800">OpenRouter</div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <select id="model" class="input ring" style="max-width:260px"><option value="openrouter/auto">openrouter/auto</option><option value="anthropic/claude-3.5-sonnet">anthropic/claude-3.5-sonnet</option><option value="openai/gpt-4.1-mini">openai/gpt-4.1-mini</option><option value="google/gemini-1.5-pro">google/gemini-1.5-pro</option><option value="meta/llama-3.1-405b-instruct">meta/llama-3.1-405b-instruct</option><option value="mistral/mistral-large-latest">mistral/mistral-large-latest</option></select>
+            <input id="sk" class="input ring" placeholder="sk-or-v1-…">
+            <button id="saveSK" class="btn fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+          </div>
+
+          <!-- Modelo personalizado e treino -->
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <input id="customModel" class="input ring" placeholder="Modelo personalizado (ex: openai/gpt-4-custom)" style="flex:1">
+            <button id="addModel" class="btn fx-trans fx-press ring">Adicionar Modelo<span class="ripple"></span></button>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;margin-top:6px;flex-wrap:wrap">
+            <input id="trainingFile" type="file" accept=".json,.txt,.dxt" class="input ring" style="max-width:260px">
+            <span class="mut" style="font-size:11px">Treinamento (DXT)</span>
+          </div>
+        </div>
+
+          <!-- Tema e Fundo personalizados -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Tema &amp; Fundo</div>
+            <div style="margin-top:8px;display:flex;flex-direction:column;gap:12px">
+              <label style="display:flex;align-items:center;gap:8px">
+                <span>Escolha o tema:</span>
+                <select id="themeSelect" class="input ring" style="max-width:200px">
+                  <option value="default">Padrão (colorido)</option>
+                  <option value="medium">Cinza médio (tecnológico)</option>
+                  <option value="custom">Personalizado (sua imagem/vídeo)</option>
+                </select>
+              </label>
+              <label style="display:flex;align-items:center;gap:8px">
+                <span>Fundo personalizado:</span>
+                <input id="bgUpload" type="file" accept="image/*,video/*" class="input ring" style="max-width:260px">
+              </label>
+              <div class="mut" style="font-size:11px">Envie uma imagem ou vídeo para usar como plano de fundo quando o tema personalizado estiver selecionado. O fundo será salvo automaticamente no seu navegador.</div>
+            </div>
+          </div>
+
+          <!-- CSS personalizado -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">CSS Personalizado</div>
+            <div style="margin-top:8px">
+              <textarea id="cssCustom" class="input ring" placeholder="CSS personalizado..." rows="4"></textarea>
+              <div style="margin-top:6px; display:flex; gap:8px; flex-wrap:wrap">
+                <button id="applyCSS" class="btn fx-trans fx-press ring">Aplicar CSS<span class="ripple"></span></button>
+                <button id="clearCSS" class="btn fx-trans fx-press ring">Limpar CSS<span class="ripple"></span></button>
+                <button id="downloadCSS" class="btn fx-trans fx-press ring">Baixar CSS<span class="ripple"></span></button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Vozes dos Arquétipos -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800; margin-bottom:6px">Vozes dos Arquétipos</div>
+            <!-- Área de seleção de voz por arquétipo.  Cada arquétipo possui
+                 um seletor de voz e um botão de teste.  Essa grade será
+                 preenchida dinamicamente pelo código em initVoices(). -->
+            <div id="voicesWrap" style="display:grid; gap:10px"><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Atlas</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Nova</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Vitalis</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Pulse</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Artemis</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Serena</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Kaos</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Genus</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Lumine</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Rhea</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Solus</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div><div style="display: flex; align-items: center; gap: 8px; flex-wrap: wrap;"><span style="min-width: 70px; font-weight: 700;">Aion</span><select class="input ring" style="max-width: 220px;"><option value="Karen">Karen (en-AU)</option><option value="Rocko">Rocko (en-GB)</option><option value="Shelley">Shelley (en-GB)</option><option value="Daniel">Daniel (en-GB)</option><option value="Grandma">Grandma (en-GB)</option><option value="Grandpa">Grandpa (en-GB)</option><option value="Flo">Flo (en-GB)</option><option value="Eddy">Eddy (en-GB)</option><option value="Reed">Reed (en-GB)</option><option value="Sandy">Sandy (en-GB)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Flo">Flo (en-US)</option><option value="Bahh">Bahh (en-US)</option><option value="Albert">Albert (en-US)</option><option value="Fred">Fred (en-US)</option><option value="Jester">Jester (en-US)</option><option value="Organ">Organ (en-US)</option><option value="Cellos">Cellos (en-US)</option><option value="Zarvox">Zarvox (en-US)</option><option value="Rocko">Rocko (en-US)</option><option value="Shelley">Shelley (en-US)</option><option value="Superstar">Superstar (en-US)</option><option value="Grandma">Grandma (en-US)</option><option value="Eddy">Eddy (en-US)</option><option value="Bells">Bells (en-US)</option><option value="Grandpa">Grandpa (en-US)</option><option value="Trinoids">Trinoids (en-US)</option><option value="Kathy">Kathy (en-US)</option><option value="Reed">Reed (en-US)</option><option value="Boing">Boing (en-US)</option><option value="Whisper">Whisper (en-US)</option><option value="Good News">Good News (en-US)</option><option value="Wobble">Wobble (en-US)</option><option value="Bad News">Bad News (en-US)</option><option value="Bolhas">Bolhas (en-US)</option><option value="Samantha">Samantha (en-US)</option><option value="Sandy">Sandy (en-US)</option><option value="Junior">Junior (en-US)</option><option value="Ralph">Ralph (en-US)</option><option value="Tessa">Tessa (en-ZA)</option><option value="Reed">Reed (pt-BR)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Shelley">Shelley (pt-BR)</option><option value="Grandma">Grandma (pt-BR)</option><option value="Grandpa">Grandpa (pt-BR)</option><option value="Rocko">Rocko (pt-BR)</option><option value="Flo">Flo (pt-BR)</option><option value="Sandy">Sandy (pt-BR)</option><option value="Eddy">Eddy (pt-BR)</option><option value="Joana">Joana (pt-PT)</option><option value="Daniel">Daniel (en-GB)</option><option value="Samantha">Samantha (en-US)</option><option value="Luciana">Luciana (pt-BR)</option><option value="Moira">Moira (en-IE)</option><option value="Rishi">Rishi (en-IN)</option><option value="Karen">Karen (en-AU)</option><option value="Joana">Joana (pt-PT)</option><option value="Tessa">Tessa (en-ZA)</option></select><button class="btn fx-trans fx-press ring">Teste<span class="ripple"></span></button></div></div>
+
+          <!-- Preferências de Performance -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Performance</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <select id="selPerf" class="input ring" style="max-width:200px">
+                <option value="low">Low</option>
+                <option value="med">Med</option>
+                <option value="high">High</option>
+              </select>
+              <button id="btnPerf" class="btn fx-trans fx-press ring">Aplicar<span class="ripple"></span></button>
+            </div>
+          </div>
+
+          <!-- Preferências de Voz -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Voz</div>
+            <div style="display:flex;gap:8px;align-items:center;margin-top:6px">
+              <select id="selVoice" class="input ring" style="max-width:200px">
+                <option>Nova</option>
+                <option>Elysha</option>
+                <option>Kaion</option>
+                <option>Serena</option>
+              </select>
+              <button id="btnVoice" class="btn fx-trans fx-press ring">Salvar<span class="ripple"></span></button>
+            </div>
+          </div>
+
+          <!-- Logs -->
+          <div class="card fx-trans fx-lift" style="display:block">
+            <div style="font-weight:800">Logs</div>
+            <div class="mut" style="font-size:11px;margin-bottom:4px">Eventos recentes</div>
+            <pre id="logs" style="margin:0;font:12px/1.4 ui-monospace,monospace;color:var(--mut);max-height:140px;overflow:auto;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere"></pre>
+          </div>
+          </div>
+      </div>
+    </section>
+
+    <!-- CHAT (Dual • Chat) -->
+    <section id="v-chat" class="view">
+  <div class="grid">
+    <div class="card">
+      <div style="font-weight:800;margin-bottom:6px">Pulso em Expansão</div>
+      <div class="chat-pulse" id="chatPulse"></div>
+    </div>
+
+    <div class="card">
+      <div class="chat-wrap">
+        <div id="chatFeed" class="chat-feed" aria-live="polite"></div>
+
+        <div class="chat-composer">
+          <textarea id="chatInput" placeholder="Escreva sua intenção... (Shift+Enter quebra linha)"></textarea>
+          <button id="chatSend" class="btn prime">Enviar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+
+  <!-- DOCK & TABS -->
+  <div id="dock" class="dock"></div>
+  <nav class="tabbar">
+    <div class="inner">
+      <button class="tab fx-trans fx-press ring" data-nav="home">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M3 10.5L12 3l9 7.5" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+  <path d="M5 10v10h14V10" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span style="display:none">Home</span><span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="apps">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <rect x="3" y="3" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+  <rect x="14" y="3" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+  <rect x="3" y="14" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+  <rect x="14" y="14" width="7" height="7" rx="2" stroke="url(#gradNebulaTab)" stroke-width="2"></rect>
+</svg><span style="display:none">Apps</span><span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring" data-nav="stack">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <polygon points="12 2 2 7 12 12 22 7 12 2" stroke="url(#gradNebulaTab)" stroke-width="2" fill="none"></polygon>
+  <polyline points="2 12 12 17 22 12" stroke="url(#gradNebulaTab)" stroke-width="2" fill="none"></polyline>
+  <polyline points="2 17 12 22 22 17" stroke="url(#gradNebulaTab)" stroke-width="2" fill="none"></polyline>
+</svg><span style="display:none">Stack</span><span class="ripple"></span>
+      </button>
+      <button class="tab fx-trans fx-press ring active" data-nav="brain">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M8 6a3 3 0 0 1 6 0 3 3 0 0 1 3 3 3 3 0 0 1 3 3 4 4 0 0 1-4 4H8a4 4 0 0 1-4-4 3 3 0 0 1 3-3 3 3 0 0 1 1-3z" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span style="display:none">Brain</span><span class="ripple"></span>
+      </button>
+      <!-- Botão da nova aba Chat -->
+      <button class="tab fx-trans fx-press ring" data-nav="chat">
+<svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+
+  <defs>
+    <linearGradient id="gradNebulaTab" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M21 15a4 4 0 0 1-4 4H7l-4 4V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v8z" stroke="url(#gradNebulaTab)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span style="display:none">Chat</span><span class="ripple"></span>
+      </button>
+    </div>
+  </nav>
+  <!-- Preview da última mensagem recebida (aparece na home e leva ao chat) -->
+  <div id="msgPreview" style="display: none;"></div>
+
+  <!-- Controles de texto e voz empilhados acima da barra de navegação -->
+  <div id="homeButtons" class="home-btns">
+    <button id="homeTextBtn" class="home-btn"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="gradNebulaPen" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M3 21l3.9-1 11.7-11.7a2.5 2.5 0 0 0-3.5-3.5L3.9 16.5 3 21z" fill="url(#gradNebulaPen)"></path>
+  <path d="M14 6l4 4" stroke="url(#gradNebulaPen)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+</svg><span class="ripple"></span></button>
+    <button id="homeVoiceBtn" class="home-btn"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="url(#gradNebula)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+  <defs>
+    <linearGradient id="gradNebula" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"></path>
+  <path d="M19 11a7 7 0 0 1-14 0"></path>
+  <path d="M12 19v4"></path>
+</svg><span class="ripple"></span></button>
+  </div>
+  <!-- Overlay de input para envio rápido de mensagens na Home -->
+  <div id="homeInputOverlay">
+    <form id="homeInputForm" autocomplete="off">
+      <input id="homeInput" type="text" placeholder="Escreva aqui…" autocomplete="off">
+      <button type="submit"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="gradNebula" x1="0" y1="0" x2="24" y2="24" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFFF"></stop>
+      <stop offset="1" stop-color="#FF00FF"></stop>
+    </linearGradient>
+  </defs>
+  <path d="M4 12L20 4L13 20L11 13L4 12Z" fill="url(#gradNebula)" opacity="0.95"></path>
+</svg><span class="ripple"></span></button>
+    </form>
+  </div>
+
+  <!-- HELP MODAL -->
+  <div id="modalHelp" class="modal" aria-hidden="true">
+    <div class="panel">
+      <div style="display:flex;align-items:center;gap:10px;justify-content:space-between">
+        <h3 style="margin:0">Ajuda &amp; Atalhos</h3>
+        <button id="closeHelp" class="btn fx-trans fx-press ring">Fechar<span class="ripple"></span></button>
+      </div>
+      <div class="mut" style="margin-top:8px">Navegue mais rápido:</div>
+      <ul>
+        <li><span class="kbd">g</span> then <span class="kbd">h</span> → Home</li>
+        <li><span class="kbd">g</span> then <span class="kbd">a</span> → Apps</li>
+        <li><span class="kbd">g</span> then <span class="kbd">s</span> → Stack</li>
+        <li><span class="kbd">g</span> then <span class="kbd">b</span> → Brain</li>
+        <li><span class="kbd">g</span> then <span class="kbd">r</span> → Chat</li>
+        <li><span class="kbd">Ctrl / Cmd</span> + <span class="kbd">K</span> → Busca</li>
+        <li><span class="kbd">Ctrl / Cmd</span> + <span class="kbd">S</span> → Baixar este HTML</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ===== Catálogo Embutido (Monólito) ===== -->
+  
+
+  <div style="position: fixed; right: 14px; bottom: calc(var(--tabsH) + 16px); display: grid; gap: 8px; z-index: 120;"></div><div style="position: fixed; right: 14px; bottom: calc(var(--tabsH) + 16px); display: grid; gap: 8px; z-index: 120;"></div>
+<!-- Local Storage Modal (safe-placed near end of body) -->
+
+
+
+<!-- Script para ocultar o splash screen após o carregamento completo da página -->
+<!-- Script adicional para o Stacks estendido: upload de HTML e criação de grupos -->
+
+
+
+<!-- Script para persistência de grupos/sessões e apps fixados na navegação -->
+
+  <!-- Sons da interface.  Coloque os arquivos em sounds/ui/*.wav conforme distribuídos no pacote UNO_UISounds_Pack_v1. -->
+  <!-- Use o som Back Action como clique principal -->
+  <audio id="sndClick" src="sounds/ui/back-action.wav" preload="auto"></audio>
+  <audio id="sndHover" src="sounds/ui/hover.wav" preload="auto"></audio>
+  <audio id="sndOpen" src="sounds/ui/open.wav" preload="auto"></audio>
+  <audio id="sndClose" src="sounds/ui/close.wav" preload="auto"></audio>
+  <audio id="sndTab" src="sounds/ui/tab.wav" preload="auto"></audio>
+  <audio id="sndNav" src="sounds/ui/nav.wav" preload="auto"></audio>
+  <audio id="sndBack" src="sounds/ui/back.wav" preload="auto"></audio>
+  <audio id="sndDrag" src="sounds/ui/drag.wav" preload="auto"></audio>
+  <audio id="sndSuccess" src="sounds/ui/success.wav" preload="auto"></audio>
+  <audio id="sndWarn" src="sounds/ui/warn.wav" preload="auto"></audio>
+  <audio id="sndError" src="sounds/ui/error.wav" preload="auto"></audio>
+  <!-- Som Tech Pop usado para ações especiais (ex: salvar nome) -->
+  <audio id="sndTechPop" src="sounds/ui/tech-pop.wav" preload="auto"></audio>
+  
+
+
+
+  
+  
+  
+
+
+
+
+
+
+
+
+  <link rel="stylesheet" href="uno_showcase_patch.css">
+  
+
+<div id="lsModal" class="ls-modal" aria-hidden="true">
+  <div class="ls-panel" id="lsPanel">
+    <div class="ls-hdr">
+      <div class="ls-ttl">LocalStorage • Presets, Chaves &amp; Carteira SK</div>
+      <div class="ls-actions">
+        <button id="lsRescan">Re-scan</button>
+        <button id="lsRefresh">Atualizar página</button>
+        <button id="lsExport">Exportar</button>
+        <label for="lsImportFile" style="display:inline-block"><button type="button">Importar</button></label>
+        <input id="lsImportFile" type="file" accept="application/json" hidden="">
+        <button id="lsClearDisabled">Limpar desativados</button>
+        <!-- PATCH: Toggle 78K within LS Panel -->
+        <button id="lsToggle78k" aria-pressed="false" title="Ativar/Desativar estado 78K">⚡ 78K: OFF</button>
+        <button id="lsClose">Fechar</button></div>
+    </div>
+
+    <details class="presets" open="">
+      <summary><strong>Presets (ON/OFF global)</strong></summary>
+      <div class="presets-grid" id="presetsGrid"></div>
+    </details>
+
+    <details class="presets" open="">
+      <summary><strong>Carteira de Chaves OpenRouter</strong></summary>
+      <div class="grid" style="gap:8px">
+        <div class="row" style="border:0;padding:0;gap:8px">
+          <input id="skName" placeholder="Nome curto (ex.: Prod, Dev, Teste)" style="flex:1">
+          <input id="skValue" placeholder="sk-..." style="flex:2">
+          <button id="skAdd">Adicionar</button>
+        </div>
+        <div class="sk-grid" id="skGrid"></div>
+      </div>
+      <div class="meta">A chave <code>dual.keys.openrouter</code> recebe a chave marcada como <b>Ativa</b>. Desativar retira a chave ativa do uso (sem apagar a carteira).</div>
+    </details>
+
+    <details class="presets" open="">
+      <summary><strong>Overlay do Arquétipo</strong> <span class="type" style="opacity:.75">força</span></summary>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+        <div>Força:</div>
+        <div class="seg">
+          <button type="button" class="ls-ov" data-level="0">0</button>
+          <button type="button" class="ls-ov" data-level="-1">−1</button>
+          <button type="button" class="ls-ov" data-level="-2">−2</button>
+        </div>
+        <div class="meta">Salvo em <code>infodose:arch.overlay.level</code> • Default: −1 (12%).</div>
+      </div>
+    </details>
+
+    <div class="meta"><span id="lsCount">—</span> • <span id="lsSize">—</span></div>
+    <div class="list" id="lsList"></div>
+
+    <details class="presets" style="margin-top:10px" open="">
+      <summary><strong>Pré-visualização de Imagens</strong></summary>
+      <div class="img-grid" id="imgGrid"></div>
+    </details>
+  </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- PATCH: overlay-hardlock -->
+
+<!-- PATCH: ls-refresh-binder -->
+
+<!-- PATCH: overlay-guardian-js -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- LSPANEL MASTER FIX v3.7.1 — CSS -->
+
+
+
+<!-- LSPANEL MASTER FIX v3.7.1 — robust injector -->
+
+
+
+
+
+ 
+
+<!-- === UNO • ORB dos Arquétipos (Injected) === --
+
+
+<div id="arch-orb-wrap" aria-label="Orb dos Arquétipos (UNO)">
+  <svg id="arch-orb" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="neo" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#ff52e5"></stop><stop offset="1" stop-color="#00c5e5"></stop>
+      </linearGradient>
+      <linearGradient id="neo2" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#39FFB6"></stop><stop offset="1" stop-color="#00c5e5"></stop>
+      </linearGradient>
+      <radialGradient id="orbGlow" cx="50%" cy="50%" r="60%">
+        <stop offset="0%" stop-color="#00e7ff" stop-opacity=".25"></stop>
+        <stop offset="65%" stop-color="#00e7ff" stop-opacity=".05"></stop>
+        <stop offset="100%" stop-color="#000" stop-opacity="0"></stop>
+      </radialGradient>
+
+      <symbol id="orb-horus" viewBox="0 0 200 200">
+        <circle cx="100" cy="100" r="80" fill="url(#orbGlow)"></circle>
+        <circle cx="100" cy="100" r="78" fill="none" stroke="url(#neo)" stroke-width="3"></circle>
+        <circle cx="100" cy="100" r="68" fill="none" stroke="url(#neo2)" stroke-width="2" opacity=".8"></circle>
+        <g>
+          <path d="M45,100 Q60,80 100,80 Q140,80 155,100 Q140,120 100,120 Q60,120 45,100 Z" fill="none" stroke="url(#neo)" stroke-width="4" stroke-linecap="round"></path>
+          <circle cx="100" cy="100" r="10" fill="url(#neo2)"></circle>
+          <path d="M105,112 q22,14 36,22" fill="none" stroke="#00e7ff" stroke-width="3" stroke-linecap="round" opacity=".8"></path>
+          <path d="M95,112 q-10,10 -14,18" fill="none" stroke="#ff52e5" stroke-width="3" stroke-linecap="round" opacity=".8"></path>
+          <path d="M60,95 q18,-16 40,-16 q22,0 40,16" fill="none" stroke="#39FFB6" stroke-width="2" opacity=".7"></path>
+        </g>
+      </symbol>
+
+      <symbol id="delta-vortex" viewBox="0 0 200 200">
+        <polygon points="100,22 178,160 22,160" fill="none" stroke="url(#neo)" stroke-width="6" stroke-linejoin="round"></polygon>
+        <g stroke="url(#neo2)" fill="none" stroke-width="2" opacity=".95">
+          <path d="M100,42 c40,0 54,30 58,48 c4,20 -6,42 -22,53 c-18,13 -43,13 -62,0 c-16,-11 -26,-33 -22,-53 c4,-18 18,-48 48,-48"></path>
+          <path d="M100,58 c30,0 42,22 45,36 c3,15 -5,31 -17,39 c-14,9 -33,9 -47,0 c-12,-8 -20,-24 -17,-39 c3,-14 14,-36 36,-36" opacity=".9"></path>
+          <path d="M100,74 c20,0 28,14 30,24 c2,10 -3,20 -11,26 c-9,6 -22,6 -31,0 c-8,-6 -13,-16 -11,-26 c2,-10 9,-24 23,-24" opacity=".85"></path>
+        </g>
+        <g>
+          <circle cx="100" cy="100" r="2" fill="#39FFB6"></circle>
+          <animateTransform attributeName="transform" type="rotate" from="0 100 100" to="360 100 100" dur="9s" repeatCount="indefinite"></animateTransform>
+        </g>
+      </symbol>
+
+      <symbol id="icon-atlas" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="30" fill="none" stroke="url(#neo)" stroke-width="6"></circle>
+        <path d="M20 50h60M50 20v60" stroke="url(#neo)" stroke-width="4"></path>
+      </symbol>
+      <symbol id="icon-nova" viewBox="0 0 100 100">
+        <g stroke="url(#neo)" fill="none" stroke-width="5">
+          <circle cx="50" cy="50" r="26"></circle>
+          <path d="M50 10v20M50 70v20M10 50h20M70 50h20M25 25l10 10M75 25l-10 10M25 75l10-10M75 75l-10-10"></path>
+        </g>
+      </symbol>
+      <symbol id="icon-vitalis" viewBox="0 0 100 100">
+        <path d="M20 60 C30 30, 70 30, 80 60" stroke="url(#neo2)" stroke-width="6" fill="none"></path>
+        <circle cx="50" cy="60" r="8" fill="url(#neo2)"></circle>
+      </symbol>
+      <symbol id="icon-pulse" viewBox="0 0 100 100">
+        <polyline points="10,60 30,60 40,30 50,70 60,45 70,60 90,60" fill="none" stroke="url(#neo2)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"></polyline>
+      </symbol>
+      <symbol id="icon-artemis" viewBox="0 0 100 100">
+        <path d="M20 80 Q50 20 80 80" fill="none" stroke="url(#neo)" stroke-width="6"></path>
+        <circle cx="50" cy="28" r="6" fill="url(#neo)"></circle>
+      </symbol>
+      <symbol id="icon-serena" viewBox="0 0 100 100">
+        <path d="M20 60 a30 20 0 1 0 60 0" fill="none" stroke="url(#neo)" stroke-width="6"></path>
+        <circle cx="50" cy="45" r="10" fill="url(#neo)"></circle>
+      </symbol>
+      <symbol id="icon-kaos" viewBox="0 0 100 100">
+        <path d="M20 50 L80 50 M50 20 L50 80" stroke="url(#neo)" stroke-width="6"></path>
+        <path d="M20 20 L80 80 M80 20 L20 80" stroke="#d800d8" stroke-width="4" opacity=".6"></path>
+      </symbol>
+      <symbol id="icon-genus" viewBox="0 0 100 100">
+        <rect x="22" y="22" width="56" height="56" fill="none" stroke="url(#neo)" stroke-width="6" rx="8"></rect>
+        <circle cx="50" cy="50" r="10" fill="url(#neo)"></circle>
+      </symbol>
+      <symbol id="icon-lumine" viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="22" fill="none" stroke="url(#neo)" stroke-width="6"></circle>
+        <path d="M50 12v10M50 78v10M12 50h10M78 50h10M24 24l7 7M76 24l-7 7M24 76l7-7M76 76l-7-7" stroke="url(#neo)" stroke-width="4"></path>
+      </symbol>
+      <symbol id="icon-solus" viewBox="0 0 100 100">
+        <path d="M20 60 C35 30, 65 30, 80 60" fill="none" stroke="url(#neo)" stroke-width="6"></path>
+        <path d="M30 55 Q50 30 70 55" fill="none" stroke="url(#neo)" stroke-width="4" opacity=".7"></path>
+      </symbol>
+      <symbol id="icon-aion" viewBox="0 0 100 100">
+        <path d="M20 70 L50 30 L80 70 Z" fill="none" stroke="url(#neo)" stroke-width="6"></path>
+        <path d="M35 60 L50 40 L65 60 Z" fill="none" stroke="url(#neo)" stroke-width="4" opacity=".6"></path>
+      </symbol>
+      <symbol id="icon-rhea" viewBox="0 0 100 100">
+        <path d="M30 70 C30 50, 70 50, 70 70" stroke="url(#neo2)" stroke-width="6" fill="none"></path>
+        <circle cx="50" cy="45" r="9" fill="url(#neo2)"></circle>
+      </symbol>
+    </defs>
+
+    <use href="#orb-horus"></use>
+    <g opacity=".28"><use href="#delta-vortex"></use></g>
+    <g id="arch-icon-holder" transform="translate(100,100) translate(-50,-50)">
+      <use id="arch-icon" href="#icon-atlas"></use>
+    </g>
+  </svg>
+</div>
+
+
+<!-- === /UNO • ORB dos Arquétipos (Injected) === -->
+
+
+  <!-- PATCH: 78K toggle for LS Panel and badge -->
+  
+
+  
+
+
+
+
+
+
+
+<div id="lsFabLayer"><button id="lsFabRefresh" class="ls-fab" title="Recarregar"></button><button id="lsFabClose" class="ls-fab" title="Fechar painel"></button></div>
+
+
+
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-0.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-1.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-2.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-3.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-4.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-5.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-6.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-7.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-8.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-9.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-10.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-11.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-12.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-13.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-14.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-15.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-16.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-17.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-18.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-19.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-20.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-21.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-22.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-23.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-24.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-25.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-26.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-27.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-28.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-29.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-30.js"></script>
+<script src="https://kodux78k.github.io/Unouno-/js/m0ds/inline-31.js"></script>
+
+
+
+</body></html>`);
