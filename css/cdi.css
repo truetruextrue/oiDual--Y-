@@ -1,0 +1,71 @@
+/* ==== GENUS IMAGE CARD ==== */
+
+.prop-card {
+    position: relative;
+    min-width: 240px;
+    height: 180px;
+    border-radius: 18px;
+    overflow: hidden;
+    background: var(--glass-panel);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    cursor: pointer;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.prop-card:hover {
+    transform: scale(1.04);
+    box-shadow: 0 20px 40px rgba(0,242,255,0.25);
+}
+
+.prop-image {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.75) contrast(1.05);
+}
+
+.prop-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to top,
+        rgba(0,0,0,0.8),
+        rgba(0,0,0,0.3),
+        rgba(0,0,0,0)
+    );
+}
+
+.prop-content {
+    position: absolute;
+    bottom: 12px;
+    left: 14px;
+    right: 14px;
+    color: white;
+    z-index: 2;
+}
+
+.prop-title {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.prop-price {
+    font-size: 15px;
+    font-weight: 800;
+    color: var(--primary);
+}
+
+.prop-image::after {
+    content:"";
+    position:absolute;
+    top:-40px;
+    right:-40px;
+    width:120px;
+    height:120px;
+    background: radial-gradient(circle, var(--primary), transparent 70%);
+    filter: blur(40px);
+    opacity:0.4;
+}
