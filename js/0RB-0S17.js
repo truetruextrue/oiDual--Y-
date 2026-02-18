@@ -687,7 +687,7 @@ window.FusionModule.init();`;
 'KXTZ': { name: 'KxT KBllX', url: 'https://kodux78k.github.io/oiDual-KxT/' },
 'U87': { name: 'UNo87', url: 'https://kodux78k.github.io/oiDual--Y-/HubUno-87-m0d.html/' },
 'U32': { name: 'UNo32', url: 'https://kodux78k.github.io/oiDual--Y-/HubUno-32-m0d.html/' },
-                'HUF': { name: 'UNoFamily', url: 'https://kodux78k.github.io/oiDual--Y-/UnoFamily-m0d.html/' },
+                'CDI': { name: 'CORRETORA DUALINFODOSE', url: 'https://kodux78k.github.io/oiDual--Y-/main/blob/corretoraDual-app-m0d.html/' },
                 'DH0':  { name: 'DH0', url: 'https://kodux78k.github.io/oiDual-H0/' },
 'START': { name: 'starT', url: 'https://kodux78k.github.io/oiDual-starT/' },
 '78K':  { name: '78K ID HOME', url: 'https://kodux78k.github.io/oiDual-idHome/' },
