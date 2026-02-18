@@ -1,0 +1,133 @@
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #1b0032, #050010);
+  color: #f8f4ff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  text-align: center;
+  padding: 32px 20px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top, #32104b, #140620);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero h1 {
+  margin-bottom: 8px;
+}
+
+.hero p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.hero-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff63d0, #43e8ff);
+  color: #050010;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+}
+
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #1b0032, #050010);
+  color: #f8f4ff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+    .orb-sys-scope {
+        --orb-cyan: #00f2ff;
+        --orb-purple: #bd00ff;
+        --orb-red: #ff2a6d;
+        --orb-glass: rgba(10, 10, 12, 0.92);
+        --orb-font: 'Segoe UI', system-ui, sans-serif;
+        position: fixed; bottom: 0; left: 0; width: 100%; height: 0; z-index: 9990; font-family: var(--orb-font); pointer-events: none;
+    }
+    .orb-sys-scope * { box-sizing: border-box; outline: none; }
+
+    /* PANEL GLASS */
+    .orb-sys-scope .panel-root {
+        position: absolute; bottom: 140px; left: 50%; transform: translate(-50%, 20px) scale(0.95);
+        width: 90%; max-width: 440px; max-height: 70vh; background: var(--orb-glass);
+        backdrop-filter: blur(25px); border: 1px solid rgba(255,255,255,0.08); border-radius: 24px;
+        box-shadow: 0 50px 100px rgba(0,0,0,0.8); opacity: 0; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        pointer-events: none; display: flex; flex-direction: column; overflow: hidden;
+    }
+    .orb-sys-scope.active .panel-root { opacity: 1; transform: translate(-50%, 0) scale(1); pointer-events: auto; }
+
+    /* LIST & ITEMS */
+    .orb-sys-scope .p-body { padding: 20px; overflow-y: auto; flex: 1; }
+    .orb-item { 
+        background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); 
+        border-radius: 16px; margin-bottom: 12px; padding: 12px; transition: 0.3s; cursor: grab;
+    }
+    .orb-item:hover { border-color: var(--orb-cyan); background: rgba(255,255,255,0.05); }
+    .orb-item-name { font-size: 11px; font-weight: 800; color: #fff; letter-spacing: 1px; display:flex; align-items:center; gap:8px; }
+
+    /* TRIGGER & CORE */
+    .orb-trigger {
+        position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+        width: 80px; height: 80px; cursor: pointer; pointer-events: auto; z-index: 100;
+        display: flex; justify-content: center; align-items: center; transition: 0.3s;
+    }
+    .orb-trigger.drag-over { transform: translateX(-50%) scale(1.3); }
+    .orb-trigger.drag-over .orb-core { background: var(--orb-red) !important; box-shadow: 0 0 30px var(--orb-red) !important; }
+
+    .orb-core { width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #fff; z-index: 2; transition: 0.3s; }
+    .orb-ring { position: absolute; width: 60px; height: 60px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--orb-cyan); border-bottom-color: var(--orb-purple); animation: orb-spin 3s linear infinite; }
+    @keyframes orb-spin { to { transform: rotate(360deg); } }
+
+.hero {
+  text-align: center;
+  padding: 32px 20px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top, #32104b, #140620);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero h1 {
+  margin-bottom: 8px;
+}
+
+.hero p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.hero-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff63d0, #43e8ff);
+  color: #050010;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+}
+/* TRIGGER & CORE */
+    .orb-trigger {
+        position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+        width: 80px; height: 80px; cursor: pointer; pointer-events: auto; z-index: 100;
+        display: flex; justify-content: center; align-items: center; transition: 0.3s;
+    }
+    .orb-trigger.drag-over { transform: translateX(-50%) scale(1.3); }
+    .orb-trigger.drag-over .orb-core { background: var(--orb-red) !important; box-shadow: 0 0 30px var(--orb-red) !important; }
+
+    .orb-core { width: 12px; height: 12px; background: #fff; border-radius: 50%; box-shadow: 0 0 20px #fff; z-index: 2; transition: 0.3s; }
+    .orb-ring { position: absolute; width: 60px; height: 60px; border-radius: 50%; border: 2px solid transparent; border-top-color: var(--orb-cyan); border-bottom-color: var(--orb-purple); }
+    @keyframes orb-spin { to { transform: rotate(360deg); } }
