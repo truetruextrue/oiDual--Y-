@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>DUAL V4 VISION | KODUX OS</title>
+    <!-- Atlas, Nova, Vitalis, Pulse, Artemis, Serena, Kaos, Genus, Lumine, Solus, Rhea, Aion -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Orbitron:wght@500;700&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    
+<link rel="stylesheet" href=". https://kodux78k.github.io/oiDual--Y-/css/corretoraDual.css"></head>
+<body id="mainBody">
+
+<!-- VIEW: DASHBOARD (HOME) -->
+<div id="view-home" class="view-section active vision-stack">
+    
+    <!-- HEADER -->
+    <header class="vision-header">
+        <div class="vision-brand" id="infodose-title">DUAL<span>V4</span></div>
+        <div class="vision-user-badge">
+            <span class="user-name" id="user-display">KODUX</span>
+            <div class="vision-user" id="user-avatar">K</div>
+        </div>
+    </header>
+
+    <!-- METRICS CARD (ATLAS/VITALIS) -->
+    <div class="glass-card" onclick="di_haptic()">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span class="metric-label">VGV MENSAL (SOROCABA)</span>
+            <span class="metric-label" style="color:var(--primary)" id="current-model">...</span>
+        </div>
+        <div class="metric-row">
+            <span class="metric-huge">R$ 14.8M</span>
+        </div>
+        <div style="margin-top:10px; height:4px; background:rgba(255,255,255,0.1); border-radius:2px;">
+            <div style="width:85%; height:100%; background:var(--primary); box-shadow:0 0 10px var(--primary);"></div>
+        </div>
+    </div>
+
+    <!-- AI AGENT BOX (ARTEMIS / NOVA) -->
+    <div class="glass-card" style="border-left: 4px solid var(--secondary);">
+        <div style="display:flex; gap:12px; align-items:center;">
+            <div class="ai-orb"></div>
+            <div style="flex:1">
+                <h4 style="font-size:13px; font-weight:800; letter-spacing: 0.5px;">ARTEMIS INTELLIGENCE</h4>
+                <p id="ai-status" style="font-size:11px; opacity:0.7; line-height: 1.4; margin-top: 4px;">Analisando leads cristalizados...</p>
+            </div>
+        </div>
+        <!-- Manual Insight Trigger -->
+        <button onclick="di_generateInsight()" style="margin-top:12px; width:100%; background:rgba(255,255,255,0.1); border:none; color:white; padding:8px; border-radius:8px; font-size:11px; cursor:pointer;">
+            <i class="fa-solid fa-wand-magic-sparkles"></i> Gerar Insight
+        </button>
+    </div>
+
+    <!-- ACTION BUTTONS (PULSE) -->
+    <div class="action-grid">
+        <div class="btn-glass" onclick="di_navTo('listings')">
+            <i class="fa-solid fa-building"></i>
+            <span>Imóveis</span>
+        </div>
+        <div class="btn-glass" onclick="di_toggleSolar()">
+            <i class="fa-solid fa-sun" id="solar-icon"></i>
+            <span>Modo</span>
+        </div>
+    </div>
+
+    <!-- GENUS PROPERTIES -->
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-top: 10px;">
+        <span class="metric-label">Oportunidades Sorocaba</span>
+        <i class="fa-solid fa-ellipsis" style="opacity:0.4"></i>
+    </div>
+    <div class="horizontal-scroll" id="prop-list">
+        <!-- Rendered by JS -->
+    </div>
+
+    <!-- TICKER ARCHETYPES -->
+    <div class="ticker" style="font-size:8px; opacity:0.3; letter-spacing:3px; text-align:center; margin-top:20px;">
+        ATLAS • NOVA • VITALIS • PULSE • ARTEMIS • SERENA • KAOS • GENUS • LUMINE • SOLUS • RHEA • AION
+    </div>
+
+</div>
+
+<!-- VIEW: LISTINGS (SEARCH) -->
+<div id="view-listings" class="view-section vision-stack">
+    <header class="vision-header">
+        <div class="vision-brand">BUSCA<span>GENUS</span></div>
+    </header>
+    
+    <div style="display:flex; gap:10px; margin-bottom:15px;">
+        <input type="text" placeholder="Buscar em Sorocaba..." style="flex:1; background:var(--glass-panel); border:1px solid var(--glass-border); padding:12px; border-radius:12px; color:var(--text-main); backdrop-filter:blur(10px);">
+        <button class="btn-glass" style="padding:12px; width:50px;"><i class="fa-solid fa-filter"></i></button>
+    </div>
+
+    <div class="list-stack" id="full-prop-list">
+        <!-- Rendered via JS -->
+    </div>
+</div>
+
+<!-- VIEW: CRM (PIPELINE) -->
+<div id="view-crm" class="view-section vision-stack">
+    <header class="vision-header">
+        <div class="vision-brand">FLUXO<span>SOLUS</span></div>
+    </header>
+    <div class="glass-card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+            <span class="metric-label">LEADS ATIVOS</span>
+            <span class="metric-delta" style="color:var(--success)">+5 Hoje</span>
+        </div>
+        <div class="list-stack" id="crm-list">
+            <!-- Rendered via JS -->
+        </div>
+    </div>
+</div>
+
+<!-- VIEW: SETTINGS (CONFIG) -->
+<div id="view-settings" class="view-section vision-stack">
+    <header class="vision-header">
+        <div class="vision-brand">CONFIG<span>KODUX</span></div>
+    </header>
+    
+    <div class="glass-card">
+        <h4 style="margin-bottom:10px; font-size:12px; text-transform:uppercase; opacity:0.7;">Conexão Neural (API)</h4>
+        <input type="password" id="input-api-key" placeholder="OpenRouter API Key (sk-...)" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:10px; border-radius:8px; color:white; margin-bottom:10px;">
+        <input type="text" id="input-model" placeholder="Modelo (ex: google/gemini-2.0-flash-001)" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:10px; border-radius:8px; color:white; margin-bottom:10px;">
+        <button onclick="di_saveConfig()" class="btn-glass" style="width:100%; padding:10px;">Salvar Conexão</button>
+    </div>
+
+    <div class="glass-card" style="margin-top:15px;">
+        <h4 style="margin-bottom:10px; font-size:12px; text-transform:uppercase; opacity:0.7;">Identidade</h4>
+        <input type="text" id="input-user-name" placeholder="Nome de Usuário" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:10px; border-radius:8px; color:white; margin-bottom:10px;">
+        <input type="text" id="input-infodose" placeholder="Nome da Infodose" style="width:100%; background:rgba(0,0,0,0.3); border:1px solid var(--glass-border); padding:10px; border-radius:8px; color:white; margin-bottom:10px;">
+        <button onclick="di_saveIdentity()" class="btn-glass" style="width:100%; padding:10px;">Atualizar Identidade</button>
+    </div>
+</div>
+
+<!-- NAVIGATION BAR -->
+<nav class="bottom-nav">
+    <i class="fa-solid fa-layer-group nav-icon active" onclick="di_navTo('home', this)"></i>
+    <i class="fa-solid fa-magnifying-glass-location nav-icon" onclick="di_navTo('listings', this)"></i>
+    <div style="width:44px; height:44px; background:var(--primary); border-radius:50%; margin-top:-22px; display:flex; align-items:center; justify-content:center; color:#000; box-shadow:0 10px 20px rgba(0,242,255,0.4); cursor:pointer;" onclick="di_generateInsight(true)">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+    </div>
+    <i class="fa-solid fa-users-viewfinder nav-icon" onclick="di_navTo('crm', this)"></i>
+    <i class="fa-solid fa-gear nav-icon" onclick="di_navTo('settings', this)"></i>
+</nav>
+
+
+
+
+
+
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/js/corretoraDual.js"></script></body></html>
