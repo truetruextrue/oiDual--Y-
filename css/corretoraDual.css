@@ -1,0 +1,159 @@
+
+        /* CORE SYSTEM STYLES - NEBULA VISION THEME */
+        :root {
+            --bg-deep: #050811;
+            --glass-panel: rgba(20, 20, 30, 0.4);
+            --glass-border: rgba(255, 255, 255, 0.15);
+            --glass-highlight: rgba(255, 255, 255, 0.05);
+            --primary: #00f2ff;
+            --secondary: #bd00ff;
+            --accent: #ffffff;
+            --text-main: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.6);
+            --blur-amt: 30px;
+            --success: #00ff9d;
+            --danger: #ff4b6b;
+        }
+
+        /* SOLAR MODES OVERRIDE */
+        body.solar-day {
+            --bg-deep: #f0f4f8;
+            --glass-panel: rgba(255, 255, 255, 0.7);
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --text-main: #1a1a1a;
+            --text-muted: #555;
+            background: radial-gradient(circle at 50% -20%, #e0f2fe 0%, #f0f9ff 60%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
+        
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background: 
+                radial-gradient(circle at 50% -20%, #2a0045 0%, transparent 60%),
+                radial-gradient(circle at 100% 50%, #003645 0%, transparent 50%),
+                radial-gradient(circle at 0% 80%, #1a0b2e 0%, transparent 50%),
+                #000000;
+            padding-bottom: 100px;
+            transition: background 0.8s ease;
+        }
+
+        /* FIXED: Vision Stack Layout & Animation */
+        .vision-stack {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 480px;
+            margin: 0 auto;
+            /* Removed conflicting opacity/animation here */
+        }
+
+        /* VIEW CONTAINER LOGIC FIXED */
+        .view-section { 
+            display: none; 
+            opacity: 0; 
+        }
+        
+        .view-section.active { 
+            display: flex; /* Force Flex to maintain Layout */
+            flex-direction: column; /* Ensure vertical stack */
+            animation: fadeIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+        }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        /* HEADER */
+        .vision-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            margin-bottom: 10px;
+        }
+        .vision-brand { font-family: 'Orbitron'; font-size: 18px; letter-spacing: 2px; }
+        .vision-brand span { color: var(--primary); text-shadow: 0 0 15px var(--primary); }
+        .vision-user-badge { display: flex; align-items: center; gap: 10px; }
+        .user-name { font-size: 12px; font-weight: 600; opacity: 0.8; }
+        .vision-user { width: 36px; height: 36px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 50%; box-shadow: 0 0 10px rgba(0,242,255,0.3); overflow: hidden; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 14px; color: #fff; }
+
+        /* GLASS CARDS */
+        .glass-card {
+            background: var(--glass-panel);
+            backdrop-filter: blur(var(--blur-amt));
+            -webkit-backdrop-filter: blur(var(--blur-amt));
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: all 0.3s ease;
+        }
+        .glass-card:active { transform: scale(0.98); }
+
+        /* METRICS */
+        .metric-row { display: flex; align-items: baseline; gap: 8px; }
+        .metric-huge { font-size: 38px; font-weight: 800; letter-spacing: -1px; background: linear-gradient(90deg, var(--text-main), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .metric-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+        /* ACTIONS */
+        .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .btn-glass {
+            background: var(--glass-panel); border: 1px solid var(--glass-border);
+            color: var(--text-main); padding: 18px; border-radius: 20px; font-weight: 600;
+            display: flex; flex-direction: column; align-items: center; gap: 8px;
+            cursor: pointer; backdrop-filter: blur(10px); transition: 0.2s;
+        }
+        .btn-glass:hover { background: rgba(255,255,255,0.1); }
+        .btn-glass:active { transform: scale(0.98); }
+        .btn-glass i { font-size: 20px; color: var(--primary); }
+
+        /* BOTTOM NAV */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(10, 10, 15, 0.85);
+            backdrop-filter: blur(40px); border: 1px solid var(--glass-border);
+            border-radius: 50px; padding: 10px 24px;
+            display: flex; gap: 32px; z-index: 100;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+        }
+        .nav-icon { font-size: 22px; color: var(--text-muted); transition: 0.3s; cursor: pointer; }
+        .nav-icon.active { color: var(--primary); transform: translateY(-3px); text-shadow: 0 0 10px var(--primary); }
+
+        /* STATUS ORB */
+        .ai-orb {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, var(--primary), var(--secondary));
+            filter: blur(10px); animation: pulse 3s infinite ease-in-out;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+        
+        /* SCROLL HORIZONTAL */
+        .horizontal-scroll { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        .prop-card { min-width: 220px; height: 280px; border-radius: 20px; position: relative; overflow: hidden; border: 1px solid var(--glass-border); flex-shrink: 0; background: #000; }
+        .prop-img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: opacity 0.3s; }
+        .prop-card:hover .prop-img { opacity: 1; transform: scale(1.05); }
+        .prop-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px; background: linear-gradient(0deg, #000, transparent); pointer-events: none; }
+
+        /* LIST VIEW (VERTICAL) */
+        .list-stack { display: flex; flex-direction: column; gap: 12px; }
+        .list-item { display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: var(--glass-panel); border: 1px solid var(--glass-border); }
+        .list-thumb { width: 60px; height: 60px; border-radius: 12px; object-fit: cover; }
+        .list-content { flex: 1; }
+        .list-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+        .list-meta { font-size: 11px; color: var(--text-muted); }
+        .list-price { font-weight: 700; color: var(--primary); font-size: 13px; }
+
+        /* LOADING SPINNER */
+        .spinner { width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; vertical-align: middle; margin-right: 8px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+    
