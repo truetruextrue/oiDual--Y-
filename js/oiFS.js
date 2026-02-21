@@ -88,7 +88,7 @@ function openApp({ title = 'App', url = 'https://example.com' }) {
 document.getElementById('add').onclick = () => {
   openApp({
     title: 'Sessão ' + (stackWrap.children.length + 1),
-    url: 'https://example.com'
+    url: 'https://kodux78k.github.io/oiDual-diHib/index.html'
   });
 };
 
