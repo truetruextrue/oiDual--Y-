@@ -94,5 +94,5 @@ document.getElementById('add').onclick = () => {
 
 // Abre um inicial
 window.onload = () => {
-  openApp({ title: 'Workspace', url: 'https://example.com' });
+  openApp({ title: 'Workspace', url: 'index.html' });
 };
