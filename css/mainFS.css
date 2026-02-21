@@ -1,0 +1,142 @@
+
+/* ===================== RESET ===================== */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  background: #0b0d10;
+  color: #fff;
+  padding: 20px;
+}
+
+/* ===================== STACK ===================== */
+#stackWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+/* ===================== SESSION CARD ===================== */
+.session {
+  background: #12151b;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(255,255,255,.08);
+  box-shadow: 0 20px 60px rgba(0,0,0,.5);
+  transition: transform .3s ease, opacity .3s ease;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.session.min .frame-shell {
+  display: none;
+}
+
+.session.max {
+  position: fixed;
+  inset: 10px;
+  z-index: 9999;
+  height: calc(100vh - 20px) !important;
+}
+
+/* ===================== HEADER ===================== */
+.session .hdr {
+  height: 42px;
+  background: linear-gradient(180deg, #1a1f2a, #12151b);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+  flex-shrink: 0;
+}
+
+.session .title {
+  font-size: 13px;
+  opacity: .85;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ===================== TOOLS ===================== */
+.tools {
+  display: flex;
+  gap: 6px;
+}
+
+.tools button {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: rgba(255,255,255,.08);
+  color: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tools button:hover {
+  background: rgba(255,255,255,.18);
+}
+
+/* ===================== FRAME SHELL & IFRAME ===================== */
+.frame-shell {
+  position: relative;
+  width: 100%;
+  background: #000;
+}
+
+.session iframe {
+  width: 100%;
+  height: 320px;
+  border: none;
+  background: #000;
+  display: block;
+}
+
+.session.max iframe {
+  height: 100% !important;
+}
+
+.session.max .frame-shell {
+  flex: 1;
+}
+
+/* Alça de Resize */
+.frame-resize {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: 15px;
+  height: 15px;
+  cursor: ns-resize;
+  background: linear-gradient(135deg, transparent 50%, rgba(255,255,255,0.1) 50%);
+}
+
+.session.max .frame-resize {
+  display: none;
+}
+
+/* ===================== ADD BUTTON ===================== */
+#add {
+  margin-bottom: 20px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  background: #4c7cff;
+  color: #fff;
+  cursor: pointer;
+  font-weight: bold;
+}
+
