@@ -1,0 +1,106 @@
+:root {
+  /* Variáveis baseadas no seu tema monólito */
+  --viewer-bd: 1px solid rgba(255, 255, 255, 0.06);
+  --viewer-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+  --viewer-text: #f5f7ff;
+}
+
+/* Base da Janela */
+.session {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: var(--viewer-bd);
+  border-radius: 16px;
+  box-shadow: var(--viewer-shadow);
+  overflow: hidden;
+  position: relative;
+  color: var(--viewer-text);
+  font-family: Inter, system-ui, sans-serif;
+  margin-bottom: 16px; /* Espaço entre as janelas */
+  max-width: 1100px; /* Largura máxima opcional */
+}
+
+/* Cabeçalho */
+.session .hdr {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+  border-bottom: 1px solid #ffffff18;
+}
+
+.session .title {
+  font-weight: 850;
+  max-width: 60%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Botões da Barra */
+.session .tools {
+  margin-left: auto;
+  display: flex;
+  gap: 6px;
+}
+
+.session .btn {
+  background: transparent;
+  border: 0;
+  color: inherit;
+  padding: 8px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.22s ease;
+}
+
+.session .btn:hover {
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.18) inset, 0 8px 22px rgba(0, 0, 0, 0.35);
+}
+
+.session .btn:active {
+  transform: translateY(2px);
+}
+
+/* Área do App (Frame Shell) */
+.frame-shell {
+  position: relative;
+  width: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+.frame-shell > .frame-content {
+  display: block;
+  width: 100%;
+  height: 60vh; /* Altura padrão */
+  min-height: 140px;
+  border: 0;
+  background: #000;
+}
+
+/* Alça de redimensionamento (Resize) */
+.frame-shell > .frame-resize {
+  position: absolute;
+  left: 8px;
+  bottom: 8px;
+  width: 16px;
+  height: 16px;
+  cursor: ns-resize;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  transition: background 0.2s;
+}
+
+.frame-shell > .frame-resize:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+/* Estado Minimizado */
+.session.min .frame-shell {
+  display: none;
+}
