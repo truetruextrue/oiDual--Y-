@@ -1,0 +1,257 @@
+/* ==========================================================================
+   BCB2 ADDON (scoped) — bcb2-addon.css
+   Extracted & namespaced from mainBCB2.css. See original: mainBCB2.css.  [oai_citation:2‡mainBCB2.css](sediment://file_00000000029071f5bd4621f99f82f027)
+   ==========================================================================
+*/
+
+/* --- local design tokens (scoped) --- */
+.bcb2{
+  /* voice defaults (scoped) */
+  --kob-voice-primary:   #00d8d8;
+  --kob-voice-secondary: #d800d8;
+  --kob-voice-accent:    #ffffff;
+  --kob-voice-bg-soft:   rgba(0,216,216,0.08);
+  --kob-voice-glow:      0 0 18px rgba(0,216,216,0.55);
+}
+
+/* -------------------------------------------------------------------------- */
+/*  1) APPS LAUNCHER / APPS UI (scoped)                                        */
+/* Extracted from mainBCB2: .appsCard, .appsToolbar, .appsSearchWrap, etc.      */
+/* -------------------------------------------------------------------------- */
+/* source: mainBCB2.css.  [oai_citation:3‡mainBCB2.css](sediment://file_00000000029071f5bd4621f99f82f027) */
+.bcb2 .appsCard{
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 18px;
+  background:
+    radial-gradient(1200px 700px at 10% -20%, rgba(240,0,255,.10), transparent 55%),
+    radial-gradient(900px 600px at 110% 0%, rgba(0,255,255,.07), transparent 50%),
+    linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+  box-shadow: 0 16px 34px rgba(0,0,0,.55);
+  overflow: hidden;
+}
+
+.bcb2 .appsToolbar{ display:flex; gap:.6rem; align-items:center; margin:.2rem 0 .6rem; flex-wrap:wrap; }
+
+.bcb2 .appsSearchWrap{
+  flex:1; min-width:0; display:flex; align-items:center; gap:.45rem;
+  padding:.55rem .7rem; border-radius:12px;
+  background: rgba(0,0,0,.25);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow: 0 6px 16px rgba(0,0,0,.45) inset;
+}
+.bcb2 .appsSearchIcon{ opacity:.8; font-size:.9rem; }
+.bcb2 .appsSearchWrap input{ width:100%; background:transparent; border:0; outline:none; color:inherit; font-size:.95rem; }
+
+.bcb2 .appsReloadBtn{
+  position:relative; padding:.6rem .9rem; border-radius:12px;
+  font-weight:800; letter-spacing:.04em;
+  border:1px solid rgba(27,228,255,.55);
+  background:
+    radial-gradient(120% 140% at 0% 0%, rgba(27,228,255,.22), transparent 60%),
+    radial-gradient(120% 140% at 100% 100%, rgba(92,255,157,.18), transparent 60%),
+    rgba(255,255,255,.03);
+  color:inherit; cursor:pointer; overflow:hidden;
+  box-shadow:0 8px 22px rgba(0,0,0,.55);
+  transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.bcb2 .appsReloadBtn:hover{ transform:translateY(-1px); border-color: rgba(240,0,255,.7); box-shadow:0 10px 28px rgba(0,0,0,.65); }
+
+.bcb2 .appsReloadGlow{
+  position:absolute; inset:-40%;
+  background: conic-gradient(from 0deg, transparent, rgba(27,228,255,.65), transparent, rgba(240,0,255,.55), transparent);
+  filter: blur(18px); opacity:.35; animation: appsGlow 3.6s linear infinite; pointer-events:none;
+}
+@keyframes appsGlow{ to{ transform:rotate(360deg); } }
+
+.bcb2 .appsGrid{ display:grid; grid-template-columns:1fr; gap:.7rem; }
+
+.bcb2 .appCard{
+  display:flex; gap:.8rem; align-items:center; padding:.85rem; border-radius:16px;
+  background:
+    radial-gradient(120% 120% at 0% 0%, rgba(240,0,255,.07), transparent 60%),
+    radial-gradient(120% 120% at 100% 100%, rgba(0,255,255,.07), transparent 60%),
+    rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 14px 30px rgba(0,0,0,.55);
+}
+.bcb2 .appIcon{
+  width:54px; height:54px; border-radius:14px; flex:0 0 auto;
+  background: rgba(0,0,0,.35);
+  border:1px solid rgba(255,255,255,.10);
+  display:grid; place-items:center; overflow:hidden;
+  box-shadow:0 6px 14px rgba(0,0,0,.6) inset;
+}
+.bcb2 .appIcon img{ width:100%; height:100%; object-fit:cover; }
+
+.bcb2 .appBody{ flex:1; min-width:0; }
+.bcb2 .appTitle{ font-weight:900; font-size:1.02rem; letter-spacing:.02em; }
+.bcb2 .appDesc{ opacity:.8; font-size:.9rem; margin-top:.15rem; display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical; overflow:hidden; }
+.bcb2 .appActions{ display:flex; gap:.45rem; margin-top:.5rem; flex-wrap:wrap; }
+.bcb2 .appBtn{ font-size:.82rem; padding:.45rem .65rem; border-radius:12px; border:1px solid rgba(255,255,255,.14); background:rgba(0,0,0,.25); color:inherit; cursor:pointer; transition:transform .12s ease, border-color .12s ease, background .12s ease; }
+.bcb2 .appBtn:hover{ transform:translateY(-1px); border-color:rgba(27,228,255,.6); background:rgba(27,228,255,.08); }
+.bcb2 .appBtn.primary{ border-color: rgba(92,255,157,.65); background: rgba(92,255,157,.12); }
+
+/* -------------------------------------------------------------------------- */
+/*  2) DEVPANEL / DEV OVERLAY (scoped)                                         */
+/* Extracted from mainBCB2: .devpanel-overlay, .devpanel, .fab-devpanel, etc.  */
+/* -------------------------------------------------------------------------- */
+/* source: mainBCB2.css.  [oai_citation:4‡mainBCB2.css](sediment://file_00000000029071f5bd4621f99f82f027) */
+.bcb2 .devpanel-overlay{
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: none;
+  background: rgba(1,2,10,.88);
+  backdrop-filter: blur(8px);
+  padding: env(safe-area-inset-top) 10px env(safe-area-inset-bottom);
+  transition: opacity .18s ease;
+  pointer-events: none;
+  opacity: 0;
+}
+.bcb2 .devpanel-overlay.show{ display:block; pointer-events:auto; opacity:1; }
+
+.bcb2 .devpanel{
+  width:100%; height:100%;
+  max-width:900px; margin:0 auto;
+  background: rgba(0,0,0,.55);
+  border:1px solid rgba(255,255,255,.10);
+  border-radius:18px;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+}
+.bcb2 .devpanel .devpanel-head{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; background:rgba(0,0,0,.45); border-bottom:1px solid rgba(255,255,255,.08); }
+.bcb2 .devpanel .devpanel-title{ font-weight:800; letter-spacing:.3px; }
+.bcb2 .devpanel .devpanel-body{ flex:1; overflow:auto; padding:10px; }
+
+/* FAB button to open devpanel (scoped) */
+.bcb2 .fab-devpanel{
+  position:fixed; right:14px; bottom:14px;
+  z-index:9999; border-radius:999px; width:56px; height:56px;
+  display:flex; align-items:center; justify-content:center;
+  border:1px solid rgba(255,255,255,.14);
+  background:
+    radial-gradient(120px 120px at 30% 20%, rgba(255,0,255,.35), transparent 55%),
+    radial-gradient(120px 120px at 70% 20%, rgba(0,255,255,.35), transparent 55%),
+    rgba(0,0,0,.6);
+  box-shadow:0 10px 30px rgba(0,0,0,.8);
+  color:inherit; font-size:20px;
+  min-width:44px; min-height:44px;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* dbody components (viewer / panels) */
+.bcb2 .dbody-bar{ display:flex; align-items:center; justify-content:space-between; padding:10px 12px; border-bottom:1px solid rgba(255,255,255,.08); background:rgba(0,0,0,.35); }
+.bcb2 .dbody-title{ font-weight:800; letter-spacing:.3px; }
+.bcb2 .dbody-tabs{ display:flex; gap:6px; padding:8px 10px; overflow-x:auto; white-space:nowrap; border-bottom:1px solid rgba(255,255,255,.06); }
+.bcb2 .dbody-panel{ position:absolute; inset:0; display:none; padding:10px; overflow:auto; }
+.bcb2 .dbody-panel.show{ display:block; }
+.bcb2 .dbody-frame-wrap{ width:100%; height:58vh; border-radius:16px; overflow:hidden; border:1px solid rgba(255,255,255,.10); background:#000; }
+
+/* -------------------------------------------------------------------------- */
+/*  3) MD BLOCKS / CALLOUTS (scoped)                                           */
+/* Extracted from mainBCB2: .md-block, .md-block.arch, .callout, etc.          */
+/* -------------------------------------------------------------------------- */
+/* source: mainBCB2.css.  [oai_citation:5‡mainBCB2.css](sediment://file_00000000029071f5bd4621f99f82f027) */
+.bcb2 .md-block{ position:relative; border-radius:14px; }
+.bcb2 .md-block.arch::before{
+  content:"";
+  position:absolute; inset:0; border-radius:14px;
+  border:1px solid color-mix(in oklab, var(--arch-color, rgba(27,228,255,.7)) 65%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--arch-color, rgba(27,228,255,.7)) 35%, transparent) inset,
+    0 0 18px color-mix(in oklab, var(--arch-color, rgba(27,228,255,.7)) 45%, transparent);
+  pointer-events:none; opacity:.85;
+}
+.bcb2 .md-block-tag{ display:inline-flex; align-items:center; gap:.35rem; font-size:10px; font-weight:900; letter-spacing:.12em; text-transform:uppercase; opacity:.9; margin-bottom:.25rem; }
+.bcb2 .md-block-tag .dot{ width:12px;height:12px;border-radius:999px;display:inline-block; background:color-mix(in oklab, var(--arch-color, #1be4ff) 35%, transparent); border:1px solid color-mix(in oklab, var(--arch-color, #1be4ff) 70%, transparent); box-shadow:0 0 8px color-mix(in oklab, var(--arch-color, #1be4ff) 80%, transparent); }
+
+/* callouts */
+.bcb2 .callout{
+  position:relative; margin:.55rem 0; padding:.8rem .9rem .85rem; border-radius:14px;
+  background: rgba(0,0,0,.22);
+  border:1px solid rgba(255,255,255,.10);
+  box-shadow:0 10px 22px rgba(0,0,0,.45);
+}
+.bcb2 .callout::before{
+  content:""; position:absolute; inset:0; border-radius:14px;
+  border:1px solid color-mix(in oklab, var(--arch-color, rgba(27,228,255,.7)) 65%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--arch-color, rgba(27,228,255,.7)) 35%, transparent) inset,
+    0 0 18px color-mix(in oklab, var(--arch-color, rgba(27,228,255,.7)) 40%, transparent);
+  pointer-events:none; opacity:.9;
+}
+.bcb2 .callout-title{ display:flex; align-items:center; gap:.45rem; font-size:11px; letter-spacing:.12em; font-weight:900; text-transform:uppercase; opacity:.9; margin-bottom:.35rem; }
+.bcb2 .callout-icon{ width:18px; height:18px; border-radius:999px; display:grid; place-items:center; font-size:12px; background: color-mix(in oklab, var(--arch-color, #1be4ff) 20%, transparent); border:1px solid color-mix(in oklab, var(--arch-color, #1be4ff) 45%, transparent); box-shadow:0 0 10px color-mix(in oklab, var(--arch-color, #1be4ff) 60%, transparent); }
+
+.bcb2 .callout.level-2{ margin-left:.7rem; }
+.bcb2 .callout.level-3{ margin-left:1.2rem; }
+.bcb2 .callout.level-4{ margin-left:1.7rem; }
+.bcb2 .callout.level-5{ margin-left:2.2rem; }
+
+/* -------------------------------------------------------------------------- */
+/*  4) VOICE / TTS DOCK (scoped)                                               */
+/* Extracted from mainBCB2: .kob-tts-dock, data-being-read, body[data-voice-*]  */
+/* Note: voice arch variables are scoped under .bcb2 above.                    */
+/* -------------------------------------------------------------------------- */
+/* source: mainBCB2.css.  [oai_citation:6‡mainBCB2.css](sediment://file_00000000029071f5bd4621f99f82f027) */
+.bcb2 .kob-tts-dock{
+  background: var(--kob-voice-bg-soft);
+  box-shadow: var(--kob-voice-glow);
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: .6rem;
+}
+.bcb2 .kob-tts-dock button[data-tts-btn="toggle"]{
+  border: 1px solid var(--kob-voice-primary);
+  color:  var(--kob-voice-accent);
+  background: transparent;
+  padding: .45rem .6rem;
+  border-radius:10px;
+}
+.bcb2 .kob-tts-dock button[data-tts-btn="sel"],
+.bcb2 .kob-tts-dock button[data-tts-btn="stop"]{
+  border: 1px solid rgba(255,255,255,0.16);
+}
+
+/* element flagged as being read */
+.bcb2 [data-being-read="true"]{
+  outline: 1px solid var(--kob-voice-primary);
+  background: var(--kob-voice-bg-soft);
+}
+
+/* Optional: scoped voice-arch overrides (if you add data-voice-arch inside .bcb2) */
+.bcb2 [data-voice-arch="kobllux"]{ --kob-voice-primary:#00d8d8; --kob-voice-secondary:#d800d8; }
+.bcb2 [data-voice-arch="uno"]    { --kob-voice-primary:#ffffff; --kob-voice-secondary:#bbbbbb; }
+.bcb2 [data-voice-arch="minuz"]  { --kob-voice-primary:#FF3366; --kob-voice-secondary:#111111; }
+.bcb2 [data-voice-arch="kodux"]  { --kob-voice-primary:#FF6FB5; --kob-voice-secondary:#5B2C6F; }
+
+/* -------------------------------------------------------------------------- */
+/*  5) MISC / UTILITIES                                                        */
+/* Scrollbars for buttons/rows inside the scoped area                          */
+/* -------------------------------------------------------------------------- */
+/* source: mainBCB2.css.  [oai_citation:7‡mainBCB2.css](sediment://file_00000000029071f5bd4621f99f82f027) */
+.bcb2 .btnRow, .bcb2 .devpanel .icons-row{ scrollbar-width: thin; }
+.bcb2 .btnRow::-webkit-scrollbar, .bcb2 .devpanel .icons-row::-webkit-scrollbar{ height:6px; }
+.bcb2 .btnRow::-webkit-scrollbar-thumb, .bcb2 .devpanel .icons-row::-webkit-scrollbar-thumb{ background:rgba(255,255,255,.18); border-radius:999px; }
+
+/* range inputs (scoped) */
+.bcb2 input[type="range"]{ width:100%; -webkit-appearance:none; appearance:none; height:30px; background:transparent; }
+.bcb2 input[type="range"]::-webkit-slider-runnable-track{
+  height:6px;
+  background:linear-gradient(90deg, var(--nebula-a, #ff00ff), var(--wood, #5CFF9D), var(--nebula-b, #00ffff));
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.12);
+  box-shadow:0 0 12px rgba(0,0,0,.06) inset;
+}
+.bcb2 input[type="range"]::-webkit-slider-thumb{
+  -webkit-appearance:none; appearance:none; width:20px; height:20px; border-radius:999px;
+  background: radial-gradient(circle at 30% 30%, #fff, #ddd 35%, var(--wood, #5CFF9D) 70%);
+  border:1px solid rgba(255,255,255,.05);
+  box-shadow:0 0 0 2px rgba(0,0,0,.05), 0 0 14px rgba(92,255,157,.06);
+  margin-top:-8px;
+}
+
+/* -------------------------------------------------------------------------- */
+/* End of bcb2-addon.css                                                        */
+/* -------------------------------------------------------------------------- */
