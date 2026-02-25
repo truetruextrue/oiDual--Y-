@@ -1,0 +1,117 @@
+:root {
+  --list-bg: color-mix(in oklab, var(--panel, #0e1220) 90%, black);
+  --list-border: color-mix(in oklab, var(--ink, #e8ecf6) 16%, transparent);
+  --list-shadow: 0 6px 24px rgba(0,0,0,.25), inset 0 0 0 1px var(--list-border);
+  --list-radius: 16px;
+  --list-marker-size: 1.65rem;
+  --list-muted: color-mix(in oklab, var(--ink, #e8ecf6) 62%, transparent);
+}
+/* wrapper visual */
+.list-card {
+  background:var(--list-bg);
+  border-radius:var(--list-radius);
+  box-shadow:var(--list-shadow);
+  border:1px solid var(--list-border);
+  padding:clamp(.6rem,.9rem,1rem);
+  margin:.85rem 0;
+}
+.list-card ul, .list-card ol {
+  margin:.25rem 0;
+  padding:0;
+  list-style:none;
+}
+.list-card li {
+  display:grid;
+  grid-template-columns:auto 1fr;
+  gap:.65rem;
+  align-items:start;
+  padding:.35rem .25rem;
+}
+.list-card li > ul, .list-card li > ol {
+  margin-top:.35rem;
+  margin-left:1.85rem;
+}
+/* ========= OL: numeração hierárquica ========= */
+.list-card ol.ol-neo {
+  counter-reset:item;
+}
+.list-card ol.ol-neo li {
+  counter-increment:item;
+}
+.list-card ol.ol-neo li::before {
+  /* hierarquia: 1, 1.1, 1.1.1 */
+  content:counters(item, ".");
+  inline-size:auto;
+  min-inline-size: var(--list-marker-size);
+  block-size: var(--list-marker-size);
+  padding:0 .55rem;
+  display:grid;
+  place-items:center;
+  font-weight:700;
+  font-variant-numeric: tabular-nums;
+  border-radius:12px;
+  background:linear-gradient(42deg, var(--grad-a, #7effa1), var(--grad-b, #67e6ff));
+  color:#000;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+/* reseta contador em sub-listas para formar 1.1, 1.2, etc. */
+.list-card ol.ol-neo ol {
+  counter-reset:item;
+}
+/* ========= UL: bullets padrão (diamante) ========= */
+.list-card ul.ul-neo:not(.style-dash):not([data-bullet="dash"]) > li::before {
+  content:"";
+  inline-size:.9rem;
+  block-size:.9rem;
+  border-radius:8px;
+  background:linear-gradient(42deg, var(--grad-a, #7effa1), var(--grad-b, #67e6ff));
+  box-shadow:0 1px 6px rgba(0,0,0,.35), 0 0 0 1px color-mix(in oklab, #fff 14%, transparent);
+  translate:0 .15rem;
+}
+/* ========= UL: variante “traço-cápsula” ========= */
+.list-card ul.ul-neo.style-dash > li::before,
+.list-card ul.ul-neo[data-bullet="dash"] > li::before {
+  content: attr(data-marker, "–");
+  /* pode trocar por texto: data-marker="TIP" */
+  display:inline-grid;
+  place-items:center;
+  inline-size:auto;
+  min-inline-size:1.35rem;
+  block-size:1.35rem;
+  padding:0 .6rem;
+  border-radius:999px;
+  font-weight:700;
+  letter-spacing:.02em;
+  background:linear-gradient(42deg, var(--grad-a, #7effa1), var(--grad-b, #67e6ff));
+  color:#000;
+  box-shadow:0 2px 10px rgba(0,0,0,.35);
+}
+/* dica/legenda leve */
+.list-card .hint {
+  color:var(--list-muted);
+  font-size:.9em;
+}
+/* ========= ASCII card (igual V1, com leve glow) ========= */
+.ascii-card {
+  background:var(--list-bg);
+  border-radius:calc(var(--list-radius) + 2px);
+  border:1px solid var(--list-border);
+  box-shadow:var(--list-shadow),
+  0 0 0 1px color-mix(in oklab, var(--grad-b, #67e6ff) 20%, transparent);
+  margin:1rem 0;
+  overflow:auto;
+}
+.ascii-card pre {
+  margin:0;
+  padding:1rem 1.1rem;
+  line-height:1.35;
+  font:500 13.5px/1.35 ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  white-space:pre;
+  tab-size:2;
+}
+.ascii-card .ascii-cap {
+  padding:.55rem .9rem .6rem;
+  border-top:1px dashed var(--list-border);
+  color:var(--list-muted);
+  font-size:.85em;
+}
