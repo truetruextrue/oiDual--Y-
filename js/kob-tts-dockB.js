@@ -194,7 +194,20 @@ class KobTtsDock extends HTMLElement {
       detail: { pos: this._pos }
     }));
   }
+async speak(text, opts = {}) {
+  this._lastText = text;
+  this.$status.textContent = 'Queued';
 
+  window.dispatchEvent(new CustomEvent('kob-tts:speak', {
+    bubbles: true,
+    composed: true,
+    detail: {
+      text,
+      opts,
+      source: 'kob-tts-dock'
+    }
+  }));
+}
   /* --- Persistência --- */
   _loadPos() {
     try {
