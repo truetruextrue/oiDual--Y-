@@ -1,0 +1,185 @@
+/* ========================================================================
+1. TOKENS & CONFIGURAÇÕES GLOBAIS (:root)
+======================================================================== /
+:root {
+/ Configurações de Animação */
+--kob-voice-theme-duration: 520ms;
+/* Cores Base (Default) */
+--kob-voice-primary: #78e3ff;
+--kob-voice-secondary: #b978ff;
+--kob-voice-accent: #ffffff;
+--kob-voice-glow: 0 0 18px rgba(0, 216, 216, 0.55);
+--kob-voice-bg-soft: radial-gradient(900px 700px at 50% 10%, rgba(123, 243, 255, 0.06), transparent 80%),
+radial-gradient(600px 600px at 70% 100%, rgba(180, 120, 255, 0.04), transparent 80%),
+var(--bg);
+/* Variáveis do Dock (TTS) */
+--tts-dock-left: 8px;
+--tts-dock-bottom: 269px;
+--tts-gap: 10px;
+--tts-glass-bg: rgba(15, 18, 28, 0.38);
+--tts-glass-bd: rgba(255, 255, 255, 0.12);
+--tts-glow: rgba(76, 240, 255, 0.85);
+--tts-ink: rgba(255, 255, 255, 0.92);
+--tts-ink-dim: rgba(255, 255, 255, 0.68);
+--tts-accent: color-mix(in srgb, #00e28b 55%, var(--tts-glow) 45%);
+}
+/* ========================================================================
+2. ARQUÉTIPOS DE VOZ (Temas Dinâmicos)
+======================================================================== */
+body[data-voice-arch="kobllux"] { --kob-voice-primary:#00d8d8; --kob-voice-secondary:#d800d8; }
+body[data-voice-arch="nova"]    { --kob-voice-primary:#FF6FB5; --kob-voice-secondary:#FFD6E8; }
+body[data-voice-arch="kaos"]    { --kob-voice-primary:#FF5C8A; --kob-voice-secondary:#3D000F; }
+body[data-voice-arch="serena"]  { --kob-voice-primary:#7AD3A8; --kob-voice-secondary:#154734; }
+body[data-voice-arch="vitalis"] { --kob-voice-primary:#00F5A0; --kob-voice-secondary:#00D9F5; }
+body[data-voice-arch="pulse"]   { --kob-voice-primary:#A259FF; --kob-voice-secondary:#2D1B69; }
+body[data-voice-arch="atlas"]   { --kob-voice-primary:#6CCFF6; --kob-voice-secondary:#1B4965; }
+body[data-voice-arch="lumine"]  { --kob-voice-primary:#FFE066; --kob-voice-secondary:#FF9F1C; }
+body[data-voice-arch="rhea"]    { --kob-voice-primary:#00B894; --kob-voice-secondary:#055E55; }
+body[data-voice-arch="solus"]   { --kob-voice-primary:#4B6584; --kob-voice-secondary:#0B1420; }
+body[data-voice-arch="aion"]    { --kob-voice-primary:#00A8E8; --kob-voice-secondary:#001F54; }
+body[data-voice-arch="cooplux"] { --kob-voice-primary:#39FFB6; --kob-voice-secondary:#00d8d8; }
+body[data-voice-arch="fitlux"]  { --kob-voice-primary:#FFC857; --kob-voice-secondary:#FFE39A; }
+/* Marcador visual do arquétipo atual */
+body[data-voice-arch] .nebula::before {
+content: attr(data-voice-arch);
+position: absolute;
+top: 10px;
+right: 14px;
+padding: 4px 8px;
+font-size: 11px;
+letter-spacing: .08em;
+text-transform: uppercase;
+border-radius: 999px;
+background: rgba(0, 0, 0, .45);
+border: 1px solid rgba(255, 255, 255, .20);
+color: var(--ink);
+backdrop-filter: blur(6px);
+pointer-events: none;
+}
+/* ========================================================================
+3. ESTADOS GLOBAIS & TRANSIÇÕES
+======================================================================== */
+body, .nebula, details.acc, .btn, #fab, .kob-tts-dock, .kob-tts-panel.is-dock {
+transition:
+background var(--kob-voice-theme-duration) ease,
+box-shadow var(--kob-voice-theme-duration) ease,
+border-color var(--kob-voice-theme-duration) ease,
+color var(--kob-voice-theme-duration) ease;
+}
+/* Destaque de leitura */
+[data-being-read="true"], [data-tts-current] {
+outline: 2px dashed var(--kob-voice-primary, #4cf);
+background: rgba(76, 240, 255, .06);
+border-radius: 8px;
+transition: background .25s ease, outline .25s ease;
+}
+/* ========================================================================
+4. KOB TTS PANEL (Base & Inline)
+======================================================================== */
+.kob-tts-panel {
+display: flex;
+gap: .5rem;
+align-items: center;
+flex-wrap: wrap;
+margin: .5rem 0;
+}
+.kob-tts-panel button {
+padding: .5rem .75rem;
+border: 1px solid rgba(255, 255, 255, .2);
+background: rgba(255, 255, 255, .05);
+backdrop-filter: saturate(1.2) blur(2px);
+border-radius: 10px;
+}
+.kob-tts-panel small {
+opacity: .8;
+}
+/* ========================================================================
+5. KOB TTS DOCK (Versão Fixa/Vertical)
+======================================================================== */
+.kob-tts-panel.is-dock {
+position: fixed;
+left: var(--tts-dock-left);
+bottom: calc(var(--tts-dock-bottom) + env(safe-area-inset-bottom, 0px));
+z-index: 9999;
+display: flex;
+flex-direction: column;
+gap: var(--tts-gap);
+align-items: stretch;
+padding: .6rem;
+border-radius: 16px;
+background: var(--tts-glass-bg);
+border: 1px solid var(--tts-glass-bd);
+backdrop-filter: blur(10px) saturate(1.15);
+box-shadow: 0 12px 26px rgba(0, 0, 0, .35), inset 0 0 0 1px rgba(255, 255, 255, .05);
+touch-action: none;
+cursor: grab;
+transform: scale(0.85);
+transform-origin: bottom left;
+}
+.kob-tts-panel.is-dock.is-dragging {
+cursor: grabbing;
+transition: none !important;
+}
+/* Botões do Dock */
+.kob-tts-panel.is-dock button {
+width: 48px;
+height: 48px;
+border-radius: 14px;
+display: grid;
+place-items: center;
+color: var(--tts-ink-dim);
+font-size: 20px;
+font-weight: 600;
+border: 1px solid rgba(255, 255, 255, .18);
+background:
+linear-gradient(180deg, rgba(255, 255, 255, .10), rgba(255, 255, 255, .02)) padding-box,
+linear-gradient(180deg, rgba(255, 255, 255, .12), rgba(255, 255, 255, .05)) border-box;
+box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .06);
+cursor: pointer;
+transition: transform .16s ease, box-shadow .16s ease, color .16s ease;
+}
+.kob-tts-panel.is-dock button:hover {
+transform: translateY(-1px);
+color: var(--tts-ink);
+box-shadow: 0 8px 18px rgba(0, 0, 0, .32), inset 0 0 0 1px rgba(255, 255, 255, .10);
+}
+/* Estado Ativo (Playing) */
+.kob-tts-panel.is-dock button[aria-pressed="true"],
+.kob-tts-dock button[data-tts-btn="toggle"] {
+color: var(--tts-ink);
+background:
+radial-gradient(120% 120% at 50% 0%, color-mix(in srgb, var(--tts-glow), transparent 65%) 0%, transparent 60%) padding-box,
+linear-gradient(180deg, rgba(255, 255, 255, .18), rgba(255, 255, 255, .08)) border-box;
+outline: 2px solid color-mix(in srgb, var(--tts-glow) 70%, var(--tts-accent) 30%);
+box-shadow:
+0 0 18px -2px color-mix(in srgb, var(--tts-glow) 70%, var(--tts-accent) 30%),
+0 10px 26px rgba(0, 0, 0, .38);
+}
+/* Status Text */
+.kob-tts-panel.is-dock small[data-tts-status] {
+margin-top: .15rem;
+font-size: 11px;
+letter-spacing: .2px;
+opacity: .78;
+color: var(--tts-ink);
+max-width: 172px;
+text-wrap: balance;
+}
+/* ========================================================================
+6. ACESSIBILIDADE & RESPONSIVIDADE
+======================================================================== */
+@media (prefers-reduced-motion: reduce) {
+.kob-tts-panel.is-dock, .kob-tts-panel.is-dock button {
+transition: none !important;
+}
+}
+@media print {
+.kob-tts-panel.is-dock { display: none !important; }
+}
+/* Ajuste de layout quando dock está presente */
+body.kob-tts-dock-padding {
+padding-left: calc(var(--tts-dock-left) + 72px);
+}
+@supports not (backdrop-filter: blur(10px)) {
+.kob-tts-panel.is-dock { background: rgba(20, 22, 28, .95); }
+}
