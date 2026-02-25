@@ -1,0 +1,139 @@
+:root {
+  /* duração da transição de cor / glow */
+    --kob-voice-theme-duration: 520ms;
+}
+/* Quem responde às mudanças de tema de voz */
+  body,
+  .nebula,
+  details.acc,
+  .btn,
+  #fab,
+  .kob-tts-dock,
+  .kob-tts-panel.is-dock {
+  transition:
+      background var(--kob-voice-theme-duration) ease,
+      box-shadow var(--kob-voice-theme-duration) ease,
+      border-color var(--kob-voice-theme-duration) ease,
+      color var(--kob-voice-theme-duration) ease;
+}
+/* Opcional: marcador visual do arquétipo atual */
+  body[data-voice-arch] .nebula::before {
+  content: attr(data-voice-arch);
+  position:absolute;
+  top:10px;
+  right:14px;
+  padding:4px 8px;
+  font-size:11px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  border-radius:999px;
+  background:rgba(0,0,0,.45);
+  border:1px solid rgba(255,255,255,.20);
+  color:var(--ink);
+  backdrop-filter:blur(6px);
+  pointer-events:none;
+}
+:root {
+  --kob-voice-primary:   #78e3ff;
+  --kob-voice-secondary: #b978ff;
+  --kob-voice-accent:    #ffffff;
+  --kob-voice-bg-soft:radial-gradient(900px 700px at 50% 10%,rgba(123,243,255,.06),transparent 80%),
+             radial-gradient(600px 600px at 70% 100%,rgba(180,120,255,.04),transparent 80%),
+             var(--bg);
+  --kob-voice-glow:      0 0 18px rgba(0,216,216,0.55);
+}
+/* Dock do TTS acompanha a voz atual */
+.kob-tts-dock {
+  background: var(--kob-voice-bg-soft);
+  box-shadow: var(--kob-voice-glow);
+  border-radius: 12px;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,0.06);
+}
+.kob-tts-dock button[data-tts-btn="toggle"] {
+  border: 1px solid var(--kob-voice-primary);
+  color:  var(--kob-voice-accent);
+}
+.kob-tts-dock button[data-tts-btn="sel"],
+.kob-tts-dock button[data-tts-btn="stop"] {
+  border: 1px solid rgba(255,255,255,0.16);
+}
+/* Se você marcar algum bloco como "sendo lido" no futuro */
+[data-being-read="true"] {
+  outline: 1px solid var(--kob-voice-primary);
+  background: var(--kob-voice-bg-soft);
+}
+/* Tema adicional por arquétipo (opcional, pra brincar com o body) */
+body[data-voice-arch="kobllux"] {
+  --kob-voice-primary:#00d8d8;
+  --kob-voice-secondary:#d800d8;
+}
+body[data-voice-arch="nova"] {
+  --kob-voice-primary:#FF6FB5;
+  --kob-voice-secondary:#FFD6E8;
+}
+body[data-voice-arch="kaos"] {
+  --kob-voice-primary:#FF5C8A;
+  --kob-voice-secondary:#3D000F;
+}
+body[data-voice-arch="serena"] {
+  --kob-voice-primary:#7AD3A8;
+  --kob-voice-secondary:#154734;
+}
+body[data-voice-arch="vitalis"] {
+  --kob-voice-primary:#00F5A0;
+  --kob-voice-secondary:#00D9F5;
+}
+body[data-voice-arch="pulse"] {
+  --kob-voice-primary:#A259FF;
+  --kob-voice-secondary:#2D1B69;
+}
+body[data-voice-arch="atlas"] {
+  --kob-voice-primary:#6CCFF6;
+  --kob-voice-secondary:#1B4965;
+}
+body[data-voice-arch="lumine"] {
+  --kob-voice-primary:#FFE066;
+  --kob-voice-secondary:#FF9F1C;
+}
+body[data-voice-arch="rhea"] {
+  --kob-voice-primary:#00B894;
+  --kob-voice-secondary:#055E55;
+}
+body[data-voice-arch="solus"] {
+  --kob-voice-primary:#4B6584;
+  --kob-voice-secondary:#0B1420;
+}
+body[data-voice-arch="aion"] {
+  --kob-voice-primary:#00A8E8;
+  --kob-voice-secondary:#001F54;
+}
+body[data-voice-arch="cooplux"] {
+  --kob-voice-primary:#39FFB6;
+  --kob-voice-secondary:#00d8d8;
+}
+body[data-voice-arch="fitlux"] {
+  --kob-voice-primary:#FFC857;
+  --kob-voice-secondary:#FFE39A;
+}
+.kob-tts-dock {
+  background:linear-gradient(
+    42deg,
+    color-mix(in srgb, var(--grad-a) 18%, transparent),
+    color-mix(in srgb, var(--grad-b) 18%, transparent)
+  ) !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  color:var(--ink) !important;
+  box-shadow:0 0 18px rgba(0,0,0,.35) !important;
+  backdrop-filter:blur(14px) !important;
+}
+.kob-tts-dock button {
+  background:rgba(0,0,0,.25) !important;
+  border:1px solid rgba(255,255,255,.18) !important;
+  color:var(--ink) !important;
+}
+.kob-tts-dock {
+  transform: scale(0.85);
+  transform-origin: bottom right;
+  /* ou onde você ancora o dock */
+}
