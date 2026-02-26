@@ -1,0 +1,170 @@
+
+    /* =========================================================
+       1. VARIÁVEIS BASE E RESET
+       ========================================================= */
+    :root {
+      --grad-a: #78e3ff;
+      --grad-b: #b978ff;
+      --bg: #070b14;
+      --panel: rgba(15,18,28,0.6);
+      --ink: #eaf6ff;
+      --tts-left: 16px;
+      --tts-bottom: 20px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+      padding-bottom: 120px; /* Espaço pro dock não cobrir conteúdo */
+    }
+
+    /* =========================================================
+       2. ESTILOS DA HOME / INTERFACE PRINCIPAL
+       ========================================================= */
+    .content-box {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    #masterBlock {
+      max-width: 800px;
+      margin: 0 auto 20px auto;
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      gap: 8px;
+    }
+
+    /* Botões Padrão e Chips */
+    .btn, .chip {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      color: var(--ink);
+      padding: 8px 14px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+    }
+    .btn:hover, .chip:hover {
+      background: rgba(255,255,255,0.15);
+      transform: translateY(-1px);
+    }
+    .chip[data-act="home"] {
+      background: rgba(0,226,139,0.15);
+      border-color: rgba(0,226,139,0.4);
+      color: #00e28b;
+    }
+
+    .field {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 14px;
+      outline: none;
+    }
+    .field:focus { border-color: var(--grad-a); }
+
+    /* Layout da Home */
+    .row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .acc { background: var(--panel); border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); overflow: hidden; }
+    .acc summary { padding: 16px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-weight: bold; background: rgba(255,255,255,0.02); }
+    .acc summary h2 { margin: 0; font-size: 18px; }
+    .acc .sec { padding: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+
+    /* Cards de Documento */
+    .stack-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+    .stack-card {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      padding: 16px;
+      border-radius: 12px;
+      transition: transform 0.2s;
+    }
+    .stack-card:hover { border-color: rgba(255,255,255,0.2); }
+    .stack-card h4 { margin: 0 0 8px 0; font-size: 16px; }
+    .stack-card .meta { font-size: 12px; color: #a2acc5; margin-bottom: 14px; }
+    .small { font-size: 13px; color: #a2acc5; }
+
+    /* Estilo de leitura do Documento */
+    .doc-reader {
+      background: var(--panel);
+      padding: 30px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    }
+    .doc-reader h1, .doc-reader h2, .doc-reader p { margin-top: 0; }
+    .doc-reader p { line-height: 1.8; color: #d0d8e8; }
+
+    /* =========================================================
+       3. CSS DO KOBLLUX TTS DOCK V32
+       ========================================================= */
+    .kob-tts-dock {
+      position: fixed; 
+      z-index: 9999; 
+      left: var(--tts-left);
+      bottom: calc(var(--tts-bottom) + env(safe-area-inset-bottom,0px));
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px;
+      padding: 6px; 
+      border-radius: 14px;
+      background: rgba(15,18,28,.6);
+      border: 1px solid rgba(255,255,255,.12);
+      -webkit-backdrop-filter: blur(12px) saturate(1.2);
+      backdrop-filter: blur(12px) saturate(1.2);
+      box-shadow: 0 12px 26px rgba(0,0,0,.4), inset 0 0 0 1px rgba(255,255,255,.05);
+      touch-action: none; 
+      cursor: grab;
+    }
+    .kob-tts-dock.is-drag { cursor: grabbing; }
+    .kob-tts-dock button {
+      width: 32px; height: 32px; border-radius: 9px;
+      display: grid; place-items: center;
+      font-size: 16px; line-height: 1; color: rgba(255,255,255,.85);
+      border: 1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      transition: all .14s ease; cursor: pointer;
+    }
+    .kob-tts-dock button:hover { transform: translateY(-1px); color: #fff; background: rgba(255,255,255,.15); }
+    .kob-tts-dock button[aria-pressed="true"] {
+      outline: 2px solid color-mix(in srgb, #00e28b 70%, #67e6ff 30%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.35), 0 0 18px -2px rgba(103,230,255,.8);
+    }
+    #tts-status {
+      margin-top: 2px; font-size: 11px; color: #a2acc5; 
+      text-align: center; display: block;
+    }
+    [data-tts-current] {
+      outline: 2px dashed #00e28b;
+      background: rgba(0,226,139,.06);
+      border-radius: 8px;
+      transition: background .2s ease, outline .2s ease;
+    }
+    #kob-tts-outline {
+      position: absolute; display: none; pointer-events: none; 
+      z-index: 9998; border: 2px dashed #00e28b; border-radius: 10px;
+    }
+
+    /* Toast Container */
+    #toast-container { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); z-index: 10000; display: flex; flex-direction: column; gap: 8px; pointer-events: none; }
+    .toast-msg { background: rgba(0,0,0,0.9); color: #fff; padding: 10px 20px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1); font-size: 14px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: fadein 0.3s forwards; }
+    @keyframes fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+  
