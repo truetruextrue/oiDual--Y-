@@ -1,0 +1,108 @@
+
+    /* Variáveis base de cor para o Dock funcionar isoladamente */
+    :root {
+      --grad-a: #78e3ff;
+      --grad-b: #b978ff;
+      --bg: #070b14;
+      --ink: #eaf6ff;
+      --tts-left: 16px;
+      --tts-bottom: 20px;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 20px;
+      line-height: 1.6;
+    }
+
+    /* O conteúdo da página para teste */
+    .content-box {
+      max-width: 600px;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.05);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* =========================================================
+       CSS DO KOBLLUX TTS DOCK V32
+       ========================================================= */
+    .kob-tts-dock {
+      position: fixed; 
+      z-index: 9999; 
+      left: var(--tts-left);
+      bottom: calc(var(--tts-bottom) + env(safe-area-inset-bottom,0px));
+      display: flex; 
+      flex-direction: column; 
+      gap: 8px;
+      padding: 6px; 
+      border-radius: 14px;
+      background: rgba(15,18,28,.38);
+      border: 1px solid rgba(255,255,255,.12);
+      -webkit-backdrop-filter: blur(10px) saturate(1.1);
+      backdrop-filter: blur(10px) saturate(1.1);
+      box-shadow: 0 12px 26px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.05);
+      touch-action: none; 
+      cursor: grab;
+    }
+    
+    .kob-tts-dock.is-drag { 
+      cursor: grabbing; 
+    }
+    
+    .kob-tts-dock button {
+      width: 29px; 
+      height: 29px; 
+      border-radius: 9px;
+      display: grid; 
+      place-items: center;
+      font-size: 16px; 
+      line-height: 1; 
+      color: rgba(255,255,255,.85);
+      border: 1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      transition: transform .14s ease, box-shadow .14s ease, color .14s ease;
+      cursor: pointer;
+    }
+    
+    .kob-tts-dock button:hover { 
+      transform: translateY(-1px); 
+      color: #fff; 
+    }
+    
+    .kob-tts-dock button[aria-pressed="true"] {
+      outline: 2px solid color-mix(in srgb, #00e28b 70%, #67e6ff 30%);
+      box-shadow: 0 8px 20px rgba(0,0,0,.35), 0 0 18px -2px rgba(103,230,255,.8);
+    }
+    
+    #tts-status {
+      margin-top: .1rem; 
+      font-size: 11px; 
+      color: #eaf6ff; 
+      max-width: 140px;
+      display: block; 
+      white-space: normal; 
+      word-break: break-word;
+      text-align: center;
+    }
+    
+    [data-tts-current] {
+      outline: 2px dashed #00e28b;
+      background: rgba(0,226,139,.06);
+      border-radius: 8px;
+      transition: background .2s ease, outline .2s ease;
+    }
+    
+    #kob-tts-outline {
+      position: absolute; 
+      display: none; 
+      pointer-events: none; 
+      z-index: 9998;
+      border: 2px dashed #00e28b; 
+      border-radius: 10px;
+    }
+  
