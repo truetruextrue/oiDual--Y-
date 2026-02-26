@@ -1,0 +1,123 @@
+
+    /* VARIÁVEIS DINÂMICAS (Serão alteradas via JS pelos Arquétipos) */
+    :root {
+      --kob-voice-primary: #32d7cb;
+      --kob-voice-secondary: #0EA5E9;
+      --kob-voice-bg-soft: rgba(10, 12, 20, 0.75);
+      --text: #f0f3f9;
+      --muted: rgba(255, 255, 255, 0.45);
+      --border: rgba(255, 255, 255, 0.1);
+      --snap-threshold: 40px;
+    }
+
+    html, body { 
+      height: 100%; margin: 0; padding: 0; 
+      background: #05070a; color: var(--text); 
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      overflow: hidden; /* O frame cuida do scroll */
+    }
+    
+    .main-wrapper { width: 100%; height: 100vh; display: flex; flex-direction: column; position: relative; }
+    
+    /* Área de Conteúdo (Iframe ou Div local) */
+    #content-frame { 
+      width: 100%; height: 100%; border: 0; 
+      background: #05070a; transition: opacity .3s; 
+    }
+
+    /* HUD - Barra de Símbolos */
+    .symbol-bar {
+      position: fixed;
+      z-index: 9999;
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      background: var(--kob-voice-bg-soft);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      transition: 
+        opacity 0.8s ease, 
+        left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+        border-radius 0.3s ease,
+        background 0.5s ease,
+        border-color 0.5s ease;
+      user-select: none;
+      touch-action: none;
+    }
+
+    /* Estados de Opacidade */
+    .symbol-bar.idle { opacity: 0.2; }
+    .symbol-bar.idle:hover { opacity: 1; }
+    .symbol-bar.is-dragging { opacity: 0.9; transition: none; }
+
+    /* Layouts de Snap */
+    .symbol-bar.snap-side { flex-direction: column; border-radius: 0 24px 24px 0; border-left: 0; }
+    .symbol-bar.snap-side-right { flex-direction: column; border-radius: 24px 0 0 24px; border-right: 0; }
+    .symbol-bar.snap-top { flex-direction: row; border-radius: 0 0 24px 24px; border-top: 0; align-items: center; }
+    .symbol-bar.floating { flex-direction: column; border-radius: 28px; }
+
+    /* Botões */
+    .symbol-button {
+      width: 44px; height: 44px; border-radius: 14px;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-size: 18px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    
+    .symbol-button:active { transform: scale(0.9); }
+    .symbol-button:hover { background: rgba(255, 255, 255, 0.12); border-color: var(--kob-voice-primary); }
+
+    /* Botão Toggle (Menu/Arquétipo) */
+    .symbol-button.main-toggle { 
+      background: linear-gradient(135deg, #1a1d29, #05070a);
+      color: var(--kob-voice-primary);
+      border-color: var(--kob-voice-primary);
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* Ícone de Status de Voz Ativa */
+    .voice-indicator {
+      position: absolute; bottom: -2px; right: -2px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--kob-voice-primary);
+      border: 2px solid #000;
+    }
+
+    /* Recolhimento (Sanfonar) */
+    .symbol-wrap {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+    }
+    .symbol-bar.collapsed .symbol-wrap { 
+      width: 0; height: 0; margin: 0; opacity: 0; pointer-events: none; transform: scale(0);
+    }
+
+    /* Texto de Status */
+    .hud-info { font-size: 9px; color: var(--muted); text-transform: uppercase; text-align: center; pointer-events: none; }
+    .symbol-bar.snap-top .hud-info { display: none; }
+
+    /* Outline de Leitura */
+    #kob-tts-outline {
+      position: absolute; pointer-events: none; z-index: 9998;
+      border: 2px solid var(--kob-voice-primary); border-radius: 8px;
+      background: var(--kob-voice-bg-soft); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 15px var(--kob-voice-primary);
+      display: none;
+    }
+
+    [data-tts-current="true"] {
+      border-radius: 8px;
+      box-shadow: inset 0 0 10px var(--kob-voice-bg-soft);
+    }
+  
