@@ -14,7 +14,17 @@
  
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-DH10.css">
 <style>
+
+
+
+
+
   :root {
+  --kob-voice-primary: #22D3EE;        
+  --kob-voice-secondary: #38BDF8;      
+  --kob-voice-bg-soft: rgba(34,211,238,0.14); 
+  --kob-voice-outline: rgba(34,211,238,0.28);
+
     --bg-blur: rgba(10, 12, 20, 0.75);
     --card-bg: rgba(20, 22, 32, 0.85);
     --text: #f0f3f9;
@@ -115,6 +125,19 @@
   .symbol-bar.snap-top .hint { display: none; }
   .symbol-bar.snap-top .toggle-wrap { margin-bottom: 0; margin-right: 4px; }
 
+
+/* KOBLLUX: Apply variables in the HUD, dock, and outline */
+.symbol-bar, .kob-tts-dock {
+  background: var(--kob-voice-bg-soft);
+  border-color: var(--kob-voice-primary);
+  color: #fff;
+}
+
+#kob-tts-outline {
+  border-color: var(--kob-voice-primary);
+  box-shadow: 0 6px 20px var(--kob-voice-outline);
+  background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+}
   /* Lixeira */
   .trash {
     position: fixed; left: 50%; bottom: 40px; transform: translateX(-50%) scale(0.8);
