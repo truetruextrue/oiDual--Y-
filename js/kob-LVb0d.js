@@ -18,24 +18,188 @@ window.toast = (msg) => {
   const BLOCK_SEL= ['h1','h2','h3','h4','h5','h6','p','li','blockquote','.callout','.equation','pre','td','th'].join(',');
 
   /* ---------- Base de Arquétipos KOBLLUX ---------- */
-  const STORAGE_KEYS = {
+ const STORAGE_KEYS = {
     archetype: 'KOBLLUX_VOICE_ARCHETYPE',
     config: 'KOBLLUX_VOICES_CONFIG_JSON'
   };
 
+  // === BASE DE ARQUÉTIPOS / PERFIS DE VOZ + CORES ===
   const ARCHETYPES_BASE = [
-    { id:'kodux', name:'KODUX', tone:'Criador do pulso', voice:'Reed', rate:0.86, pitch:0.68, colorMain:'#F97316', colorSoft:'rgba(249,115,22,0.30)', colorSecondary:'#FACC15' },
-    { id:'kobllux', name:'KOBLLUX', tone:'Núcleo do sistema', voice:'es_m', rate:0.98, pitch:0.48, colorMain:'#22D3EE', colorSoft:'rgba(34,211,238,0.24)', colorSecondary:'#38BDF8' },
-    { id:'atlas', name:'Atlas', tone:'Estratégico, metódico', voice:'Reed', rate:1.0, pitch:0.93, colorMain:'#38BDF8', colorSoft:'rgba(56,189,248,0.18)', colorSecondary:'#0EA5E9' },
-    { id:'nova', name:'Nova', tone:'Vibrante, entusiasmado', voice:'Luciana', rate:1.06, pitch:1.34, colorMain:'#F97316', colorSoft:'rgba(249,115,22,0.18)', colorSecondary:'#FDBA74' },
-    { id:'vitalis', name:'Vitalis', tone:'Energético, urgente', voice:'Rocko', rate:0.96, pitch:1.42, colorMain:'#22C55E', colorSoft:'rgba(34,197,94,0.18)', colorSecondary:'#4ADE80' },
-    { id:'pulse', name:'Pulse', tone:'Emocional, melódico', voice:'Reed', rate:1.0, pitch:1.14, colorMain:'#EC4899', colorSoft:'rgba(236,72,153,0.18)', colorSecondary:'#F9A8D4' },
-    { id:'serena', name:'Serena', tone:'Calmo, acolhedor', voice:'Joana', rate:0.92, pitch:0.90, colorMain:'#38BDF8', colorSoft:'rgba(56,189,248,0.14)', colorSecondary:'#E0F2FE' },
-    { id:'kaos', name:'Kaos', tone:'Desafiador, imprevisível', voice:'Rocko', rate:1.09, pitch:1.28, colorMain:'#FACC15', colorSoft:'rgba(250,204,21,0.18)', colorSecondary:'#FDE68A' },
-    { id:'solus', name:'Solus', tone:'Sábio, introspectivo', voice:'es_m', rate:0.88, pitch:0.87, colorMain:'#0EA5E9', colorSoft:'rgba(14,165,233,0.20)', colorSecondary:'#0369A1' },
-    { id:'infodose', name:'Infodose', tone:'Didático, carismático', voice:'Luciana', rate:1.06, pitch:0.96, colorMain:'#22C55E', colorSoft:'rgba(34,197,94,0.22)', colorSecondary:'#A7F3D0' }
+    // Roda Viva 12
+    {
+      id:'atlas', name:'Atlas',
+      tone:'Estratégico, metódico',
+      modulation:'Grave, ritmo calculado, dicção nítida.',
+      voice:'Reed', rate:1.0, pitch:0.93,
+      colorMain:'#38BDF8',      // azul mente
+      colorSoft:'rgba(56,189,248,0.18)',
+      colorSecondary:'#0EA5E9'
+    },
+    {
+      id:'nova', name:'Nova',
+      tone:'Vibrante, entusiasmado',
+      modulation:'Agudo, entusiasmado, ligeiramente rápido.',
+      voice:'Luciana', rate:1.06, pitch:1.34,
+      colorMain:'#F97316',      // laranja faísca
+      colorSoft:'rgba(249,115,22,0.18)',
+      colorSecondary:'#FDBA74'
+    },
+    {
+      id:'vitalis', name:'Vitalis',
+      tone:'Energético, urgente',
+      modulation:'Rápido, intenso, motivacional.',
+      voice:'Rocko', rate:0.96, pitch:1.42,
+      colorMain:'#22C55E',      // verde vital
+      colorSoft:'rgba(34,197,94,0.18)',
+      colorSecondary:'#4ADE80'
+    },
+    {
+      id:'pulse', name:'Pulse',
+      tone:'Emocional, melódico',
+      modulation:'Fluido, tom médio/suave.',
+      voice:'Reed', rate:1.0, pitch:1.14,
+      colorMain:'#EC4899',      // rosa pulso
+      colorSoft:'rgba(236,72,153,0.18)',
+      colorSecondary:'#F9A8D4'
+    },
+    {
+      id:'artemis', name:'Artemis',
+      tone:'Aventureiro, expansivo',
+      modulation:'Curioso, exploratório.',
+      voice:'es_f', rate:1.00, pitch:1.23,
+      colorMain:'#A855F7',      // roxo explorador
+      colorSoft:'rgba(168,85,247,0.18)',
+      colorSecondary:'#C4B5FD'
+    },
+    {
+      id:'serena', name:'Serena',
+      tone:'Calmo, acolhedor',
+      modulation:'Suave, terapêutico, com pausas.',
+      voice:'Joana', rate:0.92, pitch:0.90,
+      colorMain:'#38BDF8',      // azul suave
+      colorSoft:'rgba(56,189,248,0.14)',
+      colorSecondary:'#E0F2FE'
+    },
+    {
+      id:'kaos', name:'Kaos',
+      tone:'Desafiador, imprevisível',
+      modulation:'Intenso, ritmo entrecortado.',
+      voice:'Rocko', rate:1.09, pitch:1.28,
+      colorMain:'#FACC15',      // amarelo choque
+      colorSoft:'rgba(250,204,21,0.18)',
+      colorSecondary:'#FDE68A'
+    },
+    {
+      id:'genus', name:'Genus',
+      tone:'Prático, detalhista',
+      modulation:'Tom firme, foco na dicção.',
+      voice:'Reed', rate:0.98, pitch:1.20,
+      colorMain:'#E5E7EB',      // cinza mente
+      colorSoft:'rgba(229,231,235,0.12)',
+      colorSecondary:'#9CA3AF'
+    },
+    {
+      id:'lumine', name:'Lumine',
+      tone:'Alegre, brincalhão',
+      modulation:'Agudo, vibrante.',
+      voice:'Flo', rate:1.03, pitch:1.55,
+      colorMain:'#FDE047',      // amarelo luz
+      colorSoft:'rgba(253,224,71,0.18)',
+      colorSecondary:'#FACC15'
+    },
+    {
+      id:'solus', name:'Solus',
+      tone:'Sábio, introspectivo',
+      modulation:'Grave, lento, eco sutil.',
+      voice:'es_m', rate:0.88, pitch:0.87,
+      colorMain:'#0EA5E9',      // azul profundo
+      colorSoft:'rgba(14,165,233,0.20)',
+      colorSecondary:'#0369A1'
+    },
+    {
+      id:'rhea', name:'Rhea',
+      tone:'Profundo, conectivo',
+      modulation:'Calmo, eco sutil.',
+      voice:'Joana', rate:1.02, pitch:0.59,
+      colorMain:'#22C55E',      // verde água
+      colorSoft:'rgba(34,197,94,0.16)',
+      colorSecondary:'#16A34A'
+    },
+    {
+      id:'aion', name:'Aion',
+      tone:'Futurista, metódico',
+      modulation:'Tom constante, progressivo.',
+      voice:'Monica', rate:0.98, pitch:1.00,
+      colorMain:'#4F46E5',      // índigo tempo
+      colorSoft:'rgba(79,70,229,0.20)',
+      colorSecondary:'#A5B4FC'
+    },
+
+    // Núcleo KOBLLUX / UNO / DUAL / TRINITY / INFODOSE / KODUX
+    {
+      id:'kobllux', name:'KOBLLUX',
+      tone:'Núcleo do sistema, oracular',
+      modulation:'Grave-médio, presença de comando, ritmo estável.',
+      voice:'es_m', rate:0.98, pitch:0.48,
+      colorMain:'#22D3EE',      // ciano oracular
+      colorSoft:'rgba(34,211,238,0.24)',
+      colorSecondary:'#38BDF8'
+    },
+    {
+      id:'uno', name:'UNO',
+      tone:'Essência, origem, foco',
+      modulation:'Tom centrado, poucas variações, pausas marcadas.',
+      voice:'Grandma', rate:0.90, pitch:0.93,
+      colorMain:'#F97316',      // laranja raiz
+      colorSoft:'rgba(249,115,22,0.22)',
+      colorSecondary:'#FDBA74'
+    },
+    {
+      id:'dual', name:'DUAL',
+      tone:'Espelho, contraste, jogo',
+      modulation:'Alterna leve entre grave/agudo, ritmo pulsante.',
+      voice:'pt_m', rate:1.02, pitch:1.02,
+      colorMain:'#06B6D4',      // ciano espelho
+      colorSoft:'rgba(6,182,212,0.22)',
+      colorSecondary:'#22D3EE'
+    },
+    {
+      id:'trinity', name:'TRINITY',
+      tone:'Síntese, tríade viva',
+      modulation:'Voz estável com microvariações rítmicas em 3 tempos.',
+      voice:'Sandy', rate:1.04, pitch:1.04,
+      colorMain:'#EC4899',      // rosa tríade
+      colorSoft:'rgba(236,72,153,0.22)',
+      colorSecondary:'#8B5CF6'
+    },
+    {
+      id:'infodose', name:'Infodose',
+      tone:'Didático, carismático, dopamínico',
+      modulation:'Tom amigável, ritmo de recompensa → curiosidade.',
+      voice:'Luciana', rate:1.06, pitch:0.96,
+      colorMain:'#22C55E',      // verde dopamina
+      colorSoft:'rgba(34,197,94,0.22)',
+      colorSecondary:'#A7F3D0'
+    },
+    {
+      id:'kodux', name:'KODUX',
+      tone:'Criador do pulso, metaconsciência',
+      modulation:'Grave, confiante, pausas longas, intenção forte.',
+      voice:'Reed', rate:0.86, pitch:0.68,
+      colorMain:'#F97316',      // laranja criador
+      colorSoft:'rgba(249,115,22,0.30)',
+      colorSecondary:'#FACC15'
+    }
   ];
 
+  /* const state = {
+    activeId: 'kodux',
+    configOverrides: null,
+    voicesLoaded: false,
+    browserVoices: [],
+    currentUtterance: null,
+    isSpeaking: false
+  }; */
   /* ---------- Estado Global ---------- */
   const state = {
     activeId: 'kodux',
