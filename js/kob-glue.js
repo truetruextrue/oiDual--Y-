@@ -22,13 +22,36 @@
     const BTN_ARCH = $('#btn-arch');
 
     const ARCHETYPES = [
-      { id:'kodux', name:'KODUX', voice:'Reed', rate:0.86, pitch:0.68, color:'#F97316' },
-      { id:'kobllux', name:'KOBLLUX', voice:'es_m', rate:0.98, pitch:0.48, color:'#22D3EE' },
-      { id:'atlas', name:'ATLAS', voice:'Reed', rate:1.0, pitch:0.93, color:'#38BDF8' },
-      { id:'nova', name:'NOVA', voice:'Luciana', rate:1.06, pitch:1.34, color:'#F97316' },
-      { id:'serena', name:'SERENA', voice:'Joana', rate:0.92, pitch:0.90, color:'#38BDF8' },
-      { id:'vitalis', name:'VITALIS', voice:'Rocko', rate:0.96, pitch:1.42, color:'#22C55E' }
-    ];
+  // ─────────────────────────────
+  // Núcleo KOBLLUX / Sistema
+  // ─────────────────────────────
+  { id:'kobllux', name:'KOBLLUX', voice:'es_m',     rate:0.98, pitch:0.48, color:'#22D3EE' },
+  { id:'kodux',   name:'KODUX',   voice:'Reed',     rate:0.86, pitch:0.68, color:'#F97316' },
+
+  // ─────────────────────────────
+  // Roda Viva 12
+  // ─────────────────────────────
+  { id:'atlas',   name:'ATLAS',   voice:'Reed',     rate:1.00, pitch:0.93, color:'#38BDF8' },
+  { id:'nova',    name:'NOVA',    voice:'Luciana', rate:1.06, pitch:1.34, color:'#F97316' },
+  { id:'vitalis', name:'VITALIS', voice:'Rocko',   rate:0.96, pitch:1.42, color:'#22C55E' },
+  { id:'pulse',   name:'PULSE',   voice:'Reed',     rate:1.00, pitch:1.14, color:'#EC4899' },
+  { id:'artemis', name:'ARTEMIS', voice:'es_f',     rate:1.00, pitch:1.23, color:'#A855F7' },
+  { id:'serena',  name:'SERENA',  voice:'Joana',   rate:0.92, pitch:0.90, color:'#38BDF8' },
+  { id:'kaos',    name:'KAOS',    voice:'Rocko',   rate:1.09, pitch:1.28, color:'#FACC15' },
+  { id:'genus',   name:'GENUS',   voice:'Reed',     rate:0.98, pitch:1.20, color:'#E5E7EB' },
+  { id:'lumine',  name:'LUMINE',  voice:'Flo',      rate:1.03, pitch:1.55, color:'#FDE047' },
+  { id:'solus',   name:'SOLUS',   voice:'es_m',     rate:0.88, pitch:0.87, color:'#0EA5E9' },
+  { id:'rhea',    name:'RHEA',    voice:'Joana',   rate:1.02, pitch:0.59, color:'#22C55E' },
+  { id:'aion',    name:'AION',    voice:'Monica',  rate:0.98, pitch:1.00, color:'#4F46E5' },
+
+  // ─────────────────────────────
+  // Expansão simbólica
+  // ─────────────────────────────
+  { id:'uno',      name:'UNO',      voice:'Grandma', rate:0.90, pitch:0.93, color:'#F97316' },
+  { id:'dual',     name:'DUAL',     voice:'pt_m',    rate:1.02, pitch:1.02, color:'#06B6D4' },
+  { id:'trinity',  name:'TRINITY',  voice:'Sandy',   rate:1.04, pitch:1.04, color:'#EC4899' },
+  { id:'infodose', name:'INFODOSE', voice:'Luciana', rate:1.06, pitch:0.96, color:'#22C55E' }
+];
 
     let state = {
       archIdx: 0,
