@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR" style="--landing-opacity: 0.52;"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>A.Infodose — HORUS Unificado</title>
+<meta name="theme-color" content="#0b0f14">
+<meta name="description" content="A.Infodose Unificado: Final + Mobile Landing HORUS (Visão/Execução, bottom‑sheet, transparência 0.30–1.00)">
+
+
+
+
+<link rel="stylesheet" href="./css/main.css"></head>
+<body class="dark">
+<div class="container">
+  <div class="ascii">
+/*====================================================*\
+| A.INFODOSE — HORUS UNIFICADO — FINAL + LANDING       |
+| DUAL ◇ 𓂀 ◇ HORUS — Sessão do Usuário                 |
+\*====================================================*/
+  </div>
+
+  <div class="nav" id="nav">
+    <button class="btn" data-page="landing" aria-current="">Início</button>
+    <button class="btn" data-page="arquetipos" aria-current="">Arquétipos</button>
+    <button class="btn" data-page="ativacoes" aria-current="">Ativações</button>
+    <button class="btn" data-page="perfil" aria-current="page">Perfil</button>
+  </div>
+
+  <section id="page-landing" class="page" style="display: none;">
+    <h2>Ativar Sessão</h2>
+    <div class="card">
+      <div class="row"><span class="badge">DUAL ◇ 𓂀 ◇ HORUS</span><span class="muted">Unificado</span></div>
+      <p class="muted">Use o comando ou preencha abaixo para iniciar.</p>
+      <div class="row">
+        <input id="cmd" type="text" placeholder="Ex.: ativar A.infodose" style="flex:1">
+        <button class="btn primary" id="btnActivate">Ativar</button>
+        <button class="btn" id="btnFill">Preencher</button>
+      </div>
+      <p class="muted">Atalho: <span class="kbd">1+NOME</span> • Tudo salvo localmente.</p>
+    </div>
+
+    <h2>Área Logada</h2>
+    <div class="card glass">
+      <p class="muted">Se já tiver sessão, continue de onde parou.</p>
+      <div class="row">
+        <button class="btn" id="btnContinue">Continuar</button>
+        <button class="btn" id="btnLogout">Sair</button>
+        <button class="btn" id="btnOpenLanding">Abrir Landing HORUS</button>
+      </div>
+      <small class="muted">Landing com **Visão / Execução**, bottom‑sheet e controle de transparência.</small>
+    </div>
+  </section>
+
+  <section id="page-arquetipos" class="page" style="display: none;">
+    <h2>Arquétipos (12)</h2>
+    <div class="grid cols-3" id="gridArq"><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">♔</div>
+      </div>
+      <h3>♔  Atlas — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Cartesius‑Estrategista</span> + <span class="kbd">Cartesius‑Organizador</span></div>
+        <div>Comando: <span class="kbd">Ativar Atlas A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Cartesius‑Estrategista + Cartesius‑Organizador.</span></div>
+        <div>Atalho: <span class="kbd">1+Atlas</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Atlas">Ativar</button>
+          <button class="btn" data-definir="Atlas">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">✶</div>
+      </div>
+      <h3>✶  Nova — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Inspira‑Criadora</span> + <span class="kbd">Inspira‑Pesquisadora</span></div>
+        <div>Comando: <span class="kbd">Ativar Nova A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Inspira‑Criadora + Inspira‑Pesquisadora.</span></div>
+        <div>Atalho: <span class="kbd">1+Nova</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Nova">Ativar</button>
+          <button class="btn" data-definir="Nova">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">⚑</div>
+      </div>
+      <h3>⚑  Vitalis — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Momentum‑Motivador</span> + <span class="kbd">Momentum‑Biohacker</span></div>
+        <div>Comando: <span class="kbd">Ativar Vitalis A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Momentum‑Motivador + Momentum‑Biohacker.</span></div>
+        <div>Atalho: <span class="kbd">1+Vitalis</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Vitalis">Ativar</button>
+          <button class="btn" data-definir="Vitalis">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">♪</div>
+      </div>
+      <h3>♪  Pulse — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Resona‑Composer</span> + <span class="kbd">Resona‑Tuner</span></div>
+        <div>Comando: <span class="kbd">Ativar Pulse A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Resona‑Composer + Resona‑Tuner.</span></div>
+        <div>Atalho: <span class="kbd">1+Pulse</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Pulse">Ativar</button>
+          <button class="btn" data-definir="Pulse">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">☥</div>
+      </div>
+      <h3>☥  Artemis — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Naviga‑Explorador</span> + <span class="kbd">Naviga‑Guia</span></div>
+        <div>Comando: <span class="kbd">Ativar Artemis A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Naviga‑Explorador + Naviga‑Guia.</span></div>
+        <div>Atalho: <span class="kbd">1+Artemis</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Artemis">Ativar</button>
+          <button class="btn" data-definir="Artemis">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">❤</div>
+      </div>
+      <h3>❤  Serena — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Ampara‑Acolhedora</span> + <span class="kbd">Ampara‑Suporte</span></div>
+        <div>Comando: <span class="kbd">Ativar Serena A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Ampara‑Acolhedora + Ampara‑Suporte.</span></div>
+        <div>Atalho: <span class="kbd">1+Serena</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Serena">Ativar</button>
+          <button class="btn" data-definir="Serena">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">⚡</div>
+      </div>
+      <h3>⚡  Kaos — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Disruptor‑Crítico</span> + <span class="kbd">Disruptor‑Inovador</span></div>
+        <div>Comando: <span class="kbd">Ativar Kaos A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Disruptor‑Crítico + Disruptor‑Inovador.</span></div>
+        <div>Atalho: <span class="kbd">1+Kaos</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Kaos">Ativar</button>
+          <button class="btn" data-definir="Kaos">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">☯</div>
+      </div>
+      <h3>☯  Genus — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Fabricus‑Arquitetor</span> + <span class="kbd">Fabricus‑Construtor</span></div>
+        <div>Comando: <span class="kbd">Ativar Genus A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Fabricus‑Arquitetor + Fabricus‑Construtor.</span></div>
+        <div>Atalho: <span class="kbd">1+Genus</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Genus">Ativar</button>
+          <button class="btn" data-definir="Genus">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">✧</div>
+      </div>
+      <h3>✧  Lumine — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Lumen‑Radiante</span> + <span class="kbd">Lumen‑Harmônica</span></div>
+        <div>Comando: <span class="kbd">Ativar Lumine A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Lumen‑Radiante + Lumen‑Harmônica.</span></div>
+        <div>Atalho: <span class="kbd">1+Lumine</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Lumine">Ativar</button>
+          <button class="btn" data-definir="Lumine">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">∞</div>
+      </div>
+      <h3>∞  Aion — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Aion‑Orquestrador</span> + <span class="kbd">Aion‑Transmutador</span></div>
+        <div>Comando: <span class="kbd">Ativar Aion A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Aion‑Orquestrador + Aion‑Transmutador.</span></div>
+        <div>Atalho: <span class="kbd">1+Aion</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Aion">Ativar</button>
+          <button class="btn" data-definir="Aion">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">⚜</div>
+      </div>
+      <h3>⚜  Rhea — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Rhea‑Vínculo</span> + <span class="kbd">Rhea‑Alento</span></div>
+        <div>Comando: <span class="kbd">Ativar Rhea A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Rhea‑Vínculo + Rhea‑Alento.</span></div>
+        <div>Atalho: <span class="kbd">1+Rhea</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Rhea">Ativar</button>
+          <button class="btn" data-definir="Rhea">Definir como atual</button>
+          
+          
+        </div>
+      </div>
+    </div><div class="card">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <div><span class="badge">Dual ◇ 𓂀 ◇ Horus</span></div>
+        <div class="muted">𓂀</div>
+      </div>
+      <h3>𓂀  Horus — sessão</h3>
+      <div class="list">
+        <div>Assistentes: <span class="kbd">Horus‑Visão</span> + <span class="kbd">Horus‑Execução</span></div>
+        <div>Comando: <span class="kbd">Ativar Horus A.Infodose: DUAL ◇ 𓂀 ◇ Horus — Assistentes Horus‑Visão + Horus‑Execução.</span></div>
+        <div>Atalho: <span class="kbd">1+Horus</span></div>
+        <div class="row">
+          <button class="btn primary" data-ativar="Horus">Ativar</button>
+          <button class="btn" data-definir="Horus">Definir como atual</button>
+          <button class="btn" data-open-landing-tab="visao">𓂀 Abrir Visão</button>
+          <button class="btn" data-open-landing-tab="execucao">⚙ Abrir Execução</button>
+        </div>
+      </div>
+    </div></div>
+  </section>
+
+  <section id="page-ativacoes" class="page" style="display: none;">
+    <h2>Ativações Rápidas</h2>
+    <div class="card">
+      <div class="row">
+        <label>Cor</label><input id="inpColor" type="text" placeholder="#2979ff ou nome">
+      </div>
+      <div class="row">
+        <label>Elemento</label>
+        <select id="selEl">
+          <option>Fogo</option><option>Água</option><option>Terra</option>
+          <option>Madeira</option><option>Metal</option><option>Ar</option>
+        </select>
+        <label>Movimento</label>
+        <select id="selMov"><option>Mais</option><option>Menos</option></select>
+      </div>
+      <div class="row">
+        <button class="btn primary" id="btnResync">Resintonizar</button>
+        <button class="btn" id="btnUltima">Usar última ativação</button>
+      </div>
+    </div>
+    <hr>
+    <div class="grid cols-3" id="gridAtv"><div class="card">
+        <h3>♔  Atlas</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Atlas">Ativar</button>
+          <button class="btn" data-atalho="1+Atlas">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>✶  Nova</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Nova">Ativar</button>
+          <button class="btn" data-atalho="1+Nova">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>⚑  Vitalis</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Vitalis">Ativar</button>
+          <button class="btn" data-atalho="1+Vitalis">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>♪  Pulse</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Pulse">Ativar</button>
+          <button class="btn" data-atalho="1+Pulse">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>☥  Artemis</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Artemis">Ativar</button>
+          <button class="btn" data-atalho="1+Artemis">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>❤  Serena</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Serena">Ativar</button>
+          <button class="btn" data-atalho="1+Serena">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>⚡  Kaos</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Kaos">Ativar</button>
+          <button class="btn" data-atalho="1+Kaos">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>☯  Genus</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Genus">Ativar</button>
+          <button class="btn" data-atalho="1+Genus">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>✧  Lumine</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Lumine">Ativar</button>
+          <button class="btn" data-atalho="1+Lumine">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>∞  Aion</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Aion">Ativar</button>
+          <button class="btn" data-atalho="1+Aion">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>⚜  Rhea</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Rhea">Ativar</button>
+          <button class="btn" data-atalho="1+Rhea">Copiar atalho</button>
+        </div>
+      </div><div class="card">
+        <h3>𓂀  Horus</h3>
+        <div class="row">
+          <button class="btn primary" data-ativacao="Horus">Ativar</button>
+          <button class="btn" data-atalho="1+Horus">Copiar atalho</button>
+        </div>
+      </div></div>
+  </section>
+
+  <section id="page-perfil" class="page" style="display: block;">
+    <h2>Perfil &amp; Export</h2>
+    <div class="card">
+      <div class="row">
+        <label>Seu nome</label><input id="inpNome" type="text" placeholder="Nome do usuário">
+      </div>
+      <div class="row">
+        <label>Assistente atual</label><input id="inpAssist" type="text" placeholder="Ex.: Horus">
+      </div>
+      <div class="row">
+        <button class="btn" id="btnSave">Salvar</button>
+        <button class="btn" id="btnExportJson">Exportar JSON</button>
+        <button class="btn" id="btnExportHtml">Baixar .html</button>
+      </div>
+      <p class="muted" id="sessionHint">Sessão ativa • Arquétipo: Horus • Cor: — • El.: Fogo • Mov.: Mais</p>
+    </div>
+  </section>
+
+  <div class="footer">
+    7C Crown ativo • Unificado • Design: Dark + Glass • Safe‑Area iOS • Unicode puro
+  </div>
+</div>
+
+<!-- FAB para abrir o Landing HORUS de qualquer lugar -->
+<div class="landing-toggle"><button class="btn" id="fabLanding">𓂀 HORUS</button></div>
+
+<!-- Overlay + Bottom Sheet Landing HORUS -->
+<div class="landing-overlay" id="landingOverlay" style="display: none;"></div>
+<div class="landing" id="landing" style="display: none;">
+  <div class="sheet" id="landingSheet" role="dialog" aria-modal="true" aria-label="Landing HORUS" style="transform: translateY(100%);">
+    <div class="handle" id="dragHandle"></div>
+    <div class="content">
+      <div class="horus-logo"><span class="eye">𓂀</span><strong>HORUS</strong> • DUAL ◇ Unificado</div>
+      <div class="seg" id="seg">
+        <button class="seg-btn" data-tab="visao" aria-pressed="false">VISÃO</button>
+        <button class="seg-btn" data-tab="execucao" aria-pressed="true">EXECUÇÃO</button>
+      </div>
+
+      <section class="horus-block" id="tab-visao" aria-hidden="true">
+        <div class="card">
+          <h3>𓂀 Visão — foco e leitura do campo</h3>
+          <p class="muted">Diretriz sutil de análise simbólica, leitura do pulso e priorização de movimentos.</p>
+          <div class="row">
+            <button class="btn primary" id="btnVisaoAtivar">Ativar Visão</button>
+            <button class="btn" id="btnVisaoDefinir">Definir como atual</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="horus-block" id="tab-execucao" aria-hidden="false">
+        <div class="card">
+          <h3>⚙ Execução — ação, entrega e iteração</h3>
+          <p class="muted">Plano de ação imediato com checkpoints e loops 3‑6‑9.</p>
+          <div class="row">
+            <button class="btn primary" id="btnExecAtivar">Ativar Execução</button>
+            <button class="btn" id="btnExecDefinir">Definir como atual</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="range-wrap">
+        <label for="opacityRange" class="muted">Transparência</label>
+        <input id="opacityRange" type="range" min="0.30" max="1.00" step="0.01" value="0.85">
+        <output id="opacityOut">0.52</output>
+      </div>
+      <div class="info-small">Arraste a alça para fechar • Transparência do sheet: 0.30–1.00</div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<script type="module" src="./js/main.js"></script></body></html>
