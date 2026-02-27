@@ -18,14 +18,30 @@
 
     // ---------- 3. SISTEMA DE ARQUÉTIPOS ----------
     const ARCHETYPES = [
-      { id: 'kobllux', name: 'KOBLLUX', color: '#00e28b', rate: 1.0, pitch: 1.0 },
-      { id: 'atlas', name: 'ATLAS', color: '#38BDF8', rate: 0.9, pitch: 0.8 },
-      { id: 'nova', name: 'NOVA', color: '#F97316', rate: 1.1, pitch: 1.2 },
-      { id: 'vitalis', name: 'VITALIS', color: '#22C55E', rate: 1.0, pitch: 1.1 },
-      { id: 'pulse', name: 'PULSE', color: '#b978ff', rate: 1.05, pitch: 1.0 },
-      { id: 'serena', name: 'SERENA', color: '#78e3ff', rate: 0.85, pitch: 1.3 },
-      { id: 'kaos', name: 'KAOS', color: '#ef4444', rate: 1.2, pitch: 0.7 }
-    ];
+  // Núcleo
+  { id: 'kobllux', name: 'KOBLLUX', color: '#22D3EE', rate: 0.98, pitch: 0.48 },
+
+  // Roda Viva 12
+  { id: 'atlas',   name: 'ATLAS',   color: '#38BDF8', rate: 1.00, pitch: 0.93 },
+  { id: 'nova',    name: 'NOVA',    color: '#F97316', rate: 1.06, pitch: 1.34 },
+  { id: 'vitalis', name: 'VITALIS', color: '#22C55E', rate: 0.96, pitch: 1.42 },
+  { id: 'pulse',   name: 'PULSE',   color: '#EC4899', rate: 1.00, pitch: 1.14 },
+  { id: 'artemis', name: 'ARTEMIS', color: '#A855F7', rate: 1.00, pitch: 1.23 },
+  { id: 'serena',  name: 'SERENA',  color: '#38BDF8', rate: 0.92, pitch: 0.90 },
+  { id: 'kaos',    name: 'KAOS',    color: '#FACC15', rate: 1.09, pitch: 1.28 },
+  { id: 'genus',   name: 'GENUS',   color: '#E5E7EB', rate: 0.98, pitch: 1.20 },
+  { id: 'lumine',  name: 'LUMINE',  color: '#FDE047', rate: 1.03, pitch: 1.55 },
+  { id: 'solus',   name: 'SOLUS',   color: '#0EA5E9', rate: 0.88, pitch: 0.87 },
+  { id: 'rhea',    name: 'RHEA',    color: '#22C55E', rate: 1.02, pitch: 0.59 },
+  { id: 'aion',    name: 'AION',    color: '#4F46E5', rate: 0.98, pitch: 1.00 },
+
+  // Expansão simbólica
+  { id: 'uno',     name: 'UNO',     color: '#F97316', rate: 0.90, pitch: 0.93 },
+  { id: 'dual',    name: 'DUAL',    color: '#06B6D4', rate: 1.02, pitch: 1.02 },
+  { id: 'trinity', name: 'TRINITY', color: '#EC4899', rate: 1.04, pitch: 1.04 },
+  { id: 'infodose',name: 'INFODOSE',color: '#22C55E', rate: 1.06, pitch: 0.96 },
+  { id: 'kodux',   name: 'KODUX',   color: '#F97316', rate: 0.86, pitch: 0.68 }
+];
     let currentArchIdx = 0;
 
     function updateArchetype() {
