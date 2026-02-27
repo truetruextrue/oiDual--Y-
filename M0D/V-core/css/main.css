@@ -31,7 +31,7 @@ html, body {
   background-image: var(--bg-gradient);
   color: var(--text);
   font-family: var(--font-main);
-  overflow: hidden;
+  overflow: auto;
 }
 
 /* =========================================================
