@@ -291,11 +291,58 @@
       setStatus();
     })();
 
-    // expose API
+    // expose API antigo
+    // window.KOBLLUX = window.KOBLLUX || {};
+    // Object.assign(window.KOBLLUX, { startSpeech, stopSpeech, rebuildBlocks, updateArchetype, state });
+
+    // console.log('KOBLLUX fixed monolith init');
+    //toast('KOBLLUX pronto ✓', 900);})();
+  
+    // Substitua o final do bloco de inicialização (logo após o Object.assign original) no seu kob-glue-dh10.js por este trecho:
+
     window.KOBLLUX = window.KOBLLUX || {};
     Object.assign(window.KOBLLUX, { startSpeech, stopSpeech, rebuildBlocks, updateArchetype, state });
 
-    console.log('KOBLLUX fixed monolith init');
-    toast('KOBLLUX pronto ✓', 900);
-  })();
-  
+  // --- VEEB: convenience speakText API for external bridges/integrations
+  window.KOBLLUX.speakText = window.KOBLLUX.speakText || function(txt, opts){
+    try{
+      const text = String(txt || '').trim();
+      if(!text) return false;
+      const voiceName = (opts && opts.voice) || (ARCHETYPES[state.archIdx] && ARCHETYPES[state.archIdx].voice) || null;
+      const rate = (opts && typeof opts.rate === 'number') ? opts.rate : (ARCHETYPES[state.archIdx] && ARCHETYPES[state.archIdx].rate) || 1.0;
+      const pitch = (opts && typeof opts.pitch === 'number') ? opts.pitch : (ARCHETYPES[state.archIdx] && ARCHETYPES[state.archIdx].pitch) || 1.0;
+
+      // pick voice (handles async voices availability; fallback safe)
+      const synthLocal = window.speechSynthesis;
+      const pickVoice = () => {
+        try{
+          const voices = synthLocal ? synthLocal.getVoices() : [];
+          if(voiceName){
+            const found = voices.find(v => v.name && v.name.toLowerCase().includes(String(voiceName).toLowerCase()));
+            if(found) return found;
+          }
+          if(voices && voices.length) return voices.find(x => /pt/i.test(x.lang)) || voices[0];
+        }catch(e){ /* ignore */ }
+        return null;
+      };
+
+      const utter = new SpeechSynthesisUtterance(text);
+      const v = pickVoice();
+      if(v) utter.voice = v;
+      utter.rate = rate;
+      utter.pitch = pitch;
+      utter.lang = 'pt-BR';
+      
+      // best-effort: cancel current and speak
+      try{ synthLocal && synthLocal.cancel(); }catch(e){}
+      synthLocal && synthLocal.speak(utter);
+      return true;
+    }catch(e){
+      console.warn('KOBLLUX.speakText failed', e);
+      return false;
+    }
+  };
+
+  console.log('KOBLLUX fixed monolith init');
+  toast('KOBLLUX pronto ✓', 900);
+
