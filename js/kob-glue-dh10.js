@@ -343,14 +343,26 @@ function stopSpeech(){
   $('#tts-stop') && $('#tts-stop').addEventListener('click', ()=> stopSpeech());
   $('#tts-reset') && $('#tts-reset').addEventListener('click', ()=> { state.currentBlockIdx = 0; rebuildBlocks(); setStatus(); });
   $('#tts-reread') && $('#tts-reread').addEventListener('click', ()=> { state.currentBlockIdx = 0; startSpeech(); });
-  $('#tts-sel') && $('#tts-sel').addEventListener('click', ()=> {
-    const s = String(window.getSelection && window.getSelection());
-    if(!s || !s.trim()) return toast('Selecione um trecho para ler.');
-    try{ synth.cancel(); }catch{} const u = new SpeechSynthesisUtterance(sanitize(s)); const voice = findVoiceByNamePart(ARCHETYPES[state.archIdx].voice); if(voice) u.voice = voice; 
-    // 🔑 ADICIONE ISTO
-  if(arch.lang) u.lang = arch.lang; 
-  u.rate = ARCHETYPES[state.archIdx].rate; u.pitch = ARCHETYPES[state.archIdx].pitch; synth.speak(u);
-  });
+  $('#tts-sel') && $('#tts-sel').addEventListener('click', () => {
+  const s = String(window.getSelection && window.getSelection());
+  if (!s || !s.trim()) return toast('Selecione um trecho para ler.');
+
+  const arch = ARCHETYPES[state.archIdx] || ARCHETYPES[0];
+
+  try { synth.cancel(); } catch {}
+
+  const u = new SpeechSynthesisUtterance(sanitize(s));
+
+  const voice = findVoiceByNamePart(arch.voice);
+  if (voice) u.voice = voice;
+
+  if (arch.lang) u.lang = arch.lang;
+
+  u.rate  = arch.rate;
+  u.pitch = arch.pitch;
+
+  synth.speak(u);
+});
   
   $('#tts-grid') && $('#tts-grid').addEventListener('click', ()=> { const prefs = StorageSafe.get('prefs', {}); prefs.outline = !prefs.outline; StorageSafe.set('prefs', prefs); toast(prefs.outline ? 'Outline ativado' : 'Outline desativado'); });
 
@@ -425,7 +437,10 @@ function stopSpeech(){
       if(v) utter.voice = v;
       utter.rate = rate;
       utter.pitch = pitch;
-      utter.lang = 'pt-BR';
+      utter.lang =
+  (opts && opts.lang) ||
+  (ARCHETYPES[state.archIdx] && ARCHETYPES[state.archIdx].lang) ||
+  'pt-BR';
       
       // best-effort: cancel current and speak
       try{ synthLocal && synthLocal.cancel(); }catch(e){}
