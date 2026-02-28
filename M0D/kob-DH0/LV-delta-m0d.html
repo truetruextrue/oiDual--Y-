@@ -1,7 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR"><head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <title>Dual.Infodose — Smart HUD</title>
 
   <!-- iOS Support -->
@@ -13,6 +14,8 @@
   <!-- base (DH10) - sua base visual -->
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-DH10.css">
 
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/LV-delta.css">
+
   <!-- root / hud styles (componentized) -->
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css">
@@ -21,13 +24,28 @@
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud-overrides.css">
 
   <!-- ===== Meta config: HUD + Viewport/Opcodes ===== -->
-  <meta name="kob-hud-config" content="{&quot;arch&quot;:&quot;trinity&quot;,&quot;collapsed&quot;:false,&quot;pos&quot;:{&quot;x&quot;:20,&quot;y&quot;:120},&quot;lastUrl&quot;:&quot;https://kodux78k.github.io/Unouno-/index.html&quot;}">
-  <meta name="kob-viewport" content="{&quot;enabled&quot;:true,&quot;mode&quot;:&quot;opcodes&quot;,&quot;opcodes&quot;:[&quot;viewport&quot;,&quot;metaname&quot;,&quot;arch&quot;,&quot;snap&quot;]}">
+  <meta name="kob-hud-config" content='{"arch":"trinity","collapsed":false,"pos":{"x":20,"y":120},"lastUrl":"https://kodux78k.github.io/Unouno-/index.html"}'>
+  <meta name="kob-viewport" content='{"enabled":true,"mode":"opcodes","opcodes":["viewport","metaname","arch","snap"]}'>
 
   <!-- ===== Small bootstrap: parse metas → globals (must run BEFORE kob-hud.js) ===== -->
-  
+  <script>
+    (function(){
+      function parseMetaJSON(name){
+        const m = document.querySelector('meta[name="'+name+'"]');
+        if(!m) return null;
+        try{ return JSON.parse(m.getAttribute('content')); }
+        catch(e){ console.warn('parse meta', name, 'fail', e); return null; }
+      }
+      window.__KOB_HUD_CONFIG__ = window.__KOB_HUD_CONFIG__ || parseMetaJSON('kob-hud-config') || {};
+      window.__KOB_VIEWPORT__  = window.__KOB_VIEWPORT__  || parseMetaJSON('kob-viewport')  || {};
+      // small helper for debugging in dev
+      if(window.__KOB_HUD_CONFIG__ && window.__KOB_HUD_CONFIG__.arch){
+        console.info('KOB HUD config:', window.__KOB_HUD_CONFIG__);
+      }
+    })();
+  </script>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css"><link rel="stylesheet" href="./css/main.css"></head>
+</head>
 <body>
 
   <div class="wrap">
@@ -65,18 +83,6 @@
 
     <div id="kob-tts-outline"></div>
   </div>
-
-  <!-- ===== Scripts: HUD (defer), main module (module), extras ===== -->
-  <!-- NOTE: no trailing slash in src URLs! -->
-  
-
-  <!-- main app module (ESM) -->
-  
-
-  <!-- fallback / home utilities (non-module) -->
-  
-
-
 
 <div class="nebula"></div>
 <button id="read-exit" title="Sair do modo leitura (Esc)">← Voltar</button>
@@ -146,4 +152,18 @@ A Resolução e Expansão é o retorno à Máxima HARMONIA. O Selo da Perfeiçã
 
 
 
-<script  src="./js/m0ds/LV-delta.js"></script></body></html>
+<script  src="./js/m0ds/LV-delta.js"></script>
+
+
+  <!-- ===== Scripts: HUD (defer), main module (module), extras ===== -->
+  <!-- NOTE: no trailing slash in src URLs! -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/kob-hud.js"></script>
+
+  <!-- main app module (ESM) -->
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+  <!-- fallback / home utilities (non-module) -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-home.js"></script>
+
+</body>
+</html>
