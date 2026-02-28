@@ -102,12 +102,36 @@ function activateArchetype(id) {
 
 /* ─────────────────────────────────────────────
  * GENUS — FALA SINCRONIZADA
- * ───────────────────────────────────────────── */
 
 function speakWithCurrentArchetype(text) {
   if (!VoiceEngine.currentArch) return false;
   return speak(text, VoiceEngine.currentArch);
 }
+ * ───────────────────────────────────────────── */
+
+
+function speakWithCurrentArchetype(text, hooks = {}) {
+  if (!VoiceEngine.currentArch) return false;
+
+  const u = new SpeechSynthesisUtterance(text);
+
+  try { VoiceEngine.synth.cancel(); } catch {}
+
+  const arch = VoiceEngine.currentArch;
+  const voice = findVoiceByNamePart(arch.voice);
+  if (voice) u.voice = voice;
+  if (arch.lang) u.lang = arch.lang;
+  u.rate = arch.rate ?? 1;
+  u.pitch = arch.pitch ?? 1;
+
+  hooks.onStart && (u.onstart = hooks.onStart);
+  hooks.onEnd   && (u.onend   = hooks.onEnd);
+  hooks.onError && (u.onerror = hooks.onError);
+
+  VoiceEngine.synth.speak(u);
+  return true;
+}
+
 
 /* ─────────────────────────────────────────────
  * LUMINE — API PÚBLICA
