@@ -422,3 +422,4 @@
   console.log('KOBLLUX fixed monolith init');
   toast('KOBLLUX pronto ✓', 900);
 
+})(); // end IIFE
