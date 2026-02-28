@@ -1,12 +1,12 @@
 import {
-} from '.m0ds/kob-glue-dh10-3.js';
+} from './m0ds/kob-glue-dh10-3.js';
 
 
 import {
   registerArchetypes,
   activateArchetype,
   speakWithCurrentArchetype
-} from '.m0ds/kob-voice-engine.js';
+} from './m0ds/kob-voice-engine.js';
 
 registerArchetypes(ARCHETYPES);
 
