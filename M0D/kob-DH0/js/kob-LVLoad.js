@@ -6,7 +6,7 @@
     order: [
       "core-inline.js",
       "utils-inline.js",
-      "ui-stubs.js"   // opcional: só se precisar dos stubs
+      "ui-stubs-inline.js"   // opcional: só se precisar dos stubs
     ],
     debug: true
   };
