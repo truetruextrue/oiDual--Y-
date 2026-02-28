@@ -1,0 +1,18 @@
+/* kob-hud-vars.css — variáveis base e tema de voz */
+:root {
+  --kob-voice-primary: #22D3EE;
+  --kob-voice-secondary: #38BDF8;
+  --kob-voice-bg-soft: rgba(34,211,238,0.14);
+  --kob-voice-outline: rgba(34,211,238,0.28);
+
+  --bg-blur: rgba(10, 12, 20, 0.75);
+  --card-bg: rgba(20, 22, 32, 0.85);
+  --text: #f0f3f9;
+  --muted: rgba(255, 255, 255, 0.45);
+  --accent: #32d7cb;
+  --danger: #ff5e5e;
+  --border: rgba(255, 255, 255, 0.1);
+
+  /* tempo padrão para transições do HUD */
+  --kob-voice-theme-duration: 520ms;
+}
