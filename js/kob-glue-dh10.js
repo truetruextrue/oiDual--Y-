@@ -21,36 +21,32 @@
     const BTN_ARCH = $('#btn-arch');
     
   const ARCHETYPES = [
-    // ─────────────────────────────
-    // Núcleo KOBLLUX / Sistema
-    // ─────────────────────────────
-    { id:'kobllux', name:'KOBLLUX', voice:'es_m',    rate:0.98, pitch:0.48, color:'#22D3EE' },
-    { id:'kodux',   name:'KODUX',   voice:'Reed',    rate:0.86, pitch:0.68, color:'#F97316' },
+  { id:'kobllux', name:'KOBLLUX', voice:'Majed',   lang:'ar-001', rate:0.98, pitch:0.48, color:'#22D3EE' },
+  { id:'kodux',   name:'KODUX',   voice:'Majed',   lang:'ar-001', rate:0.86, pitch:0.68, color:'#F97316' },
 
-    // ─────────────────────────────
-    // Roda Viva 12
-    // ─────────────────────────────
-    { id:'atlas',   name:'ATLAS',   voice:'Reed',    rate:1.00, pitch:0.93, color:'#38BDF8' },
-    { id:'nova',    name:'NOVA',    voice:'Luciana', rate:1.06, pitch:1.34, color:'#F97316' },
-    { id:'vitalis', name:'VITALIS', voice:'Rocko',   rate:0.96, pitch:1.42, color:'#22C55E' },
-    { id:'pulse',   name:'PULSE',   voice:'Reed',    rate:1.00, pitch:1.14, color:'#EC4899' },
-    { id:'artemis', name:'ARTEMIS', voice:'es_f',    rate:1.00, pitch:1.23, color:'#A855F7' },
-    { id:'serena',  name:'SERENA',  voice:'Joana',   rate:0.92, pitch:0.90, color:'#38BDF8' },
-    { id:'kaos',    name:'KAOS',    voice:'Rocko',   rate:1.09, pitch:1.28, color:'#FACC15' },
-    { id:'genus',   name:'GENUS',   voice:'Reed',    rate:0.98, pitch:1.20, color:'#E5E7EB' },
-    { id:'lumine',  name:'LUMINE',  voice:'Flo',     rate:1.03, pitch:1.55, color:'#FDE047' },
-    { id:'solus',   name:'SOLUS',   voice:'es_m',    rate:0.88, pitch:0.87, color:'#0EA5E9' },
-    { id:'rhea',    name:'RHEA',    voice:'Joana',   rate:1.02, pitch:0.59, color:'#22C55E' },
-    { id:'aion',    name:'AION',    voice:'Monica',  rate:0.98, pitch:1.00, color:'#4F46E5' },
+  // Roda Viva 12
+  { id:'atlas',   name:'ATLAS',   voice:'Reed',    lang:'en-US',  rate:1.00, pitch:0.93, color:'#38BDF8' },
+  { id:'nova',    name:'NOVA',    voice:'Luciana', lang:'pt-BR',  rate:1.06, pitch:1.34, color:'#F97316' },
+  { id:'vitalis', name:'VITALIS', voice:'Rocko',   lang:'pt-BR',  rate:0.96, pitch:1.42, color:'#22C55E' },
+  { id:'pulse',   name:'PULSE',   voice:'Reed',    lang:'pt-BR',  rate:1.00, pitch:1.14, color:'#EC4899' },
+  { id:'artemis', name:'ARTEMIS', voice:'Paulina', lang:'es-MX',  rate:1.00, pitch:1.23, color:'#A855F7' },
+  { id:'serena',  name:'SERENA',  voice:'Joana',   lang:'pt-BR',  rate:0.92, pitch:0.90, color:'#38BDF8' },
+  { id:'kaos',    name:'KAOS',    voice:'Rocko',   lang:'pt-BR',  rate:1.09, pitch:1.28, color:'#FACC15' },
+  { id:'genus',   name:'GENUS',   voice:'Reed',    lang:'pt-BR',  rate:0.98, pitch:1.20, color:'#E5E7EB' },
+  { id:'lumine',  name:'LUMINE',  voice:'Flo',     lang:'fr-FR',  rate:1.03, pitch:1.55, color:'#FDE047' },
+  { id:'solus',   name:'SOLUS',   voice:'Satu',    lang:'fi-FI',  rate:0.88, pitch:0.87, color:'#0EA5E9' },
+  { id:'rhea',    name:'RHEA',    voice:'Alice',   lang:'it-IT',  rate:1.02, pitch:0.59, color:'#22C55E' },
+  { id:'aion',    name:'AION',    voice:'Milena',  lang:'ru-RU',  rate:0.38, pitch:1.00, color:'#4F46E5' },
 
-    // ─────────────────────────────
-    // Expansão simbólica
-    // ─────────────────────────────
-    { id:'uno',      name:'UNO',      voice:'Grandma', rate:0.90, pitch:0.93, color:'#F97316' },
-    { id:'dual',     name:'DUAL',     voice:'pt_m',    rate:1.02, pitch:1.02, color:'#06B6D4' },
-    { id:'trinity',  name:'TRINITY',  voice:'Sandy',   rate:1.04, pitch:1.04, color:'#EC4899' },
-    { id:'infodose', name:'INFODOSE', voice:'Luciana', rate:1.06, pitch:0.96, color:'#22C55E' }
-  ];
+  // Expansão simbólica
+  { id:'uno',      name:'UNO',      voice:'Grandma', lang:'en-US', rate:0.90, pitch:0.93, color:'#F97316' },
+  { id:'dual',     name:'DUAL',     voice:'Reed',    lang:'pt-BR', rate:1.02, pitch:1.02, color:'#06B6D4' },
+  { id:'trinity',  name:'TRINITY',  voice:'Sandy',   lang:'en-US', rate:1.04, pitch:1.04, color:'#EC4899' },
+  { id:'infodose', name:'INFODOSE', voice:'Luciana', lang:'pt-BR', rate:1.06, pitch:0.96, color:'#22C55E' },
+
+  // Arquétipo adicional
+  { id:'horus', name:'HORUS', voice:'Majed', lang:'ar-001', rate:0.94, pitch:0.82, color:'#F59E0B' }
+];
 
   let state = {
     archIdx: 0,
@@ -310,6 +306,8 @@
     const u = new SpeechSynthesisUtterance(txt);
     const voice = findVoiceByNamePart(arch.voice);
     if(voice) u.voice = voice;
+    // 🔑 ADICIONE ISTO
+    if(arch.lang) u.lang = arch.lang;
     u.rate = arch.rate; u.pitch = arch.pitch;
     u.onstart = () => { showOutlineFor(el); setStatus(); };
     u.onend = () => {
@@ -348,8 +346,12 @@ function stopSpeech(){
   $('#tts-sel') && $('#tts-sel').addEventListener('click', ()=> {
     const s = String(window.getSelection && window.getSelection());
     if(!s || !s.trim()) return toast('Selecione um trecho para ler.');
-    try{ synth.cancel(); }catch{} const u = new SpeechSynthesisUtterance(sanitize(s)); const voice = findVoiceByNamePart(ARCHETYPES[state.archIdx].voice); if(voice) u.voice = voice; u.rate = ARCHETYPES[state.archIdx].rate; u.pitch = ARCHETYPES[state.archIdx].pitch; synth.speak(u);
+    try{ synth.cancel(); }catch{} const u = new SpeechSynthesisUtterance(sanitize(s)); const voice = findVoiceByNamePart(ARCHETYPES[state.archIdx].voice); if(voice) u.voice = voice; 
+    // 🔑 ADICIONE ISTO
+  if(arch.lang) u.lang = arch.lang; 
+  u.rate = ARCHETYPES[state.archIdx].rate; u.pitch = ARCHETYPES[state.archIdx].pitch; synth.speak(u);
   });
+  
   $('#tts-grid') && $('#tts-grid').addEventListener('click', ()=> { const prefs = StorageSafe.get('prefs', {}); prefs.outline = !prefs.outline; StorageSafe.set('prefs', prefs); toast(prefs.outline ? 'Outline ativado' : 'Outline desativado'); });
 
   function sanitize(txt){ return String(txt||'').replace(/\bCopiar\b/g,' ').replace(/\s{2,}/g,' ').trim(); }
