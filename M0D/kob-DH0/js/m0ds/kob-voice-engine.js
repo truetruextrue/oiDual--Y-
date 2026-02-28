@@ -103,13 +103,6 @@ function activateArchetype(id) {
 /* ─────────────────────────────────────────────
  * GENUS — FALA SINCRONIZADA
 
-function speakWithCurrentArchetype(text) {
-  if (!VoiceEngine.currentArch) return false;
-  return speak(text, VoiceEngine.currentArch);
-}
- * ───────────────────────────────────────────── */
-
-
 function speakWithCurrentArchetype(text, hooks = {}) {
   if (!VoiceEngine.currentArch) return false;
 
@@ -131,7 +124,14 @@ function speakWithCurrentArchetype(text, hooks = {}) {
   VoiceEngine.synth.speak(u);
   return true;
 }
+ * ───────────────────────────────────────────── */
 
+
+
+function speakWithCurrentArchetype(text) {
+  if (!VoiceEngine.currentArch) return false;
+  return speak(text, VoiceEngine.currentArch);
+}
 
 /* ─────────────────────────────────────────────
  * LUMINE — API PÚBLICA
