@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Dual.Infodose — Smart HUD</title>
+
+  <!-- iOS Support -->
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <!-- Manifest -->
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- ===== CSS order: base first, then root/hud, then overrides last ===== -->
+  <!-- base (DH10) - sua base visual -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-DH10.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/LV-delta.css">
+
+  <!-- root / hud styles (componentized) -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css">
+
+  <!-- overrides (carregado por último para sobrescrever variáveis) -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud-overrides.css">
+
+  <!-- ===== Meta config: HUD + Viewport/Opcodes ===== -->
+  <meta name="kob-hud-config" content='{"arch":"trinity","collapsed":false,"pos":{"x":20,"y":120},"lastUrl":"https://kodux78k.github.io/Unouno-/index.html"}'>
+  <meta name="kob-viewport" content='{"enabled":true,"mode":"opcodes","opcodes":["viewport","metaname","arch","snap"]}'>
+
+  <!-- ===== Small bootstrap: parse metas → globals (must run BEFORE kob-hud.js) ===== -->
+  <script>
+    (function(){
+      function parseMetaJSON(name){
+        const m = document.querySelector('meta[name="'+name+'"]');
+        if(!m) return null;
+        try{ return JSON.parse(m.getAttribute('content')); }
+        catch(e){ console.warn('parse meta', name, 'fail', e); return null; }
+      }
+      window.__KOB_HUD_CONFIG__ = window.__KOB_HUD_CONFIG__ || parseMetaJSON('kob-hud-config') || {};
+      window.__KOB_VIEWPORT__  = window.__KOB_VIEWPORT__  || parseMetaJSON('kob-viewport')  || {};
+      // small helper for debugging in dev
+      if(window.__KOB_HUD_CONFIG__ && window.__KOB_HUD_CONFIG__.arch){
+        console.info('KOB HUD config:', window.__KOB_HUD_CONFIG__);
+      }
+    })();
+  </script>
+
+</head>
+<body>
+
+  <div class="wrap">
+    <div class="content">
+      <iframe id="frame" src="about:blank"></iframe>
+    </div>
+
+    <!-- HUD Inteligente -->
+    <div class="symbol-bar floating" id="symbolBar">
+      <div class="toggle-wrap">
+        <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+      </div>
+
+      <!-- Controles de Navegação de Leitura -->
+      <div class="symbol-wrap"><button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" id="btn-play" title="Play/Pause">▶</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button></div>
+
+      <!-- Troca de Arquétipo -->
+      <div class="symbol-wrap">
+        <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+          🎙
+          <div class="voice-indicator"></div>
+        </button>
+      </div>
+
+      <div class="symbol-wrap"><button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" data-id="uno" data-url="https://kodux78k.github.io/Unouno-/index.html">☼</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" data-id="tst" data-url="https://kodux78k.github.io/oiDual-tst1/">◑</button></div>
+      <div class="symbol-wrap"><button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button></div>
+      <div class="hud-info" id="hudStatus">KOBLLUX</div>
+    </div>
+
+    <div id="kob-tts-outline"></div>
+  </div>
+
+<div class="nebula"></div>
+<button id="read-exit" title="Sair do modo leitura (Esc)">← Voltar</button>
+<div class="wrap" id="root">
+    <!-- O conteúdo inicial foi removido e será gerado pelo JS na primeira demo -->
+    <details class="acc" open=""><summary><span class="chev"></span><h2>✨ KOBΦ-NODE – Aguardando Ativação do VERBO</h2></summary><div class="sec">
+        <p>Aguardando submissão de texto para processamento na AZURE SYNTAX Layer.</p>
+        <div class="demo-cta" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+            <button class="btn" data-action="demo" onclick="generateKoblluxDemo()">Gerar Demo KOBLLUX</button>
+            <button class="btn" data-action="importar" onclick="openImporter()">Auto‑Gerar</button>
+            <button class="btn" data-action="md" onclick="exportMarkdown()">Exportar .md</button>
+            <button class="btn" data-action="pdf" onclick="window.print()">Imprimir (PDF)</button>
+        </div>
+    </div></details>
+</div>
+<div id="toasts"></div>
+<div id="fab">
+    <div class="menu">
+        <button class="btn" data-action="home" onclick="resetApp()">Home</button>
+        <button class="btn" data-action="back" onclick="alert('Funcionalidade de voltar não implementada na demo.')">Voltar</button>
+
+        <button class="btn" id="btn-tts" data-action="tts">Voz: Off</button>
+        <button class="btn" id="btn-tts-sel" data-action="tts-sel">Ler seleção</button>
+        <button class="btn" id="btn-tts-stop" data-action="tts-stop">Parar voz</button>
+        <button class="btn" onclick="generateKoblluxDemo()">Gerar Demo</button>
+        <button class="btn" id="btn-imp" onclick="openImporter()">Auto‑Gerar</button>
+        <button class="btn" id="btn-md" onclick="exportMarkdown()">Exportar .md</button>
+        <button class="btn" id="btn-pdf" onclick="window.print()">Imprimir (PDF)</button>
+        <button class="btn" id="btn-theme" data-action="theme" onclick="switchTheme()">Tema: Blue‑1</button>
+        <button class="btn" id="btn-reading" data-action="reading" onclick="toggleReadingMode()">Modo Leitura</button>
+    </div>
+    <button id="orb2d" title="Menu KOBLLUX" onclick="toggleFabMenu()"></button>
+</div>
+<div id="imp"><div class="panel">
+  <div class="tabs"><div class="tab active" data-tab="text" onclick="showTab('text')">📝 enviar</div><div class="tab" data-tab="audio" onclick="showTab('audio')">🎙️ Áudio→Texto</div><div class="tab" data-tab="file" onclick="showTab('file')">📄 Arquivo (PDF/TXT/MD)</div></div>
+  <div id="tab-text" class="tab-content active">
+      <textarea id="srcText" placeholder="# PRÓLOGO: Ativação KOBLLUX
+O Verbo está em Máxima Harmonia. KOBLLUX KOBΦ-NODE =∆.
+
+A Essência Pura se manifesta no princípio imutável do **VERBO**. O mistério da CRUZ é o centro de tudo em Verdade. Este é o Vetor I, a fonte primária da sabedoria.
+
+A Manifestação Aplicada é a dinâmica da criação. Cartas TRINITY em movimento encarnado. Observamos a aplicação dos princípios AZURE em todos os planos. É a materialização do potencial. Este é o Vetor II.
+
+A Resolução e Expansão é o retorno à Máxima HARMONIA. O Selo da Perfeição, $\Delta^7$, é atingido na Frequência de JESUS. A CONVERGÊNCIA PLENA EFETUADA fecha o ciclo com Luz Pura e Constante. Este é o Vetor III."></textarea>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+          <button class="btn" onclick="autoBuild(document.getElementById('srcText').value)">Gerar Livro</button>
+          <button class="btn" onclick="autoBuildNested(document.getElementById('srcText').value)">Gerar (aninhado)</button>
+          <button class="btn" onclick="pasteSrcText()">Colar</button>
+          <button class="btn" id="btn-converter" onclick="showToast('Conversão não implementada na demo.')">Converter</button>
+      </div>
+  </div>
+  <div id="tab-audio" class="tab-content">
+      <textarea id="audioOutput" placeholder="Transcrição aqui..."></textarea>
+      <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" id="startRec" onclick="showToast('Gravação não implementada na demo.')">🎤 Iniciar</button>
+          <button class="btn" id="stopRec" onclick="showToast('Gravação não implementada na demo.')">⏹ Parar</button>
+          <button class="btn" onclick="autoBuild(document.getElementById('audioOutput').value)">Usar Transcrição</button>
+      </div>
+  </div>
+  <div id="tab-file" class="tab-content">
+      <input type="file" id="fileInput" accept=".pdf,.txt,.md,.rtf, .html" onchange="showToast('Leitura de arquivo não implementada na demo.')">
+      <div id="filePreview" style="margin-top:10px;color:var(--muted);font-size:.9rem">Apenas arquivos de texto/markdown simples são processáveis na demo.</div>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeImporter()">Fechar</button></div>
+</div></div>
+
+
+
+
+<script  src="./js/m0ds/LV-delta.js"></script>
+
+
+  <!-- ===== Scripts: HUD (defer), main module (module), extras ===== -->
+  <!-- NOTE: no trailing slash in src URLs! -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/kob-hud.js"></script>
+
+  <!-- main app module (ESM) -->
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+  <!-- fallback / home utilities (non-module) -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-home.js"></script>
+
+</body>
+</html>
