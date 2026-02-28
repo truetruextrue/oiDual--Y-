@@ -319,8 +319,24 @@
     synth.speak(u);
   }
 
-  function startSpeech(){ if(!state.blocks.length) rebuildBlocks(); if(!state.blocks.length){ toast('Nada para ler'); return } state.isSpeaking = true; const btn = $('#btn-play'); if(btn) btn.textContent = '■'; speakCurrent(); }
-  function stopSpeech(){ state.isSpeaking = false; try{ synth && synth.cancel(); }catch{} const btn = $('#btn-play'); if(btn) btn.textContent = '▶'; hideOutline(); setStatus(); }
+  // function startSpeech(){ if(!state.blocks.length) rebuildBlocks(); if(!state.blocks.length){ toast('Nada para ler'); return } state.isSpeaking = true; const btn = $('#btn-play'); if(btn) btn.textContent = '■'; speakCurrent(); }
+  // function stopSpeech(){ state.isSpeaking = false; try{ synth && synth.cancel(); }catch{} const btn = $('#btn-play'); if(btn) btn.textContent = '▶'; hideOutline(); setStatus(); }
+
+function startSpeech(){
+  if(!state.blocks.length) rebuildBlocks();
+  if(!state.blocks.length){ toast('Nada para ler'); return }
+  state.isSpeaking = true;
+  BTN_PLAY && (BTN_PLAY.textContent = '■');
+  speakCurrent();
+}
+
+function stopSpeech(){
+  state.isSpeaking = false;
+  try{ synth && synth.cancel(); }catch{}
+  BTN_PLAY && (BTN_PLAY.textContent = '▶');
+  hideOutline();
+  setStatus();
+}
 
   // dock extras
   $('#tts-on') && $('#tts-on').addEventListener('click', ()=> { if(state.isSpeaking) stopSpeech(); else startSpeech(); });
