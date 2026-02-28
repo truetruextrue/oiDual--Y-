@@ -1,0 +1,172 @@
+/* ===============================
+   KOBLLUX PLAYER — CORE (ROOT-DRIVEN)
+   =============================== */
+
+/* Container principal */
+#koblluxPlayer {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 260px;
+  padding: 18px;
+
+  background: var(--bg-blur);
+  backdrop-filter: blur(12px) saturate(180%);
+  color: var(--text);
+
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 28px var(--kob-voice-bg-soft);
+
+  font-family: 'SF Mono', 'Courier New', monospace;
+  transition: all var(--kob-voice-theme-duration) cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* -------------------------------
+   Botão Toggle (ícone flutuante)
+   ------------------------------- */
+#togglePlayer {
+  width: 48px;
+  height: 48px;
+  aspect-ratio: 1 / 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+
+  background: linear-gradient(
+    135deg,
+    var(--kob-voice-primary),
+    var(--kob-voice-secondary)
+  );
+  backdrop-filter: blur(6px);
+
+  color: var(--text);
+  font-size: 20px;
+
+  box-shadow: 0 0 22px var(--kob-voice-outline);
+  transition:
+    transform var(--kob-voice-theme-duration) ease,
+    box-shadow var(--kob-voice-theme-duration) ease;
+}
+
+#togglePlayer:hover {
+  transform: rotate(90deg);
+  box-shadow: 0 0 30px var(--kob-voice-primary);
+}
+
+/* Ícone interno */
+#togglePlayer svg,
+#togglePlayer .waves-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* -------------------------------
+   Área de controles do player
+   ------------------------------- */
+#playerControls {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 10px;
+  animation: koblluxFadeIn var(--kob-voice-theme-duration) ease-out;
+}
+
+/* -------------------------------
+   Botões, selects e ranges
+   ------------------------------- */
+#koblluxPlayer button,
+#koblluxPlayer select,
+#koblluxPlayer input[type="range"] {
+  width: 100%;
+  padding: 8px 12px;
+
+  background: var(--card-bg);
+  color: var(--text);
+
+  border-radius: 8px;
+  border: 1px solid var(--border);
+
+  font-size: 13px;
+  cursor: pointer;
+  transition: all var(--kob-voice-theme-duration) ease;
+}
+
+#koblluxPlayer button:hover,
+#koblluxPlayer select:hover {
+  background: var(--kob-voice-bg-soft);
+  border-color: var(--kob-voice-outline);
+  box-shadow: inset 0 0 0 1px var(--kob-voice-outline);
+}
+
+/* -------------------------------
+   Range (volume / intensidade)
+   ------------------------------- */
+#koblluxPlayer input[type="range"] {
+  -webkit-appearance: none;
+  height: 6px;
+  padding: 0;
+  background: var(--kob-voice-bg-soft);
+  border-radius: 10px;
+}
+
+#koblluxPlayer input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--kob-voice-primary);
+  box-shadow: 0 0 12px var(--kob-voice-outline);
+  cursor: pointer;
+  transition: transform 220ms ease, box-shadow 220ms ease;
+}
+
+#koblluxPlayer input[type="range"]::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+  box-shadow: 0 0 18px var(--kob-voice-primary);
+}
+
+/* -------------------------------
+   Labels
+   ------------------------------- */
+#koblluxPlayer label {
+  font-size: 11px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  opacity: 0.8;
+  color: var(--muted);
+}
+
+/* -------------------------------
+   Animações
+   ------------------------------- */
+@keyframes koblluxFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* -------------------------------
+   Utilitário
+   ------------------------------- */
+.hidden {
+  display: none !important;
+}
