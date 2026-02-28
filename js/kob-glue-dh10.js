@@ -15,6 +15,11 @@
   const hudStatus = $('#hudStatus');
   const outline = $('#kob-tts-outline');
 
+    const BTN_PLAY = $('#btn-play');
+    const BTN_NEXT = $('#btn-next');
+    const BTN_PREV = $('#btn-prev');
+    const BTN_ARCH = $('#btn-arch');
+    
   const ARCHETYPES = [
     // ─────────────────────────────
     // Núcleo KOBLLUX / Sistema
