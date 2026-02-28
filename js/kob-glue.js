@@ -296,7 +296,9 @@
     // Object.assign(window.KOBLLUX, { startSpeech, stopSpeech, rebuildBlocks, updateArchetype, state });
 
     // console.log('KOBLLUX fixed monolith init');
-    //toast('KOBLLUX pronto ✓', 900);})();
+    //toast('
+    // KOBLLUX pronto ✓', 900);
+// })();
   
     // Substitua o final do bloco de inicialização (logo após o Object.assign original) no seu kob-glue-dh10.js por este trecho:
 
