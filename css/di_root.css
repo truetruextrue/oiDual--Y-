@@ -1,0 +1,21 @@
+:root {
+
+  /* ===== MODOS BASE ===== */
+  --bg-day: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+  --bg-sunset: linear-gradient(135deg, #ff758c 0%, #ff7eb3 50%, #65a6ff 100%);
+  --bg-night: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+
+  /* ===== ESTADO ATUAL ===== */
+  --bg-main: var(--bg-night);
+  --bg-overlay: transparent;
+
+  /* ===== TOKENS GERAIS ===== */
+  --text-primary: #ffffff;
+  --surface-1: rgba(255,255,255,0.05);
+  --surface-2: rgba(255,255,255,0.08);
+
+  --accent-1: #78e3ff;
+  --accent-2: #b978ff;
+
+  --scroll-bg: rgba(255,255,255,0.08);
+}
