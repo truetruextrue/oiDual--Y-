@@ -1,0 +1,2191 @@
+<html lang="pt-BR"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEBULA · Unified Live Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --grad-a: #78e3ff;
+            --grad-b: #b978ff;
+            --bg: #050110;
+            --panel: #0d0421;
+            --ink: #eaf6ff;
+            --muted: #9db0cc;
+            --radius: 16px;
+            --sidebar-width: 278px;
+        }
+
+        /* Shell / Layout */
+        * { box-sizing: border-box; }
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: var(--bg);
+            color: var(--ink);
+            font-family: 'Inter', system-ui, sans-serif;
+            overflow: auto;
+        }
+
+        .app-shell {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        /* Sidebar Retrátil */
+        #sidebar {
+            width: var(--sidebar-width);
+            min-width: var(--sidebar-width);
+            background: linear-gradient(180deg, #0d0421 0%, #050110 100%);
+            border-right: 1px solid rgba(34, 211, 238, 0.15);
+            display: flex;
+            flex-direction: column;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            z-index: 50;
+        }
+
+        #sidebar.collapsed {
+            margin-left: calc(var(--sidebar-width) * -1);
+        }
+
+        .side-content {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        /* Botão de Toggle lateral */
+        .toggle-tab {
+            position: absolute;
+            right: -32px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 32px;
+            height: 64px;
+            background: var(--panel);
+            border: 1px solid rgba(34, 211, 238, 0.2);
+            border-left: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0 12px 12px 0;
+            color: var(--grad-a);
+            box-shadow: 10px 0 20px rgba(0,0,0,0.4);
+        }
+
+        /* Tabs Navigation */
+        .tabs-nav {
+            display: flex;
+            background: rgba(0,0,0,0.3);
+            padding: 4px;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            gap: 4px;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--muted);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(90deg, var(--grad-a), var(--grad-b));
+            color: #000;
+        }
+
+        /* Cards e Code */
+        .card-section {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.06);
+            border-radius: 14px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        textarea.code-editor {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(0,0,0,0.5);
+            border: 1px solid rgba(34, 211, 238, 0.1);
+            border-radius: 8px;
+            color: #22d3ee;
+            font-family: 'Fira Code', monospace;
+            font-size: 12px;
+            padding: 10px;
+            outline: none;
+            resize: vertical;
+        }
+
+        /* Preview Area */
+        main {
+            flex: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+            background: radial-gradient(circle at center, #100821 0%, #050110 100%);
+            overflow: auto;
+        }
+
+        .preview-container {
+            flex: 1;
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            border: 6px solid #1a1a2e;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Custom Scroll */
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--grad-b); border-radius: 10px; }
+    </style>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+  /* MOBILE-FIRST VERTICAL HARD-LOCK */
+
+  :root {
+    --nebula-bg-1: #050015;
+    --nebula-bg-2: #0b021f;
+    --nebula-bg-3: #02000a;
+    --nebula-accent-pink: #ff63d0;
+    --nebula-accent-cyan: #43e8ff;
+    --nebula-accent-green: #7bffb0;
+    --nebula-border-soft: rgba(255, 255, 255, 0.08);
+    --nebula-text-main: #f8f4ff;
+    --nebula-text-soft: #c5bddf;
+    --radius-card: 18px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+overflow:auto;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+      "Segoe UI", sans-serif;
+    background:
+      radial-gradient(circle at top, #200037 0%, #090017 42%, #020007 100%);
+    color: var(--nebula-text-main);
+  }
+
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1.25rem 0.9rem 2.5rem;
+  }
+
+  /* App-shell estilo Hub1 / BlueCup */
+  .app-shell {
+    border-radius: 22px;
+    padding: 0.85rem 0.95rem;
+    margin-bottom: 1rem;
+    background:
+      radial-gradient(circle at top left,
+        rgba(255, 99, 208, 0.12),
+        rgba(67, 232, 255, 0.04),
+        rgba(0, 0, 0, 0.9));
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.7);
+  }
+
+  .app-shell-header {
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .app-orb {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background:
+      conic-gradient(from 42deg,
+        #ff63d0,
+        #43e8ff,
+        #7bffb0,
+        #ff63d0);
+    box-shadow: 0 0 18px rgba(255, 99, 208, 0.7);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .app-orb-inner {
+    position: absolute;
+    inset: 3px;
+    border-radius: 50%;
+    background:
+      radial-gradient(circle at 30% 20%, #ffffff, #1b0032 45%, #050010 100%);
+  }
+
+  .app-shell-title {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .app-shell-title h1 {
+    margin: 0;
+    font-size: 1rem;
+  }
+
+  .app-shell-title span {
+    font-size: 0.78rem;
+    color: var(--nebula-text-soft);
+  }
+
+  .app-shell-badges {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-top: 0.35rem;
+  }
+
+  .app-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--nebula-text-soft);
+  }
+
+  .app-pill strong {
+    color: var(--nebula-accent-cyan);
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.25rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    background: radial-gradient(circle at top left,
+      rgba(255, 99, 208, 0.9) 0%,
+      rgba(74, 37, 133, 0.9) 40%,
+      rgba(12, 36, 72, 0.9) 100%);
+    box-shadow: 0 0 22px rgba(255, 99, 208, 0.45);
+  }
+
+  .pill span {
+    font-weight: 600;
+  }
+
+  .pill small {
+    opacity: 0.9;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 1.25rem;
+  }
+
+  header h2 {
+    margin: 0.55rem 0 0.25rem;
+    font-size: 1.1rem;
+  }
+
+  header p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--nebula-text-soft);
+  }
+
+  .card {
+    border-radius: var(--radius-card);
+    padding: 1rem 1.1rem;
+    background:
+      radial-gradient(circle at top,
+        #241236 0%,
+        #140a23 40%,
+        #05010b 100%);
+    border: 1px solid var(--nebula-border-soft);
+    box-shadow: 0 18px 36px rgba(0, 0, 0, 0.65);
+    margin-top: 0.9rem;
+  }
+
+  .card-title-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.6rem;
+  }
+
+  .card h3 {
+    margin: 0;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .mini-label {
+    font-size: 0.75rem;
+    color: var(--nebula-text-soft);
+    margin-bottom: 0.35rem;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    border-radius: 999px;
+    padding: 0.13rem 0.55rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .badge-auto {
+    border-color: var(--nebula-accent-green);
+    color: var(--nebula-accent-green);
+  }
+
+  .badge-tip {
+    border-color: var(--nebula-accent-cyan);
+    color: var(--nebula-accent-cyan);
+  }
+
+  .badge-warn {
+    border-color: #ffb56c;
+    color: #ffb56c;
+  }
+
+  .preview-frame {
+    width: 100%;
+    min-height: 780px;
+    border-radius: 16px;
+    border: 1px solid var(--nebula-border-soft);
+    background: #ffffff;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.8);
+  }
+
+  .controls-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
+  button,
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35rem;
+    border-radius: 999px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.8rem;
+    border: none;
+    cursor: pointer;
+    color: #050010;
+    background: linear-gradient(135deg,
+      var(--nebula-accent-pink),
+      var(--nebula-accent-cyan));
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+    width: auto;
+  }
+
+  button.secondary {
+    background: linear-gradient(135deg,
+      rgba(255, 255, 255, 0.12),
+      rgba(255, 255, 255, 0.03));
+    color: var(--nebula-text-main);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    box-shadow: none;
+  }
+
+  button:active {
+    transform: translateY(1px);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.7);
+  }
+
+  .toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+  }
+
+  .toggle input {
+    accent-color: var(--nebula-accent-cyan);
+    width: 16px;
+    height: 16px;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 140px;
+    padding: 0.6rem 0.7rem;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    background: #05000c;
+    color: var(--nebula-text-main);
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+      "Liberation Mono", "Courier New", monospace;
+    font-size: 0.8rem;
+    resize: vertical;
+  }
+
+  textarea:focus-visible {
+    outline: 2px solid rgba(99, 234, 255, 0.75);
+    outline-offset: 1px;
+  }
+
+  .code-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.35rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .code-label-row span {
+    font-size: 0.78rem;
+    color: var(--nebula-text-soft);
+  }
+
+  .code-label-row .actions {
+    display: inline-flex;
+    gap: 0.3rem;
+  }
+
+  .code-label-row button {
+    font-size: 0.7rem;
+    padding: 0.25rem 0.55rem;
+    box-shadow: none;
+  }
+
+  details summary {
+    list-style: none;
+    cursor: pointer;
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .summary-left {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  .summary-left span {
+    font-size: 0.86rem;
+    font-weight: 500;
+  }
+
+  .summary-icon {
+    width: 18px;
+    height: 18px;
+    border-radius: 999px;
+    background: radial-gradient(circle at top,
+      var(--nebula-accent-pink),
+      var(--nebula-accent-cyan));
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.72rem;
+    color: #050010;
+  }
+
+  .summary-label-soft {
+    font-size: 0.72rem;
+    color: var(--nebula-text-soft);
+  }
+
+  details .inner {
+    margin-top: 0.7rem;
+  }
+
+  .footer-note {
+    margin-top: 1.1rem;
+    font-size: 0.75rem;
+    text-align: center;
+    color: var(--nebula-text-soft);
+    opacity: 0.8;
+  }
+
+  /* Cápsulas */
+  .capsules-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .capsules-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .capsule-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    padding: 0.55rem 0.65rem;
+    border-radius: 12px;
+    background: rgba(0, 0, 0, 0.32);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 0.45rem;
+  }
+
+  .capsule-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  .capsule-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+  }
+
+  .capsule-meta {
+    font-size: 0.72rem;
+    color: var(--nebula-text-soft);
+  }
+
+  .capsule-buttons {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.15rem;
+  }
+
+  .capsule-buttons button {
+    font-size: 0.7rem;
+    padding: 0.22rem 0.6rem;
+    box-shadow: none;
+  }
+
+  /* Desktop leve */
+  @media (min-width: 768px) {
+    .preview-frame {
+      min-height: 380px;
+    }
+  }
+  </style></head>
+<body>
+
+<div class="app-shell">
+    <aside id="sidebar">
+        <button class="toggle-tab" onclick="toggleSidebar()">
+            <span id="side-icon">◀</span>
+        </button>
+
+        <div class="side-content">
+            <header class="mb-6">
+                <h1 class="text-2xl font-black text-white italic">NEBULA <span class="text-cyan-400">UNIFIED</span></h1>
+                <p class="text-[10px] text-slate-500 tracking-[3px] uppercase font-bold">Split &amp; Patch Engine</p>
+            </header>
+
+            <nav class="tabs-nav">
+                <button class="tab-btn active" onclick="switchTab('links', this)">Links</button>
+                <button class="tab-btn" onclick="switchTab('body', this)">Body</button>
+                <button class="tab-btn" onclick="switchTab('js', this)">Scripts</button>
+            </nav>
+
+            <div id="panel-links" class="tab-panel">
+                <div class="card-section">
+                    <label class="text-[10px] font-bold text-cyan-500 uppercase mb-2 block">Source Upload</label>
+                    <input type="file" id="file-upload" accept=".html" class="block w-full text-xs text-slate-500 file:mr-3 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-xs file:font-semibold file:bg-cyan-500/10 file:text-cyan-400 hover:file:bg-cyan-500/20 cursor-pointer">
+                </div>
+
+                <div class="card-section">
+                    <div class="flex justify-between mb-3">
+                        <label class="text-[10px] font-bold text-pink-500 uppercase">External CSS</label>
+                        <button onclick="addLinkField()" class="text-[9px] bg-pink-500/20 text-pink-400 px-2 py-0.5 rounded">ADD</button>
+                    </div>
+                    <div id="links-list" class="space-y-2"></div>
+                </div>
+
+                <div class="card-section">
+                    <label class="text-[10px] font-bold text-emerald-500 uppercase mb-3 block">Internal Styles</label>
+                    <div id="styles-list" class="space-y-3"></div>
+                </div>
+            </div>
+
+            <div id="panel-body" class="tab-panel hidden">
+                <div class="card-section">
+                    <label class="text-[10px] font-bold text-emerald-500 uppercase mb-2 block">Body Structure</label>
+                    <div id="body-tree" class="max-h-60 overflow-y-auto space-y-2 pr-2"></div>
+                </div>
+                <div class="card-section">
+                    <div class="flex justify-between mb-2">
+                        <label id="block-label" class="text-[10px] font-bold text-white uppercase">Editor de Bloco</label>
+                        <button onclick="saveBlockEdit()" class="text-[9px] bg-emerald-500 text-black font-bold px-2 py-0.5 rounded">SALVAR</button>
+                    </div>
+                    <textarea id="block-editor" class="code-editor" placeholder="Selecione um bloco acima..."></textarea>
+                </div>
+            </div>
+
+            <div id="panel-js" class="tab-panel hidden">
+                <div class="card-section">
+                    <label class="text-[10px] font-bold text-yellow-500 uppercase mb-3 block">Global Script</label>
+                    <textarea id="js-global-editor" class="code-editor" style="min-height: 300px;" placeholder="// Seu código JS aqui..."></textarea>
+                    <button onclick="updatePreview()" class="w-full mt-3 bg-yellow-500 text-black font-bold py-2 rounded text-xs hover:bg-yellow-400 transition">APLICAR LOGICA</button>
+                </div>
+            </div>
+
+            <div class="mt-8">
+                <button onclick="exportFullHTML()" class="w-full bg-white text-black font-black py-3 rounded-xl text-sm shadow-xl hover:scale-[1.02] active:scale-95 transition">GERAR BUILD FINAL</button>
+            </div>
+        </div>
+    </aside>
+
+    <main>
+        <div class="flex justify-between items-center mb-4">
+            <div>
+                <h2 class="text-white font-bold text-lg">Live Preview</h2>
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                    <span class="text-[10px] text-slate-400 uppercase tracking-widest font-bold">Workspace Ativo</span>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="updatePreview()" class="px-4 py-2 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold hover:bg-white/10 transition">RECARREGAR</button>
+                <button onclick="openNewWindow()" class="px-4 py-2 bg-cyan-500 text-black rounded-lg text-[10px] font-bold hover:bg-cyan-400 transition">POP-OUT</button>
+            </div>
+        </div>
+
+        <div class="preview-container">
+            <iframe id="preview-frame" sandbox="allow-scripts allow-modals allow-same-origin"></iframe>
+        </div>
+
+        <footer class="mt-4 flex justify-between text-[10px] text-slate-500 font-bold uppercase tracking-tighter">
+            <span>Nebula Evolution Engine</span>
+            <span id="status-msg">Pronto para processamento</span>
+        </footer>
+    </main>
+</div>
+
+<script>
+    // State
+    let state = {
+        headMeta: '',
+        links: [], // { href, id }
+        styles: [], // { content }
+        body: '',
+        js: '',
+        selectedBlockIdx: -1
+    };
+
+    function toggleSidebar() {
+        const side = document.getElementById('sidebar');
+        const icon = document.getElementById('side-icon');
+        side.classList.toggle('collapsed');
+        icon.textContent = side.classList.contains('collapsed') ? '▶' : '◀';
+    }
+
+    function switchTab(tabId, btn) {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.add('hidden'));
+        document.getElementById('panel-' + tabId).classList.remove('hidden');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+    }
+
+    // Parser
+    document.getElementById('file-upload').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if(!file) return;
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(ev.target.result, 'text/html');
+
+            state.headMeta = Array.from(doc.head.querySelectorAll('meta, title')).map(m => m.outerHTML).join('\n');
+            
+            // Extract Links
+            state.links = Array.from(doc.querySelectorAll('link[rel="stylesheet"]')).map(l => ({ href: l.getAttribute('href'), id: Math.random() }));
+            
+            // Extract Styles
+            state.styles = Array.from(doc.querySelectorAll('style')).map(s => ({ content: s.textContent }));
+
+            // Extract Body (clean scripts)
+            const bodyClone = doc.body.cloneNode(true);
+            Array.from(bodyClone.querySelectorAll('script')).forEach(s => s.remove());
+            state.body = bodyClone.innerHTML;
+
+            // Extract Scripts
+            state.js = Array.from(doc.querySelectorAll('script')).map(s => s.textContent).join('\n\n');
+            document.getElementById('js-global-editor').value = state.js;
+
+            renderLinks();
+            renderStyles();
+            renderBodyTree();
+            updatePreview();
+            document.getElementById('status-msg').textContent = "HTML Processado com sucesso";
+        };
+        reader.readAsText(file);
+    });
+
+    function renderLinks() {
+        const container = document.getElementById('links-list');
+        container.innerHTML = state.links.map((l, i) => `
+            <div class="flex gap-2 items-center">
+                <input type="text" value="${l.href}" oninput="state.links[${i}].href = this.value" class="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1 text-[11px] text-cyan-300 outline-none focus:border-cyan-500">
+                <button onclick="state.links.splice(${i},1); renderLinks(); updatePreview();" class="text-red-500 text-lg">&times;</button>
+            </div>
+        `).join('') || '<p class="text-[10px] text-slate-600 italic">Sem links externos.</p>';
+    }
+
+    function addLinkField() {
+        state.links.push({ href: '', id: Math.random() });
+        renderLinks();
+    }
+
+    function renderStyles() {
+        const container = document.getElementById('styles-list');
+        container.innerHTML = state.styles.map((s, i) => `
+            <div class="relative">
+                <textarea oninput="state.styles[${i}].content = this.value" class="code-editor !min-h-[80px]">${s.content}</textarea>
+                <button onclick="state.styles.splice(${i},1); renderStyles(); updatePreview();" class="absolute top-1 right-2 text-red-500 hover:text-red-400 text-sm">Remover</button>
+            </div>
+        `).join('') || '<p class="text-[10px] text-slate-600 italic">Sem estilos internos.</p>';
+    }
+
+    function renderBodyTree() {
+        const container = document.getElementById('body-tree');
+        const temp = document.createElement('div');
+        temp.innerHTML = state.body;
+        const children = Array.from(temp.children);
+
+        container.innerHTML = children.map((c, i) => {
+            const label = c.id ? `#${c.id}` : (c.className ? `.${c.className.split(' ')[0]}` : c.tagName.toLowerCase());
+            return `
+                <button onclick="selectBlock(${i})" class="w-full text-left p-2 rounded bg-white/5 border border-white/5 hover:bg-white/10 text-[10px] flex justify-between items-center group">
+                    <span class="text-slate-300 font-mono">${label}</span>
+                    <span class="text-[8px] text-slate-500 opacity-0 group-hover:opacity-100 uppercase">Editar</span>
+                </button>
+            `;
+        }).join('');
+    }
+
+    function selectBlock(idx) {
+        state.selectedBlockIdx = idx;
+        const temp = document.createElement('div');
+        temp.innerHTML = state.body;
+        const node = temp.children[idx];
+        document.getElementById('block-editor').value = node ? node.innerHTML : '';
+        document.getElementById('block-label').textContent = "Editando: " + (node ? node.tagName : 'Bloco');
+    }
+
+    function saveBlockEdit() {
+        if(state.selectedBlockIdx === -1) return;
+        const temp = document.createElement('div');
+        temp.innerHTML = state.body;
+        if(temp.children[state.selectedBlockIdx]) {
+            temp.children[state.selectedBlockIdx].innerHTML = document.getElementById('block-editor').value;
+            state.body = temp.innerHTML;
+            updatePreview();
+            document.getElementById('status-msg').textContent = "Bloco atualizado";
+        }
+    }
+
+    function updatePreview() {
+        state.js = document.getElementById('js-global-editor').value;
+        const iframe = document.getElementById('preview-frame');
+        
+        const linksHtml = state.links.map(l => `<link rel="stylesheet" href="${l.href}">`).join('\n');
+        const stylesHtml = state.styles.map(s => `<style>${s.content}</style>`).join('\n');
+
+        const content = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                ${state.headMeta}
+                ${linksHtml}
+                ${stylesHtml}
+            </head>
+            <body style="margin:0; padding:0;">
+                ${state.body}
+                <script>${state.js.replace(/<\/script>/g, '<\\/script>')}<\/script>
+            </body>
+            </html>
+        `;
+
+        const blob = new Blob([content], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        if(iframe.src) URL.revokeObjectURL(iframe.src);
+        iframe.src = url;
+    }
+
+    function exportFullHTML() {
+        const linksHtml = state.links.map(l => `<link rel="stylesheet" href="${l.href}">`).join('\n');
+        const stylesHtml = state.styles.map(s => `<style>${s.content}</style>`).join('\n');
+        
+        const final = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    ${state.headMeta}
+    ${linksHtml}
+    ${stylesHtml}
+</head>
+<body>
+${state.body}
+<script>
+${document.getElementById('js-global-editor').value}
+<\/script>
+</body>
+</html>`;
+
+        const blob = new Blob([final], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `nebula_build_${Date.now()}.html`;
+        a.click();
+    }
+
+    function openNewWindow() {
+        const iframe = document.getElementById('preview-frame');
+        fetch(iframe.src).then(r => r.text()).then(html => {
+            const win = window.open();
+            win.document.write(html);
+        });
+    }
+
+    // Live update for JS
+    document.getElementById('js-global-editor').addEventListener('blur', updatePreview);
+</script>
+
+
+
+
+
+  <main>
+    <!-- APP CARD HUB1 / BLUECUP -->
+    <section class="app-shell" data-hub1-app="NebulaLiveEditor">
+      <div class="app-shell-header">
+        <div class="app-orb">
+          <div class="app-orb-inner"></div>
+        </div>
+        <div class="app-shell-title">
+          <h1>Nebula Live Editor</h1>
+          <span>App-card do Hub1 / BlueCup · Batedor visual de HTML</span>
+        </div>
+      </div>
+      <div class="app-shell-badges">
+        <div class="app-pill"><strong>modo</strong> editor visual</div>
+        <div class="app-pill">preview em tempo real</div>
+        <div class="app-pill">cápsulas → apps Hub1</div>
+      </div>
+    </section>
+
+    <header>
+      <div class="pill">
+        <span>Nebula Live</span>
+        <small>HTML · CSS · JS · Preview</small>
+      </div>
+      <h2>Batedor de HTML em tempo real</h2>
+      <p>
+        Cola seu layout, ajusta o CSS, testa o JS e salva como cápsula ou app da Play Store interna.
+      </p>
+    </header>
+
+    <!-- PREVIEW CARD -->
+    <section class="card" id="preview-card">
+      <div class="card-title-row">
+        <h3>1 · Preview da página</h3>
+        <span class="badge badge-tip">visual primeiro</span>
+      </div>
+      <p class="mini-label">
+        Tudo que você editar nos blocos de código abaixo aparece aqui.
+      </p>
+      <iframe id="previewFrame" class="preview-frame" title="Preview Live"></iframe>
+
+      <div class="controls-row">
+        <button id="runOnceBtn">
+          🔁 Atualizar agora
+        </button>
+
+        <label class="toggle">
+          <input type="checkbox" id="autoRunToggle" checked="">
+          <span>Atualizar automaticamente enquanto digita</span>
+        </label>
+      </div>
+
+      <p class="mini-label" id="statusText" style="margin-top:0.5rem;">
+        Status: aguardando primeira atualização…
+      </p>
+    </section>
+
+    <!-- HTML CARD -->
+    <section class="card">
+      <details open="">
+        <summary>
+          <div class="summary-left">
+            <div class="summary-icon">H</div>
+            <span>2 · HTML</span>
+          </div>
+          <span class="summary-label-soft">estrutura da página</span>
+        </summary>
+        <div class="inner">
+          <div class="code-label-row">
+            <span>HTML (conteúdo do &lt;body&gt;)</span>
+            <div class="actions">
+              <button class="secondary" type="button" id="btnHtmlPaste">Colar</button>
+              <button class="secondary" type="button" id="btnHtmlClear">Limpar</button>
+              <button class="secondary" type="button" id="btnHtmlSample">Exemplo</button>
+            </div>
+          </div>
+          <textarea id="htmlInput" spellcheck="false"></textarea>
+          <p class="mini-label">
+            Botão “Colar” tenta ler o texto do clipboard e jogar direto aqui (funciona melhor em HTTPS / localhost).
+          </p>
+        </div>
+      </details>
+    </section>
+
+    <!-- CSS CARD -->
+    <section class="card">
+      <details open="">
+        <summary>
+          <div class="summary-left">
+            <div class="summary-icon">C</div>
+            <span>3 · CSS</span>
+          </div>
+          <span class="summary-label-soft">estilo da página</span>
+        </summary>
+        <div class="inner">
+          <div class="code-label-row">
+            <span>CSS (vai dentro de &lt;style&gt;&lt;/style&gt;)</span>
+            <div class="actions">
+              <button class="secondary" type="button" id="btnCssClear">Limpar</button>
+              <button class="secondary" type="button" id="btnCssSample">Exemplo</button>
+            </div>
+          </div>
+          <textarea id="cssInput" spellcheck="false"></textarea>
+        </div>
+      </details>
+    </section>
+
+    <!-- JS CARD -->
+    <section class="card">
+      <details>
+        <summary>
+          <div class="summary-left">
+            <div class="summary-icon">J</div>
+            <span>4 · JavaScript</span>
+          </div>
+          <span class="summary-label-soft">interação / comportamento</span>
+        </summary>
+        <div class="inner">
+          <div class="code-label-row">
+            <span>JS (vai no final do &lt;body&gt;)</span>
+            <div class="actions">
+              <button class="secondary" type="button" id="btnJsClear">Limpar</button>
+              <button class="secondary" type="button" id="btnJsSample">Exemplo</button>
+            </div>
+          </div>
+          <textarea id="jsInput" spellcheck="false"></textarea>
+          <p class="mini-label">
+            Se der erro de JS, ele aparece no console do navegador (DevTools).
+          </p>
+        </div>
+      </details>
+    </section>
+
+    <!-- CAPSULAS CARD -->
+    <section class="card">
+      <div class="card-title-row">
+        <h3>5 · Cápsulas salvas &amp; Play Store interna</h3>
+        <span class="badge badge-auto">localStorage</span>
+      </div>
+      <p class="mini-label">
+        Salva o combo HTML/CSS/JS atual como cápsula e publica como app da Play Store interna (Hub1).
+      </p>
+
+      <div class="capsules-actions">
+        <button id="saveCapsuleBtn">
+          💾 Salvar como cápsula
+        </button>
+        <button class="secondary" type="button" id="clearCapsulesBtn">
+          🧹 Apagar todas
+        </button>
+      </div>
+
+      <p class="mini-label" id="capsulesStatus">
+        Nenhuma cápsula salva ainda.
+      </p>
+
+      <ul class="capsules-list" id="capsulesList"></ul>
+
+      <p class="mini-label">
+        Cada cápsula vira um possível “app” interno. A Play Store do Hub1 pode ler
+        <code>localStorage["hub1_apps_capsules_v1"]</code> e montar os cards.
+      </p>
+    </section>
+
+    <!-- NOTINHA FINAL -->
+    <p class="footer-note">
+      Tudo fica salvo no navegador (edição atual + cápsulas + apps internos). Dá pra limpar sem medo, é tudo local.
+    </p>
+  </main>
+
+  <script>
+  // ==========================
+  // IDs e chaves de storage
+  // ==========================
+  const htmlInput = document.getElementById("htmlInput");
+  const cssInput = document.getElementById("cssInput");
+  const jsInput = document.getElementById("jsInput");
+  const previewFrame = document.getElementById("previewFrame");
+  const autoRunToggle = document.getElementById("autoRunToggle");
+  const runOnceBtn = document.getElementById("runOnceBtn");
+  const statusText = document.getElementById("statusText");
+
+  const btnHtmlClear = document.getElementById("btnHtmlClear");
+  const btnCssClear = document.getElementById("btnCssClear");
+  const btnJsClear = document.getElementById("btnJsClear");
+  const btnHtmlSample = document.getElementById("btnHtmlSample");
+  const btnCssSample = document.getElementById("btnCssSample");
+  const btnJsSample = document.getElementById("btnJsSample");
+  const btnHtmlPaste = document.getElementById("btnHtmlPaste");
+
+  const saveCapsuleBtn = document.getElementById("saveCapsuleBtn");
+  const clearCapsulesBtn = document.getElementById("clearCapsulesBtn");
+  const capsulesStatus = document.getElementById("capsulesStatus");
+  const capsulesList = document.getElementById("capsulesList");
+
+  const STORAGE_KEY = "nebula_live_editor_v1";
+  const CAPSULES_KEY = "nebula_live_capsules_v1";
+
+  // Apps da Play Store interna (Hub1)
+  const HUB1_APPS_KEY = "hub1_apps_capsules_v1";
+
+  // ==========================
+  // Status visual
+  // ==========================
+  function setStatus(text, type = "info") {
+    if (!statusText) return;
+    statusText.textContent = "Status: " + text;
+    if (type === "ok") {
+      statusText.style.color = "#9bffc9";
+    } else if (type === "warn") {
+      statusText.style.color = "#ffcf8a";
+    } else if (type === "error") {
+      statusText.style.color = "#ff9b7b";
+    } else {
+      statusText.style.color = "#f8f4ff";
+    }
+  }
+
+  // ==========================
+  // Edição atual (não cápsulas)
+  // ==========================
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      const obj = JSON.parse(raw);
+      if (typeof obj.html === "string") htmlInput.value = obj.html;
+      if (typeof obj.css === "string") cssInput.value = obj.css;
+      if (typeof obj.js === "string") jsInput.value = obj.js;
+      if (typeof obj.auto === "boolean") {
+        autoRunToggle.checked = obj.auto;
+      }
+      return true;
+    } catch (e) {
+      console.warn("Erro ao carregar do storage:", e);
+      return false;
+    }
+  }
+
+  function saveToStorage() {
+    try {
+      const obj = {
+        html: htmlInput.value,
+        css: cssInput.value,
+        js: jsInput.value,
+        auto: autoRunToggle.checked,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch (e) {
+      console.warn("Erro ao salvar no storage:", e);
+    }
+  }
+
+  function buildDocumentString() {
+    const html = htmlInput.value || "";
+    const css = cssInput.value || "";
+    const js = jsInput.value || "";
+
+    const full = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Preview · Nebula Live</title>
+  <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  ${css}
+  </style>
+</head>
+<body>
+${html}
+
+<script>
+${js.replace(/<\/script>/gi, "<\\/script>")}
+<\/script>
+</body>
+</html>
+`;
+    return full;
+  }
+
+  function updatePreview() {
+    try {
+      const docString = buildDocumentString();
+      const blob = new Blob([docString], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      previewFrame.src = url;
+      setStatus(
+        autoRunToggle.checked
+          ? "preview atualizado automaticamente."
+          : "preview atualizado manualmente.",
+        "ok"
+      );
+      saveToStorage();
+    } catch (e) {
+      console.error("Erro ao atualizar preview:", e);
+      setStatus("erro ao atualizar preview. Veja o console.", "error");
+    }
+  }
+
+  // Debounce simples
+  let debounceTimer = null;
+  function scheduleUpdate() {
+    if (!autoRunToggle.checked) {
+      saveToStorage();
+      setStatus("auto-update desligado. Clique em “Atualizar agora”.", "warn");
+      return;
+    }
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      updatePreview();
+    }, 350);
+  }
+
+  // Eventos de edição atual
+  htmlInput.addEventListener("input", scheduleUpdate);
+  cssInput.addEventListener("input", scheduleUpdate);
+  jsInput.addEventListener("input", scheduleUpdate);
+
+  autoRunToggle.addEventListener("change", () => {
+    saveToStorage();
+    if (autoRunToggle.checked) {
+      setStatus("auto-update ligado. Qualquer digitação atualiza o preview.");
+      updatePreview();
+    } else {
+      setStatus("auto-update desligado. Use “Atualizar agora”.", "warn");
+    }
+  });
+
+  runOnceBtn.addEventListener("click", () => {
+    updatePreview();
+  });
+
+  // ==========================
+  // Botão COLAR (HTML)
+  // ==========================
+  async function pasteIntoHtml() {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      alert("API de clipboard não disponível aqui. Tenta em HTTPS ou localhost.");
+      setStatus("clipboard API indisponível neste contexto.", "warn");
+      return;
+    }
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) {
+        setStatus("clipboard vazio ou sem texto.", "warn");
+        return;
+      }
+      htmlInput.value = text;
+      scheduleUpdate();
+      setStatus("conteúdo colado do clipboard no HTML.", "ok");
+    } catch (e) {
+      console.error("Erro ao ler clipboard:", e);
+      alert("Não consegui ler o clipboard. O navegador talvez tenha bloqueado.");
+      setStatus("erro ao tentar colar do clipboard.", "error");
+    }
+  }
+
+  btnHtmlPaste.addEventListener("click", () => {
+    pasteIntoHtml();
+  });
+
+  // ==========================
+  // Botões limpar
+  // ==========================
+  btnHtmlClear.addEventListener("click", () => {
+    htmlInput.value = "";
+    scheduleUpdate();
+  });
+
+  btnCssClear.addEventListener("click", () => {
+    cssInput.value = "";
+    scheduleUpdate();
+  });
+
+  btnJsClear.addEventListener("click", () => {
+    jsInput.value = "";
+    scheduleUpdate();
+  });
+
+  // ==========================
+  // Exemplos rápidos
+  // ==========================
+  const SAMPLE_HTML = `
+<div class="hero">
+  <h1>Olá, Nebula Live 👋</h1>
+  <p>Esse é o seu batedor visual de HTML/CSS/JS.</p>
+  <button class="hero-btn">Clique aqui</button>
+</div>
+  `.trim();
+
+  const SAMPLE_CSS = `
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #1b0032, #050010);
+  color: #f8f4ff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  text-align: center;
+  padding: 32px 20px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top, #32104b, #140620);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero h1 {
+  margin-bottom: 8px;
+}
+
+.hero p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.hero-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff63d0, #43e8ff);
+  color: #050010;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+}
+  `.trim();
+
+  const SAMPLE_JS = `
+document.querySelector(".hero-btn")?.addEventListener("click", () => {
+  alert("Rodando JS no preview! 🔮");
+});
+  `.trim();
+
+  btnHtmlSample.addEventListener("click", () => {
+    htmlInput.value = SAMPLE_HTML;
+    scheduleUpdate();
+  });
+
+  btnCssSample.addEventListener("click", () => {
+    cssInput.value = SAMPLE_CSS;
+    scheduleUpdate();
+  });
+
+  btnJsSample.addEventListener("click", () => {
+    jsInput.value = SAMPLE_JS;
+    scheduleUpdate();
+  });
+
+  // ==========================
+  // Cápsulas (name, html, css, js, createdAt)
+  // ==========================
+  function getCapsules() {
+    try {
+      const raw = localStorage.getItem(CAPSULES_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return [];
+      return arr;
+    } catch (e) {
+      console.warn("Erro ao ler cápsulas:", e);
+      return [];
+    }
+  }
+
+  function setCapsules(arr) {
+    try {
+      localStorage.setItem(CAPSULES_KEY, JSON.stringify(arr));
+    } catch (e) {
+      console.warn("Erro ao salvar cápsulas:", e);
+    }
+  }
+
+  function formatDate(iso) {
+    if (!iso) return "";
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "";
+      const dia = String(d.getDate()).padStart(2, "0");
+      const mes = String(d.getMonth() + 1).padStart(2, "0");
+      const ano = d.getFullYear();
+      const hora = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      return `${dia}/${mes}/${ano} · ${hora}:${min}`;
+    } catch {
+      return "";
+    }
+  }
+
+  // ==========================
+  // Apps da Play Store interna (Hub1)
+  // ==========================
+  function getHub1Apps() {
+    try {
+      const raw = localStorage.getItem(HUB1_APPS_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return [];
+      return arr;
+    } catch (e) {
+      console.warn("Erro ao ler apps Hub1:", e);
+      return [];
+    }
+  }
+
+  function setHub1Apps(arr) {
+    try {
+      localStorage.setItem(HUB1_APPS_KEY, JSON.stringify(arr));
+    } catch (e) {
+      console.warn("Erro ao salvar apps Hub1:", e);
+    }
+  }
+
+  // Expor helper global pra outros módulos, se quiserem
+  window.NebulaLiveHub1 = {
+    getCapsules,
+    getHub1Apps,
+    HUB1_APPS_KEY,
+    CAPSULES_KEY,
+  };
+
+  function publishCapsuleAsHub1App(capsule) {
+    const apps = getHub1Apps();
+    const appId = "nebula-" + capsule.id;
+
+    // Se já existe app com o mesmo id, sobra só um (atualiza)
+    const filtered = apps.filter(a => a.id !== appId);
+
+    const app = {
+      id: appId,
+      name: capsule.name || "Cápsula Nebula",
+      createdAt: capsule.createdAt,
+      type: "html_capsule",
+      source: "NebulaLiveEditor",
+      html: capsule.html || "",
+      css: capsule.css || "",
+      js: capsule.js || "",
+    };
+
+    filtered.unshift(app);
+    setHub1Apps(filtered);
+  }
+
+  function renderCapsulesList() {
+    const capsules = getCapsules();
+    capsulesList.innerHTML = "";
+
+    if (!capsules.length) {
+      capsulesStatus.textContent = "Nenhuma cápsula salva ainda.";
+      return;
+    }
+
+    capsulesStatus.textContent = `Você tem ${capsules.length} cápsula(s) salva(s).`;
+
+    const existingApps = getHub1Apps();
+    const existingIds = new Set(existingApps.map(a => a.id));
+
+    capsules.forEach(capsule => {
+      const li = document.createElement("li");
+      li.className = "capsule-item";
+
+      const top = document.createElement("div");
+      top.className = "capsule-top";
+
+      const nameEl = document.createElement("div");
+      nameEl.className = "capsule-name";
+      nameEl.textContent = capsule.name || "(sem nome)";
+
+      const metaEl = document.createElement("div");
+      metaEl.className = "capsule-meta";
+      metaEl.textContent = formatDate(capsule.createdAt);
+
+      top.appendChild(nameEl);
+      top.appendChild(metaEl);
+
+      const btnRow = document.createElement("div");
+      btnRow.className = "capsule-buttons";
+
+      const btnLoad = document.createElement("button");
+      btnLoad.type = "button";
+      btnLoad.className = "secondary";
+      btnLoad.textContent = "Carregar";
+      btnLoad.addEventListener("click", () => {
+        htmlInput.value = capsule.html || "";
+        cssInput.value = capsule.css || "";
+        jsInput.value = capsule.js || "";
+        saveToStorage();
+        updatePreview();
+        setStatus(`cápsula “${capsule.name || "sem nome"}” carregada.`, "ok");
+      });
+
+      const btnPublish = document.createElement("button");
+      btnPublish.type = "button";
+      btnPublish.className = "secondary";
+      const appId = "nebula-" + capsule.id;
+      const alreadyApp = existingIds.has(appId);
+      btnPublish.textContent = alreadyApp ? "📲 Atualizar app Hub1" : "📲 Publicar no Hub1";
+      btnPublish.addEventListener("click", () => {
+        publishCapsuleAsHub1App(capsule);
+        setStatus(`cápsula “${capsule.name || "sem nome"}” publicada como app Hub1.`, "ok");
+        renderCapsulesList(); // atualiza label do botão
+      });
+
+      const btnDelete = document.createElement("button");
+      btnDelete.type = "button";
+      btnDelete.className = "secondary";
+      btnDelete.textContent = "Excluir";
+      btnDelete.addEventListener("click", () => {
+        const confirmDelete = confirm(
+          `Apagar cápsula “${capsule.name || "sem nome"}”?`
+        );
+        if (!confirmDelete) return;
+        const arr = getCapsules().filter(c => c.id !== capsule.id);
+        setCapsules(arr);
+        setStatus("cápsula apagada.", "warn");
+        renderCapsulesList();
+      });
+
+      btnRow.appendChild(btnLoad);
+      btnRow.appendChild(btnPublish);
+      btnRow.appendChild(btnDelete);
+
+      li.appendChild(top);
+      li.appendChild(btnRow);
+
+      capsulesList.appendChild(li);
+    });
+  }
+
+  function saveCapsule() {
+    const html = htmlInput.value || "";
+    const css = cssInput.value || "";
+    const js = jsInput.value || "";
+
+    if (!html && !css && !js) {
+      alert("Nada pra salvar. Preenche pelo menos HTML, CSS ou JS.");
+      return;
+    }
+
+    let name = prompt("Nome da cápsula:", "Layout " + new Date().toLocaleString());
+    if (name === null) return;
+    name = name.trim();
+    if (!name) {
+      name = "Cápsula sem nome " + new Date().toLocaleString();
+    }
+
+    const nowIso = new Date().toISOString();
+    const newCapsule = {
+      id: Date.now(),
+      name,
+      html,
+      css,
+      js,
+      createdAt: nowIso,
+    };
+
+    const arr = getCapsules();
+    arr.unshift(newCapsule);
+    setCapsules(arr);
+    renderCapsulesList();
+    setStatus(`cápsula “${name}” salva.`, "ok");
+  }
+
+  function clearCapsules() {
+    const capsules = getCapsules();
+    if (!capsules.length) {
+      alert("Você não tem cápsulas salvas.");
+      return;
+    }
+    const confirmClear = confirm(
+      "Apagar TODAS as cápsulas salvas neste navegador?"
+    );
+    if (!confirmClear) return;
+    setCapsules([]);
+    setStatus("todas as cápsulas foram apagadas.", "warn");
+    renderCapsulesList();
+  }
+
+  saveCapsuleBtn.addEventListener("click", saveCapsule);
+  clearCapsulesBtn.addEventListener("click", clearCapsules);
+
+  // ==========================
+  // Init
+  // ==========================
+  window.addEventListener("DOMContentLoaded", () => {
+    const hadStored = loadFromStorage();
+    if (!hadStored) {
+      htmlInput.value = SAMPLE_HTML;
+      cssInput.value = SAMPLE_CSS;
+      jsInput.value = SAMPLE_JS;
+    }
+    renderCapsulesList();
+    updatePreview();
+  });
+  </script>
+
+
+  <script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+}
+</script>
+
+
+<script>
+  // ==========================
+  // IDs e chaves de storage
+  // ==========================
+  const htmlInput = document.getElementById("htmlInput");
+  const cssInput = document.getElementById("cssInput");
+  const jsInput = document.getElementById("jsInput");
+  const previewFrame = document.getElementById("previewFrame");
+  const autoRunToggle = document.getElementById("autoRunToggle");
+  const runOnceBtn = document.getElementById("runOnceBtn");
+  const statusText = document.getElementById("statusText");
+
+  const btnHtmlClear = document.getElementById("btnHtmlClear");
+  const btnCssClear = document.getElementById("btnCssClear");
+  const btnJsClear = document.getElementById("btnJsClear");
+  const btnHtmlSample = document.getElementById("btnHtmlSample");
+  const btnCssSample = document.getElementById("btnCssSample");
+  const btnJsSample = document.getElementById("btnJsSample");
+  const btnHtmlPaste = document.getElementById("btnHtmlPaste");
+
+  const saveCapsuleBtn = document.getElementById("saveCapsuleBtn");
+  const clearCapsulesBtn = document.getElementById("clearCapsulesBtn");
+  const capsulesStatus = document.getElementById("capsulesStatus");
+  const capsulesList = document.getElementById("capsulesList");
+
+  const STORAGE_KEY = "nebula_live_editor_v1";
+  const CAPSULES_KEY = "nebula_live_capsules_v1";
+
+  // Apps da Play Store interna (Hub1)
+  const HUB1_APPS_KEY = "hub1_apps_capsules_v1";
+
+  // ==========================
+  // Status visual
+  // ==========================
+  function setStatus(text, type = "info") {
+    if (!statusText) return;
+    statusText.textContent = "Status: " + text;
+    if (type === "ok") {
+      statusText.style.color = "#9bffc9";
+    } else if (type === "warn") {
+      statusText.style.color = "#ffcf8a";
+    } else if (type === "error") {
+      statusText.style.color = "#ff9b7b";
+    } else {
+      statusText.style.color = "#f8f4ff";
+    }
+  }
+
+  // ==========================
+  // Edição atual (não cápsulas)
+  // ==========================
+  function loadFromStorage() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return false;
+      const obj = JSON.parse(raw);
+      if (typeof obj.html === "string") htmlInput.value = obj.html;
+      if (typeof obj.css === "string") cssInput.value = obj.css;
+      if (typeof obj.js === "string") jsInput.value = obj.js;
+      if (typeof obj.auto === "boolean") {
+        autoRunToggle.checked = obj.auto;
+      }
+      return true;
+    } catch (e) {
+      console.warn("Erro ao carregar do storage:", e);
+      return false;
+    }
+  }
+
+  function saveToStorage() {
+    try {
+      const obj = {
+        html: htmlInput.value,
+        css: cssInput.value,
+        js: jsInput.value,
+        auto: autoRunToggle.checked,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch (e) {
+      console.warn("Erro ao salvar no storage:", e);
+    }
+  }
+
+  function buildDocumentString() {
+    const html = htmlInput.value || "";
+    const css = cssInput.value || "";
+    const js = jsInput.value || "";
+
+    const full = `
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Preview · Nebula Live</title>
+  <style>
+  html, body {
+    margin: 0;
+    padding: 0;
+  }
+  ${css}
+  </style>
+</head>
+<body>
+${html}
+
+<script>
+${js.replace(/<\/script>/gi, "<\\/script>")}
+<\/script>
+</body>
+</html>
+`;
+    return full;
+  }
+
+  function updatePreview() {
+    try {
+      const docString = buildDocumentString();
+      const blob = new Blob([docString], { type: "text/html" });
+      const url = URL.createObjectURL(blob);
+      previewFrame.src = url;
+      setStatus(
+        autoRunToggle.checked
+          ? "preview atualizado automaticamente."
+          : "preview atualizado manualmente.",
+        "ok"
+      );
+      saveToStorage();
+    } catch (e) {
+      console.error("Erro ao atualizar preview:", e);
+      setStatus("erro ao atualizar preview. Veja o console.", "error");
+    }
+  }
+
+  // Debounce simples
+  let debounceTimer = null;
+  function scheduleUpdate() {
+    if (!autoRunToggle.checked) {
+      saveToStorage();
+      setStatus("auto-update desligado. Clique em “Atualizar agora”.", "warn");
+      return;
+    }
+    if (debounceTimer) clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => {
+      updatePreview();
+    }, 350);
+  }
+
+  // Eventos de edição atual
+  htmlInput.addEventListener("input", scheduleUpdate);
+  cssInput.addEventListener("input", scheduleUpdate);
+  jsInput.addEventListener("input", scheduleUpdate);
+
+  autoRunToggle.addEventListener("change", () => {
+    saveToStorage();
+    if (autoRunToggle.checked) {
+      setStatus("auto-update ligado. Qualquer digitação atualiza o preview.");
+      updatePreview();
+    } else {
+      setStatus("auto-update desligado. Use “Atualizar agora”.", "warn");
+    }
+  });
+
+  runOnceBtn.addEventListener("click", () => {
+    updatePreview();
+  });
+
+  // ==========================
+  // Botão COLAR (HTML)
+  // ==========================
+  async function pasteIntoHtml() {
+    if (!navigator.clipboard || !navigator.clipboard.readText) {
+      alert("API de clipboard não disponível aqui. Tenta em HTTPS ou localhost.");
+      setStatus("clipboard API indisponível neste contexto.", "warn");
+      return;
+    }
+    try {
+      const text = await navigator.clipboard.readText();
+      if (!text) {
+        setStatus("clipboard vazio ou sem texto.", "warn");
+        return;
+      }
+      htmlInput.value = text;
+      scheduleUpdate();
+      setStatus("conteúdo colado do clipboard no HTML.", "ok");
+    } catch (e) {
+      console.error("Erro ao ler clipboard:", e);
+      alert("Não consegui ler o clipboard. O navegador talvez tenha bloqueado.");
+      setStatus("erro ao tentar colar do clipboard.", "error");
+    }
+  }
+
+  btnHtmlPaste.addEventListener("click", () => {
+    pasteIntoHtml();
+  });
+
+  // ==========================
+  // Botões limpar
+  // ==========================
+  btnHtmlClear.addEventListener("click", () => {
+    htmlInput.value = "";
+    scheduleUpdate();
+  });
+
+  btnCssClear.addEventListener("click", () => {
+    cssInput.value = "";
+    scheduleUpdate();
+  });
+
+  btnJsClear.addEventListener("click", () => {
+    jsInput.value = "";
+    scheduleUpdate();
+  });
+
+  // ==========================
+  // Exemplos rápidos
+  // ==========================
+  const SAMPLE_HTML = `
+<div class="hero">
+  <h1>Olá, Nebula Live 👋</h1>
+  <p>Esse é o seu batedor visual de HTML/CSS/JS.</p>
+  <button class="hero-btn">Clique aqui</button>
+</div>
+  `.trim();
+
+  const SAMPLE_CSS = `
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: radial-gradient(circle at top, #1b0032, #050010);
+  color: #f8f4ff;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero {
+  text-align: center;
+  padding: 32px 20px;
+  border-radius: 24px;
+  background: radial-gradient(circle at top, #32104b, #140620);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.hero h1 {
+  margin-bottom: 8px;
+}
+
+.hero p {
+  margin-top: 0;
+  margin-bottom: 16px;
+  opacity: 0.85;
+}
+
+.hero-btn {
+  border: none;
+  border-radius: 999px;
+  padding: 10px 20px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff63d0, #43e8ff);
+  color: #050010;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.7);
+}
+  `.trim();
+
+  const SAMPLE_JS = `
+document.querySelector(".hero-btn")?.addEventListener("click", () => {
+  alert("Rodando JS no preview! 🔮");
+});
+  `.trim();
+
+  btnHtmlSample.addEventListener("click", () => {
+    htmlInput.value = SAMPLE_HTML;
+    scheduleUpdate();
+  });
+
+  btnCssSample.addEventListener("click", () => {
+    cssInput.value = SAMPLE_CSS;
+    scheduleUpdate();
+  });
+
+  btnJsSample.addEventListener("click", () => {
+    jsInput.value = SAMPLE_JS;
+    scheduleUpdate();
+  });
+
+  // ==========================
+  // Cápsulas (name, html, css, js, createdAt)
+  // ==========================
+  function getCapsules() {
+    try {
+      const raw = localStorage.getItem(CAPSULES_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return [];
+      return arr;
+    } catch (e) {
+      console.warn("Erro ao ler cápsulas:", e);
+      return [];
+    }
+  }
+
+  function setCapsules(arr) {
+    try {
+      localStorage.setItem(CAPSULES_KEY, JSON.stringify(arr));
+    } catch (e) {
+      console.warn("Erro ao salvar cápsulas:", e);
+    }
+  }
+
+  function formatDate(iso) {
+    if (!iso) return "";
+    try {
+      const d = new Date(iso);
+      if (Number.isNaN(d.getTime())) return "";
+      const dia = String(d.getDate()).padStart(2, "0");
+      const mes = String(d.getMonth() + 1).padStart(2, "0");
+      const ano = d.getFullYear();
+      const hora = String(d.getHours()).padStart(2, "0");
+      const min = String(d.getMinutes()).padStart(2, "0");
+      return `${dia}/${mes}/${ano} · ${hora}:${min}`;
+    } catch {
+      return "";
+    }
+  }
+
+  // ==========================
+  // Apps da Play Store interna (Hub1)
+  // ==========================
+  function getHub1Apps() {
+    try {
+      const raw = localStorage.getItem(HUB1_APPS_KEY);
+      if (!raw) return [];
+      const arr = JSON.parse(raw);
+      if (!Array.isArray(arr)) return [];
+      return arr;
+    } catch (e) {
+      console.warn("Erro ao ler apps Hub1:", e);
+      return [];
+    }
+  }
+
+  function setHub1Apps(arr) {
+    try {
+      localStorage.setItem(HUB1_APPS_KEY, JSON.stringify(arr));
+    } catch (e) {
+      console.warn("Erro ao salvar apps Hub1:", e);
+    }
+  }
+
+  // Expor helper global pra outros módulos, se quiserem
+  window.NebulaLiveHub1 = {
+    getCapsules,
+    getHub1Apps,
+    HUB1_APPS_KEY,
+    CAPSULES_KEY,
+  };
+
+  function publishCapsuleAsHub1App(capsule) {
+    const apps = getHub1Apps();
+    const appId = "nebula-" + capsule.id;
+
+    // Se já existe app com o mesmo id, sobra só um (atualiza)
+    const filtered = apps.filter(a => a.id !== appId);
+
+    const app = {
+      id: appId,
+      name: capsule.name || "Cápsula Nebula",
+      createdAt: capsule.createdAt,
+      type: "html_capsule",
+      source: "NebulaLiveEditor",
+      html: capsule.html || "",
+      css: capsule.css || "",
+      js: capsule.js || "",
+    };
+
+    filtered.unshift(app);
+    setHub1Apps(filtered);
+  }
+
+  function renderCapsulesList() {
+    const capsules = getCapsules();
+    capsulesList.innerHTML = "";
+
+    if (!capsules.length) {
+      capsulesStatus.textContent = "Nenhuma cápsula salva ainda.";
+      return;
+    }
+
+    capsulesStatus.textContent = `Você tem ${capsules.length} cápsula(s) salva(s).`;
+
+    const existingApps = getHub1Apps();
+    const existingIds = new Set(existingApps.map(a => a.id));
+
+    capsules.forEach(capsule => {
+      const li = document.createElement("li");
+      li.className = "capsule-item";
+
+      const top = document.createElement("div");
+      top.className = "capsule-top";
+
+      const nameEl = document.createElement("div");
+      nameEl.className = "capsule-name";
+      nameEl.textContent = capsule.name || "(sem nome)";
+
+      const metaEl = document.createElement("div");
+      metaEl.className = "capsule-meta";
+      metaEl.textContent = formatDate(capsule.createdAt);
+
+      top.appendChild(nameEl);
+      top.appendChild(metaEl);
+
+      const btnRow = document.createElement("div");
+      btnRow.className = "capsule-buttons";
+
+      const btnLoad = document.createElement("button");
+      btnLoad.type = "button";
+      btnLoad.className = "secondary";
+      btnLoad.textContent = "Carregar";
+      btnLoad.addEventListener("click", () => {
+        htmlInput.value = capsule.html || "";
+        cssInput.value = capsule.css || "";
+        jsInput.value = capsule.js || "";
+        saveToStorage();
+        updatePreview();
+        setStatus(`cápsula “${capsule.name || "sem nome"}” carregada.`, "ok");
+      });
+
+      const btnPublish = document.createElement("button");
+      btnPublish.type = "button";
+      btnPublish.className = "secondary";
+      const appId = "nebula-" + capsule.id;
+      const alreadyApp = existingIds.has(appId);
+      btnPublish.textContent = alreadyApp ? "📲 Atualizar app Hub1" : "📲 Publicar no Hub1";
+      btnPublish.addEventListener("click", () => {
+        publishCapsuleAsHub1App(capsule);
+        setStatus(`cápsula “${capsule.name || "sem nome"}” publicada como app Hub1.`, "ok");
+        renderCapsulesList(); // atualiza label do botão
+      });
+
+      const btnDelete = document.createElement("button");
+      btnDelete.type = "button";
+      btnDelete.className = "secondary";
+      btnDelete.textContent = "Excluir";
+      btnDelete.addEventListener("click", () => {
+        const confirmDelete = confirm(
+          `Apagar cápsula “${capsule.name || "sem nome"}”?`
+        );
+        if (!confirmDelete) return;
+        const arr = getCapsules().filter(c => c.id !== capsule.id);
+        setCapsules(arr);
+        setStatus("cápsula apagada.", "warn");
+        renderCapsulesList();
+      });
+
+      btnRow.appendChild(btnLoad);
+      btnRow.appendChild(btnPublish);
+      btnRow.appendChild(btnDelete);
+
+      li.appendChild(top);
+      li.appendChild(btnRow);
+
+      capsulesList.appendChild(li);
+    });
+  }
+
+  function saveCapsule() {
+    const html = htmlInput.value || "";
+    const css = cssInput.value || "";
+    const js = jsInput.value || "";
+
+    if (!html && !css && !js) {
+      alert("Nada pra salvar. Preenche pelo menos HTML, CSS ou JS.");
+      return;
+    }
+
+    let name = prompt("Nome da cápsula:", "Layout " + new Date().toLocaleString());
+    if (name === null) return;
+    name = name.trim();
+    if (!name) {
+      name = "Cápsula sem nome " + new Date().toLocaleString();
+    }
+
+    const nowIso = new Date().toISOString();
+    const newCapsule = {
+      id: Date.now(),
+      name,
+      html,
+      css,
+      js,
+      createdAt: nowIso,
+    };
+
+    const arr = getCapsules();
+    arr.unshift(newCapsule);
+    setCapsules(arr);
+    renderCapsulesList();
+    setStatus(`cápsula “${name}” salva.`, "ok");
+  }
+
+  function clearCapsules() {
+    const capsules = getCapsules();
+    if (!capsules.length) {
+      alert("Você não tem cápsulas salvas.");
+      return;
+    }
+    const confirmClear = confirm(
+      "Apagar TODAS as cápsulas salvas neste navegador?"
+    );
+    if (!confirmClear) return;
+    setCapsules([]);
+    setStatus("todas as cápsulas foram apagadas.", "warn");
+    renderCapsulesList();
+  }
+
+  saveCapsuleBtn.addEventListener("click", saveCapsule);
+  clearCapsulesBtn.addEventListener("click", clearCapsules);
+
+  // ==========================
+  // Init
+  // ==========================
+  window.addEventListener("DOMContentLoaded", () => {
+    const hadStored = loadFromStorage();
+    if (!hadStored) {
+      htmlInput.value = SAMPLE_HTML;
+      cssInput.value = SAMPLE_CSS;
+      jsInput.value = SAMPLE_JS;
+    }
+    renderCapsulesList();
+    updatePreview();
+  });
+  </script><script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js')
+}
+</script>
+
+<script>
+(() => {
+  // Cria/injeta um <style> dinâmico
+  const style = document.createElement('style');
+  style.id = 'di-runtime-style';
+
+  style.textContent = `
+    /* ===== BODY / HTML ===== */
+    html, body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: auto;
+      overflow-y: auto;
+    }
+
+    /* ===== CONTENT IFRAME ===== */
+    .content iframe,
+    .content #frame {
+      padding: 0 3px 39px;
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      display: block;
+    }
+  `;
+
+  document.head.appendChild(style);
+})();
+</script>
+
+   </body></html>
