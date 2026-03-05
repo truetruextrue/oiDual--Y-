@@ -4,7 +4,7 @@ import {
   registerArchetypes,
   activateArchetype,
   speakWithCurrentArchetype
-} from './m0ds/kob-voice-engine-1.js';
+} from './m0ds/kob-voice-engine-0.js';
 
 registerArchetypes(ARCHETYPES);
 activateArchetype('atlas');
