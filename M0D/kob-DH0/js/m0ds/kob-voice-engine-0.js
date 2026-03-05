@@ -39,10 +39,10 @@ function applyVoiceTheme(arch) {
   const root = document.documentElement;
   const body = document.body;
 
-  root.style.setProperty('--kob-voice-primary', arch.theme.primary);
-  root.style.setProperty('--kob-voice-secondary', arch.theme.secondary);
-  root.style.setProperty('--kob-voice-bg-soft', arch.theme.bgSoft);
-  root.style.setProperty('--kob-voice-glow', arch.theme.glow);
+  root.style.setProperty('--kob-tts-primary', arch.theme.primary);
+  root.style.setProperty('--kob-tts-secondary', arch.theme.secondary);
+  root.style.setProperty('--kob-tts-bg-soft', arch.theme.bgSoft);
+  root.style.setProperty('--kob-tts-glow', arch.theme.glow);
 
   body.setAttribute('data-voice-arch', arch.id);
 }
