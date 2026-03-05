@@ -29,7 +29,7 @@
   const outline = $('#kob-tts-outline') || (() => {
     const el = document.createElement('div');
     el.id = 'kob-tts-outline';
-    el.style.position = 'absolute';
+    el.style.position = 'relative';
     el.style.pointerEvents = 'none';
     el.style.display = 'none';
     document.body.appendChild(el);
@@ -516,6 +516,9 @@
         return;
       }
 
+      
+      
+      
       // TTS controls
       const bid = (btn.id || btn.dataset.id || btn.dataset.action || '').toString();
 
@@ -570,6 +573,20 @@
      small util
      ----------------------------- */
   function hexToRgba(hex,a){ const c=(hex||'#000').replace('#',''); const r=parseInt(c.slice(0,2),16), g=parseInt(c.slice(2,4),16), b=parseInt(c.slice(4,6),16); return `rgba(${r},${g},${b},${a})`; }
+
+
+function applyVoiceTheme(arch){
+
+  const root = document.documentElement;
+
+  root.style.setProperty('--kob-voice-primary', arch.theme.primary);
+  root.style.setProperty('--kob-voice-secondary', arch.theme.secondary);
+  root.style.setProperty('--kob-voice-bg-soft', arch.theme.bgSoft);
+  root.style.setProperty('--kob-voice-glow', arch.theme.glow);
+
+  document.body.dataset.voiceArch = arch.id;
+
+}
 
   /* -----------------------------
      updateArchetype: update CSS + call engine.applyVoiceTheme if available
