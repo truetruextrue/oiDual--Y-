@@ -118,6 +118,19 @@ function applyVoiceTheme(arch) {
   const body = document.body || document.documentElement;
 
   try {
+
+  /* ─────────────
+     TTS SYSTEM
+  ───────────── */
+
+  root.style.setProperty('--kob-tts-primary', primary);
+  root.style.setProperty('--kob-tts-secondary', secondary);
+  root.style.setProperty('--kob-tts-soft', soft);
+  root.style.setProperty('--kob-tts-glow', glow);
+
+   
+
+
     root.style.setProperty('--kob-voice-primary', theme.primary);
     root.style.setProperty('--kob-voice-secondary', theme.secondary);
     root.style.setProperty('--kob-voice-bg-soft', theme.bgSoft);
