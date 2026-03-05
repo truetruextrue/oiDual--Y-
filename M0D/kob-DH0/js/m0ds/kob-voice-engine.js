@@ -31,7 +31,7 @@ function getArchetypeById(id) {
 
 /* ─────────────────────────────────────────────
  * PULSE — APLICAR TEMA VISUAL
- * ───────────────────────────────────────────── */
+ * ───────────────────────────────────────────── *
 
 function applyVoiceTheme(arch) {
   if (!arch || !arch.theme) return;
@@ -45,8 +45,42 @@ function applyVoiceTheme(arch) {
   root.style.setProperty('--kob-voice-glow', arch.theme.glow);
 
   body.setAttribute('data-voice-arch', arch.id);
-}
+} */
+function applyVoiceTheme(arch) {
+  if (!arch || !arch.theme) return;
 
+  const root = document.documentElement;
+  const body = document.body;
+
+  const primary   = arch.theme.primary;
+  const secondary = arch.theme.secondary;
+  const soft      = arch.theme.soft || arch.theme.bgSoft;
+  const glow      = arch.theme.glow;
+
+  /* ─────────────
+     TTS SYSTEM
+  ───────────── */
+
+  root.style.setProperty('--kob-tts-primary', primary);
+  root.style.setProperty('--kob-tts-secondary', secondary);
+  root.style.setProperty('--kob-tts-soft', soft);
+  root.style.setProperty('--kob-tts-glow', glow);
+
+  /* ─────────────
+     VOICE SYSTEM (legacy)
+  ───────────── */
+
+  root.style.setProperty('--kob-voice-primary', primary);
+  root.style.setProperty('--kob-voice-secondary', secondary);
+  root.style.setProperty('--kob-voice-bg-soft', soft);
+  root.style.setProperty('--kob-voice-glow', glow);
+
+  /* ─────────────
+     ARCH STATE
+  ───────────── */
+
+  body.setAttribute('data-voice-arch', arch.id);
+}
 /* ─────────────────────────────────────────────
  * ARTEMIS — SELEÇÃO DE VOZ
  * ───────────────────────────────────────────── */
