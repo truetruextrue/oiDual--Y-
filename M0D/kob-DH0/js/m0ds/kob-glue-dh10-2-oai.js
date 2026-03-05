@@ -575,7 +575,7 @@
   function hexToRgba(hex,a){ const c=(hex||'#000').replace('#',''); const r=parseInt(c.slice(0,2),16), g=parseInt(c.slice(2,4),16), b=parseInt(c.slice(4,6),16); return `rgba(${r},${g},${b},${a})`; }
 
 
-function applyVoiceTheme(arch){
+/*function applyVoiceTheme(arch){
 
   const root = document.documentElement;
 
@@ -586,6 +586,41 @@ function applyVoiceTheme(arch){
 
   document.body.dataset.voiceArch = arch.id;
 
+}*/
+  function applyVoiceTheme(arch) {
+  if (!arch || !arch.theme) return;
+
+  const root = document.documentElement;
+  const body = document.body;
+
+  const primary   = arch.theme.primary;
+  const secondary = arch.theme.secondary;
+  const soft      = arch.theme.soft || arch.theme.bgSoft;
+  const glow      = arch.theme.glow;
+
+  /* ─────────────
+     TTS SYSTEM
+  ───────────── */
+
+  root.style.setProperty('--kob-tts-primary', primary);
+  root.style.setProperty('--kob-tts-secondary', secondary);
+  root.style.setProperty('--kob-tts-soft', soft);
+  root.style.setProperty('--kob-tts-glow', glow);
+
+  /* ─────────────
+     VOICE SYSTEM (legacy)
+  ───────────── */
+
+  root.style.setProperty('--kob-voice-primary', primary);
+  root.style.setProperty('--kob-voice-secondary', secondary);
+  root.style.setProperty('--kob-voice-bg-soft', soft);
+  root.style.setProperty('--kob-voice-glow', glow);
+
+  /* ─────────────
+     ARCH STATE
+  ───────────── */
+
+  body.setAttribute('data-voice-arch', arch.id);
 }
 
   /* -----------------------------
