@@ -43,7 +43,7 @@
 
   /* -----------------------------
      Archetypes (keep structure compat)
-     ----------------------------- *
+     ----------------------------- */
   const ARCHETYPES = [
     { id:'kobllux', name:'KOBLLUX', voice:'Reed',   lang:'pt-BR', rate:0.98, pitch:0.48, color:'#22D3EE' },
     { id:'kodux',   name:'KODUX',   voice:'Reed',   lang:'pt-BR', rate:0.86, pitch:0.68, color:'#F97316' },
@@ -65,14 +65,14 @@
     { id:'infodose', name:'INFODOSE', voice:'Luciana', lang:'pt-BR', rate:1.06, pitch:0.96, color:'#22C55E' },
     { id:'horus', name:'HORUS', voice:'Majed', lang:'ar-001', rate:0.94, pitch:0.82, color:'#F59E0B' }
   ];
-  */
+  
 
 /* ─────────────────────────────────────────────
    ARCHETYPES · Unified Voice + Theme Registry
    usado por:
    - kob-glue-dh10.js
    - kob-voice-engine.js
-   ───────────────────────────────────────────── */
+   ───────────────────────────────────────────── *
  const ARCHETYPES = [
 
   {
@@ -379,7 +379,7 @@
     }
   }
 
-];
+];*/
 
 
   /* -----------------------------
