@@ -399,4 +399,9 @@ html, body {
       transition: color 0.5s ease;
     }
 
+.kob-tts-dock{
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
    
