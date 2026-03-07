@@ -1,0 +1,96 @@
+
+    :root {
+      /* Z-index system */
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+      
+      /* Orb & Voice Colors */
+      --orb-speed: 7.8s;
+      --kob-voice-primary: #78e3ff;
+      --kob-voice-secondary: #b978ff;
+      --kob-voice-accent: #ffffff;
+      --neon-cyan: #00f2ff;
+      --neon-purple: #bc00ff;
+    }
+
+    /* Estrutura Root Reativa */
+    #root {
+      min-height: 100vh;
+      width: 100%;
+      background-color: #0b0c10;
+      background-image: 
+        radial-gradient(circle at 10% 50%, color-mix(in srgb, var(--kob-voice-primary) 12%, transparent) 0%, transparent 60%),
+        radial-gradient(circle at 90% 50%, color-mix(in srgb, var(--kob-voice-secondary) 12%, transparent) 0%, transparent 60%);
+      background-attachment: fixed;
+      transition: background-image 0.5s ease;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Overlay de background fixo */
+    #bg-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: var(--z-base);
+      pointer-events: none;
+    }
+
+    /* Wrap Principal do HUD KOB */
+    .wrap {
+      position: relative;
+      z-index: var(--z-content);
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .content {
+      flex: 1;
+      position: relative;
+    }
+
+    /* Orb Styles */
+    .orb-microphone-container {
+        width: 100%; height: 100%;
+        display: flex; align-items: center; justify-content: center;
+        position: relative;
+    }
+    .tts-orb-mini {
+        width: 28px; height: 28px;
+        display: flex; align-items: center; justify-content: center;
+    }
+    .orb {
+        width: 100%; height: 100%;
+        border-radius: 50%;
+        display: grid; place-items: center;
+    }
+    .orb-core {
+        width: 78%; height: 78%;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, var(--kob-voice-accent) 0%, rgba(255,255,255,0.1) 10%, transparent 60%),
+                    radial-gradient(circle at 70% 70%, var(--kob-voice-primary) 0%, var(--kob-voice-secondary) 100%);
+        box-shadow: 0 0 15px var(--kob-voice-primary);
+        animation: orbSpin var(--orb-speed) linear infinite;
+    }
+    @keyframes orbSpin { to { transform: rotate(360deg); } }
+    
+    .speaking .orb-core {
+        animation: orbSpin 2s linear infinite, orbPulse 0.5s ease-in-out infinite alternate;
+    }
+    @keyframes orbPulse { from { transform: scale(1); } to { transform: scale(1.15); } }
+
+    /* Ajustes das seções de ativação */
+    .activation-hidden { display: none; }
+    .activation-card {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 8px;
+    }
+  
