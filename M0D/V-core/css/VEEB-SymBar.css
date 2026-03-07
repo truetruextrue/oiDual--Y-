@@ -29,7 +29,7 @@ html, body {
   background-image: var(--bg-gradient);
   color: var(--text);
   font-family: var(--font-main);
-  overflow: hidden; /* O frame cuida do scroll */
+  overflow: auto; /* hidden se O frame cuida do scroll */
 }
 
 .main-wrapper { 
