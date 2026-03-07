@@ -441,3 +441,7 @@ input[type="text"]:focus {
    Cada seção incorpora um dos 12 arquétipos, formando um sistema coeso
    onde o HUD se move, atraca e reage como um organismo vivo.
    ===================================================================== */
+.kob-tts-dock{
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
