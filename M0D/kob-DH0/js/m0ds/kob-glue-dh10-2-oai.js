@@ -29,7 +29,7 @@
   const outline = $('#kob-tts-outline') || (() => {
     const el = document.createElement('div');
     el.id = 'kob-tts-outline';
-    el.style.position = 'relative';
+    el.style.position = 'absolute';
     el.style.pointerEvents = 'none';
     el.style.display = 'none';
     document.body.appendChild(el);
