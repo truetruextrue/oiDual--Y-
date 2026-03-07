@@ -46,7 +46,7 @@
   const d = document.createElement('div');
 
   // fusão das classes
-  d.className = 'kob-tts-dock symbol-bar';
+  d.className = 'kob-tts-dock';
 
   d.innerHTML = `
     <button id="tts-stop"  title="Parar">■</button>
