@@ -32,7 +32,11 @@
     el.style.position = 'absolute';
     el.style.pointerEvents = 'none';
     el.style.display = 'none';
-    document.body.appendChild(el);
+    
+    /* document.body.appendChild(el); */
+    
+    document.querySelector('.content').appendChild(el);
+
     return el;
   })();
 
