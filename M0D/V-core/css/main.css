@@ -34,6 +34,55 @@ html, body {
   overflow: auto;
 }
 
+:root {
+
+  /* ===============================
+     VOICE CORE
+     =============================== */
+
+  --kob-voice-primary: #00e28b;
+  --kob-voice-secondary: #0EA5E9;
+
+  --kob-voice-bg-soft: color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+  --kob-voice-bg-strong: color-mix(in srgb, var(--kob-voice-primary) 40%, black);
+
+  --kob-voice-glow: color-mix(in srgb, var(--kob-voice-primary) 60%, white);
+
+  /* ===============================
+     DERIVAÇÕES DO TEMA
+     =============================== */
+
+  --grad-a: var(--kob-voice-primary);
+  --grad-b: var(--kob-voice-secondary);
+
+  --panel-bg: color-mix(in srgb, var(--kob-voice-primary) 10%, #0b0f18);
+
+  --border: color-mix(in srgb, var(--kob-voice-primary) 30%, rgba(255,255,255,0.1));
+
+  --text: #f0f3f9;
+
+  --bg-dark: #02040a;
+
+  --bg-gradient:
+    radial-gradient(
+      circle at 50% -10%,
+      color-mix(in srgb, var(--kob-voice-primary) 35%, #1a224f) 0%,
+      #050714 60%,
+      #000
+    );
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+
+  background:
+    var(--bg-dark),
+    var(--bg-gradient);
+
+  color: var(--text);
+  font-family: var(--font-main);
+}
 /* =========================================================
    2. SISTEMA HUD FLUTUANTE VIVO (DH10 FINAL)
    ========================================================= */
