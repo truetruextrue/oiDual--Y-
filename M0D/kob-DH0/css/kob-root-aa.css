@@ -1,0 +1,123 @@
+/* ========== kob-hud-aa.css ========== */
+/* HUD AAA helper + archetypes variables (lightweight) */
+
+/* root defaults + placeholders for archetypes */
+:root{
+  --z-base: 0;
+  --z-content: 100;
+  --z-widget: 500;
+  --z-overlay: 1000;
+  --z-system: 5000;
+
+  /* voice core defaults (will be overridden via JS setArchetype) */
+  --kob-voice-primary: #78e3ff;
+  --kob-voice-secondary: #b978ff;
+  --kob-voice-accent: #ffffff;
+
+  /* derived helpers */
+  --kob-voice-bg-soft: color-mix(in srgb, var(--kob-voice-primary) 18%, transparent);
+  --kob-voice-glow: color-mix(in srgb, var(--kob-voice-primary) 60%, white);
+
+  /* snapping */
+  --snap-threshold: 40px;
+  --magnet-radius: 88px;
+  --snap-ease: cubic-bezier(.18,.9,.22,1);
+}
+
+/* small global helpers used by modules */
+.kob-transition { transition: all 220ms var(--snap-ease); will-change: transform, top, left; }
+
+/* Ambient blobs (simple responsive) */
+.ambient-light { position: absolute; inset: auto 0 0 0; pointer-events: none; z-index: calc(var(--z-widget) - 10); }
+.ambient-light .blob {
+  position: absolute;
+  width: clamp(160px, 22vw, 420px);
+  height: clamp(160px, 22vw, 420px);
+  filter: blur(24px) saturate(120%);
+  opacity: .65;
+  border-radius: 999px;
+  transform: translate3d(0,0,0);
+}
+.blob-1 { left: -8vw; bottom: -6vh; background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), transparent 60%); }
+.blob-2 { right: -6vw; bottom: -4vh; background: radial-gradient(circle at 70% 70%, var(--kob-voice-secondary), transparent 60%); }
+
+/* snap-zone visible helper (optional) */
+#snap-zone { position: fixed; right: 18vw; bottom: 16vh; width: 220px; height: 220px; border-radius: 12px; pointer-events: none; z-index: var(--z-system); opacity: .04; transition: opacity .35s; }
+
+/* toaster */
+.toaster-wrap { position: fixed; right: 18px; bottom: 20px; width: auto; max-width: 360px; z-index: calc(var(--z-overlay) + 5); }
+
+/* symbol-bar base (keeps same API as your markup) */
+.symbol-bar {
+  position: fixed;
+  left: 20px;
+  top: 20vh;
+  z-index: var(--z-system);
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+  align-items: center;
+  border-radius: 28px;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--kob-voice-primary) 6%, #051023), rgba(2,4,10,.5));
+  border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 22%, rgba(255,255,255,0.04));
+  backdrop-filter: blur(12px) saturate(140%);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+  user-select: none;
+  touch-action: none;
+  transform-origin: left top;
+}
+
+/* small state classes */
+.symbol-bar.is-dragging { transition: none !important; opacity: 0.98; filter: saturate(1.06); }
+.symbol-bar.snap-side { border-radius: 0 24px 24px 0; flex-direction: column; padding: 12px; }
+.symbol-bar.snap-side-right { border-radius: 24px 0 0 24px; flex-direction: column; padding: 12px; }
+.symbol-bar.snap-top { border-radius: 0 0 24px 24px; flex-direction: row; }
+
+/* symbol button */
+.symbol-button {
+  width: 44px; height: 44px;
+  display: inline-grid; place-items: center;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  background: var(--kob-voice-bg-soft);
+  color: var(--kob-voice-accent);
+  cursor: pointer;
+  font-weight: 700;
+  transition: transform .12s var(--snap-ease), box-shadow .18s var(--snap-ease), background .18s;
+}
+.symbol-button:active { transform: scale(.94); }
+.symbol-button:hover { box-shadow: 0 6px 18px color-mix(in srgb, var(--kob-voice-primary) 30%, transparent); border-color: color-mix(in srgb, var(--kob-voice-primary) 28%, transparent); color: var(--kob-voice-primary); }
+
+/* orb micro */
+.orb { width: 32px; height: 32px; border-radius: 50%; display:grid; place-items:center; position:relative; overflow:visible; }
+.orb-core {
+  width: 70%;
+  height: 70%;
+  border-radius: 50%;
+  background:
+   radial-gradient(circle at 30% 30%, var(--kob-voice-accent) 0%, rgba(255,255,255,0.06) 8%, transparent 58%),
+   radial-gradient(circle at 70% 70%, var(--kob-voice-primary) 0%, var(--kob-voice-secondary) 100%);
+  box-shadow: 0 0 12px var(--kob-voice-primary);
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+@keyframes orbSpin { to { transform: rotate(360deg); } }
+
+.speaking .orb-core { animation: orbSpin 1.6s linear infinite, orbPulse .9s ease-in-out infinite alternate; filter: drop-shadow(0 0 18px var(--kob-voice-primary)); }
+@keyframes orbPulse { from { transform: scale(1); } to { transform: scale(1.14) rotate(180deg); } }
+
+/* voice-indicator (small dot) */
+.voice-indicator {
+  position: absolute; right: -4px; top: -4px;
+  width: 10px; height: 10px; border-radius: 999px;
+  background: var(--kob-voice-primary); border: 2px solid #000;
+  box-shadow: 0 0 10px var(--kob-voice-primary);
+}
+
+/* HUD info small label */
+.hud-info { font-size: 10px; color: var(--kob-voice-primary); font-weight: 700; padding: 0 8px; }
+
+/* snap animation helpers */
+.kob-snap-anim { transition: transform 420ms var(--snap-ease), left 420ms var(--snap-ease), top 420ms var(--snap-ease); }
+
+/* small utilities */
+.hidden { display:none !important; }
