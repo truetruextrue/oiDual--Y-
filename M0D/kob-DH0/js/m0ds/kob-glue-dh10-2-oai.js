@@ -49,8 +49,8 @@
      Archetypes (keep structure compat)
      ----------------------------- */
   const ARCHETYPES = [
-    { id:'kobllux', name:'KOBLLUX', voice:'Reed',   lang:'pt-BR', rate:0.98, pitch:0.48, color:'#22D3EE' },
-    { id:'kodux',   name:'KODUX',   voice:'Reed',   lang:'pt-BR', rate:0.86, pitch:0.68, color:'#F97316' },
+    { id:'kobllux', name:'KOBLLUX', voice:'Luciana',   lang:'pt-BR', rate:0.98, pitch:0.48, color:'#22D3EE' },
+    { id:'kodux',   name:'KODUX',   voice:'Luciana',   lang:'pt-BR', rate:0.86, pitch:0.68, color:'#F97316' },
     { id:'atlas',   name:'ATLAS',   voice:'Reed',    lang:'en-US',  rate:1.00, pitch:0.93, color:'#38BDF8' },
     { id:'nova',    name:'NOVA',    voice:'Luciana', lang:'pt-BR',  rate:1.06, pitch:1.34, color:'#F97316' },
     { id:'vitalis', name:'VITALIS', voice:'Rocko',   lang:'pt-BR',  rate:0.96, pitch:1.42, color:'#22C55E' },
@@ -60,11 +60,11 @@
     { id:'kaos',    name:'KAOS',    voice:'Rocko',   lang:'pt-BR',  rate:1.09, pitch:1.28, color:'#FACC15' },
     { id:'genus',   name:'GENUS',   voice:'Reed',    lang:'pt-BR',  rate:0.98, pitch:1.23, color:'#E5E7EB' },
     { id:'lumine',  name:'LUMINE',  voice:'Flo',     lang:'fr-FR',  rate:1.03, pitch:1.55, color:'#FDE047' },
-    { id:'solus',   name:'SOLUS',   voice:'Satu',    lang:'fi-FI',  rate:0.99, pitch:0.87, color:'#0EA5E9' },
-    { id:'rhea',    name:'RHEA',    voice:'Alice',   lang:'it-IT',  rate:1.02, pitch:0.59, color:'#22C55E' },
-    { id:'aion',    name:'AION',    voice:'Milena',  lang:'ru-RU',  rate:0.88, pitch:0.30, color:'#4F46E5' },
+    { id:'solus',   name:'SOLUS',   voice:'Satu',    lang:'fi-FI',  rate:1.18, pitch:0.87, color:'#0EA5E9' },
+    { id:'rhea',    name:'RHEA',    voice:'Alice',   lang:'it-IT',  rate:1.12, pitch:0.59, color:'#22C55E' },
+    { id:'aion',    name:'AION',    voice:'Monica',  lang:'es-ES',  rate:0.88, pitch:0.30, color:'#4F46E5' },
     { id:'uno',      name:'UNO',      voice:'Grandma', lang:'en-US', rate:0.90, pitch:0.93, color:'#F97316' },
-    { id:'dual',     name:'DUAL',     voice:'Reed',    lang:'pt-BR', rate:1.02, pitch:1.02, color:'#06B6D4' },
+    { id:'dual',     name:'DUAL',     voice:'Milena',    lang:'ru-RU', rate:1.02, pitch:1.02, color:'#06B6D4' },
     { id:'trinity',  name:'TRINITY',  voice:'Sandy',   lang:'en-US', rate:1.04, pitch:1.04, color:'#EC4899' },
     { id:'infodose', name:'INFODOSE', voice:'Luciana', lang:'pt-BR', rate:1.06, pitch:0.96, color:'#22C55E' },
     { id:'horus', name:'HORUS', voice:'Majed', lang:'ar-001', rate:0.94, pitch:0.82, color:'#F59E0B' }
