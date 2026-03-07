@@ -38,25 +38,26 @@
 
           <button id="tts-reread"  title="Re-Ler do início">⟳</button>
           <button id="tts-voice"   title="Trocar Voz PT-BR">🎙</button>
+
+    <button id="tts-grid"  title="Outline / Click-to-Speak">⌗</button>
 ---------- */
       
         const dock = document.querySelector('.kob-tts-dock') || (()=> {
-        const d = document.createElement('div');
-        d.className = 'kob-tts-dock';
-        d.innerHTML = `
+  const d = document.createElement('div');
 
-       
-          <button id="tts-stop"    title="Parar">■</button>
+  // fusão das classes
+  d.className = 'kob-tts-dock symbol-bar floating';
 
-          <button id="tts-reset"   title="Reset + próxima seção">↻</button>
-          <button id="tts-grid"    title="Outline / Click-to-Speak">⌗</button>
+  d.innerHTML = `
+    <button id="tts-stop"  title="Parar">■</button>
+    <button id="tts-reset" title="Reset + próxima seção">↻</button>
 
-          <small id="tts-status">Pronto.</small>
-        `;
-        document.body.appendChild(d);
-        return d;
-      })();
+    <small id="tts-status">Pronto.</small>
+  `;
 
+  document.body.appendChild(d);
+  return d;
+})();
       const outline = document.getElementById('kob-tts-outline') || (()=> {
         const o = document.createElement('div');
         o.id='kob-tts-outline';
