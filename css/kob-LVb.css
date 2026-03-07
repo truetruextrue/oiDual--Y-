@@ -106,3 +106,7 @@
       border-radius: 10px;
     }
   
+.kob-tts-dock{
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
