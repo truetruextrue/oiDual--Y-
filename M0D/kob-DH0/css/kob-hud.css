@@ -17,7 +17,7 @@ iframe#frame, iframe#content-frame { width: 100%; min-height: 100vh; height: 100
   position: fixed;
   z-index: 9999;
   display: flex;
-  gap: 8px;
+  gap: 2px;
   padding: 10px;
   background: var(--bg-blur);
   backdrop-filter: blur(15px) saturate(160%);
@@ -32,12 +32,15 @@ iframe#frame, iframe#content-frame { width: 100%; min-height: 100vh; height: 100
     padding 0.3s ease;
   user-select: none;
   touch-action: none;
-  opacity: 1;
+  opacity: 0.96;
 }
 
+
+
+
 /* Estado Inativo */
-.symbol-bar.idle { opacity: 0.15; }
-.symbol-bar.idle:hover { opacity: 1; }
+.symbol-bar.idle { opacity: 0.18; }
+.symbol-bar.idle:hover { opacity: 0.96; }
 
 /* Variações de Snap */
 .symbol-bar.snap-side { flex-direction: column; border-radius: 0 20px 20px 0; border-left: 0; }
@@ -116,3 +119,10 @@ iframe#frame, iframe#content-frame { width: 100%; min-height: 100vh; height: 100
 
 /* small helpers */
 .hud-info { font-size: 12px; padding: 4px 8px; align-self: center; opacity: .95; }
+
+
+.symbol-bar.collapsed{
+gap: 2px;
+padding:6px;
+width:fit-content;
+}
