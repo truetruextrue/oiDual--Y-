@@ -169,7 +169,7 @@ iframe#frame, iframe#content-frame { width: 100%; min-height: 100vh; height: 100
   justify-content: center;
 }
 
-.symbol-bar.floating { flex-direction: collum; border-radius:  24px; }
+.symbol-bar.floating { flex-direction: column; border-radius:  24px; }
 
 /* Botões */
 .symbol-button {
