@@ -43,8 +43,8 @@ iframe#frame, iframe#content-frame { width: 100%; min-height: 100vh; height: 100
 .symbol-bar.idle:hover { opacity: 0.96; }
 
 /* Variações de Snap */
-.symbol-bar.snap-side { flex-direction: column; border-radius: 0 20px 20px 0; border-left: 0; }
-.symbol-bar.snap-side-right { flex-direction: column; border-radius: 20px 0 0 20px; border-right: 0; }
+.symbol-bar.snap-side { bottom:28%;flex-direction: column; border-radius: 0 20px 20px 0; border-left: 0; }
+.symbol-bar.snap-side-right { bottom:28%; flex-direction: column; border-radius: 20px 0 0 20px; border-right: 0; }
 
 /* Snap Topo */
 .symbol-bar.snap-top {
