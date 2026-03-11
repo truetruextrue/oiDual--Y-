@@ -1,0 +1,52 @@
+/* KODUX: estilos base dos widgets (usa suas variáveis de arquétipo) */
+  .di-widget {
+    position: fixed;
+    min-width: 320px;
+    width: 420px;
+    max-width: 92vw;
+    min-height: 120px;
+    background: linear-gradient(180deg, color-mix(in srgb, var(--kob-voice-primary) 10%, transparent), rgba(0,0,0,0.4));
+    border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+    box-shadow: 0 18px 50px rgba(0,0,0,0.6), 0 0 28px color-mix(in srgb, var(--kob-voice-primary) 18%, transparent);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+    z-index: 6000; /* KODUX */
+    color: var(--text);
+    display:flex;
+    flex-direction:column;
+    resize: both;
+  }
+
+  .di-widget .di-header {
+    display:flex;
+    gap:8px;
+    align-items:center;
+    padding:8px 10px;
+    cursor:grab;
+    user-select:none;
+    background: linear-gradient(0deg, rgba(255,255,255,0.02), transparent);
+    border-bottom: 1px solid rgba(255,255,255,0.03);
+  }
+  .di-widget .di-title { font-weight:600; font-size:13px; letter-spacing:.04em; flex:1; }
+  .di-widget .di-controls { display:flex; gap:6px; }
+  .di-widget .di-controls button {
+    border: none; background: transparent; color:var(--ink); padding:6px; border-radius:8px; cursor:pointer;
+  }
+  .di-widget .di-body { padding:12px; font-size:14px; flex:1; overflow:auto; }
+
+  /* small footer info */
+  .di-widget .di-footer { padding:8px 10px; font-size:12px; color:var(--muted); border-top:1px solid rgba(255,255,255,0.02); }
+
+  /* symbol-bar mini-button */
+  .symbol-button.spawn-btn {
+    width:14px; height:24px; border-radius:10px; display:grid; place-items:center; cursor:pointer;
+    background:linear-gradient(180deg, var(--kob-voice-primary), color-mix(in srgb,var(--kob-voice-secondary) 12%, transparent));
+    box-shadow: 0 8px 20px rgba(0,0,0,0.45);
+    color: #081018; font-weight:700;
+  }
+
+  /* responsive clamp */
+  @media (max-width:720px){
+    .di-widget{ width:92vw; left:4vw !important; right:auto !important; }
+  }
