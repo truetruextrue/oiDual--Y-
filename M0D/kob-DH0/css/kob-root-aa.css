@@ -48,10 +48,10 @@
 .toaster-wrap { position: fixed; right: 18px; bottom: 20px; width: auto; max-width: 360px; z-index: calc(var(--z-overlay) + 5); }
 
 /* symbol-bar base (keeps same API as your markup) */
-.symbol-bar {
+.
+symbol-bar {
   position: fixed;
-  left: 20px;
-  top: 20vh;
+  
   z-index: var(--z-system);
   display: flex;
   gap: 10px;
@@ -75,7 +75,7 @@
 
 /* symbol button */
 .symbol-button {
-  width: 44px; height: 44px;
+  width: 33px; height: 33px;
   display: inline-grid; place-items: center;
   border-radius: 12px;
   border: 1px solid transparent;
