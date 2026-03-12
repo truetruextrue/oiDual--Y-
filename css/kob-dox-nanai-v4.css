@@ -923,6 +923,7 @@ body {
   background: radial-gradient(circle at 97% 88%, var(--arch-glow), transparent 78%);
   transition: background 1.2s;
   pointer-events: none;
+  opacity: 0.39;
 }
 
 /* ===== STATUS BAR ===== */
