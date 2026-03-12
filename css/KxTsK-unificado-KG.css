@@ -121,20 +121,34 @@
 }
 
 /* --- THEME ADDITIONAL VOICES (Body attributes) --- */
-body[data-voice-arch="kobllux"] { --kob-voice-primary:#00d8d8; --kob-voice-secondary:#d800d8; }
-body[data-voice-arch="nova"] { --kob-voice-primary:#FF6FB5; --kob-voice-secondary:#FFD6E8; }
-body[data-voice-arch="kaos"] { --kob-voice-primary:#FF5C8A; --kob-voice-secondary:#3D000F; }
-body[data-voice-arch="serena"] { --kob-voice-primary:#7AD3A8; --kob-voice-secondary:#154734; }
-body[data-voice-arch="vitalis"] { --kob-voice-primary:#00F5A0; --kob-voice-secondary:#00D9F5; }
-body[data-voice-arch="pulse"] { --kob-voice-primary:#A259FF; --kob-voice-secondary:#2D1B69; }
-body[data-voice-arch="atlas"] { --kob-voice-primary:#6CCFF6; --kob-voice-secondary:#1B4965; }
-body[data-voice-arch="lumine"] { --kob-voice-primary:#FFE066; --kob-voice-secondary:#FF9F1C; }
-body[data-voice-arch="rhea"] { --kob-voice-primary:#00B894; --kob-voice-secondary:#055E55; }
-body[data-voice-arch="solus"] { --kob-voice-primary:#4B6584; --kob-voice-secondary:#0B1420; }
-body[data-voice-arch="aion"] { --kob-voice-primary:#00A8E8; --kob-voice-secondary:#001F54; }
-body[data-voice-arch="cooplux"] { --kob-voice-primary:#39FFB6; --kob-voice-secondary:#00d8d8; }
-body[data-voice-arch="fitlux"] { --kob-voice-primary:#FFC857; --kob-voice-secondary:#FFE39A; }
+/* ==========================================================================
+   5. KOBLLUX TTS SYSTEM & DOCK
+   ========================================================================== */
+/* Tema adicional por arquétipo (opcional, p/ o body) */
+    /* ===== ARQUÉTIPOS (19) ===== */
+    body[data-voice-arch="kobllux"] { --kob-voice-primary: #22D3EE; --kob-voice-secondary: #0E7C9E; }
+    body[data-voice-arch="kodux"]   { --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; }
+    body[data-voice-arch="atlas"]   { --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; }
+    body[data-voice-arch="nova"]    { --kob-voice-primary: #F72585; --kob-voice-secondary: #7209B7; }
+    body[data-voice-arch="vitalis"] { --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; }
+    body[data-voice-arch="pulse"]   { --kob-voice-primary: #EC4899; --kob-voice-secondary: #831843; }
+    body[data-voice-arch="artemis"] { --kob-voice-primary: #A855F7; --kob-voice-secondary: #5B21B6; }
+    body[data-voice-arch="serena"]  { --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; }
+    body[data-voice-arch="kaos"]    { --kob-voice-primary: #FACC15; --kob-voice-secondary: #B45309; }
+    body[data-voice-arch="genus"]   { --kob-voice-primary: #E5E7EB; --kob-voice-secondary: #4B5563; }
+    body[data-voice-arch="lumine"]  { --kob-voice-primary: #FDE047; --kob-voice-secondary: #CA8A04; }
+    body[data-voice-arch="solus"]   { --kob-voice-primary: #0EA5E9; --kob-voice-secondary: #0369A1; }
+    body[data-voice-arch="rhea"]    { --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; }
+    body[data-voice-arch="aion"]    { --kob-voice-primary: #4F46E5; --kob-voice-secondary: #3730A3; }
+    body[data-voice-arch="uno"]     { --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; }
+    body[data-voice-arch="dual"]    { --kob-voice-primary: #06B6D4; --kob-voice-secondary: #0E7C9E; }
+    body[data-voice-arch="trinity"] { --kob-voice-primary: #EC4899; --kob-voice-secondary: #831843; }
+    body[data-voice-arch="infodose"]{ --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; }
+    body[data-voice-arch="horus"]   { --kob-voice-primary: #F59E0B; --kob-voice-secondary: #B45309; }
 
+    body[data-voice-arch="cooplux"] { --kob-voice-primary:#39FFB6; --kob-voice-secondary:#00d8d8; }
+    body[data-voice-arch="fitlux"]  { --kob-voice-primary:#FFC857; --kob-voice-secondary:#FFE39A; }
+    
 
 /* =========================
    2. RESET, BASE & ACCESSIBILITY
