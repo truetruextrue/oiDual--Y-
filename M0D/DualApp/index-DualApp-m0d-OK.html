@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+<!-- =========================================================
+ATLAS — Estrutura fundamental do sistema
+Responsável pelo corpo estrutural do app e metadados
+========================================================= -->
+
+<meta charset="utf-8">
+
+<meta name="viewport"
+  content="width=device-width, initial-scale=1.0">
+
+<title>Dual.Infodose</title>
+
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#000000">
+
+<link rel="icon"
+  type="image/png"
+  href="https://kodux78k.github.io/dual-app/assets/icons/icon-192.png">
+
+
+<!-- =========================================================
+LUMINE — Interface visual e estética
+Carrega o CSS principal do sistema
+========================================================= -->
+
+<link rel="stylesheet"
+  href="https://kodux78k.github.io/oiDual--Y-/M0D/DualApp/css/main.css">
+
+</head>
+
+
+<body>
+
+<!-- =========================================================
+GENUS — Identidade ativa do sistema
+Nome do assistente exibido na interface
+========================================================= -->
+
+<div id="assistantName"></div>
+
+
+
+<!-- =========================================================
+ATLAS — Motor central de navegação
+iframe que funciona como sistema de apps internos
+========================================================= -->
+
+<div class="content">
+
+  <iframe
+    id="frame"
+    class="active"
+    src="index.html"></iframe>
+
+</div>
+
+
+
+<!-- =========================================================
+PULSE — Barra de símbolos (atalhos de navegação)
+Cada botão carrega um módulo HTML
+========================================================= -->
+
+<div class="symbol-bar">
+
+  <button class="symbol-button" onclick="loadPage('about:blank')">Φ</button>
+
+  <button class="symbol-button" onclick="loadPage('dual-decoder-13.html')">꩜</button>
+
+  <button class="symbol-button" onclick="loadPage('Splash_FINAL_TEMA_PULSO.html')">◌</button>
+
+  <button class="symbol-button" onclick="loadPage('Raros.html')">☼</button>
+
+  <button class="symbol-button" onclick="loadPage('Solashss.html')">◑</button>
+
+  <button class="symbol-button" onclick="loadPage('dual-tube-25-0.html')">◘</button>
+
+</div>
+
+
+
+<!-- =========================================================
+ARTEMIS — Controle de navegação rápida
+Botão de retorno ao núcleo do sistema
+========================================================= -->
+
+<button class="lock-button"
+  onclick="loadPage('index.html')"></button>
+
+
+
+<!-- =========================================================
+GENUS — Upload de módulos locais
+Permite carregar HTML externo como componente
+========================================================= -->
+
+<input
+  type="file"
+  id="uploadHTML"
+  accept=".html"
+  style="display:none">
+
+
+
+<button id="uploadComponentBtn">⧉</button>
+
+<button id="remoteComponentBtn">☍</button>
+
+
+
+<!-- =========================================================
+KAOS — Sistema de desbloqueio simbólico
+Decodificador de selos e códigos
+========================================================= -->
+
+<button id="toggleDecoderBtn">✦</button>
+
+<button id="btn-expandir-ritual">◉</button>
+
+<div id="decoderBox">
+
+  <input
+    id="codeInput"
+    type="text"
+    placeholder="Digite o selo...">
+
+  <button onclick="decodeSymbolicCode()">
+    ✦ Desbloquear
+  </button>
+
+</div>
+
+
+
+<!-- =========================================================
+VITALIS — Campo energético visual
+Sistema de pulsos animados
+========================================================= -->
+
+<div id="pulsos-container">
+
+  <div id="pulsos"></div>
+
+</div>
+
+
+
+<!-- =========================================================
+SERENA — Player de áudio meditativo
+Sistema de trilhas e frequências binaurais
+========================================================= -->
+
+<div id="koblluxPlayer"
+  style="position:fixed;top:42px;left:20px;z-index:7;
+  background:rgba(0,0,0,0.8);
+  backdrop-filter:blur(9px);
+  padding:5px;border-radius:10px;
+  display:flex;flex-direction:column;
+  gap:6px;
+  transition:all 0.6s ease;
+  max-width:199px;
+  color:var(--text);
+  font-family:monospace;">
+
+  <button id="togglePlayer"
+    style="font-size:20px;background:none;border:none;color:inherit;cursor:pointer;">
+    ≈
+  </button>
+
+  <div id="playerWrapper" class="hidden"></div>
+
+  <div id="playerControls"
+    style="display:none;flex-direction:column;gap:8px;">
+
+    <button id="playPause"
+      style="font-size:22px;background:none;">
+      ►
+    </button>
+
+
+    <!-- seleção de trilhas -->
+
+    <select id="trackSelect">
+      <option value="">🎵 Escolha uma trilha</option>
+      <option value="Sono_Profundo">🌙 Sono Profundo</option>
+      <option value="Manifestação">✨ Manifestação</option>
+      <option value="Ativação_Pineal">🧠 Ativação Pineal</option>
+      <option value="Alívio_da_Ansiedade">🌿 Alívio da Ansiedade</option>
+      <option value="Meditação_Theta">◉ Meditação Theta</option>
+      <option value="Viagem_Astral">🌌 Viagem Astral</option>
+      <option value="Foco_Profundo">🎯 Foco Profundo</option>
+      <option value="Flow_State">🌊 Flow State</option>
+      <option value="Relaxamento_Rápido">💤 Relaxamento Rápido</option>
+      <option value="Concentração_Sustentada">📚 Concentração Sustentada</option>
+      <option value="Cura_Emocional">💖 Cura Emocional</option>
+      <option value="Recuperação_Física">🏋️ Recuperação Física</option>
+      <option value="matrix">🧪 Matrix</option>
+      <option value="tesseract">🧿 Tesseract</option>
+    </select>
+
+
+
+    <!-- volume trilha -->
+
+    <label>
+      🎵 Volume Trilha
+      <input
+        type="range"
+        id="trackVolume"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1">
+    </label>
+
+
+    <!-- volume binaural -->
+
+    <label>
+      🧘 Volume Binaural
+      <input
+        type="range"
+        id="binauralVolume"
+        min="0"
+        max="1"
+        step="0.01"
+        value="1">
+    </label>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================================================
+LUMINE — efeitos visuais do ambiente
+========================================================= -->
+
+<button id="themeToggle" title="Alternar tema"></button>
+
+<div id="particles-js"></div>
+
+
+
+<!-- =========================================================
+NOVA — logotipo e identidade visual
+========================================================= -->
+
+<div class="svg-container" id="logoContainer">
+
+  <object
+    data="https://kodux78k.github.io/dual-app/assets/icons/3D_logo_Dual_Infodose_10.png"
+    type="image/png"
+    id="logoObj"></object>
+
+</div>
+
+
+
+<!-- =========================================================
+SOLUS — Núcleo de resposta da IA
+========================================================= -->
+
+<div id="response" class="response-container">
+
+  <div class="pages-wrapper">
+
+    <div class="page initial active">
+
+      <strong>
+        Clique no ◉ e diga “Oi, Dual”.
+      </strong>
+
+    </div>
+
+  </div>
+
+
+
+  <p class="footer-text">
+
+    <em>
+      Do seu jeito.
+      <strong>Sempre</strong> único.
+      <strong>Sempre</strong> seu.
+    </em>
+
+  </p>
+
+  <div class="response-controls">
+    <div class="control-buttons">
+      <button class="copy-button" title="Copiar">
+        <object
+          data="https://kodux78k.github.io/dual-app/assets/icons/BW_quad_Dual_Infodose.svg"
+          height="27"
+          type="image/svg+xml"
+          width="27"></object>
+      </button>
+      <button class="paste-button" title="Colar">
+        <object
+          data="https://kodux78k.github.io/dual-app/assets/icons/BW_Dual_Infodose.svg"
+          height="24"
+          type="image/svg+xml"
+          width="24"></object>
+      </button>
+      <button class="toggle-button" id="toggleBtn" title="Login Infodose">
+        <object
+          data="https://kodux78k.github.io/dual-app/assets/icons/KBLX-pack/SuS-logo-1.PNG"
+          height="33"
+          type="image/png"
+          width="33"></object>
+      </button>
+      <button class="kitty-button" id="kittyBtn" title="Estudos">
+        <object
+          data="https://kodux78k.github.io/dual-app/assets/icons/DualKittyKard-icon-3.png"
+          height="33"
+          type="image/png"
+          width="33"></object>
+      </button>
+      <button class="upload-symbolic-button" id="uploadFileBtn" title="Enviar Arquivo">
+        ⧉
+      </button>
+      <input accept=".txt,.html,.json,.pdf,.png,.jpg,.jpeg" id="symbolicFileInput" style="display: none;" type="file">
+    </div>
+    <div class="pagination">
+      <button data-action="prev">⟵</button>
+      <span id="pageIndicator">1 / 1</span>
+      <button data-action="next">⟶</button>
+    </div>
+  </div>
+
+</div>
+
+<div class="input-container">
+
+  <input
+    id="userInput"
+    type="text"
+    placeholder="Diga: 'oi, Dual'...">
+
+  <button id="sendBtn" title="Enviar">➤</button>
+
+  <button id="voiceBtn" title="Falar">
+
+    <object
+      data="https://kodux78k.github.io/dual-app/assets/icons/Reset_buttom_Dual-Infodose.svg"
+      height="36"
+      type="image/svg+xml"
+      width="36"></object>
+
+  </button>
+
+</div>
+
+
+
+<!-- =========================================================
+RHEA — Sistema de login e configuração
+========================================================= -->
+
+<div id="loginBox" class="login-container">
+
+  <div id="advancedToggleOptions" style="display:none;margin-top:12px;flex-direction:column;gap:10px;">
+    <input id="skInput" placeholder="🔑 Nova chave SK..." style="padding:8px;border-radius:8px;border:1px solid #0ff;background:rgba(0,0,0,0.2);color:#0ff;" type="text">
+    <input id="roleSystemInput" placeholder="📜 Role System..." style="padding:8px;border-radius:8px;border:1px solid #0ff;background:rgba(0,0,0,0.2);color:#0ff;" type="text">
+    <select id="modelSelector" style="padding:8px;border-radius:8px;background:rgba(0,0,0,0.2);color:#0ff;border:1px solid #0ff;">
+      <option value="">🤖 Selecione modelo</option>
+      <option value="deepseek/deepseek-chat-v3-0324:free">Deepseek v3</option>
+      <option value="openchat/openchat-3.5-1210:free">OpenChat 3.5</option>
+      <option value="mistralai/mixtral-8x7b:free">Mixtral</option>
+      <option value="meta-llama/llama-3-70b-instruct:free">LLaMA 3 70B</option>
+    </select>
+    <button onclick="salvarConfiguracoesAvancadas()" style="padding:8px;border-radius:8px;border:1px solid #0ff;background:#0ff;color:#000;font-weight:bold;">💾 Ativar Configurações</button>
+  </div>
+  <form id="loginForm">
+    <input id="userName" placeholder="Nome do usuário" required="" type="text">
+    <input id="assistantInput" placeholder="Nome dual.infodose" required="" type="text">
+    <button type="submit">Ativar</button>
+  </form>
+</div>
+
+<button id="togglePanelBtn">⚙️</button>
+
+<div id="layoutTogglePanel">
+  <label><input onchange="toggleElement('#response', this)" type="checkbox"> Mostrar IA</label>
+  <label><input onchange="toggleElement('.svg-container', this)" type="checkbox"> Mostrar Logo</label>
+  <label><input onchange="toggleElement('#koblluxPlayer', this)" type="checkbox"> Mostrar Player</label>
+  <label><input onchange="toggleElement('#uploadComponentBtn,#remoteComponentBtn,#toggleDecoderBtn', this)" type="checkbox"> Mostrar Botões Laterais</label>
+  <label><input onchange="toggleElement('.symbol-bar', this)" type="checkbox"> Mostrar SymbolBar</label>
+  <hr>
+  <button onclick="mostrarTodos()">Mostrar Todos</button>
+  <button onclick="ocultarTodos()">Ocultar Todos</button>
+  <hr>
+  <button onclick="salvarEstadoUI()">Salvar Preferência</button>
+</div>
+
+<button id="userButton">☯ UserButton</button>
+<div class="pages-wrapper" id="pagesWrapper"></div>
+
+<!-- KODUX MASTER DIAG (non-invasive) -->
+
+<script type="module"
+  src="https://kodux78k.github.io/oiDual--Y-/M0D/DualApp/js/main.js"></script>
+</body>
+
+</html>
