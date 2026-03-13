@@ -11,3 +11,5 @@ import {
 registerArchetypes(ARCHETYPES);
 activateArchetype('atlas');
 speakWithCurrentArchetype('O sistema está vivo.');
+
+import 'https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mestre-22.js';
