@@ -71,7 +71,7 @@ html, body {
    --------------------------------------------------------------------- */
 .symbol-bar {
   position: fixed;
-  left: 20px;
+  /* left: 20px; */
   top: auto;
   bottom: auto;
   right: auto;
