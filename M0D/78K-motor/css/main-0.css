@@ -268,10 +268,13 @@
 
     /* =========================================
        NOVA - HUD MAGNÉTICO & TOASTS
+    
+    
+    display: flex; align-items: center; gap: 8px; padding: 10px;
+
        ========================================= */
     .symbol-bar {
-      position: fixed; z-index: 9999; display: flex; align-items: center; gap: 8px; padding: 10px;
-      background: rgba(10, 14, 23, 0.85); backdrop-filter: var(--panel-blur); -webkit-backdrop-filter: var(--panel-blur);
+      position: fixed; z-index: 9999;       background: rgba(10, 14, 23, 0.85); backdrop-filter: var(--panel-blur); -webkit-backdrop-filter: var(--panel-blur);
       border: 1px solid var(--border); border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);
       user-select: none; touch-action: none; bottom: 30px; left: 50%; transform: translate3d(-50%, 0, 0);
     }
@@ -282,7 +285,7 @@
     .drag-handle::before { content: '⋮⋮'; font-size: 18px; font-weight: bold; letter-spacing: -2px; }
 
     .symbol-btn {
-      width: 44px; height: 44px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.08);
+      width: 28px; height: 28px; border-radius: 22px; border: 1px solid rgba(255,255,255,0.08);
       background: rgba(0,0,0,0.4); color: var(--text-main); font-size: 16px; cursor: pointer;
       display: flex; align-items: center; justify-content: center; transition: all 0.2s ease; outline: none;
     }
