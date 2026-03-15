@@ -315,6 +315,27 @@
 
 
 
+/* ===== VARIÁVEIS GLOBAIS ===== */
+:root {
+  --bg-dark: #05070a;
+  --text: #f0f3f9;
+  --text-muted: #9aa4c8;
+  --panel-bg: rgba(8, 10, 18, 0.75);
+  --panel-blur: blur(20px) saturate(160%);
+  --border: rgba(120, 227, 255, 0.2);
+  --border-active: rgba(120, 227, 255, 0.6);
+
+  /* Cores do arquétipo ativo (padrão) */
+  --kob-voice-primary: #78e3ff;
+  --kob-voice-secondary: #b978ff;
+  --kob-voice-accent: #ffffff;
+  --arch-color: var(--kob-voice-primary);
+  --arch-glow: color-mix(in srgb, var(--arch-color) 25%, transparent);
+
+  --orb-speed: 7.8s;
+  --transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
+}
+
 /* ===== ARQUÉTIPOS (19 cores) ===== */
 body[data-voice-arch="kobllux"] { --kob-voice-primary: #22D3EE; --kob-voice-secondary: #0E7C9E; }
 body[data-voice-arch="kodux"]   { --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; }
@@ -792,4 +813,3 @@ body {
   color: #fff;
   font-family: 'JetBrains Mono', monospace;
 }
-  
