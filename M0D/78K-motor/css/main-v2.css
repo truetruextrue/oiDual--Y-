@@ -137,9 +137,9 @@
     .empty-state { text-align:center; padding:40px 20px; color:var(--text-muted); border:1px dashed var(--border); border-radius:var(--radius-md); background:rgba(0,0,0,0.2); }
     .status-bar { font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text-muted); text-align:center; text-transform:uppercase; letter-spacing:3px; margin-top:10px; }
 
-    /* ===== HUD FLUTUANTE UNIFICADO (do Motor 78K) ===== */
+    /* ===== HUD FLUTUANTE UNIFICADO (do Motor 78K) bottom:30px; left:50%; transform:translate3d(-50%,0,0);===== */
     .symbol-bar {
-      position: fixed; bottom:30px; left:50%; transform:translate3d(-50%,0,0);
+      position: fixed; 
       z-index:9999; display:flex; align-items:center; gap:8px; padding:10px;
       background:rgba(10,14,23,0.85); backdrop-filter:var(--panel-blur); border:1px solid var(--border);
       border-radius:30px; box-shadow:0 10px 30px rgba(0,0,0,0.5); user-select:none; touch-action:none;
@@ -155,7 +155,7 @@
     .drag-handle:hover, .symbol-bar.dragging .drag-handle { opacity:1; color:var(--kob-voice-primary); }
     .symbol-bar.dragging .drag-handle { cursor:grabbing; }
     .symbol-btn {
-      width:44px; height:44px; border-radius:22px; border:1px solid rgba(255,255,255,0.08);
+      width:24px; height:24px; border-radius:22px; border:1px solid rgba(255,255,255,0.08);
       background:rgba(0,0,0,0.4); color:var(--text-main); font-size:16px; cursor:pointer;
       display:flex; align-items:center; justify-content:center; transition:all 0.2s ease;
       flex-shrink:0;
