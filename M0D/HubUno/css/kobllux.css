@@ -1,0 +1,149 @@
+/* KOBLLUX — módulo visual e UI para HUB UNO
+   - Contém estilo do modal, wheel, seals, botões e animações.
+   - Keep names reasonably scoped to avoid collisions (prefix: kob-)
+*/
+
+:root{
+  --kob-bg: rgba(11,15,20,0.92);
+  --kob-accent: #7c4dff;
+  --kob-accent-2: #00d6ff;
+  --kob-ok: #39ffb6;
+  --kob-warn: #ffb86b;
+  --kob-radius: 12px;
+  --kob-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  --kob-font: 13px/1.3 Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+}
+
+/* Modal */
+.kob-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2147483650;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.45));
+  backdrop-filter: blur(6px);
+}
+.kob-modal.open { display:flex; }
+
+.kob-panel {
+  width: min(920px, 94vw);
+  max-height: 86vh;
+  overflow: auto;
+  background: var(--kob-bg);
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: var(--kob-shadow);
+  border: 1px solid rgba(255,255,255,0.06);
+  font: var(--kob-font);
+  color: #e7eefc;
+}
+
+/* Header */
+.kob-header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+.kob-header h3 { margin:0; font-size:16px; font-weight:800; letter-spacing:0.03em; }
+.kob-close { margin-left:auto; background:transparent; border:0; color:inherit; cursor:pointer; font-weight:800; padding:6px; border-radius:8px; }
+.kob-close:hover { background:rgba(255,255,255,0.03) }
+
+/* Layout grid */
+.kob-grid { display:grid; grid-template-columns: 360px 1fr; gap:12px; align-items:start; }
+@media(max-width:980px){ .kob-grid { grid-template-columns: 1fr; } }
+
+/* Left column: wheel + seals */
+.kob-left { background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:12px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); }
+.kob-wheel-wrap { display:flex; align-items:center; justify-content:center; padding:8px; }
+.kob-wheel {
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  position: relative;
+  background: radial-gradient(circle at 30% 30%, rgba(124,77,255,0.10), transparent 35%),
+              linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border: 1px solid rgba(255,255,255,0.06);
+  box-shadow: 0 14px 36px rgba(0,0,0,0.5);
+  display:grid;
+  place-items:center;
+  transition: transform .6s cubic-bezier(.22,.8,.36,1);
+  overflow:visible;
+}
+.kob-wheel.rotating { animation: kob-rotate 6s linear infinite; }
+
+@keyframes kob-rotate {
+  from { transform: rotate(0deg); } to { transform: rotate(360deg); }
+}
+
+/* poles: 6 slices using absolute positioned items */
+.kob-pole {
+  position:absolute;
+  width: 56%;
+  height: 56%;
+  left: 22%;
+  top: 22%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  transform-origin: center center;
+  pointer-events:auto;
+  cursor:pointer;
+  transition: transform .28s ease, box-shadow .2s ease;
+  border-radius: 10px;
+}
+.kob-pole .label {
+  background: rgba(0,0,0,0.35);
+  padding:6px 10px;
+  border-radius:8px;
+  font-weight:800;
+  font-size:12px;
+}
+.kob-pole.on { box-shadow: 0 8px 20px rgba(124,77,255,0.16); transform: scale(1.06) }
+
+/* position six poles around circle */
+.kob-pole.p0 { transform: rotate(0deg) translateY(-36%) rotate(0deg); }
+.kob-pole.p1 { transform: rotate(60deg) translateY(-36%) rotate(-60deg); }
+.kob-pole.p2 { transform: rotate(120deg) translateY(-36%) rotate(-120deg); }
+.kob-pole.p3 { transform: rotate(180deg) translateY(-36%) rotate(-180deg); }
+.kob-pole.p4 { transform: rotate(240deg) translateY(-36%) rotate(-240deg); }
+.kob-pole.p5 { transform: rotate(300deg) translateY(-36%) rotate(-300deg); }
+
+/* Center hub */
+.kob-hub { width:110px; height:110px; border-radius:50%; display:grid; place-items:center; font-weight:900; background:linear-gradient(180deg,var(--kob-accent),var(--kob-accent-2)); color:#05101a; box-shadow: inset 0 2px 6px rgba(255,255,255,0.08); }
+
+/* seals (7) */
+.kob-seals { display:flex; gap:8px; flex-wrap:wrap; margin-top:12px; justify-content:center; }
+.kob-seal {
+  width:40px; height:40px; border-radius:8px;
+  display:grid; place-items:center; font-weight:900; cursor:pointer;
+  background: rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+}
+.kob-seal.on { background: linear-gradient(90deg,var(--kob-accent),var(--kob-accent-2)); color:#05101a; box-shadow: 0 8px 24px rgba(124,77,255,0.22); transform: translateY(-4px) }
+
+/* Right column: controls & potentials */
+.kob-right { padding:12px; display:flex; flex-direction:column; gap:12px; }
+.kob-section { background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent); padding:10px; border-radius:10px; border:1px solid rgba(255,255,255,0.04); }
+.kob-section h4 { margin:0 0 8px 0; font-size:13px; font-weight:800; }
+.kob-potentials { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+.kob-potential { display:flex; gap:8px; align-items:center; }
+.kob-potential input[type="text"]{ flex:1; padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.06); background:transparent; color:inherit; }
+.kob-controls { display:flex; gap:8px; flex-wrap:wrap; }
+.kob-btn { padding:8px 10px; border-radius:10px; border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02); color:inherit; cursor:pointer; font-weight:800; }
+.kob-btn.primary { background: linear-gradient(90deg,var(--kob-accent),var(--kob-accent-2)); color:#05101a; }
+.kob-hash { font-family: ui-monospace, Menlo, monospace; font-size:12px; word-break:break-all; background:rgba(255,255,255,0.02); padding:8px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); }
+
+/* small helpers */
+.kob-row { display:flex; gap:8px; align-items:center; }
+.kob-chip { font-weight:800; padding:4px 8px; border-radius:999px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.04); }
+
+/* Animations for seals pulse when hash generated */
+.kob-seal.pulse { animation: kob-pulse 1.1s ease infinite; }
+@keyframes kob-pulse {
+  0% { transform: translateY(0); box-shadow: 0 6px 16px rgba(124,77,255,0.08); }
+  50% { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(124,77,255,0.2); }
+  100% { transform: translateY(0); box-shadow: 0 6px 16px rgba(124,77,255,0.08); }
+}
+
+/* tiny responsive fix */
+@media (max-width:540px){
+  .kob-wheel { width:240px;height:240px; }
+}
