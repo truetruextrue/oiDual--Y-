@@ -1,0 +1,1162 @@
+/* ═══════════════════════════════════════════════════════════
+   0x00 · INICIAR · B · D8 · CSS
+   ═══════════════════════════════════════════════════════════
+   Arquivo   : kobllux-matrix-densa-arquitetura-veeb/css/0x00_iniciar_B_D8.css
+   Opcode    : 0x00 · 396Hz
+   V.E.E.B.  : Base · ponto zero · S=Σbᵢ·2^(i-1) · identidade do sistema
+   KOBLLUX   : VERDADE×INTEGRAR÷Δ=∞ · S=Σbᵢ·2^(i-1)
+═══════════════════════════════════════════════════════════ */
+/* =====================================================================
+       ARQUITETURA VEEB – SISTEMA DE INTERFACE VIVA (BASE COMPLETA)
+       12 ARQUÉTIPOS APLICADOS AO HUD MAGNÉTICO
+       ===================================================================== */
+
+    /* ---------------------------------------------------------------------
+       1. ATLAS – FUNDAÇÃO E VARIÁVEIS GLOBAIS
+          O alicerce do sistema. Define o espaço, as forças primordiais
+          e as constantes que governam todos os elementos.
+       --------------------------------------------------------------------- */
+    :root {
+      /* Cores base – matéria‑prima do universo visual */
+      --bg-dark: #02040a;
+      --ink: #eaf6ff;
+      --text: #f0f3f9;
+      --muted: rgba(255, 255, 255, 0.45);
+
+      /* Tipografia – a voz do sistema */
+      --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
+      /* Campos magnéticos – limite de atracação (threshold) */
+      --snap-threshold: 40px;
+
+      /* Arquétipo VEEB – Kob (voz primária e secundária) – padrão */
+      --kob-voice-primary: #00e28b;
+      --kob-voice-secondary: #0EA5E9;
+
+      /* Derivadas da voz – criadas com color-mix para consistência dinâmica */
+      --kob-voice-bg-soft: color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+      --kob-voice-bg-strong: color-mix(in srgb, var(--kob-voice-primary) 40%, black);
+      --kob-voice-glow: color-mix(in srgb, var(--kob-voice-primary) 60%, white);
+
+      /* Painéis e superfícies – transparência controlada pela voz */
+      --panel-bg: color-mix(in srgb, var(--kob-voice-primary) 10%, #0b0f18);
+
+      /* Bordas – vivas, mas sutis */
+      --border: color-mix(in srgb, var(--kob-voice-primary) 30%, rgba(255,255,255,0.1));
+
+      /* Gradiente de fundo – céu noturno com aurora da voz */
+      --bg-gradient:
+        radial-gradient(
+          circle at 50% -10%,
+          color-mix(in srgb, var(--kob-voice-primary) 35%, #1a224f) 0%,
+          #050714 60%,
+          #000
+        );
+
+      /* Gradiente para textos e destaques */
+      --grad-a: var(--kob-voice-primary);
+      --grad-b: var(--kob-voice-secondary);
+
+      /* Z‑index base */
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+
+      /* Orb settings */
+      --orb-speed: 7.8s;
+      --kob-voice-accent: #ffffff;
+    }
+
+    /* Reset – limpeza do terreno */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg-dark) var(--bg-gradient);  /* Sobreposição do céu estrelado */
+      color: var(--text);
+      font-family: var(--font-main);
+      overflow-x: auto;
+      overflow-y: auto;  /* Ajustado para permitir rolagem do conteúdo */
+      scroll-behavior: smooth;
+    }
+
+    /* ---------------------------------------------------------------------
+       2. NOVA – O HUD FLUTUANTE (MOVIMENTO)
+          O elemento que viaja pelo espaço da tela. Sua natureza é ser livre,
+          mas responde a campos gravitacionais.
+       --------------------------------------------------------------------- */
+    .symbol-bar {
+      position: fixed;
+      left: 20px;
+      top: auto;
+      bottom: auto;
+      right: auto;
+      z-index: 9999;
+
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      align-items: center;
+      justify-content: center;
+
+      /* Estética – superfície vítrea */
+      background: rgba(10, 12, 20, 0.85);
+      backdrop-filter: blur(15px) saturate(180%);
+      -webkit-backdrop-filter: blur(15px) saturate(180%);
+      border: 1px solid var(--border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+      border-radius: 28px;
+
+      /* Comportamento – arrasto nativo desabilitado */
+      user-select: none;
+      touch-action: none;
+
+      /* Transições – base para o movimento elástico (Vitalis) */
+      transition:
+        opacity 0.6s ease,
+        top 0.35s cubic-bezier(0.175,0.885,0.32,1.275),
+        left 0.35s cubic-bezier(0.175,0.885,0.32,1.275),
+        border-radius 0.25s ease,
+        background 0.4s ease,
+        border-color 0.5s ease;
+    }
+
+    /* ---------------------------------------------------------------------
+       3. VITALIS – TRANSIÇÕES ELÁSTICAS E VIDA ORGÂNICA
+          A curva cúbica que simula uma mola física. Faz o HUD parecer vivo.
+       --------------------------------------------------------------------- */
+
+    /* ---------------------------------------------------------------------
+       4. PULSE – ESTADOS DE INTERAÇÃO E RESPOSTA IMEDIATA
+          O HUD reage à presença do usuário: fica mais visível ao hover,
+          opaco quando ocioso, e perde transições durante o arrasto.
+       --------------------------------------------------------------------- */
+    .symbol-bar.idle {
+      opacity: 0.2;
+    }
+    .symbol-bar.idle:hover {
+      opacity: 1;
+    }
+
+    .symbol-bar.is-dragging {
+      opacity: 0.9;
+      transition: none !important;
+      transform: none !important;
+      will-change: top, left;
+    }
+
+    /* ---------------------------------------------------------------------
+       5. ARTEMIS – ESTADOS DE ENCAIXE (SNAP)
+          Classes que transformam a aparência do HUD conforme a borda dominante.
+       --------------------------------------------------------------------- */
+    .symbol-bar.snap-side {
+      flex-direction: column;
+      border-radius: 0 24px 24px 0;
+      border-left: 0;
+    }
+
+    .symbol-bar.snap-side-right {
+      flex-direction: column;
+      border-radius: 24px 0 0 24px;
+      border-right: 0;
+    }
+
+    .symbol-bar.snap-top {
+      flex-direction: row;
+      border-radius: 0 0 24px 24px;
+      border-top: 0;
+    }
+
+    .symbol-bar.snap-side,
+    .symbol-bar.snap-side-right,
+    .symbol-bar.snap-top {
+      max-width: 90vw;
+      max-height: 90vh;
+    }
+
+    .symbol-bar.floating {
+      flex-direction: column;
+      border-radius: 28px;
+      inset: auto;
+    }
+
+    /* ---------------------------------------------------------------------
+       6. SERENA – COLAPSO E ECONOMIA DE ESPAÇO
+          O HUD pode se contrair a um pequeno núcleo, escondendo os símbolos.
+       --------------------------------------------------------------------- */
+    .symbol-bar.collapsed {
+      min-width: 44px;
+      min-height: 44px;
+    }
+
+    .symbol-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
+    }
+
+    .symbol-bar.collapsed .symbol-wrap {
+      width: 0;
+      height: 0;
+      margin: 0;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0);
+    }
+
+    /* ---------------------------------------------------------------------
+       7. KAOS – BOTÕES E AÇÕES TÁTEIS
+          Elementos que o usuário toca, com feedbacks imediatos.
+       --------------------------------------------------------------------- */
+    .symbol-button {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-size: 18px;
+
+      cursor: pointer;
+      flex-shrink: 0;
+      position: relative;
+
+      transition: all 0.2s ease;
+    }
+
+    .symbol-button:hover {
+      background: rgba(255,255,255,0.12);
+      border-color: var(--kob-voice-primary);
+      color: var(--kob-voice-primary);
+    }
+
+    .symbol-button:active {
+      transform: scale(0.9);
+    }
+
+    .symbol-button.main-toggle {
+      background: linear-gradient(135deg,#1a1d29,#05070a);
+      color: var(--kob-voice-primary);
+      border-color: var(--kob-voice-primary);
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    }
+
+    /* ---------------------------------------------------------------------
+       8. LUMINE – INDICADORES LUMINOSOS E FEEDBACK VISUAL
+          Pequenos pontos de luz que mostram estado ativo, como a voz falando.
+       --------------------------------------------------------------------- */
+    .voice-indicator {
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--kob-voice-primary);
+      border: 2px solid #000;
+      box-shadow: 0 0 5px var(--kob-voice-primary);
+      transition: background 0.5s ease, box-shadow 0.5s ease;
+    }
+
+    .hud-info {
+      font-size: 10px;
+      color: var(--kob-voice-primary);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+
+      display: flex;
+      align-items: center;
+      padding: 0 10px;
+      border-left: 1px solid var(--border);
+      pointer-events: none;
+    }
+
+    .symbol-bar.snap-top .hud-info {
+      display: none;
+    }
+
+    /* ---------------------------------------------------------------------
+       9. SOLUS – FOCO NO TEXTO E LEITURA (TTS)
+          O elemento que “fala” é destacado por um outline vivo.
+       --------------------------------------------------------------------- */
+    #kob-tts-outline {
+      position: absolute;
+      z-index: 9998;
+      pointer-events: none;
+
+      border: 2px solid var(--kob-voice-primary);
+      border-radius: 8px;
+      background: var(--kob-voice-bg-soft);
+      box-shadow: 0 0 15px var(--kob-voice-primary);
+
+      transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
+      display: none;
+    }
+
+    [data-tts-current="true"] {
+      background: var(--kob-voice-bg-soft);
+      border-radius: 8px;
+      border-color: var(--kob-voice-primary) !important;
+      box-shadow:
+        0 0 15px var(--kob-voice-bg-soft),
+        inset 0 0 10px var(--kob-voice-bg-soft);
+      transform: scale(1.02);
+      transition: all 0.3s ease;
+    }
+
+    /* ---------------------------------------------------------------------
+       10. RHEA – ESTRUTURA DE PAINÉIS E CONTEÚDO
+          Os blocos que organizam a informação de forma adaptável.
+       --------------------------------------------------------------------- */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 20px;
+    }
+
+    .system-title {
+      font-weight: 800;
+      font-size: 1.2rem;
+      background: -webkit-linear-gradient(0deg, var(--grad-a), var(--grad-b));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 2px;
+    }
+
+    #clock {
+      font-family: monospace;
+      font-size: 1.1rem;
+      color: var(--kob-voice-primary);
+      transition: color 0.5s ease;
+    }
+
+    .content-box {
+      max-width: 278px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* ---------------------------------------------------------------------
+       11. GENUS – ACORDEÕES MODULARES
+          Componentes expansíveis que se adaptam ao conteúdo.
+       --------------------------------------------------------------------- */
+    .accordion {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .accordion-header {
+      padding: 15px 20px;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      user-select: none;
+    }
+
+    .accordion-header:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .accordion-content {
+      max-height: 0;
+      padding: 0 20px;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .accordion.open .accordion-content {
+      max-height: 2500px;
+      padding: 15px 20px;
+      opacity: 1;
+      border-top: 1px solid var(--border);
+    }
+
+    .indicator {
+      transition: transform 0.3s ease;
+    }
+
+    .accordion.open .indicator {
+      transform: rotate(180deg);
+    }
+
+    /* ---------------------------------------------------------------------
+       12. AION – CAMPOS DE ENTRADA E INTERAÇÕES FINAS
+          Elementos que recebem dados do usuário, com feedback da voz.
+       --------------------------------------------------------------------- */
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: white;
+      font-family: var(--font-main);
+      margin-bottom: 15px;
+      margin-top: 5px;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: var(--kob-voice-primary);
+    }
+
+    /* ---------------------------------------------------------------------
+       ÁREA DE TEXTO PARA LEITURA TTS (exemplo)
+       --------------------------------------------------------------------- */
+    #reader-content p {
+      padding: 12px 16px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    #reader-content p strong {
+      color: var(--kob-voice-primary);
+      transition: color 0.5s ease;
+    }
+
+    /* ---------------------------------------------------------------------
+       KOBLLUX TTS DOCK (integrado)
+       --------------------------------------------------------------------- */
+    .kob-tts-dock {
+      position: fixed;
+      z-index: 9999;
+      left: var(--tts-left, 16px);
+      bottom: calc(var(--tts-bottom, 20px) + env(safe-area-inset-bottom,0px));
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      padding: 6px;
+      border-radius: 14px;
+      background: rgba(15,18,28,.38);
+      border: 1px solid rgba(255,255,255,.12);
+      -webkit-backdrop-filter: blur(10px) saturate(1.1);
+      backdrop-filter: blur(10px) saturate(1.1);
+      box-shadow: 0 3px 6px rgba(0,0,0,.35), inset 0 0 0 1px rgba(255,255,255,.05);
+      touch-action: none;
+      cursor: grab;
+      transition: transform .35s ease, opacity .65s ease;
+    }
+
+    .kob-tts-dock.is-drag {
+      cursor: grabbing;
+    }
+
+    .kob-tts-dock.idle {
+      opacity: .12;
+      transform: scale(.92);
+    }
+
+    .kob-tts-dock:hover {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .kob-tts-dock button {
+      width: 29px;
+      height: 29px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-size: 16px;
+      line-height: 1;
+      color: rgba(255,255,255,.85);
+      border: 1px solid rgba(255,255,255,.18);
+      background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
+      transition: transform .14s ease, box-shadow .14s ease, color .14s ease;
+      cursor: pointer;
+    }
+
+    .kob-tts-dock button:hover {
+      transform: translateY(-1px);
+      color: #fff;
+    }
+
+    .kob-tts-dock button[aria-pressed="true"] {
+      outline: 2px solid color-mix(in srgb, #00e28b 70%, #67e6ff 30%);
+      box-shadow: 0 2px 7px rgba(0,0,0,.35), 0 0 3px -2px rgba(103,230,255,.8);
+    }
+
+    #tts-status {
+      margin-top: .1rem;
+      font-size: 11px;
+      color: #eaf6ff;
+      max-width: 140px;
+      display: block;
+      white-space: normal;
+      word-break: break-word;
+      text-align: center;
+    }
+
+    /* ---------------------------------------------------------------------
+       CORES DOS ARQUÉTIPOS (definidas via atributo body, mas também como classes para uso nos cards)
+       --------------------------------------------------------------------- */
+    /* Definições via body – permanecem para o HUD */
+    body[data-voice-arch="kobllux"] { --kob-voice-primary: #22D3EE; --kob-voice-secondary: #0E7C9E; }
+    body[data-voice-arch="kodux"]   { --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; }
+    body[data-voice-arch="atlas"]   { --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; }
+    body[data-voice-arch="nova"]    { --kob-voice-primary: #F72585; --kob-voice-secondary: #7209B7; }
+    body[data-voice-arch="vitalis"] { --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; }
+    body[data-voice-arch="pulse"]   { --kob-voice-primary: #EC4899; --kob-voice-secondary: #831843; }
+    body[data-voice-arch="artemis"] { --kob-voice-primary: #A855F7; --kob-voice-secondary: #5B21B6; }
+    body[data-voice-arch="serena"]  { --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; }
+    body[data-voice-arch="kaos"]    { --kob-voice-primary: #FACC15; --kob-voice-secondary: #B45309; }
+    body[data-voice-arch="genus"]   { --kob-voice-primary: #E5E7EB; --kob-voice-secondary: #4B5563; }
+    body[data-voice-arch="lumine"]  { --kob-voice-primary: #FDE047; --kob-voice-secondary: #CA8A04; }
+    body[data-voice-arch="solus"]   { --kob-voice-primary: #0EA5E9; --kob-voice-secondary: #0369A1; }
+    body[data-voice-arch="rhea"]    { --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; }
+    body[data-voice-arch="aion"]    { --kob-voice-primary: #4F46E5; --kob-voice-secondary: #3730A3; }
+    body[data-voice-arch="uno"]     { --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; }
+    body[data-voice-arch="dual"]    { --kob-voice-primary: #06B6D4; --kob-voice-secondary: #0E7C9E; }
+    body[data-voice-arch="trinity"] { --kob-voice-primary: #EC4899; --kob-voice-secondary: #831843; }
+    body[data-voice-arch="infodose"]{ --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; }
+    body[data-voice-arch="horus"]   { --kob-voice-primary: #F59E0B; --kob-voice-secondary: #B45309; }
+
+    /* Classes para uso nos cards – extraídas das definições acima */
+    .arch-atlas { --arch-color: #38BDF8; --arch-secondary: #1E3A8A; }
+    .arch-nova { --arch-color: #F72585; --arch-secondary: #7209B7; }
+    .arch-vitalis { --arch-color: #22C55E; --arch-secondary: #166534; }
+    .arch-pulse { --arch-color: #EC4899; --arch-secondary: #831843; }
+    .arch-artemis { --arch-color: #A855F7; --arch-secondary: #5B21B6; }
+    .arch-serena { --arch-color: #38BDF8; --arch-secondary: #1E3A8A; }
+    .arch-kaos { --arch-color: #FACC15; --arch-secondary: #B45309; }
+    .arch-genus { --arch-color: #E5E7EB; --arch-secondary: #4B5563; }
+    .arch-lumine { --arch-color: #FDE047; --arch-secondary: #CA8A04; }
+    .arch-solus { --arch-color: #0EA5E9; --arch-secondary: #0369A1; }
+    .arch-rhea { --arch-color: #22C55E; --arch-secondary: #166534; }
+    .arch-aion { --arch-color: #4F46E5; --arch-secondary: #3730A3; }
+
+    /* =====================================================================
+       ESTILOS ADICIONAIS PARA A PÁGINA KOBLLUX (HERO, MANIFESTO, PORTAL, CARDS)
+       ===================================================================== */
+    .hero, .manifesto, .portal-section, .archetypes-section, .law-footer {
+      position: relative;
+      z-index: 10;
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 4rem 2rem;
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .hero-sigil {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.65rem, 1.2vw, 0.85rem);
+      color: var(--kob-voice-primary);
+      opacity: 0.7;
+      letter-spacing: 0.3em;
+      margin-bottom: 2rem;
+      white-space: pre;
+      line-height: 1.6;
+      animation: pulse-soft 4s ease-in-out infinite;
+    }
+
+    .hero-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(2.2rem, 6vw, 5rem);
+      font-weight: 900;
+      background: linear-gradient(135deg, var(--grad-a) 0%, var(--grad-b) 40%, var(--kob-voice-primary) 70%, var(--grad-a) 100%);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shimmer 6s ease-in-out infinite;
+      letter-spacing: 0.1em;
+      line-height: 1.1;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: clamp(0.75rem, 1.5vw, 0.95rem);
+      color: var(--kob-voice-secondary);
+      letter-spacing: 0.5em;
+      text-transform: uppercase;
+      margin-bottom: 2rem;
+      opacity: 0.8;
+    }
+
+    .hero-law {
+      font-size: clamp(1rem, 2vw, 1.3rem);
+      font-weight: 300;
+      color: var(--ink);
+      max-width: 700px;
+      line-height: 1.8;
+      margin-bottom: 2.5rem;
+    }
+
+    .hero-law strong {
+      color: var(--kob-voice-primary);
+      font-weight: 600;
+    }
+
+    .hero-seal {
+      font-size: 2rem;
+      letter-spacing: 0.3em;
+      animation: pulseX 20s linear infinite;
+      display: inline-block;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      letter-spacing: 0.5em;
+      color: var(--kob-voice-secondary);
+      text-transform: uppercase;
+      margin-bottom: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .section-title {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-weight: 700;
+      color: var(--kob-voice-primary);
+      letter-spacing: 0.05em;
+    }
+
+    /* Manifesto Grid */
+    .manifesto-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .manifest-card {
+      background: var(--panel-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .manifest-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--kob-voice-primary), transparent);
+      opacity: 0.6;
+    }
+
+    .manifest-card-key {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      color: var(--kob-voice-secondary);
+      letter-spacing: 0.3em;
+      margin-bottom: 0.5rem;
+      opacity: 0.7;
+    }
+
+    .manifest-card-num {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 2.5rem;
+      color: var(--kob-voice-primary);
+      opacity: 0.3;
+      position: absolute;
+      top: 0.8rem;
+      right: 1rem;
+      line-height: 1;
+    }
+
+    .manifest-card p {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--ink);
+      font-weight: 300;
+    }
+
+    /* Tabela de Portais */
+    .portal-section {
+      background: linear-gradient(180deg, transparent, rgba(10,10,32,0.8), transparent);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .portal-table-wrapper {
+      max-width: 900px;
+      margin: 2rem auto 0;
+      overflow-x: auto;
+    }
+
+    .portal-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .portal-table th {
+      font-family: var(--font-main);
+      font-size: 0.75rem;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--kob-voice-secondary);
+      padding: 1rem 1.5rem;
+      text-align: left;
+      border-bottom: 1px solid color-mix(in srgb, var(--kob-voice-secondary) 20%, transparent);
+      opacity: 0.7;
+    }
+
+    .portal-table td {
+      padding: 0.9rem 1.5rem;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 0.88rem;
+      color: var(--ink);
+    }
+
+    .portal-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+
+    .portal-ascii {
+      font-size: 1.1rem;
+      color: var(--kob-voice-primary);
+      white-space: nowrap;
+    }
+
+    .portal-name {
+      color: var(--kob-voice-secondary);
+      font-weight: bold;
+      letter-spacing: 0.2em;
+    }
+
+    .portal-func {
+      color: var(--ink);
+      font-family: var(--font-main);
+      font-size: 0.9rem;
+    }
+
+    /* Grid de Arquétipos (cards) */
+    .archetypes-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+
+    .arch-card {
+      background: var(--panel-bg);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+      --card-accent: var(--kob-voice-primary); /* fallback */
+    }
+
+    .arch-card:hover {
+      transform: translateY(-6px) scale(1.01);
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 40px color-mix(in srgb, var(--card-accent) 30%, transparent);
+      border-color: var(--card-accent);
+    }
+
+    .arch-card-header {
+      padding: 2rem 2rem 1.5rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .arch-card-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 2rem; right: 2rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--card-accent), transparent);
+    }
+
+    .arch-symbol {
+      font-size: 2.8rem;
+      line-height: 1;
+      filter: drop-shadow(0 0 12px var(--card-accent));
+      flex-shrink: 0;
+      transition: filter 0.3s ease;
+    }
+
+    .arch-card:hover .arch-symbol {
+      filter: drop-shadow(0 0 20px var(--card-accent)) brightness(1.2);
+    }
+
+    .arch-header-text {
+      flex: 1;
+    }
+
+    .arch-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      color: var(--card-accent);
+      letter-spacing: 0.4em;
+      opacity: 0.6;
+      margin-bottom: 0.2rem;
+    }
+
+    .arch-name {
+      font-family: 'Montserrat', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--card-accent);
+      letter-spacing: 0.06em;
+      line-height: 1.1;
+    }
+
+    .arch-role {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--ink);
+      opacity: 0.7;
+      margin-top: 0.3rem;
+      letter-spacing: 0.2em;
+    }
+
+    .arch-body {
+      padding: 1.5rem 2rem 2rem;
+      transition: height 0.34s cubic-bezier(.2,.9,.25,1), opacity 0.25s ease, padding 0.28s cubic-bezier(.2,.9,.25,1);
+      overflow: hidden;
+    }
+
+    .arch-desc {
+      font-size: 0.92rem;
+      line-height: 1.75;
+      color: var(--ink);
+      font-weight: 300;
+      margin-bottom: 1.5rem;
+    }
+
+    .arch-visual {
+      width: 100%;
+      height: 160px;
+      border-radius: 10px;
+      margin-bottom: 1.5rem;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.06);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .arch-visual::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center, color-mix(in srgb, var(--card-accent) 15%, transparent) 0%, transparent 70%);
+    }
+
+    .arch-visual-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+
+    .arch-visual-symbol {
+      font-size: 4.5rem;
+      filter: drop-shadow(0 0 30px var(--card-accent));
+      display: block;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    .arch-visual-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4em;
+      color: var(--card-accent);
+      opacity: 0.5;
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .arch-code-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.3);
+      border-radius: 30px;
+      padding: 0.5rem 1rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .arch-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      color: var(--card-accent);
+      letter-spacing: 0.1em;
+    }
+
+    .arch-code-btn {
+      background: transparent;
+      border: 1px solid var(--card-accent);
+      border-radius: 20px;
+      padding: 0.3rem 1rem;
+      color: var(--card-accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+
+    .arch-code-btn:hover {
+      background: color-mix(in srgb, var(--card-accent) 10%, transparent);
+      box-shadow: 0 0 10px var(--card-accent);
+    }
+
+    .arch-code-btn.copied {
+      border-color: #50dc78;
+      color: #50dc78;
+      background: rgba(80,220,120,0.1);
+    }
+
+    .arch-prompt-wrapper {
+      margin-top: 1.5rem;
+    }
+
+    .arch-prompt-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.35em;
+      color: var(--card-accent);
+      opacity: 0.6;
+      margin-bottom: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    .arch-prompt {
+      background: rgba(0,0,0,0.4);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-left: 2px solid var(--card-accent);
+      border-radius: 8px;
+      padding: 1rem;
+      font-size: 0.88rem;
+      font-weight: 300;
+      color: var(--ink);
+      line-height: 1.65;
+      max-height: 130px;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: var(--card-accent) transparent;
+      margin-bottom: 0.75rem;
+    }
+
+    .copy-prompt-btn {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: transparent;
+      border: 1px solid var(--card-accent);
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      color: var(--card-accent);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.2em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .copy-prompt-btn:hover {
+      background: color-mix(in srgb, var(--card-accent) 10%, transparent);
+      box-shadow: 0 0 15px var(--card-accent);
+    }
+
+    .copy-prompt-btn.copied {
+      border-color: #50dc78;
+      color: #50dc78;
+      background: rgba(80,220,120,0.08);
+    }
+
+    /* Footer */
+    .law-footer {
+      text-align: center;
+      border-top: 1px solid var(--border);
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      max-width: 600px;
+      margin: 2rem auto;
+      opacity: 0.3;
+    }
+
+    .divider-line {
+      flex: 1;
+      height: 1px;
+      background: var(--kob-voice-primary);
+    }
+
+    .divider-sym {
+      color: var(--kob-voice-primary);
+      font-size: 1.2rem;
+    }
+
+    .law-text {
+      font-family: 'Montserrat', sans-serif;
+      font-size: clamp(0.9rem, 2vw, 1.4rem);
+      color: var(--kob-voice-primary);
+      letter-spacing: 0.1em;
+      line-height: 2;
+      margin-bottom: 1.5rem;
+      opacity: 0.9;
+    }
+
+    .law-center {
+      font-family: var(--font-main);
+      font-size: clamp(0.8rem, 1.5vw, 1rem);
+      color: var(--ink);
+      letter-spacing: 0.3em;
+      opacity: 0.5;
+      text-transform: uppercase;
+    }
+
+    /* Accordion states */
+    .arch-card.is-collapsed .arch-body,
+    .manifest-card.is-collapsed .collapsible-body {
+      height: 0 !important;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      opacity: 0 !important;
+      overflow: hidden !important;
+    }
+
+    .arch-card.is-open .indicator,
+    .manifest-card.is-open .indicator {
+      transform: rotate(180deg);
+    }
+
+    .indicator {
+      display:inline-block;
+      width:22px;
+      height:22px;
+      line-height:22px;
+      text-align:center;
+      border-radius:6px;
+      transition: transform .32s cubic-bezier(.2,.9,.25,1), opacity .2s;
+      color: var(--card-accent, var(--kob-voice-primary));
+      font-size:12px;
+      opacity: .9;
+      flex-shrink:0;
+      margin-left:12px;
+    }
+
+    .arch-card-header[tabindex]:focus,
+    .manifest-card .manifest-card-key[tabindex]:focus {
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--card-accent, var(--kob-voice-primary)) 12%, transparent);
+      border-radius: 8px;
+    }
+
+    /* Animações */
+    @keyframes shimmer {
+      0%, 100% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+    }
+
+    @keyframes pulse-soft {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 0.9; }
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes fade-in-up {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .arch-card {
+      animation: fade-in-up 0.6s ease both;
+    }
+    .arch-card:nth-child(1) { animation-delay: 0.05s; }
+    .arch-card:nth-child(2) { animation-delay: 0.1s; }
+    .arch-card:nth-child(3) { animation-delay: 0.15s; }
+    .arch-card:nth-child(4) { animation-delay: 0.2s; }
+    .arch-card:nth-child(5) { animation-delay: 0.25s; }
+    .arch-card:nth-child(6) { animation-delay: 0.3s; }
+    .arch-card:nth-child(7) { animation-delay: 0.35s; }
+    .arch-card:nth-child(8) { animation-delay: 0.4s; }
+    .arch-card:nth-child(9) { animation-delay: 0.45s; }
+    .arch-card:nth-child(10) { animation-delay: 0.5s; }
+    .arch-card:nth-child(11) { animation-delay: 0.55s; }
+    .arch-card:nth-child(12) { animation-delay: 0.6s; }
+
+    /* Acessibilidade */
+    button:focus-visible {
+      outline: 2px solid var(--kob-voice-primary);
+      outline-offset: 2px;
+    }
+
+    /* Scroll customizado */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--bg-dark); }
+    ::-webkit-scrollbar-thumb { background: var(--kob-voice-primary); border-radius: 3px; }
+
+    /* Responsividade */
+    @media (max-width: 600px) {
+      .hero, .manifesto, .portal-section, .archetypes-section, .law-footer {
+        padding: 2rem 1rem;
+      }
+      .archetypes-grid {
+        grid-template-columns: 1fr;
+      }
+    }

@@ -1,0 +1,107 @@
+/* ═══════════════════════════════════════════════════════════
+   0x01 · PULSAR · V · D5 · CSS
+   ═══════════════════════════════════════════════════════════
+   Arquivo   : kobllux-matrix-densa-arquitetura-veeb/css/0x01_pulsar_V_D5.css
+   Opcode    : 0x01 · 432Hz
+   V.E.E.B.  : Vibração · f₁=432Hz · P(t)=A·sin(2π·432·t) · impulso sonoro
+   KOBLLUX   : VERDADE×INTEGRAR÷Δ=∞ · S=Σbᵢ·2^(i-1)
+═══════════════════════════════════════════════════════════ */
+/* ===== VARIÁVEIS ===== */
+:root {
+  --neon-cyan: #00f2ff;
+  --neon-purple: #bd00ff;
+  --neon-gold: #ffd700;
+  --neon-success: #00ff9d;
+  --neon-danger: #ff2a6d;
+  --font-ui: 'Montserrat', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+  --glass-surface: rgba(18,18,22,0.65);
+  --glass-border: rgba(255,255,255,0.06);
+  --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  --bg-gradient: linear-gradient(180deg,#000,#111);
+  --text: #d7d7d7;
+  --ink: #e8ecf6;
+}
+
+/* ===== ÁREA DE RESPOSTA ===== */
+.response-container {
+  position: fixed; left:20px; right:20px; bottom:160px;
+  padding:12px; background:rgba(0,0,0,0.4); backdrop-filter:blur(10px);
+  border-radius:20px; max-height:calc(100vh - 220px); overflow-y:auto; z-index:1;
+}
+.page { display:none; opacity:0; transition:opacity 0.8s ease-in-out; }
+.page.active { display:block; opacity:1; }
+.page.initial { text-align:center; font-size:1.1em; }
+
+/* ===== CONTROLES ===== */
+.response-controls {
+  display:flex; justify-content:space-between; align-items:center;
+  margin-top:15px; padding-top:10px; border-top:1px solid rgba(255,255,255,0.2);
+}
+.control-buttons { display:flex; gap:10px; align-items:center; }
+.control-btn {
+  background:rgba(255,255,255,0.05); padding:6px; border-radius:6px;
+  cursor:pointer; transition:background 0.4s; display:flex; gap:6px;
+  border:none; outline:none;
+}
+.control-btn:hover { background:rgba(255,255,255,0.12); }
+.control-btn svg { stroke:rgba(255,255,255,0.5); fill:none; }
+.toggle-button.active svg { stroke:var(--neon-success); filter:drop-shadow(0 0 5px var(--neon-success)); }
+.pagination { display:flex; align-items:center; gap:10px; }
+.pagination button { background:none; border:none; font-size:1.2em; color:#6fe4fb; cursor:pointer; }
+
+/* ===== BLOCOS DE RESPOSTA ===== */
+.response-block {
+  margin:1rem 0; padding:1.2rem; border-radius:12px;
+  animation:fadeIn 1.8s ease forwards;
+  transition:box-shadow 0.4s,transform 0.4s;
+  line-height:1.5; position:relative; cursor:pointer; overflow:hidden;
+  background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(0,0,0,0.25));
+  border: 1px solid rgba(255,255,255,0.03);
+}
+.response-block:hover { box-shadow:0 0 15px rgba(0,255,255,0.12); }
+.response-block .meta { position:absolute; top:8px; right:8px; display:flex; gap:6px; }
+.crystal-btn { background:rgba(0,0,0,0.25); border-radius:6px; padding:6px; cursor:pointer; border:none; color:var(--neon-cyan); }
+.response-block.expanded { transform:scale(1.03); background:rgba(0,0,0,0.6); z-index:2; }
+.response-block.clicked { animation:clickPulse 0.8s ease-out; }
+
+/* ===== CAMPO DE ENTRADA ===== */
+.input-container {
+  position:fixed; left:20px; right:20px; bottom:90px;
+  display:flex; gap:10px; z-index:2; max-width:calc(100% - 40px);
+}
+.input-container input {
+  flex:1; padding:10px; border:none; border-radius:20px;
+  background:rgba(255,255,255,0.1); color:inherit; outline:none; font-size:16px;
+}
+.input-container input:focus { background:rgba(255,255,255,0.2); }
+.input-container button {
+  width:60px; height:60px; border:none; border-radius:50%;
+  background:linear-gradient(45deg,#111,#5e5c5e); color:#fff; font-size:1.5em;
+  cursor:pointer; display:flex; justify-content:center; align-items:center;
+  animation:pulse 2s infinite ease-in-out; transition:transform 0.4s;
+}
+.input-container button:hover { transform:scale(1.1); }
+
+/* ===== MODAL CRISTALIZADOS ===== */
+.modal { position: fixed; inset: 0; display: none; z-index: 9998; justify-content:center; align-items:center; }
+.modal.active { display:flex; }
+.box {
+  background:#1a1a1a; padding:20px; border-radius:12px;
+  border:1px solid rgba(255,255,255,0.06); width:90%; max-width:520px;
+  box-shadow:0 8px 40px rgba(0,0,0,0.6); color:#fff;
+}
+.crystal-list { max-height:300px; overflow:auto; display:flex; flex-direction:column; gap:8px; }
+.crystal-item {
+  background:rgba(255,255,255,0.02); padding:8px; border-radius:8px;
+  display:flex; justify-content:space-between; gap:8px; align-items:flex-start;
+}
+.btn { padding:10px; border-radius:8px; border:none; cursor:pointer; font-weight:600; }
+.btn-prim { background:var(--neon-cyan); color:#000; }
+.btn-sec { background:rgba(255,255,255,0.08); color:#fff; }
+.small { font-size:0.85em; color:#bbb; }
+
+/* ===== ANIMAÇÕES ===== */
+@keyframes fadeIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.02)} }
+@keyframes clickPulse { 0%,100%{opacity:1} 50%{opacity:0.8} }
