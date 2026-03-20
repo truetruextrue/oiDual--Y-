@@ -1,0 +1,70 @@
+:root {
+  /* Cores base – matéria‑prima do universo visual */
+  --bg-dark: #02040a;
+  --ink: #eaf6ff;
+  --text: #f0f3f9;
+  --muted: rgba(255, 255, 255, 0.45);
+
+  /* Tipografia – a voz do sistema */
+  --font-main: 'Inter', system-ui, -apple-system, sans-serif;
+
+  /* Campos magnéticos – limite de atracação (threshold) */
+  --snap-threshold: 40px;
+
+  /* Arquétipo VEEB – Kob (voz primária e secundária) */
+  --kob-voice-primary: #00e28b;
+  --kob-voice-secondary: #0EA5E9;
+
+  /* Derivadas da voz – criadas com color-mix para consistência dinâmica */
+  --kob-voice-bg-soft: color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
+  --kob-voice-bg-strong: color-mix(in srgb, var(--kob-voice-primary) 40%, black);
+  --kob-voice-glow: color-mix(in srgb, var(--kob-voice-primary) 60%, white);
+
+  /* Painéis e superfícies – transparência controlada pela voz */
+  --panel-bg: color-mix(in srgb, var(--kob-voice-primary) 10%, #0b0f18);
+
+  /* Bordas – vivas, mas sutis */
+  --border: color-mix(in srgb, var(--kob-voice-primary) 30%, rgba(255,255,255,0.1));
+
+  /* Gradiente de fundo – céu noturno com aurora da voz */
+  --bg-gradient:
+    radial-gradient(
+      circle at 50% -10%,
+      color-mix(in srgb, var(--kob-voice-primary) 35%, #1a224f) 0%,
+      #050714 60%,
+      #000
+    );
+
+  /* Gradiente para textos e destaques */
+  --grad-a: var(--kob-voice-primary);
+  --grad-b: var(--kob-voice-secondary);
+}
+
+/* Reset – limpeza do terreno */
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+  background: var(--bg-dark) var(--bg-gradient);  /* Sobreposição do céu estrelado */
+  color: var(--text);
+  font-family: var(--font-main);
+  overflow: auto;
+}
+/*override brabo */
+
+body {
+  background: var(--bg-dark) !important;
+}
+
+iframe {
+  background: transparent !important;
+}
+
+#arch-overlay {
+  background:
+    radial-gradient(circle at 97% 88%, var(--arch-glow), transparent 78%),
+    rgba(5, 7, 10, 0.5);
+}
