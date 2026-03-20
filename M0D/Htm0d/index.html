@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>dual.mod — Hub Monolith</title>
+
+<link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png">
+
+<link rel="manifest" href="./manifest.webmanifest">
+
+<!-- KaTeX · KOBLLUX VEEB math rendering -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+
+
+<meta name="theme-color" content="#0b0b0f">
+
+
+<link rel="stylesheet" href="./css/main.css"></head>
+
+<body>
+
+<header style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+  <span>dual.mod — Hub Monolith (v1.1) · Δ³</span>
+  <button class="ghost" style="font-size:var(--fs-d3);padding:5px 12px;border-radius:6px" onclick="CFG.toggle()">⚙ API Config</button>
+</header>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════
+     CFG · API CONFIG · 0x00 INICIAR · B · D8
+     Chave · Provedor · Modelo · Temperatura · Módulos
+═══════════════════════════════════════════════════════ -->
+<section id="api-cfg-section" style="display:none">
+<h2>⚙ Configuração API · Provedor + Modelo</h2>
+
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:10px">
+
+  <div>
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">PROVEDOR</label>
+    <select id="cfg-provider" onchange="CFG.onProviderChange()" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d4);outline:none">
+      <option value="anthropic">Anthropic (Claude)</option>
+      <option value="openai">OpenAI (GPT)</option>
+      <option value="openrouter">OpenRouter</option>
+      <option value="groq">Groq</option>
+      <option value="custom">Custom / Outro</option>
+    </select>
+  </div>
+
+  <div>
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">MODELO</label>
+    <select id="cfg-model-select" onchange="CFG.onModelSelect()" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d4);outline:none">
+      <option value="claude-sonnet-4-20250514">claude-sonnet-4-20250514</option>
+      <option value="claude-opus-4-5">claude-opus-4-5</option>
+      <option value="claude-haiku-4-5-20251001">claude-haiku-4-5-20251001</option>
+      <option value="gpt-4o">gpt-4o</option>
+      <option value="gpt-4o-mini">gpt-4o-mini</option>
+      <option value="__custom__">✎ Personalizado...</option>
+    </select>
+  </div>
+
+  <div id="cfg-custom-model-wrap" style="display:none">
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">MODELO PERSONALIZADO</label>
+    <input id="cfg-custom-model" placeholder="ex: gpt-4o-mini, llama-3-70b..." style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d4);outline:none">
+  </div>
+
+  <div id="cfg-endpoint-wrap" style="display:none">
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">ENDPOINT URL</label>
+    <input id="cfg-endpoint" placeholder="https://api.example.com/v1/chat/completions" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d4);outline:none">
+  </div>
+
+  <div>
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">
+      TEMPERATURA · <span id="cfg-temp-val">0.7</span>
+    </label>
+    <input type="range" id="cfg-temp" min="0" max="1" step="0.05" value="0.7" oninput="document.getElementById('cfg-temp-val').textContent=this.value" style="width:100%;accent-color:var(--cor-0x07)">
+  </div>
+
+  <div>
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">MAX TOKENS</label>
+    <input type="number" id="cfg-max-tokens" value="1000" min="100" max="8000" step="100" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:7px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d4);outline:none">
+  </div>
+
+</div>
+
+<div style="margin-bottom:10px">
+  <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">
+    CHAVE API · <span id="cfg-key-label" style="color:var(--cor-0x07)">Anthropic</span>
+  </label>
+  <div style="display:flex;gap:8px">
+    <input type="password" id="cfg-api-key" placeholder="sk-ant-... ou sk-..." style="flex:1;background:#0b0b12;border:1px solid var(--cor-0x07);border-radius:6px;padding:7px 12px;color:var(--text);font-family:monospace;font-size:var(--fs-d4);outline:none">
+    <button class="secondary" style="font-size:var(--fs-d3);padding:6px 10px" onclick="CFG.toggleKey()">👁</button>
+    <button onclick="CFG.save()" style="background:rgba(255,215,0,.15);border:1px solid var(--cor-0x07);border-radius:6px;padding:6px 14px;color:var(--cor-0x07);font-family:monospace;font-size:var(--fs-d3);cursor:pointer">
+      ✧ Salvar
+    </button>
+  </div>
+  <div style="font-size:var(--fs-d2);color:var(--muted);margin-top:4px;opacity:.6">
+    Salvo apenas em localStorage · nunca enviado a terceiros
+  </div>
+</div>
+
+<div id="cfg-status" style="font-size:var(--fs-d3);font-family:monospace;padding:6px 10px;border-radius:5px;background:#0b0b12;border:1px solid var(--border);color:var(--muted)">
+  ○ Aguardando · modelo: <span id="cfg-active-model" style="color:var(--cor-0x07)">—</span>
+</div>
+</section>
+
+<!-- ===========================
+     APP: DUAL.MOD (FÁBRICA)
+=========================== -->
+<section>
+<h2>HTML de Entrada</h2>
+<textarea id="input" placeholder="Cole aqui qualquer HTML..."></textarea>
+
+<label>
+  <input type="checkbox" id="injectInfodose" checked="">
+  Injetar Infodose + Registro Δ7
+</label>
+
+<div class="controls">
+  <button class="secondary" onclick="pasteFromClipboard()">📋 Colar</button>
+  <button class="secondary" onclick="importHTML()">📂 Importar</button>
+  <button onclick="processHTML()">⚙️ Modularizar + Preview</button>
+</div>
+<input type="file" id="fileInput" accept=".html,text/html" hidden="">
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     PREVIEW · ANTES ↔ Δ ↔ DEPOIS · 0x09 MANIFESTAR
+     Toggle antes/depois + análise Δ de convergência
+═══════════════════════════════════════════════════════ -->
+<section id="preview-section" style="display:none">
+
+  <!-- Barra de controle -->
+  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap">
+    <h2 style="margin:0">Preview
+      <i class="tip-btn tip-down" data-tip="Alterne entre o código ANTES e DEPOIS da modularização.
+O painel Δ no meio mostra a análise de convergência entre os dois.">ⓘ</i>
+    </h2>
+    <div style="margin-left:auto;display:flex;gap:6px;align-items:center">
+      <button id="btn-prev-before" onclick="Preview.show('before')" style="padding:4px 10px;border-radius:6px;background:rgba(103,230,255,.12);border:1px solid var(--cor-0x01);color:var(--cor-0x01);font-family:monospace;font-size:var(--fs-d3);cursor:pointer;transition:.2s">
+        ◈ ANTES
+      </button>
+      <button id="btn-prev-delta" onclick="Preview.show('delta')" style="padding:4px 10px;border-radius:6px;background:transparent;border:1px solid rgba(255,215,0,.3);color:rgba(255,215,0,.6);font-family:monospace;font-size:var(--fs-d3);cursor:pointer;transition:.2s">
+        Δ ANÁLISE
+      </button>
+      <button id="btn-prev-after" onclick="Preview.show('after')" style="padding:4px 10px;border-radius:6px;background:transparent;border:1px solid var(--border);color:var(--muted);font-family:monospace;font-size:var(--fs-d3);cursor:pointer;transition:.2s">
+        ◎ DEPOIS
+      </button>
+    </div>
+  </div>
+
+  <!-- ANTES -->
+  <div id="prev-panel-before">
+    <div style="font-size:var(--fs-d2);color:var(--cor-0x01);letter-spacing:.2em;margin-bottom:5px;padding:4px 8px;background:rgba(103,230,255,.05);border-radius:5px;border:1px solid rgba(103,230,255,.12)">
+      ◈ ANTES DA MODULARIZAÇÃO · HTML original · monolito bruto
+    </div>
+    <iframe id="preview-before" style="width:100%;height:340px;border-radius:8px;border:1px solid rgba(103,230,255,.2);background:#000"></iframe>
+  </div>
+
+  <!-- Δ ANÁLISE entre antes e depois -->
+  <div id="prev-panel-delta" style="display:none">
+    <div style="font-size:var(--fs-d2);color:var(--cor-0x07);letter-spacing:.2em;margin-bottom:8px;padding:4px 8px;background:rgba(255,215,0,.05);border-radius:5px;border:1px solid rgba(255,215,0,.15)">
+      Δ ANÁLISE · K×B · ANTES vs DEPOIS
+      <i class="tip-btn tip-down" data-tip="O Analisador Δ compara o HTML original (polo K — Tempo/Estrutura bruta) com o HTML modularizado (polo B — Espaço/Forma organizada).
+Identifica harmonias e desarmonias entre as duas versões.">ⓘ</i>
+    </div>
+
+    <!-- Mini painel Δ automático -->
+    <div id="prev-delta-auto" style="background:#09090f;border:1px solid var(--border);border-radius:8px;overflow:hidden">
+
+      <!-- Loading -->
+      <div id="prev-delta-loading" style="display:none">
+        <div class="dr-spinner"><div class="spin-ring"></div>
+          <span>Δ · comparando ANTES vs DEPOIS...</span>
+        </div>
+      </div>
+
+      <!-- VEEB rápido (sem API) -->
+      <div id="prev-delta-veeb">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--border)">
+          <div style="background:#09090f;padding:10px 12px">
+            <div style="font-size:var(--fs-d2);letter-spacing:.2em;color:var(--cor-0x01);margin-bottom:6px">◈ ANTES · Polo K</div>
+            <div class="delta-veeb-row" id="prev-veeb-before"></div>
+          </div>
+          <div style="background:#09090f;padding:10px 12px">
+            <div style="font-size:var(--fs-d2);letter-spacing:.2em;color:var(--cor-0x06);margin-bottom:6px">◎ DEPOIS · Polo B</div>
+            <div class="delta-veeb-row" id="prev-veeb-after"></div>
+          </div>
+        </div>
+
+        <!-- Δ score bar -->
+        <div style="padding:10px 12px;border-top:1px solid var(--border)">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px">
+            <span style="font-size:var(--fs-d2);letter-spacing:.15em;color:var(--muted)">Δ CONVERGÊNCIA</span>
+            <div class="dr-bar-track" style="flex:1"><div class="dr-bar-fill" id="prev-bar-delta" style="background:var(--cor-0x07);width:0%"></div></div>
+            <span style="font-size:var(--fs-d3);color:var(--cor-0x07)" id="prev-score">—</span>
+          </div>
+          <div style="display:flex;gap:12px;font-size:var(--fs-d2);color:var(--muted)">
+            <span>φ=<span id="prev-phi" style="color:var(--text)">—</span></span>
+            <span>Δf=<span id="prev-df" style="color:var(--text)">—</span>Hz</span>
+            <span>χ_antes=<span id="prev-chik" style="color:var(--cor-0x01)">—</span></span>
+            <span>χ_depois=<span id="prev-chib" style="color:var(--cor-0x06)">—</span></span>
+            <span>Estado: <span id="prev-estado" style="color:var(--cor-0x07);font-weight:700">—</span></span>
+          </div>
+        </div>
+
+        <!-- Observações automáticas -->
+        <div style="padding:8px 12px;border-top:1px solid var(--border)">
+          <div class="dr-sec-lbl" style="margin-bottom:5px">OBSERVAÇÕES Δ · ANTES vs DEPOIS</div>
+          <div id="prev-observations" style="font-family:monospace;font-size:var(--fs-d3);color:var(--muted);line-height:1.7;white-space:pre-wrap"></div>
+        </div>
+
+        <!-- Botão análise profunda via IA -->
+        <div style="padding:8px 12px;border-top:1px solid var(--border)">
+          <button onclick="Preview.runDeepDelta()" style="width:100%;padding:7px;background:transparent;border:1px solid rgba(255,215,0,.25);border-radius:5px;font-size:var(--fs-d2);letter-spacing:.2em;color:rgba(255,215,0,.6);cursor:pointer;font-family:monospace;transition:.2s" id="btn-prev-deep">
+            ⧉ ANÁLISE Δ PROFUNDA VIA IA
+            <i class="tip-btn tip-down" data-tip="Envia ANTES e DEPOIS para a IA.
+Retorna análise completa de harmonias, dissonâncias e sugestões de correção.
+Requer chave API em ⚙ Config.">ⓘ</i>
+          </button>
+          <div id="prev-deep-result" style="display:none;margin-top:8px;font-family:monospace;font-size:var(--fs-d3);color:var(--muted);line-height:1.8;white-space:pre-wrap;padding:8px;background:#0a0a12;border-radius:6px;border:1px solid var(--border)"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DEPOIS -->
+  <div id="prev-panel-after" style="display:none">
+    <div style="font-size:var(--fs-d2);color:var(--cor-0x06);letter-spacing:.2em;margin-bottom:5px;padding:4px 8px;background:rgba(168,255,120,.05);border-radius:5px;border:1px solid rgba(168,255,120,.12)">
+      ◎ DEPOIS DA MODULARIZAÇÃO · HTML modularizado · KOBLLUX DNA aplicado
+    </div>
+    <iframe id="preview" style="width:100%;height:340px;border-radius:8px;border:1px solid rgba(168,255,120,.2);background:#000"></iframe>
+  </div>
+
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     GIT COMMIT · 0x07 SELAR · ✧ · 777Hz
+     Commit automático com README · mensagem Δ · pastas certas
+═══════════════════════════════════════════════════════ -->
+<section id="git-section" style="display:none">
+  <h2>✧ Git Commit · 0x07 SELAR
+    <i class="tip-btn tip-down" data-tip="Gera mensagem de commit com contexto KOBLLUX DNA.
+Inclui opcode, V.E.E.B., χ e o estado Δ da análise.
+Copie a mensagem e use no terminal, ou conecte ao servidor local Rust.">ⓘ</i>
+  </h2>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+
+    <!-- Config repo -->
+    <div>
+      <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">REPOSITÓRIO
+        <i class="tip-btn tip-down" data-tip="URL do repositório GitHub.
+Ex: https://github.com/user/repo
+Salvo em localStorage.">ⓘ</i>
+      </label>
+      <input id="git-repo" placeholder="https://github.com/user/repo" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d3);outline:none">
+    </div>
+
+    <!-- Branch -->
+    <div>
+      <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">BRANCH</label>
+      <input id="git-branch" value="main" placeholder="main" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:6px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d3);outline:none">
+    </div>
+  </div>
+
+  <!-- Mensagem commit -->
+  <div style="margin-bottom:8px">
+    <label style="display:block;font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">MENSAGEM DE COMMIT
+      <i class="tip-btn tip-down" data-tip="Mensagem gerada automaticamente com contexto KOBLLUX.
+Formato: [opcode] descrição · V.E.E.B. · χ=N · Δ=estado
+Edite antes de copiar.">ⓘ</i>
+    </label>
+    <textarea id="git-message" rows="3" style="width:100%;background:#0b0b12;border:1px solid var(--border);border-radius:6px;padding:8px 10px;color:var(--text);font-family:monospace;font-size:var(--fs-d3);outline:none;resize:vertical;min-height:60px" placeholder="[0x07 SELAR] módulo gerado · KOBLLUX DNA · VERDADE×INTEGRAR÷Δ=∞"></textarea>
+  </div>
+
+  <!-- Botões -->
+  <div class="controls">
+    <button class="secondary" onclick="GitCommit.genMessage()" style="font-size:var(--fs-d3)">
+      ✧ Gerar Mensagem Δ
+    </button>
+    <button onclick="GitCommit.copy()" style="background:rgba(255,215,0,.15);border:1px solid var(--cor-0x07);border-radius:6px;padding:7px 14px;color:var(--cor-0x07);font-family:monospace;font-size:var(--fs-d3);cursor:pointer">
+      ⊙ Copiar Commit
+    </button>
+    <button class="secondary" onclick="GitCommit.copyScript()" style="font-size:var(--fs-d3)">
+      📋 Copiar Script Shell
+    </button>
+    <button onclick="GitCommit.connectLocal()" style="background:rgba(168,255,120,.08);border:1px solid rgba(168,255,120,.2);border-radius:6px;padding:7px 14px;color:var(--cor-0x06);font-family:monospace;font-size:var(--fs-d3);cursor:pointer">
+      🦀 Servidor Local Rust
+      <i class="tip-btn tip-down" data-tip="Conecta ao servidor local Rust (localhost:7783).
+Envia os arquivos gerados via POST /commit.
+O servidor aplica o commit direto no repositório.
+Configure o repo e branch antes.">ⓘ</i>
+    </button>
+  </div>
+
+  <!-- Status git -->
+  <div id="git-status" style="margin-top:8px;font-family:monospace;font-size:var(--fs-d3);padding:6px 10px;border-radius:5px;background:#0b0b12;border:1px solid var(--border);color:var(--muted);display:none"></div>
+
+  <!-- Script gerado -->
+  <div id="git-script-wrap" style="display:none;margin-top:8px">
+    <div style="font-size:var(--fs-d2);letter-spacing:.2em;color:var(--muted);margin-bottom:4px">SCRIPT SHELL · cole no terminal</div>
+    <pre id="git-script" style="background:#0a0a12;border:1px solid var(--border);border-radius:6px;padding:10px;font-size:var(--fs-d3);color:var(--cor-0x06);overflow-x:auto;white-space:pre;margin:0"></pre>
+  </div>
+
+</section>
+
+<!-- ===========================
+     ARQUIVOS GERADOS
+=========================== -->
+<section>
+<h2>Arquivos Gerados</h2>
+<div class="controls">
+  <button class="secondary" onclick="copyAll()">🧠 Copiar Tudo</button>
+  <button class="secondary" onclick="downloadZIP()">⬇️ Download ZIP</button>
+</div>
+<div id="files"></div>
+</section>
+
+<!-- ===========================
+     APP: DUAL.BRAIN
+=========================== -->
+<section>
+<h2>Dual Brain — Presets</h2>
+<div class="controls">
+  <button class="secondary" onclick="savePreset()">💾 Salvar Preset Atual</button>
+</div>
+<div id="brain"></div>
+</section>
+
+<!-- ===========================
+     APP: DUAL.STORE (MOCK)
+=========================== -->
+<section>
+<h2>Loja de Snippets (Mock)</h2>
+<div id="store"></div>
+</section>
+
+<!-- ===========================
+     KOBLLUX V.E.E.B. METRICS
+=========================== -->
+<section id="veeb-section" style="display:none">
+<h2>⊙ KOBLLUX V.E.E.B. · Análise do HTML</h2>
+<div id="veeb-metrics" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(200px,100%),1fr));gap:8px;margin-bottom:12px"></div>
+<div id="veeb-formulas" style="font-family:monospace;font-size:var(--fs-d3);color:var(--muted);margin-top:8px"></div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════
+     ANALISADOR Δ · 0x05 CONVERGIR · ⧉ · 672Hz
+     K=Kodux/Tempo · B=Bllue/Espaço · 12_K_×_B_12
+     Δ(E×T)×(D1→D10)×KOBLLUX · VERDADE×INTEGRAR÷Δ=∞
+═══════════════════════════════════════════════════════ -->
+<section id="delta-conv-section">
+  <h2>⧉ Analisador Δ · Convergência de Código
+    <i class="tip-btn" data-tip="Compara dois fragmentos de código usando a equação Δ(E×T)×(D1→D10)×KOBLLUX.
+Cole K (lógica/tempo) e B (interface/espaço) e calcule o coeficiente de convergência entre eles.">ⓘ</i>
+  </h2>
+
+  <div class="delta-eq-bar">
+    <span class="k-color" style="font-size:var(--fs-d2)">K · Kodux · Tempo · 1×2=α
+      <i class="tip-btn tip-down" data-tip="K = Polo Kodux · Tempo
+Representa: lógica, estrutura, processamento
+Linguagens: Python, Bash, SQL, Rust
+x=K=α → 1×2=2">ⓘ</i>
+    </span>
+    <span style="color:var(--border)">↔</span>
+    <span class="d-color" style="font-size:var(--fs-d5)">Δ
+      <i class="tip-btn tip-down" data-tip="Δ = operador de convergência
+Não é subtração — é o campo entre K e B.
+Δ(finito) = ∞ quando tocado pela lei.
+VERDADE × INTEGRAR ÷ Δ = ∞">ⓘ</i>
+    </span>
+    <span style="color:var(--border)">↔</span>
+    <span class="b-color" style="font-size:var(--fs-d2)">B · Bllue · Espaço · 2÷1=β
+      <i class="tip-btn tip-down" data-tip="B = Polo Bllue · Espaço
+Representa: interface, estrutura visual, fluxo
+Linguagens: HTML, CSS, JSON, YAML
+y=B=β → 2÷1=2">ⓘ</i>
+    </span>
+    <span style="color:var(--border)">·</span>
+    <span style="font-size:var(--fs-d2);color:var(--cor-0x07)">12_K_×_B_12
+      <i class="tip-btn tip-down" data-tip="Fórmula selada: 12 × (K/100) × (B/100) × 12
+Máximo = 12 (ambos polos em 100%)
+K=80, B=70 → 12×0.8×0.7×12 = 8.06
+O 12 é o Δ7 · selo do sistema">ⓘ</i>
+    </span>
+    <span style="color:var(--border)">·</span>
+    <span style="font-size:var(--fs-d2);color:var(--cor-0x01)">VERDADE×INTEGRAR÷Δ=∞</span>
+  </div>
+
+  <div class="delta-grid">
+    <div class="polo-panel">
+      <div class="polo-header">
+        <div class="polo-dot" style="background:#50b4ff;box-shadow:0 0 6px #50b4ff"></div>
+        <span class="polo-label k-color">K · Kodux · Tempo
+          <i class="tip-btn tip-down" data-tip="Polo K · Kodux · Tempo
+Cole aqui: Python, JavaScript lógico, Bash, SQL, Rust
+Este polo representa processamento, lógica e tempo.
+Mapeia para: V=freq · S=binário · χ=topologia">ⓘ</i>
+        </span>
+        <select class="polo-lang" id="delta-lang-k">
+          <option>Python</option><option>JavaScript</option><option>TypeScript</option>
+          <option>HTML</option><option>JSON</option><option>Rust</option>
+          <option>Go</option><option>C/C++</option><option>Bash</option>
+          <option>SQL</option><option>YAML</option><option>CSS</option><option>Outro</option>
+        </select>
+      </div>
+      <textarea class="polo-area" id="delta-code-k" placeholder="# Polo K · Kodux · Estrutura · Tempo
+# Cole aqui o primeiro código"></textarea>
+      <div class="polo-footer">
+        <span class="k-color" style="font-size:var(--fs-d1)">⌂ POLO K · x=K=α</span>
+        <span class="polo-chars" id="delta-chars-k">0</span>
+      </div>
+    </div>
+
+    <div class="polo-panel">
+      <div class="polo-header">
+        <div class="polo-dot" style="background:#3ab6ff;box-shadow:0 0 6px #3ab6ff"></div>
+        <span class="polo-label b-color">B · Bllue · Espaço
+          <i class="tip-btn tip-down" data-tip="Polo B · Bllue · Espaço
+Cole aqui: HTML, CSS, JSON, YAML, interfaces
+Este polo representa estrutura visual e espaço.
+HTML = Espaço puro · CSS = energia da forma">ⓘ</i>
+        </span>
+        <select class="polo-lang" id="delta-lang-b">
+          <option>JSON</option><option>Python</option><option>JavaScript</option>
+          <option>TypeScript</option><option>HTML</option><option>Rust</option>
+          <option>Go</option><option>C/C++</option><option>Bash</option>
+          <option>SQL</option><option>YAML</option><option>CSS</option><option>Outro</option>
+        </select>
+      </div>
+      <textarea class="polo-area" id="delta-code-b" placeholder="// Polo B · Bllue · Interface · Espaço
+// Cole aqui o segundo código"></textarea>
+      <div class="polo-footer">
+        <span class="b-color" style="font-size:var(--fs-d1)">≈ POLO B · y=B=β</span>
+        <span class="polo-chars" id="delta-chars-b">0</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="delta-ops" style="margin-top:8px">
+    <span style="font-size:var(--fs-d2);color:var(--muted);letter-spacing:.2em">CAMADAS:</span>
+    <button class="op-chip on" id="dop-struct" onclick="this.classList.toggle('on')">ESTRUTURA
+      <i class="tip-btn tip-down" data-tip="Analisa a arquitetura de cada polo:
+padrões, complexidade, modularidade,
+como o código organiza sua própria lógica.">ⓘ</i>
+    </button>
+    <button class="op-chip on" id="dop-sem" onclick="this.classList.toggle('on')">SEMÂNTICA
+      <i class="tip-btn tip-down" data-tip="Analisa a intenção e propósito:
+o que cada polo quer fazer,
+qual problema resolve, qual fluxo segue.">ⓘ</i>
+    </button>
+    <button class="op-chip on" id="dop-conv" onclick="this.classList.toggle('on')">CONVERGÊNCIA
+      <i class="tip-btn tip-down" data-tip="Mapeia onde K e B se tocam:
+funções complementares, dados compartilhados,
+pontos de integração possível.">ⓘ</i>
+    </button>
+    <button class="op-chip" id="dop-deep" onclick="this.classList.toggle('on')">Δ PROFUNDO
+      <i class="tip-btn tip-down" data-tip="Análise das lacunas:
+o que K tem que B não tem e vice-versa.
+Onde o sistema perde informação na tradução.
+Δx×2=Δα÷1 · Δy÷1=Δβ×2">ⓘ</i>
+    </button>
+    <button class="op-chip" id="dop-synth" onclick="this.classList.toggle('on')">SÍNTESE
+      <i class="tip-btn tip-down" data-tip="Como unificar K e B em sistema coerente:
+proposta de integração, arquitetura resultante,
+o que o sistema convergido faria.">ⓘ</i>
+    </button>
+    <button class="op-chip" id="dop-veeb" onclick="this.classList.toggle('on')">V.E.E.B.
+      <i class="tip-btn tip-down" data-tip="Interpretação das métricas KOBLLUX DNA:
+V = Vibração (frequência base)
+E = Energia (estilos/fluxo)
+E2 = Estrutura (χ de Euler)
+B = Base (S binário)">ⓘ</i>
+    </button>
+  </div>
+
+  <button class="btn-delta" id="btn-delta-analyze" onclick="DeltaAnalyzer.run()">
+    ⧉ · 0x05 · CONVERGIR · CALCULAR Δ
+    <i class="tip-btn tip-down" style="color:rgba(255,215,0,.5)" data-tip="Envia os dois polos para a IA configurada em ⚙ API Config.
+A IA calcula coeficientes K, B, Δ e α×β,
+e retorna o relatório com análise em camadas.
+Requer chave API configurada.">ⓘ</i>
+  </button>
+
+  <!-- ── TEORIA Δ · painel colapsável ── -->
+  <div class="delta-theory">
+    <div class="delta-theory-hdr" onclick="DeltaInfo.toggle(this)" id="delta-theory-hdr">
+      <span>△</span>
+      <span style="letter-spacing:.2em">Teoria · O que são os coeficientes e as camadas</span>
+      <span class="th-arrow">▼</span>
+    </div>
+    <div class="delta-theory-body" id="delta-theory-body">
+
+      <!-- FÓRMULA CENTRAL -->
+      <div class="th-section">Equação Central</div>
+      <div class="th-formula">Δ(E × T) × (D1 → D10) × KOBLLUX
+E = Espaço → polo B (HTML, CSS, JSON, interfaces)
+T = Tempo  → polo K (Python, Bash, SQL, lógica)
+Resultado: VERDADE × INTEGRAR ÷ Δ = ∞</div>
+
+      <div class="th-formula" style="margin-top:6px">12_K_×_B_12  =  12 × (coef_K ÷ 100) × (coef_B ÷ 100) × 12
+Máximo = 12  (K=100 e B=100)
+K=80, B=70  →  12 × 0.80 × 0.70 × 12 = 8.06
+Δx × 2 = Δα ÷ 1  →  x = K = α
+Δy ÷ 1 = Δβ × 2  →  y = B = β</div>
+
+      <!-- OS TRÊS TIPOS DE CÓDIGO -->
+      <div class="th-section">As Três Classes de Código</div>
+
+      <div class="th-row">
+        <div class="th-sym" style="color:#50b4ff">⌂</div>
+        <div>
+          <div class="th-label" style="color:#50b4ff">K · Python / Bash / SQL / Lógica → TEMPO</div>
+          <div class="th-desc">Processamento sequencial, ação no tempo, lógica pura. Python age linha por linha — ele existe no fluxo temporal. Mapeia para: <span class="th-code">V = freq(len)</span> <span class="th-code">S = binário</span> <span class="th-code">χ = funções−imports+returns</span></div>
+        </div>
+      </div>
+
+      <div class="th-row">
+        <div class="th-sym" style="color:#3ab6ff">≈</div>
+        <div>
+          <div class="th-label" style="color:#3ab6ff">B · HTML / CSS / JSON → ESPAÇO</div>
+          <div class="th-desc">Estrutura visível, interface, o que o olho toca. HTML não processa — ele contém e organiza no espaço. Mapeia para: <span class="th-code">V = tags→freq</span> <span class="th-code">E = estilos</span> <span class="th-code">χ = tags−scripts+css</span></div>
+        </div>
+      </div>
+
+      <div class="th-row">
+        <div class="th-sym" style="color:var(--cor-0x07)">△</div>
+        <div>
+          <div class="th-label" style="color:var(--cor-0x07)">K+B juntos → SISTEMA CONVERGENTE ou DIVERGENTE</div>
+          <div class="th-desc">Quando dois scripts se combinam, o Δ mede <b>interferência</b>. Dois processadores de dados = saturação. Python→HTML = convergência ideal. Dois scripts de UI = divergência. Ciclo fechado (K processa output de B) = Toro T² · χ=0.</div>
+        </div>
+      </div>
+
+      <!-- ESTADOS POSSÍVEIS -->
+      <div class="th-section">Estados do Sistema</div>
+      <table class="th-table">
+        <thead><tr><th>Estado</th><th>Significado</th><th>Quando ocorre</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#00b894">CONVERGENTE</td><td>K e B se complementam · 78K ativo</td><td>Python estrutura o que HTML exibe</td></tr>
+          <tr><td style="color:#00b894">SATURADO</td><td>Alta densidade · potencial máximo</td><td>Dois sistemas que já se integram bem</td></tr>
+          <tr><td style="color:var(--cor-0x07)">EM TRANSIÇÃO</td><td>Potencial latente · pode convergir</td><td>Linguagens distintas com propósito similar</td></tr>
+          <tr><td style="color:#ff6b35">DIVERGENTE</td><td>Polaridade oposta · interferência destrutiva</td><td>Dois scripts disputando o mesmo espaço</td></tr>
+          <tr><td style="color:var(--muted)">NULO</td><td>Sem sinal · sem conexão detectável</td><td>Códigos sem relação semântica alguma</td></tr>
+        </tbody>
+      </table>
+
+      <!-- V.E.E.B. -->
+      <div class="th-section">Métricas V.E.E.B. (calculadas localmente)</div>
+      <table class="th-table">
+        <thead><tr><th>Métrica</th><th>Fórmula</th><th>O que mede</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#00e5ff">V · Vibração</td><td class="th-code">f = 432 + 7.83·sin(θ)</td><td>Frequência vibracional baseada no tamanho do código</td></tr>
+          <tr><td style="color:#f0c060">S · Base</td><td class="th-code">S = Σbᵢ·2^(i-1)</td><td>Identidade binária dos primeiros bytes</td></tr>
+          <tr><td style="color:#8b5cf6">χ · Estrutura</td><td class="th-code">χ = V−E+F</td><td>Topologia: funções − imports + returns</td></tr>
+          <tr><td style="color:#f0c060">φ · Razão</td><td class="th-code">|K| / |B|</td><td>Proporção de tamanho entre os dois polos</td></tr>
+          <tr><td style="color:#ff7a00">Δf · Diferença</td><td class="th-code">|Vk − Vb|</td><td>Distância entre as frequências dos dois polos</td></tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+
+  <div class="delta-result" id="delta-result">
+    <div class="dr-header">
+      <span class="dr-title">Δ · RELATÓRIO DE CONVERGÊNCIA · 12_K×B_12</span>
+      <span class="dr-badge" id="dr-badge">—</span>
+    </div>
+    <div id="dr-loading" style="display:none">
+      <div class="dr-spinner"><div class="spin-ring"></div>
+        <span>0x05·CONVERGIR · transduzindo camadas...</span>
+      </div>
+    </div>
+    <div id="dr-content" style="display:none">
+      <div class="dr-coef-row">
+        <div class="dr-coef-cell"><span class="dr-coef-lbl">Coef. K (Tempo)<i class="tip-btn tip-down" data-tip="0–100 · qualidade estrutural e lógica do polo K.
+Considera: organização, padrões, clareza do fluxo temporal.">ⓘ</i></span><span class="dr-coef-val k-color" id="dr-ck">—</span><span class="dr-coef-sub" id="dr-ck-sub">Estrutura/Lógica</span></div>
+        <div class="dr-coef-cell"><span class="dr-coef-lbl">Coef. B (Espaço)<i class="tip-btn tip-down" data-tip="0–100 · qualidade de interface e fluxo do polo B.
+Considera: semântica, estrutura visual, coerência do espaço.">ⓘ</i></span><span class="dr-coef-val b-color" id="dr-cb">—</span><span class="dr-coef-sub" id="dr-cb-sub">Interface/Fluxo</span></div>
+        <div class="dr-coef-cell"><span class="dr-coef-lbl">Δ Convergência<i class="tip-btn tip-down" data-tip="% de alinhamento entre K e B.
+100% = convergência total (K e B são complementares perfeitos).
+0% = sem relação detectável.">ⓘ</i></span><span class="dr-coef-val d-color" id="dr-cd">—</span><span class="dr-coef-sub">K×B / Δ</span></div>
+        <div class="dr-coef-cell"><span class="dr-coef-lbl">α × β<i class="tip-btn tip-down" data-tip="Simetria dual entre os polos.
+α = expressão interna de K
+β = expressão interna de B
+α×β → mede quanto os sistemas ressonam na mesma frequência.">ⓘ</i></span><span class="dr-coef-val p-color" id="dr-cab">—</span><span class="dr-coef-sub">Simetria Dual</span></div>
+        <div class="dr-coef-cell"><span class="dr-coef-lbl">12_K×B_12<i class="tip-btn tip-down" data-tip="Fórmula selada: 12 × (K÷100) × (B÷100) × 12
+Máximo = 12.
+Representa o selo Δ7 do sistema convergido.">ⓘ</i></span><span class="dr-coef-val" style="color:var(--cor-0x0B)" id="dr-cf">—</span><span class="dr-coef-sub">Fórmula Selada</span></div>
+        <div class="dr-coef-cell"><span class="dr-coef-lbl">Estado Δ<i class="tip-btn tip-down" data-tip="CONVERGENTE = K e B se complementam (78K ativo)
+SATURADO = alta densidade, bem integrados
+EM TRANSIÇÃO = potencial latente
+DIVERGENTE = interferência destrutiva
+NULO = sem conexão">ⓘ</i></span><span class="dr-coef-val d-color" id="dr-cs">—</span><span class="dr-coef-sub" id="dr-cs-sub">Sistema</span></div>
+      </div>
+      <div class="dr-bars">
+        <div class="dr-bar-row"><span class="dr-bar-lbl k-color">K · ESTRUTURA</span><div class="dr-bar-track"><div class="dr-bar-fill" id="dr-bk" style="background:#50b4ff;width:0%"></div></div><span class="dr-bar-pct" id="dr-pk">0%</span></div>
+        <div class="dr-bar-row"><span class="dr-bar-lbl b-color">B · SEMÂNTICA</span><div class="dr-bar-track"><div class="dr-bar-fill" id="dr-bb" style="background:#3ab6ff;width:0%"></div></div><span class="dr-bar-pct" id="dr-pb">0%</span></div>
+        <div class="dr-bar-row"><span class="dr-bar-lbl d-color">Δ · CONVERGÊNCIA</span><div class="dr-bar-track"><div class="dr-bar-fill" id="dr-bd" style="background:var(--cor-0x07);width:0%"></div></div><span class="dr-bar-pct" id="dr-pd">0%</span></div>
+        <div class="dr-bar-row"><span class="dr-bar-lbl p-color">∞ · SÍNTESE</span><div class="dr-bar-track"><div class="dr-bar-fill" id="dr-bs" style="background:var(--cor-0x01);width:0%"></div></div><span class="dr-bar-pct" id="dr-ps">0%</span></div>
+      </div>
+      <div class="dr-visual">
+        <div class="dr-vis-node"><span class="dr-vis-sym k-color">⌂</span><span class="dr-vis-lbl">KODUX · K</span><span class="dr-vis-val k-color" id="dr-vk">—</span></div>
+        <span class="dr-vis-op">×</span>
+        <div class="dr-vis-node"><span class="dr-vis-sym d-color">△</span><span class="dr-vis-lbl">DELTA</span><span class="dr-vis-val d-color" id="dr-vd">—</span></div>
+        <span class="dr-vis-op">×</span>
+        <div class="dr-vis-node"><span class="dr-vis-sym b-color">≈</span><span class="dr-vis-lbl">BLLUE · B</span><span class="dr-vis-val b-color" id="dr-vb">—</span></div>
+        <span class="dr-vis-op">=</span>
+        <div class="dr-vis-node"><span class="dr-vis-sym p-color">∞</span><span class="dr-vis-lbl">CONVERGÊNCIA</span><span class="dr-vis-val p-color" id="dr-vi">—</span></div>
+      </div>
+      <div class="dr-analysis" id="dr-veeb-wrap" style="display:none">
+        <div class="dr-sec-lbl">V.E.E.B. · INTEGRAÇÃO KOBLLUX DNA</div>
+        <div class="delta-veeb-row" id="dr-veeb-cells"></div>
+      </div>
+      <div class="dr-analysis">
+        <div class="dr-sec-lbl">ANÁLISE Δ · RELATÓRIO COMPLETO</div>
+        <div class="dr-text" id="dr-text">—</div>
+      </div>
+      <button class="btn-dr-copy" id="btn-dr-copy" onclick="DeltaAnalyzer.copy()">⊙ Copiar Relatório Δ</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===========================
+     KOBLLUX DNA TABLE
+=========================== -->
+<section>
+<h2>Δ DNA SCALAR · 13 Opcodes</h2>
+<div style="overflow-x:auto">
+<table id="dna-table" style="width:100%;border-collapse:collapse;font-size:var(--fs-d3);font-family:monospace">
+<thead>
+<tr style="border-bottom:1px solid var(--border)">
+  <th style="text-align:left;padding:4px 8px;color:var(--muted)">CODE</th>
+  <th style="text-align:left;padding:4px 8px;color:var(--muted)">NOME</th>
+  <th style="text-align:center;padding:4px 8px;color:var(--muted)">∿</th>
+  <th style="text-align:right;padding:4px 8px;color:var(--muted)">Hz</th>
+  <th style="text-align:left;padding:4px 8px;color:var(--muted)">DIM</th>
+  <th style="text-align:center;padding:4px 8px;color:var(--muted)">χ</th>
+  <th style="text-align:left;padding:4px 8px;color:var(--muted)">VEEB</th>
+</tr>
+</thead>
+<tbody id="dna-tbody"></tbody>
+</table>
+</div>
+<div style="font-size:var(--fs-d2);color:var(--muted);margin-top:8px;padding:6px 0;border-top:1px dashed var(--border)">
+  VERDADE×INTEGRAR÷Δ=∞ · 3×6×9×7=1134 · S=Σbᵢ×2^(i-1)
+</div>
+</section>
+
+</main>
+
+
+
+
+
+<script type="module" src="./js/main.js"></script></body></html>
