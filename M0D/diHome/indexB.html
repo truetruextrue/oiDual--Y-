@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fusion OS Vision — Ultimate</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  
+  
+  
+
+  
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/css/mainB.css"></head>
+<body class="text-gray-100">
+
+  <div id="particles-js"></div>
+  <div id="orb-top" class="orb-bg"></div>
+  <div id="orb-bottom" class="orb-bg"></div>
+
+  <header>
+    <div class="v-pill" onclick="Identity.openInfodoseModal()">
+      <div id="header-status" class="w-2 h-2 rounded-full shadow-[0_0_10px_currentColor]" style="background-color: var(--active-color); color: var(--active-color);"></div>
+      <span id="displayUserHeader" class="uppercase">PILOTO</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div id="tts-indicator" class="voice-wave hidden">
+        <div class="bar" style="animation-delay: -0.2s"></div>
+        <div class="bar" style="animation-delay: -0.1s"></div>
+        <div class="bar"></div>
+        <div class="bar" style="animation-delay: -0.3s"></div>
+      </div>
+      <div class="v-pill" onclick="Identity.showInfodoseModal()">
+        <span id="displayArchetypeBadge" class="uppercase text-[10px] tracking-widest text-white/80">...</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="universe-viewport">
+
+    <!-- CORTEX -->
+    <section class="screen-panel pt-32 px-6" id="view-cortex">
+      <div class="max-w-3xl mx-auto h-full flex flex-col">
+        <div class="flex justify-between items-end mb-8 fade-in">
+          <div>
+            <h1 class="text-5xl font-thin tracking-tighter text-white">Córtex</h1>
+            <p class="text-xs text-white/40 font-bold tracking-widest mt-2 uppercase">Arquivo Mnemônico</p>
+          </div>
+          <button onclick="Cortex.openNewMemory()" class="v-pill bg-white/10 hover:bg-white/20 border-white/20">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Cristal</span>
+          </button>
+        </div>
+        <div class="v-glass p-1 mb-8 flex items-center gap-3 px-4 fade-in" style="border-radius:18px; animation-delay: 0.1s;">
+          <i data-lucide="search" class="w-4 h-4 text-white/40"></i>
+          <input id="memory-search" oninput="Cortex.render()" class="bg-transparent w-full h-11 text-sm placeholder-white/20 font-medium" placeholder="Buscar nas matrizes...">
+        </div>
+        <div id="crystal-container" class="pb-24 fade-in" style="animation-delay:0.2s"></div>
+      </div>
+    </section>
+
+    <!-- NEXUS -->
+    <section class="screen-panel flex flex-col items-center justify-center relative" id="view-nexus">
+      <div class="text-center z-10 fade-in w-full px-6">
+
+        <!-- ═══════════════════════════════════════════════════════
+             ORB · 0x09·MANIFESTAR · GIF loop ↔ MP4 com áudio
+             Clique = SINCRONIZAR → play MP4 → onended → GIF
+        ═══════════════════════════════════════════════════════ -->
+        <div id="hero-orb" class="w-72 h-72 mx-auto rounded-full relative cursor-pointer mb-10 transition-transform duration-500 hover:scale-105" onclick="Orb.sync()">
+
+          <!-- Anéis decorativos -->
+          <div class="absolute inset-0 rounded-full border border-white/20 animate-[spin_12s_linear_infinite]"></div>
+          <div class="absolute inset-4 rounded-full border border-white/10 animate-[spin_18s_linear_infinite_reverse]"></div>
+
+          <!-- Ring de status de play -->
+          <div id="orb-sync-ring"></div>
+
+          <!-- Camada visual: GIF + VIDEO sobrepostos -->
+          <div id="orb-arch-visual">
+            <!-- GIF: loop silencioso (estado passivo) -->
+            <img id="orb-arch-img" src="" alt="" draggable="false">
+            <!-- VIDEO: play único com áudio (estado ativo) -->
+            <video id="orb-arch-video" src="" preload="metadata" draggable="false" playsinline="" webkit-playsinline=""></video>
+          </div>
+
+          <!-- Ícone padrão (quando sem visual) -->
+          <div class="absolute inset-0 flex items-center justify-center" id="orb-default-icon">
+            <div class="w-36 h-36 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10 shadow-[0_0_80px_var(--active-glow)] flex items-center justify-center">
+               <i data-lucide="aperture" class="w-14 h-14 text-white/90"></i>
+            </div>
+          </div>
+
+          <!-- Hint de play (hover) -->
+          <div id="orb-play-hint">
+            <div class="play-hint-icon">
+              <i data-lucide="play" class="w-5 h-5 text-white fill-white ml-1"></i>
+            </div>
+          </div>
+
+          <!-- Badge opcode -->
+          <div id="orb-opcode-badge">○ 0x00 · INICIAR · 396Hz</div>
+        </div>
+
+        <h1 id="hero-title" class="text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">FUSION</h1>
+        <p id="archetype-status-text" class="mt-4 text-xs text-white/40 uppercase tracking-[0.2em] font-bold">Inicializando...</p>
+
+        <div class="mt-16 flex gap-4 justify-center">
+          <button onclick="Navigation.to(0)" class="v-pill hover:bg-white/10 border-white/10">
+            <i data-lucide="brain-circuit" class="w-4 h-4 text-white/70"></i> Córtex
+          </button>
+          <button onclick="Navigation.to(2)" class="v-pill hover:bg-white/10 border-white/10">
+            <i data-lucide="play-circle" class="w-4 h-4 text-white/70"></i> DualTube
+          </button>
+          <button onclick="Navigation.to(3)" class="v-pill hover:bg-white/10 border-white/10">
+            <i data-lucide="github" class="w-4 h-4 text-white/70"></i> Repositório
+          </button>
+        </div>
+        <div class="mt-6">
+           <p id="drk-line" class="text-[10px] text-white/20 italic font-serif">"O silêncio é a resposta."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DUALTUBE · 0x00 · 7 ABAS CARROSSEL -->
+    <section class="screen-panel pt-28 px-4" id="view-dualtube">
+      <div class="max-w-5xl mx-auto pb-24">
+
+        <!-- Header -->
+        <div class="flex justify-between items-end mb-6 fade-in">
+          <div>
+            <h2 class="text-4xl font-thin tracking-tighter">Stream</h2>
+            <p class="text-xs text-white/40 uppercase tracking-widest mt-1 font-bold">0x00 · Curadoria de Sinais</p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold tracking-tighter" id="dt-watched-count">0</div>
+            <div class="text-[9px] text-white/30 uppercase tracking-widest">Sincronizados</div>
+          </div>
+        </div>
+
+        <!-- TAB BAR SCROLL -->
+        <div class="overflow-x-auto mb-6 fade-in" style="scrollbar-width:none">
+          <div class="flex gap-2 pb-1" style="width:max-content">
+            <button id="dttab-0" onclick="DualTube.setTab(0)" class="v-pill dt-tab dt-tab-on text-[10px] whitespace-nowrap">
+              <i data-lucide="newspaper" class="w-3 h-3"></i> 0x01 · INFODOSE
+            </button>
+            <button id="dttab-1" onclick="DualTube.setTab(1)" class="v-pill dt-tab text-[10px] whitespace-nowrap">
+              <i data-lucide="hexagon" class="w-3 h-3"></i> 0x02 · MATRIZ NEURAL
+            </button>
+            <button id="dttab-2" onclick="DualTube.setTab(2)" class="v-pill dt-tab text-[10px] whitespace-nowrap">
+              <i data-lucide="music" class="w-3 h-3"></i> 0x03 · FREQUÊNCIAS
+            </button>
+            <button id="dttab-3" onclick="DualTube.setTab(3)" class="v-pill dt-tab text-[10px] whitespace-nowrap">
+              <i data-lucide="brain" class="w-3 h-3"></i> 0x04 · COGNITIVA
+            </button>
+            <button id="dttab-4" onclick="DualTube.setTab(4)" class="v-pill dt-tab text-[10px] whitespace-nowrap">
+              <i data-lucide="moon" class="w-3 h-3"></i> 0x05 · MEDITAÇÕES
+            </button>
+            <button id="dttab-5" onclick="DualTube.setTab(5)" class="v-pill dt-tab text-[10px] whitespace-nowrap">
+              <i data-lucide="github" class="w-3 h-3"></i> 0x06 · VÍDEOS GIT
+            </button>
+            <button id="dttab-6" onclick="DualTube.setTab(6)" class="v-pill dt-tab text-[10px] whitespace-nowrap">
+              <i data-lucide="headphones" class="w-3 h-3"></i> 0x07 · PODCASTS
+            </button>
+          </div>
+        </div>
+
+        <!-- PANELS -->
+        <!-- 0x01 INFODOSE -->
+        <div id="dtpanel-0" class="fade-in">
+          <div class="v-glass p-4 mb-6 flex items-center gap-3 border-[var(--active-color)]/20">
+            <span class="text-2xl">⧉</span>
+            <div>
+              <p class="text-sm font-bold tracking-widest uppercase text-[var(--active-color)]">Jornal Interdimensional INFODOSE</p>
+              <p class="text-[10px] text-white/40 mt-0.5">Sinais que atravessam todos os véus · Frequência 672Hz</p>
+            </div>
+          </div>
+          <div id="dt-infodose-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div>
+        </div>
+
+        <!-- 0x02 MATRIZ NEURAL -->
+        <div id="dtpanel-1" class="fade-in" style="display:none">
+          <div class="v-glass p-4 mb-6 flex items-center gap-3 border-[var(--active-color)]/20">
+            <span class="text-2xl">△</span>
+            <div>
+              <p class="text-sm font-bold tracking-widest uppercase text-[var(--active-color)]">Matriz Neural · 17 Arquétipos</p>
+              <p class="text-[10px] text-white/40 mt-0.5">Selecione · Alterne abas · Copie prompts</p>
+            </div>
+          </div>
+          <div id="dt-matriz-grid" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(300px,1fr))"></div>
+        </div>
+
+        <!-- 0x03 FREQUÊNCIAS -->
+        <div id="dtpanel-2" class="fade-in" style="display:none">
+          <div id="dt-freq-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div>
+        </div>
+
+        <!-- 0x04 COGNITIVA -->
+        <div id="dtpanel-3" class="fade-in" style="display:none">
+          <div id="dt-cogn-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div>
+        </div>
+
+        <!-- 0x05 MEDITAÇÕES -->
+        <div id="dtpanel-4" class="fade-in" style="display:none">
+          <div id="dt-medi-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div>
+        </div>
+
+        <!-- 0x06 VÍDEOS GITHUB -->
+        <div id="dtpanel-5" class="fade-in" style="display:none">
+          <div id="dt-ghv-container">
+            <div class="v-glass p-4 mb-4 flex gap-3 items-center">
+              <input id="dt-gh-url" placeholder="URL JSON do GitHub..." class="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 outline-none focus:border-[var(--active-color)]/50 font-mono">
+              <button onclick="DualTube.loadGH()" class="v-pill text-xs bg-[var(--active-color)]/10 border-[var(--active-color)]/30 text-[var(--active-color)]">
+                Carregar
+              </button>
+            </div>
+            <div id="dt-ghv-grid" class="space-y-6"></div>
+            <p class="text-[9px] text-white/20 text-center mt-4 font-mono">JSON: {"categories":[{"cat":"...","vids":["ytId","https://...mp4"]}]}</p>
+          </div>
+        </div>
+
+        <!-- 0x07 PODCASTS GITHUB -->
+        <div id="dtpanel-6" class="fade-in" style="display:none">
+          <div class="v-glass p-4 mb-4 flex gap-3 items-center">
+            <input id="dt-pod-url" placeholder="URL JSON de podcasts..." class="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 outline-none focus:border-[var(--active-color)]/50 font-mono">
+            <button onclick="DualTube.loadPod()" class="v-pill text-xs bg-[var(--active-color)]/10 border-[var(--active-color)]/30 text-[var(--active-color)]">
+              Carregar
+            </button>
+          </div>
+          <div id="dt-pod-grid" class="flex flex-col gap-3"></div>
+          <p class="text-[9px] text-white/20 text-center mt-4 font-mono">JSON: {"podcasts":[{"cat":"...","eps":[{"title":"...","url":"...mp3","cover":"..."}]}]}</p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- GITHUB -->
+    <section class="screen-panel pt-32 px-6" id="view-github">
+      <div class="max-w-4xl mx-auto pb-24">
+        <div class="flex justify-between items-end mb-8 fade-in">
+          <div>
+            <h2 class="text-5xl font-thin tracking-tighter">Repositório</h2>
+            <p class="text-xs text-white/40 uppercase tracking-widest mt-2 font-bold">⧉ 0x05 · CONVERGIR · GitHub Feed</p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold tracking-tighter" id="gh-video-count">0</div>
+            <div class="text-[9px] text-white/30 uppercase tracking-widest">Sinais</div>
+          </div>
+        </div>
+
+        <!-- URL Input -->
+        <div class="v-glass p-4 mb-6 fade-in" style="animation-delay:0.1s">
+          <p class="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-bold">⧉ Fonte GitHub · URL JSON</p>
+          <div class="flex gap-3">
+            <input id="gh-repo-url" class="flex-1 bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 outline-none focus:border-[var(--active-color)]/50 transition font-mono" placeholder="https://raw.githubusercontent.com/user/repo/main/feed.json">
+            <button onclick="GitHub.load()" class="v-pill bg-[var(--active-color)]/10 border-[var(--active-color)]/30 text-[var(--active-color)] hover:bg-[var(--active-color)]/20">
+              Carregar
+            </button>
+          </div>
+          <!-- Schema hint -->
+          <details class="mt-2">
+            <summary class="text-[9px] text-white/20 cursor-pointer">ver formato JSON</summary>
+            <pre class="text-[9px] text-white/20 mt-2 font-mono leading-relaxed">{
+  "title": "Meu Feed",
+  "categories": [
+    { "cat": "Vídeos", "vids": ["ytId", "https://...mp4"] }
+  ],
+  "podcasts": [
+    { "cat": "Podcast",
+      "eps": [{"title":"EP 01","url":"https://...mp3","cover":"https://...jpg"}] }
+  ]
+}</pre>
+          </details>
+        </div>
+
+        <!-- Status -->
+        <div id="gh-status" class="text-[9px] text-white/25 font-mono mb-4 fade-in pl-1" style="animation-delay:0.12s"></div>
+
+        <!-- TABS: Vídeos | Podcasts -->
+        <div class="flex gap-2 mb-6">
+          <button id="gh-tab-videos" class="v-pill gh-tab-on text-xs" onclick="GitHub.setTab('videos')">
+            <i data-lucide="play-circle" class="w-3 h-3"></i> Vídeos
+          </button>
+          <button id="gh-tab-podcasts" class="v-pill text-xs" style="display:none" onclick="GitHub.setTab('podcasts')">
+            <i data-lucide="headphones" class="w-3 h-3"></i> Podcasts
+          </button>
+        </div>
+
+        <!-- Panels -->
+        <div id="gh-panel-videos" class="space-y-12 fade-in" style="animation-delay:0.2s"></div>
+        <div id="gh-panel-podcasts" class="space-y-4 fade-in" style="display:none;animation-delay:0.2s"></div>
+
+        <!-- Empty state -->
+        <div id="gh-empty" class="mt-12 p-8 v-glass border-dashed border-white/10 flex flex-col items-center justify-center text-center opacity-50">
+          <i data-lucide="github" class="w-8 h-8 mb-3 text-white/30"></i>
+          <p class="text-sm text-white/40 mb-1">Nenhum repositório carregado</p>
+          <p class="text-[10px] text-white/20">Cole a URL do JSON acima</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- NAV -->
+  <div id="nav-indicator">
+    <div class="dot" id="dot-0" onclick="Navigation.to(0)"></div>
+    <div class="dot active" id="dot-1" onclick="Navigation.to(1)"></div>
+    <div class="dot" id="dot-2" onclick="Navigation.to(2)"></div>
+    <div class="dot" id="dot-3" onclick="Navigation.to(3)"></div>
+  </div>
+
+  <!-- GLOBAL PLAYER -->
+  <div id="global-player" class="v-glass overflow-hidden">
+    <div class="absolute top-3 right-3 z-20 flex gap-2">
+      <button onclick="Player.minimize()" class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-white/20 transition border border-white/5">
+        <i data-lucide="minus" class="w-3 h-3 text-white"></i>
+      </button>
+      <button onclick="Player.stop()" class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-red-500/30 transition border border-white/5">
+        <i data-lucide="x" class="w-3 h-3 text-white"></i>
+      </button>
+    </div>
+    <div id="player-frame-wrap" class="w-full h-full bg-black"></div>
+  </div>
+
+  <!-- MODAL -->
+  <div id="modal-overlay" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+    <div id="modal-content" class="v-glass p-6 w-full max-w-2xl max-h-[85vh] overflow-y-auto transform scale-95 opacity-0"></div>
+  </div>
+
+  <!-- TOAST -->
+  <div id="di_toast" class="fixed top-28 left-1/2 -translate-x-1/2 z-[300] pointer-events-none flex flex-col items-center gap-2"></div>
+
+  
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0B.js"></script>
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+
+</body></html>
