@@ -1,0 +1,326 @@
+<html lang="pt"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>KOBLLUX · HERO-DOCK 78K · VEEB</title>
+  
+  <!-- Fontes -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=JetBrains+Mono:wght@400;700&amp;family=Montserrat:wght@800;900&amp;display=swap" rel="stylesheet">
+  
+  
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main.css"><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/LV/css/main.css"></head>
+<body data-arch="kodux">
+
+  <div class="container">
+    <!-- Bloco Principal (Agora é um Acordeão) -->
+    <main class="fusion-card accordion is-open" id="mainHeroCard">
+      <!-- HEADER ACORDEÃO -->
+      <div class="header-78k accordion-header">
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <div class="logo-orb"></div>
+          <div class="title-block">
+            <h1>Motor 78K</h1>
+            <p>Kobllux Matrix Densa · VEEB</p>
+          </div>
+        </div>
+        <!-- Indicador será injetado pelo JS ou pode ser hardcoded. Deixaremos o JS injetar. -->
+      </div>
+      
+      <!-- BODY ACORDEÃO -->
+      <div class="collapsible-body">
+        <div class="input-group">
+          <textarea id="inputText" placeholder="Insira o texto original aqui. O motor usará a pontuação (. ! ?) para segmentar os fractais..."></textarea>
+        </div>
+        
+        <div class="controls-grid">
+          <div class="input-group">
+            <label>Frequência Inicial (Arquétipo)</label>
+            <select id="startArch">
+              <option value="atlas">Atlas (Ordem/Estrutura)</option>
+              <option value="nova">Nova (Energia/Inovação)</option>
+              <option value="vitalis">Vitalis (Crescimento/Vida)</option>
+              <option value="pulse">Pulse (Ritmo/Ação)</option>
+              <option value="kaos">Kaos (Desconstrução)</option>
+              <option value="kodux" selected="">Kodux (Síntese/Mestre)</option>
+              <option value="lumine">Lumine (Clareza/Luz)</option>
+              <option value="aion">Aion (Tempo/Eternidade)</option>
+            </select>
+          </div>
+          
+          <label class="checkbox-wrapper" title="Alterna os arquétipos sequencialmente para cada parágrafo gerado">
+            <input type="checkbox" id="cycleMode" checked="">
+            <span>Modo Roda Viva (Ciclagem)</span>
+          </label>
+        </div>
+
+        <button class="btn-generate" id="genBtn">Integrar Fractais de Texto</button>
+      </div>
+    </main>
+
+    <!-- Área de Saída (.content) -->
+    <div id="outputContainer" class="output-area content">
+      <div class="empty-state">Aguardando inserção de dados. O processamento ocorrerá na frequência selecionada.</div>
+    </div>
+
+    <div class="status-bar" id="statusBar">Sistema em repouso · Matrix Pronta</div>
+  </div>
+
+  <!-- HUD Magnético -->
+  <div class="symbol-bar" id="hudBar">
+    <div class="drag-handle" id="hudDrag" title="Arrastar HUD"></div>
+    <button class="symbol-btn" id="copyBtn" title="Copiar Texto Processado">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+    </button>
+    <button class="symbol-btn" id="clearBtn" title="Limpar Tudo">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+    </button>
+    <button class="symbol-btn" id="downloadBtn" title="Transferir Documento">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+    </button>
+    <div class="hud-info" id="hudStatus">78K-ID</div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/js/modules/inline-0.js"></script>
+
+
+
+
+
+<div class="nebula"></div>
+<button id="read-exit" title="Sair do modo leitura (Esc)">← Voltar</button>
+<div class="wrap" id="root"><details class="acc" open=""><summary><span class="chev"></span><h2>✨ Builder v2 – Áudio + PDF</h2></summary><div class="sec"><p>Abra o painel “Auto‑Gerar” pelo botão +.</p><div class="demo-cta" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"><button class="btn" data-action="demo">Gerar Demo</button><button class="btn" data-action="importar">Auto‑Gerar</button><button class="btn" data-action="md">Exportar .md</button><button class="btn" data-action="pdf">Imprimir (PDF)</button></div></div></details></div>
+<div id="toasts"></div>
+<div id="fab"><div class="menu">
+    <button class="btn" data-action="home">Home</button>
+    <button class="btn" data-action="back">Voltar</button>
+
+    <button class="btn" id="btn-tts" data-action="tts">Voz: Off</button>
+    <button class="btn" id="btn-tts-sel" data-action="tts-sel">Ler seleção</button>
+    <button class="btn" id="btn-tts-stop" data-action="tts-stop">Parar voz</button>
+  <button class="btn" data-action="demo">Gerar Demo</button>
+    <button class="btn" id="btn-imp" data-action="importar">Auto‑Gerar</button>
+  <button class="btn" id="btn-md" data-action="md">Exportar .md</button>
+  <button class="btn" id="btn-pdf" data-action="pdf">Imprimir (PDF)</button>
+  <button class="btn" id="btn-theme" data-action="theme">Tema: Blue‑1</button>
+  <button class="btn" id="btn-reading" data-action="reading">Modo Leitura</button>
+</div><button class="fab-btn" id="fab-toggle">＋</button></div>
+<div id="imp"><div class="panel">
+  <div class="tabs"><div class="tab active" data-tab="text">📝 enviar</div><div class="tab" data-tab="audio">🎙️ Áudio→Texto</div><div class="tab" data-tab="file">📄 Arquivo (PDF/TXT/MD)</div></div>
+  <div id="tab-text" class="tab-content active"><textarea id="srcText" placeholder="# PRÓLOGO
+Texto aqui..."></textarea><button class="btn" onclick="autoBuild(document.getElementById('srcText').value)">Gerar Livro</button> <button class="btn" onclick="autoBuildNested(document.getElementById('srcText').value)">Gerar (aninhado)</button> <button class="btn" onclick="pasteSrcText()">Colar</button> <button class="btn" id="btn-converter">Converter</button></div>
+  <div id="tab-audio" class="tab-content"><textarea id="audioOutput" placeholder="Transcrição aqui..."></textarea><div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="startRec">🎤 Iniciar</button><button class="btn" id="stopRec">⏹ Parar</button><button class="btn" onclick="autoBuild(document.getElementById('audioOutput').value)">Usar Transcrição</button></div></div>
+  <div id="tab-file" class="tab-content"><input type="file" id="fileInput" accept=".pdf,.txt,.md,.rtf, .html"><div id="filePreview" style="margin-top:10px;color:var(--muted);font-size:.9rem"></div></div>
+  <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="closeImporter()">Fechar</button></div>
+</div></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--script id="CSS_INNER_RENDER_V1">
+(()=>{'use strict';
+const STYLE_ID='INLINE_CSS_RENDER_V1';
+function appendCSS(css){
+  if(!css || !css.trim()) return;
+  let s=document.getElementById(STYLE_ID);
+  if(!s){ s=document.createElement('style'); s.id=STYLE_ID; document.head.appendChild(s); }
+  s.appendChild(document.createTextNode('\n'+css));
+}
+
+window.CSS_INNER = {
+  // Varre o DOM e injeta CSS encontrado em blocos comuns
+  applyFromDOM(){
+    let css='';
+    document.querySelectorAll('style[data-inline], [data-css-inline], pre[data-lang="css"], code.language-css, pre code.css').forEach(el=>{
+      const t = (el.textContent||'').trim();
+      if(t) css += '\n' + t;
+    });
+    appendCSS(css);
+  },
+  // Extrai <style>...</style> de uma string HTML e aplica
+  applyFromHTML(html){
+    if(!html) return;
+    const re=/<style[^>]*>([\s\S]*?)<\/style>/gi; let m, css='';
+    while((m=re.exec(html))){ css += '\n' + (m[1]||''); }
+    appendCSS(css);
+  }
+};
+document.addEventListener('DOMContentLoaded', ()=> CSS_INNER.applyFromDOM());
+})();
+</script-->
+
+
+
+
+<!-- ============ Σ KaTeX — FAB ACTION PATCH (safe with FAB_MINI) ============ -->
+
+
+
+<!-- ============ LIST/ASCII BEAUTY PATCH — V2 (hierarquia + traço-cápsula) ============ -->
+
+
+
+<!-- ============ /LIST/ASCII BEAUTY PATCH — V2 ============ -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ============ TEXT BEAUTY & INTERACTION PATCH — V3 (aditivo) ============ -->
+
+
+
+<!-- ============ /TEXT BEAUTY & INTERACTION PATCH — V3 ============ -->
+
+
+
+
+
+
+
+
+ 
+
+
+ 
+
+
+
+<!-- MD Smart Generator · Monólito BUGADÃO v3 -->
+
+
+
+<!-- KOBLLUX :: PATCH ÚNICO — TTS por Blocos (v2 • Dock Vertical + Drag + Auto-Wire) -->
+
+
+
+<!-- /KOBLLUX :: PATCH ÚNICO — TTS por Blocos -->
+
+<!-- KOBLLUX :: TTS v32 — Dock + Outline + Vozes PT-BR + ASCII + Status compacto -->
+
+
+
+
+<!-- KOBLLUX :: TTS v32.2 — Patch Correto (clique + dock + limpeza de texto) -->
+
+
+
+<!-- BIG_LOCK_RESET_v1 — limpa locks e força preferências de base -->
+
+
+
+
+
+<!-- KOBLLUX · Vozes Arquétipas — Patch Inline (UPDATED) -->
+
+
+
+
+<!-- KOBLLUX · PATCH de Tema de Voz (cor por arquétipo) -->
+
+
+<!-- KOBLLUX · Soft Transition Override (fade de cores) -->
+
+
+<!-- KOBLLUX · Soft Fade Extra para BACKGROUND -->
+
+
+<!-- KOBLLUX · PATCH Buttons Fade + TTS Dock Soft Shadow -->
+
+
+
+<!-- KOBLLUX · ASCII Carousel v1 (marca ::anim ... ::end com ```ascii dentro) -->
+
+
+
+
+
+
+<!-- KOBLLUX PATCH :: FAB auto-close on action click / outside click -->
+
+
+
+<!-- KOBLLUX PATCH :: Converter (RTF→MD, tabelista, tokens, buttons) -->
+
+
+<!-- KOBLLUX PATCH :: FAB fecha logo após clicar em uma ação -->
+
+
+
+
+<!-- KOBLLUX · PATCH Gatilhos de Arquétipo (tags + frases) -->
+
+
+<!-- KOBLLUX · Bloquinho de Vozes + Gatilhos (Ion, Solus, Artemis, Pulse) -->
+
+
+
+
+
+<!-- Scripts modulares (inline) -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-6.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-8.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-9.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-12.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-16.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-17.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-18.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-20.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-21.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-22.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-24.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-25.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-26.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-27.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-28.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-29.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-30.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-31.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-39.js"></script>
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-1.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-2.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-4.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-6.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-8.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-9.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-12.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-16.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-17.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-18.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-20.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-21.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-22.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-24.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-25.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-26.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-27.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-28.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-29.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-31.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/inline-39.js"></script></body></html>
