@@ -1349,3 +1349,20 @@ body {
   color: #fff;
   font-family: 'JetBrains Mono', monospace;
 }
+
+
+/*override brabo */
+
+body {
+  background: var(--bg-dark) !important;
+}
+
+iframe {
+  background: transparent !important;
+}
+
+#arch-overlay {
+  background:
+    radial-gradient(circle at 97% 88%, var(--arch-glow), transparent 78%),
+    rgba(5, 7, 10, 0.5);
+}
