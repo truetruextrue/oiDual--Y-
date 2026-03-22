@@ -1,0 +1,28 @@
+/* Efeito de drop zone */
+.symbol-bar.drop-zone-active,
+#mainCard.drop-zone-active {
+  transition: box-shadow 0.2s;
+}
+.symbol-bar.drop-zone-hover {
+  box-shadow: 0 0 0 3px var(--accent), 0 0 20px var(--accent);
+}
+#mainCard.drop-zone-hover {
+  box-shadow: 0 0 0 3px var(--accent), 0 0 30px var(--accent);
+}
+/* Estilo do orbe dentro da barra */
+.symbol-bar .custom-orb-button {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+}
+/* Estilo do orbe dentro do card */
+.card-orb-avatar {
+  filter: drop-shadow(0 0 10px var(--accent));
+  transition: transform 0.2s;
+}
+.card-orb-avatar:hover {
+  transform: scale(1.05);
+}
