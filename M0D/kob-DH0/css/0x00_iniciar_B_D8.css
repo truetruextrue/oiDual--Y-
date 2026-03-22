@@ -93,7 +93,7 @@
        --------------------------------------------------------------------- */
     .symbol-bar {
       position: fixed;
-      left: 20px;
+      left: auto;
       top: auto;
       bottom: auto;
       right: auto;
