@@ -1,0 +1,128 @@
+/* =========================
+   DOCK IDLE (fallback)
+========================= */
+.kob-tts-dock {
+  transition: transform .35s ease, opacity .65s ease;
+}
+.kob-tts-dock.idle {
+  opacity: .18;
+  transform: scale(.92);
+}
+.kob-tts-dock:hover {
+  opacity: 1;
+  transform: scale(1);
+}
+
+
+/* =========================
+   SYMBOL BAR — FULL OVERRIDE
+========================= */
+
+.symbol-bar {
+  position: fixed !important;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 42px;
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02)),
+    rgba(8,10,18,0.66);
+
+  backdrop-filter: blur(22px) saturate(150%);
+  -webkit-backdrop-filter: blur(22px) saturate(150%);
+
+  border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+
+  box-shadow:
+    0 10px 40px rgba(0,0,0,0.65),
+    inset 0 0 12px rgba(255,255,255,0.03),
+    0 0 18px color-mix(in srgb, var(--kob-voice-primary) 22%, transparent);
+
+  transition: transform .28s cubic-bezier(.23,1,.32,1), opacity .45s ease, box-shadow .28s ease;
+
+  touch-action: none;
+  user-select: none;
+  cursor: grab;
+}
+
+.symbol-bar.idle {
+  opacity: .14;
+  transform: translateY(-50%) scale(.88);
+  filter: grayscale(.4) brightness(.8);
+}
+
+.symbol-bar:hover {
+  transform: translateY(-50%) scale(1.05);
+}
+
+.symbol-bar.dragging {
+  transition: none !important;
+  transform: none !important;
+  cursor: grabbing;
+  z-index: 10001 !important;
+
+  box-shadow:
+    0 30px 70px rgba(0,0,0,0.75),
+    inset 0 0 18px rgba(255,255,255,0.04),
+    0 0 40px color-mix(in srgb,var(--kob-voice-primary) 40%, transparent);
+}
+
+.symbol-bar.horizontal {
+  flex-direction: row;
+  gap: 12px;
+  padding: 10px 14px;
+  border-radius: 28px;
+}
+
+.symbol-bar.connected {
+  outline: 1px dashed color-mix(in srgb,var(--kob-voice-primary) 35%, transparent);
+  outline-offset: 6px;
+}
+
+.symbol-bar.snap {
+  transition: left .22s cubic-bezier(.2,.9,.3,1),
+              top .22s cubic-bezier(.2,.9,.3,1),
+              transform .22s ease;
+}
+
+.symbol-bar.horizontal .symbol-button {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+}
+
+.symbol-bar .orb-mini {
+  width: 26px;
+  height: 26px;
+}
+
+/* Magnet preview */
+.symbol-bar .magnet-halo {
+  position: absolute;
+  inset: -8px;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .16s ease;
+}
+
+.symbol-bar.magnet-preview .magnet-halo {
+  opacity: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb,var(--kob-voice-primary) 20%, transparent)
+  );
+  filter: blur(8px);
+}
+
+.symbol-bar[data-keep-inside="true"] {
+  max-width: calc(100vw - 12px);
+}
