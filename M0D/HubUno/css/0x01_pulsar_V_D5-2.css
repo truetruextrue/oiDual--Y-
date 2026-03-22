@@ -1,0 +1,69 @@
+/* ═══════════════════════════════════════════════════════════
+   0x01 · PULSAR · V · D5 · CSS
+   ═══════════════════════════════════════════════════════════
+   Arquivo   : kobllux-hub-uno-v4-m5-vocal-espelho/css/0x01_pulsar_V_D5-2.css
+   Opcode    : 0x01 · 432Hz
+   V.E.E.B.  : Vibração · f₁=432Hz · P(t)=A·sin(2π·432·t) · impulso sonoro
+   KOBLLUX   : VERDADE×INTEGRAR÷Δ=∞ · S=Σbᵢ·2^(i-1)
+═══════════════════════════════════════════════════════════ */
+/* Panel core */
+                                                                                                          #ls-panel{position:fixed;right:16px;bottom:16px;max-width:min(1040px,96vw);max-height:82vh;overflow:hidden;z-index:2147483646;background:rgba(10,14,20,.97);border:1px solid #ffffff26;border-radius:16px;backdrop-filter:blur(12px);display:none;box-shadow:0 18px 48px rgba(0,0,0,.6)}
+                                                                                                          #ls-panel header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 14px;border-bottom:1px solid #ffffff18;color:#cfe6ff}
+                                                                                                          #ls-title{font-weight:800;margin-right:auto}
+                                                                                                          #ls-search{min-width:200px;background:#0e1724;border:1px solid #294461;border-radius:10px;color:#d9e6ff;padding:8px 10px;font:12px ui-monospace,monospace}
+                                                                                                          #ls-actions{display:flex;gap:8px;flex-wrap:wrap}
+                                                                                                          #ls-actions button{display:inline-flex;align-items:center;gap:6px;background:#0d1b2a;border:1px solid #254b70;color:#cfe6ff;border-radius:10px;padding:6px 10px;cursor:pointer}
+                                                                                                          #ls-body{display:grid;grid-template-rows:auto auto 1fr;border-top:1px solid #ffffff10}
+                                                                                                          #ls-stats{display:flex;gap:10px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid #ffffff10}
+                                                                                                          .stat{background:#0e1724;border:1px solid #294461;border-radius:10px;padding:8px 10px;color:#cfe6ff;font:12px ui-monospace,monospace}
+                                                                                                          .stat b{color:#a9c7ff}
+                                                                                                          #ls-new{display:grid;grid-template-columns:260px 1fr auto;gap:8px;padding:10px 14px;border-bottom:1px solid #ffffff10}
+                                                                                                          #ls-new input,#ls-new textarea{background:#0e1724;border:1px solid #294461;border-radius:10px;color:#d9e6ff;padding:8px 10px;font:12px ui-monospace,monospace}
+                                                                                                          #ls-new textarea{resize:vertical;min-height:40px;max-height:120px}
+                                                                                                          #ls-new button{display:inline-flex;align-items:center;gap:6px;background:#114d2f;border:1px solid #2c7a58;color:#bfffe0;border-radius:10px;padding:8px 12px;font-weight:700;cursor:pointer}
+                                                                                                          #ls-grid{overflow:auto;max-height:54vh;padding:6px 0}
+                                                                                                          details.ls-group{border-top:1px dashed #ffffff14}
+                                                                                                          details.ls-group>summary{list-style:none;cursor:pointer;padding:10px 14px;color:#d7e7ff;display:flex;align-items:center;gap:8px}
+                                                                                                          .badge{background:#0d1b2a;border:1px solid #254b70;border-radius:999px;padding:2px 8px;color:#cfe6ff;font:11px ui-monospace,monospace}
+                                                                                                          .group-body{padding:0 8px 8px}
+                                                                                                          .ls-head,.ls-row{display:grid;grid-template-columns:280px 1fr 170px;gap:8px;padding:8px 6px 8px 8px}
+                                                                                                          .ls-head{position:sticky;top:0;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,0));backdrop-filter:blur(6px);z-index:1;border-bottom:1px solid #ffffff10}
+                                                                                                          .ls-head div{color:#a9c7ff;font:700 11px/1 ui-monospace,monospace;text-transform:uppercase;letter-spacing:.08em}
+                                                                                                          .ls-row{border-bottom:1px dashed #ffffff10;align-items:start}
+                                                                                                          .ls-k{color:#a9c7ff;font:12px/1.35 ui-monospace,monospace;word-break:break-all}
+                                                                                                          .ls-v{display:flex;flex-direction:column;gap:6px}
+                                                                                                          .ls-preview{background:#0e1724;border:1px solid #294461;border-radius:10px;color:#d9e6ff;padding:8px 10px;font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;max-height:60px;overflow:auto}
+                                                                                                          .ls-expand{display:none;width:100%}
+                                                                                                          .ls-expand textarea{width:100%;min-height:120px;background:#0e1724;border:1px solid #294461;border-radius:10px;color:#d9e6ff;padding:8px 10px;font:12px/1.35 ui-monospace,monospace;white-space:pre-wrap;word-break:break-word;resize:vertical}
+                                                                                                          .ls-a{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+                                                                                                          .icon-btn{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;background:#0d1b2a;border:1px solid #254b70;color:#cfe6ff;cursor:pointer}
+                                                                                                          .icon-btn.warn{background:#2a1212;border-color:#703333;color:#ffd0d0}
+                                                                                                          .icon-btn.ok{background:#0f2a1e;border-color:#2f7a56;color:#c9ffe7}
+                                                                                                          .icon-btn svg{width:18px;height:18px;fill:currentColor}
+                                                                                                          .mut{color:#93a7bf;font-size:11px}
+                                                                                                          @media (max-width:960px){ .ls-head,.ls-row,#ls-new{grid-template-columns:220px 1fr 150px} }
+                                                                                                          @media (max-width:720px){ #ls-panel{left:16px;right:16px;max-width:unset} .ls-head,.ls-row,#ls-new{grid-template-columns:160px 1fr 120px} }
+                                                                                                          /* Mini dock */
+                                                                                                          #ls-mini{position:fixed;right:12px;bottom:12px;z-index:2147483647;display:none}
+                                                                                                          #ls-mini .dock{background:rgba(10,14,20,.98);border:1px solid #ffffff24;border-radius:14px;padding:8px;display:flex;gap:8px;align-items:center;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+                                                                                                          #ls-mini .icon{width:36px;height:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:10px;background:#0d1b2a;border:1px solid #254b70;color:#cfe6ff;cursor:pointer}
+                                                                                                          #ls-mini .icon.warn{background:#2a1212;border-color:#703333;color:#ffd0d0}
+                                                                                                          #ls-mini .icon.ok{background:#0f2a1e;border-color:#2f7a56;color:#c9ffe7}
+                                                                                                          #ls-mini svg{width:18px;height:18px;fill:currentColor}
+                                                                                                          #ls-mini .sep{width:1px;height:26px;background:#ffffff18;margin:0 4px}
+                                                                                                          #ls-mini .pill{font:11px ui-monospace,monospace;color:#a9c7ff;background:#0e1724;border:1px solid #294461;border-radius:999px;padding:4px 8px}
+                                                                                                          /* === Mobile tuning (iPhone, narrow) === */
+                                                                                                          @media (max-width: 480px){
+                                                                                                          #ls-panel{left: 10px; right: 10px; bottom: 10px; border-radius: 14px; max-height: 80vh;}
+                                                                                                          #ls-actions button{padding:8px 10px; font-size:12px}
+                                                                                                          .ls-head,.ls-row{grid-template-columns: 1fr; gap:6px; padding:8px}
+                                                                                                          .ls-head{display:none}
+                                                                                                          .ls-k{font-weight:800}
+                                                                                                          .ls-a{justify-content:flex-start}
+                                                                                                          .icon-btn{width:40px;height:40px;border-radius:12px}
+                                                                                                          .ls-preview{max-height:84px}
+                                                                                                          }
+                                                                                                          /* fix overflow when nested containers have transforms */
+                                                                                                          #ls-panel *{min-width:0}
+                                                                                                          /* Keep panel above any glass layers */
+                                                                                                          #ls-panel{z-index:2147483647}

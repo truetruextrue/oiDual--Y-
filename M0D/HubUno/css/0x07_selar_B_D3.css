@@ -1,0 +1,24 @@
+/* ═══════════════════════════════════════════════════════════
+   0x07 · SELAR · B · D3 · CSS
+   ═══════════════════════════════════════════════════════════
+   Arquivo   : kobllux-hub-uno-v4-m5-vocal-espelho/css/0x07_selar_B_D3.css
+   Opcode    : 0x07 · 777Hz
+   V.E.E.B.  : Base · selo vibracional · ✧ 777Hz · ∆⁷ SELAR
+   KOBLLUX   : VERDADE×INTEGRAR÷Δ=∞ · S=Σbᵢ·2^(i-1)
+═══════════════════════════════════════════════════════════ */
+/* Badges de sotaque - não quebram o design existente */
+                                                                                                                      .arch-switcher select option[data-sotaque]::after {
+                                                                                                                      content: attr(data-sotaque);
+                                                                                                                      font-size: 9px;
+                                                                                                                      margin-left: 6px;
+                                                                                                                      opacity: 0.7;
+                                                                                                                      }
+                                                                                                                      /* Tooltip sutil no seletor de arquétipo */
+                                                                                                                      #arch-select {
+                                                                                                                      position: relative;
+                                                                                                                      }
+                                                                                                                      /* Indicador visual no círculo quando voz está ativa */
+                                                                                                                      .arch-circle.voz-ativa {
+                                                                                                                      box-shadow: 0 0 20px var(--kob-voice-glow, rgba(0,216,216,0.3));
+                                                                                                                      transition: box-shadow 0.3s ease;
+                                                                                                                      }
