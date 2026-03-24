@@ -1,0 +1,110 @@
+{
+  "hub": "infodose",
+  "items": [
+    {
+      "platform": "youtube",
+      "title": "Trilhas Potencializadoras dos Aromas",
+      "url": "https://youtu.be/Bt_rLbMjJDk",
+      "category": "ativacao",
+      "priority": 1
+    },
+    {
+      "platform": "youtube",
+      "title": "Desperte a magia dos 12 Arquétipos",
+      "url": "https://youtu.be/_0wVkryxanE",
+      "category": "psicologia",
+      "priority": 1
+    },
+    {
+      "platform": "youtube",
+      "title": "Infodose • Pra quem merece saber",
+      "url": "https://youtu.be/Id2NI9tv1r4",
+      "category": "essencial",
+      "priority": 1
+    },
+    {
+      "platform": "youtube",
+      "title": "A Fórmula da Dopamina Sexy",
+      "url": "https://youtu.be/qldgs0aLdB0",
+      "category": "dopamina",
+      "priority": 1
+    },
+    {
+      "platform": "youtube",
+      "title": "O Espaço da Mente",
+      "url": "https://youtu.be/FbutKMpd8MY",
+      "category": "consciencia",
+      "priority": 1
+    },
+    {
+      "platform": "youtube",
+      "title": "A Recompensa",
+      "url": "https://youtu.be/1L9_rFmIGJ8",
+      "category": "neurobiologia",
+      "priority": 2
+    },
+    {
+      "platform": "youtube",
+      "title": "O poder das cortinas",
+      "url": "https://youtu.be/koKhjQKGJSc",
+      "category": "design",
+      "priority": 2
+    },
+    {
+      "platform": "youtube",
+      "title": "Poder sob seus pés",
+      "url": "https://youtu.be/KrtOVrk8aDk",
+      "category": "arquitetura",
+      "priority": 2
+    },
+    {
+      "platform": "youtube",
+      "title": "Dopamina e Vícios",
+      "url": "https://youtu.be/NBWDV6xjUP0",
+      "category": "neuro",
+      "priority": 2
+    },
+    {
+      "platform": "youtube",
+      "title": "TDAH e Dopamina",
+      "url": "https://youtu.be/dGYbN8jgdNQ",
+      "category": "foco",
+      "priority": 2
+    },
+    {
+      "platform": "youtube",
+      "title": "Manipule o Subconsciente",
+      "url": "https://youtu.be/JBjFhAutIVk",
+      "category": "subconsciente",
+      "priority": 2
+    },
+    {
+      "platform": "youtube",
+      "title": "A Deriva no Espaço da Mente",
+      "url": "https://youtu.be/hfQ1L6fCfAo",
+      "category": "meditacao",
+      "priority": 3
+    },
+    {
+      "platform": "youtube",
+      "title": "Navegando no Universo",
+      "url": "https://youtu.be/DTDfkHwuMic",
+      "category": "meditacao",
+      "priority": 3
+    },
+    {
+      "platform": "youtube",
+      "title": "Sinfonia Criativa",
+      "url": "https://youtu.be/OVfqxW_Xlhw",
+      "category": "meditacao",
+      "priority": 3
+    },
+    {
+      "platform": "youtube",
+      "title": "Playlist • Se chegou até você",
+      "url": "https://youtube.com/playlist?list=PL_XiIUPFx4DSKFuJZZiKCxVUy20PtDdaB",
+      "category": "playlist",
+      "priority": 1
+    }
+  ]
+}
