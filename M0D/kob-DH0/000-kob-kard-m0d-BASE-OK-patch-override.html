@@ -1,0 +1,249 @@
+<script>
+(function() {
+  'use strict';
+
+  // =============================================
+  // 1. GERENCIAMENTO DE CONFIGURAÇÃO
+  // =============================================
+
+  function saveSymbolBar() {
+    const buttons = [];
+    document.querySelectorAll('.symbol-button[data-id]').forEach(btn => {
+      buttons.push({
+        id: btn.dataset.id,
+        url: btn.dataset.url || '',
+        label: btn.innerHTML.trim() || btn.dataset.id
+      });
+    });
+    localStorage.setItem('symbolBarConfig', JSON.stringify(buttons));
+    console.log('[SymbolBar] Configuração salva');
+  }
+
+  function loadSymbolBar() {
+    const saved = localStorage.getItem('symbolBarConfig');
+    if (!saved) return;
+
+    try {
+      const buttons = JSON.parse(saved);
+      buttons.forEach(data => {
+        const btn = document.querySelector(`.symbol-button[data-id="${data.id}"]`);
+        if (btn) {
+          btn.dataset.url = data.url;
+          btn.innerHTML = data.label;
+        }
+      });
+      console.log('[SymbolBar] Configuração carregada');
+    } catch(e) {
+      console.warn('[SymbolBar] Erro ao carregar configuração', e);
+    }
+  }
+
+  // =============================================
+  // 2. EDIÇÃO POR LONG PRESS (4 segundos)
+  // =============================================
+
+  let pressTimer = null;
+  let currentEditingBtn = null;
+
+  function closeEditor() {
+    const panel = document.getElementById('kblx-back');
+    if (panel) panel.style.display = 'none';
+    currentEditingBtn = null;
+    if (pressTimer) clearTimeout(pressTimer);
+  }
+
+  function enterEditMode(btn) {
+    const panel = document.getElementById('kblx-back');
+    const input = document.getElementById('kblx-inp');
+    const title = document.getElementById('kblx-ttl');
+
+    if (!panel || !input || !title) return;
+
+    // Preenche o editor com os dados atuais
+    title.textContent = btn.dataset.id || 'Botão';
+    input.value = btn.dataset.url || '';
+
+    currentEditingBtn = btn;
+    panel.style.display = 'flex';
+    input.focus();
+  }
+
+  // Atribuir eventos a todos os botões da SymbolBar
+  function attachLongPressEvents() {
+    document.querySelectorAll('.symbol-button[data-id]').forEach(btn => {
+      // Evita duplicidade de eventos
+      btn.removeEventListener('pointerdown', handlePointerDown);
+      btn.removeEventListener('pointerup', handlePointerCancel);
+      btn.removeEventListener('pointerleave', handlePointerCancel);
+      btn.removeEventListener('pointercancel', handlePointerCancel);
+
+      btn.addEventListener('pointerdown', handlePointerDown);
+      btn.addEventListener('pointerup', handlePointerCancel);
+      btn.addEventListener('pointerleave', handlePointerCancel);
+      btn.addEventListener('pointercancel', handlePointerCancel);
+    });
+  }
+
+  function handlePointerDown(e) {
+    const btn = e.currentTarget;
+    // Se já está editando, ignora
+    if (currentEditingBtn) return;
+
+    pressTimer = setTimeout(() => {
+      enterEditMode(btn);
+    }, 4000); // 4 segundos
+  }
+
+  function handlePointerCancel() {
+    if (pressTimer) {
+      clearTimeout(pressTimer);
+      pressTimer = null;
+    }
+  }
+
+  // =============================================
+  // 3. INTEGRAÇÃO COM O PAINEL EXISTENTE (kblx-back)
+  // =============================================
+
+  function initEditorPanel() {
+    const panel = document.getElementById('kblx-back');
+    const saveBtn = document.getElementById('kblx-btn-save');
+    const closeBtn = document.getElementById('kblx-btn-close');
+    const inp = document.getElementById('kblx-inp');
+
+    if (!panel || !saveBtn || !closeBtn) return;
+
+    // Sobrescrever comportamento de salvar
+    saveBtn.onclick = () => {
+      if (!currentEditingBtn) {
+        closeEditor();
+        return;
+      }
+
+      const newUrl = inp.value.trim();
+      currentEditingBtn.dataset.url = newUrl;
+
+      // Se quiser também alterar o texto/label (opcional)
+      // currentEditingBtn.innerHTML = newUrl.split('/').pop() || 'link';
+
+      saveSymbolBar();
+      closeEditor();
+    };
+
+    closeBtn.onclick = () => {
+      closeEditor();
+    };
+
+    // Fechar ao clicar fora do painel (opcional)
+    panel.addEventListener('click', (e) => {
+      if (e.target === panel) closeEditor();
+    });
+  }
+
+  // =============================================
+  // 4. EXTRA: DELETAR BOTÃO (adicione um botão no painel)
+  // =============================================
+
+  function addDeleteButtonToPanel() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel) return;
+
+    // Evita duplicar o botão
+    if (document.getElementById('kblx-btn-delete')) return;
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'kblx-btn-delete';
+    deleteBtn.className = 'kblx-btn kblx-delete';
+    deleteBtn.textContent = '🗑 Remover Botão';
+    deleteBtn.style.background = '#ff3366';
+    deleteBtn.style.color = '#fff';
+    deleteBtn.style.border = 'none';
+
+    const row = panel.querySelector('.kblx-row');
+    if (row) row.appendChild(deleteBtn);
+
+    deleteBtn.onclick = () => {
+      if (!currentEditingBtn) return;
+      const wrapper = currentEditingBtn.closest('.symbol-wrap');
+      if (wrapper) wrapper.remove();
+      else currentEditingBtn.remove();
+      saveSymbolBar();
+      closeEditor();
+    };
+  }
+
+  // =============================================
+  // 5. EXTRA: CARREGAR HTML LOCAL
+  // =============================================
+
+  function addFileUploadToPanel() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel) return;
+
+    // Cria um campo de upload se não existir
+    let fileInput = document.getElementById('kblx-file-upload');
+    if (!fileInput) {
+      fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.id = 'kblx-file-upload';
+      fileInput.accept = '.html';
+      fileInput.style.marginTop = '10px';
+      fileInput.style.width = '100%';
+      fileInput.style.padding = '6px';
+      fileInput.style.background = '#1e1e2f';
+      fileInput.style.color = '#fff';
+      fileInput.style.border = '1px solid #2a2a3a';
+      fileInput.style.borderRadius = '6px';
+
+      const container = panel.querySelector('.p-lbl');
+      if (container && container.parentNode) {
+        container.parentNode.insertBefore(fileInput, container.nextSibling);
+      } else {
+        panel.appendChild(fileInput);
+      }
+    }
+
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const content = ev.target.result;
+        if (currentEditingBtn) {
+          // Salva como data-url especial (srcdoc)
+          currentEditingBtn.dataset.url = `data:text/html;charset=utf-8,${encodeURIComponent(content)}`;
+          saveSymbolBar();
+          closeEditor();
+        }
+      };
+      reader.readAsText(file);
+      fileInput.value = ''; // permite reenviar o mesmo arquivo
+    };
+  }
+
+  // =============================================
+  // 6. INICIALIZAÇÃO
+  // =============================================
+
+  function init() {
+    loadSymbolBar();
+    attachLongPressEvents();
+    initEditorPanel();
+    addDeleteButtonToPanel();
+    addFileUploadToPanel();
+
+    // Observa se novos botões forem adicionados dinamicamente
+    const observer = new MutationObserver(() => attachLongPressEvents());
+    observer.observe(document.getElementById('symbolBar') || document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

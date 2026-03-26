@@ -1,0 +1,1289 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <title>Fusion Card // Core Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css"><style> 
+
+/* estado normal */
+.kob-tts-dock{
+  transition: transform .35s ease, opacity .65s ease;
+}
+
+/* quase invisível */
+.kob-tts-dock.idle{
+  opacity: .18;
+  transform: scale(.92);
+}
+
+/* quando passa o dedo ou mouse */
+.kob-tts-dock:hover{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kob-tts-dock{
+
+ 
+  box-shadow:none !important;
+}</style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"></head>
+<body>
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <!-- CONTAINER PARA CENTRALIZAR INICIALMENTE -->
+  <div class="container">
+    <div class="fusion-card closed" id="mainCard">
+
+      <div class="card-header" id="cardHeader">
+        <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+        <div class="text-block">
+          <div class="greeting-row">
+            <span class="txt-thin" id="lblHello">Oi,</span>
+            <span class="txt-heavy" id="lblName">Convidado</span>
+          </div>
+          <div class="brand-dual">DUAL</div>
+        </div>
+        <div class="clock-widget">
+          <div class="time-display" id="clockTime">00:00</div>
+          <span class="status-led">ONLINE</span>
+        </div>
+        <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido"><i data-lucide="menu"></i></button>
+      </div>
+      
+      <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+      <div class="drag-handle"></div>
+
+      <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+        <div class="mini-avatar" id="smallMiniAvatar"></div>
+        <div class="small-text" id="smallText">Aguardando ativação...</div>
+        <div class="ident-badge" id="smallIdent">--</div>
+      </div>
+
+      <div class="card-body" id="cardBody">
+        <!-- Main Input User -->
+        <div class="input-wrapper stagger-item">
+          <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+        </div>
+
+        <!-- Section 1: ASCII Activation -->
+        <div class="activation-wrap stagger-item">
+          <div class="activation-toggle" onclick="toggleSection('activationCard')">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+              <strong style="letter-spacing:1px;font-size:0.9rem">Ativação ASCII</strong>
+            </div>
+            <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">BASE v1</div>
+          </div>
+          <div id="activationCard" class="activation-card activation-hidden">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="mini-avatar" id="actMiniAvatar"></div>
+                <div><div style="font-weight:700">CÉREBRO</div><div style="font-size:0.78rem;opacity:0.6"><span id="actName">User</span></div></div>
+              </div>
+              <div class="activation-badge" id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:0.8em">v:--</div>
+            </div>
+            <pre id="actPre" class="activation-pre">Carregando...</pre>
+            <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+              <button class="trigger-btn" id="copyActBtn">COPIAR</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: System & Neural (Config) -->
+        <div class="activation-wrap stagger-item">
+            <div class="activation-toggle" onclick="toggleSection('systemCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                  <strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong>
+                </div>
+                <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+            </div>
+            <div id="systemCard" class="activation-card activation-hidden">
+                <div class="col">
+                   <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                   <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                   <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="model-toggle">
+                      <select id="modelSelect" class="btn">
+                        <option value="" disabled="">Selecione Modelo</option>
+                        <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                        <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                        <option value="mistralai/devstral-2512:free">DevStral</option>
+                        <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                      </select>
+                   </div>
+                   
+                   <div class="panel-divider" style="margin:10px 0; border-top:1px solid rgba(255,255,255,0.05)"></div>
+                   <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stagger-item" style="margin-top:4px">
+            <div class="stat-lbl" style="margin-bottom:6px; font-size:0.6rem; color:rgba(255,255,255,0.4)">INTERFACE MODE</div>
+            <div style="display:flex; gap:8px;">
+                <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
+                <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
+                <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- KEYS MANAGER MODAL -->
+  <div id="keysModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card" role="dialog">
+      <div class="keys-header">
+        <div>
+          <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+        </div>
+        <button id="closeKeysBtn" class="small-btn">X</button>
+      </div>
+      <div class="key-list" id="keyList"></div>
+      <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div class="form-grid">
+          <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+          <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+        </div>
+        <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)">ADICIONAR CHAVE</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+          <i data-lucide="shield-check" style="width:14px"></i> <span id="vaultStatusText">Cofre Aberto</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VAULT UNLOCK MODAL -->
+  <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card">
+      <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+      <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+      <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+      <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+      <div style="display:flex;gap:8px;justify-content:center">
+         <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+         <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-00.js"></script>
+<!--
+<script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"></script>
+-->
+
+
+
+
+
+
+<div id="root">
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+
+<div class="wrap">
+  <div class="content">
+    <iframe id="frame" src="about:blank"></iframe>
+    <div id="kob-tts-outline"></div>
+  </div>
+
+  <!-- HUD Inteligente -->
+  <div class="symbol-bar floating" id="symbolBar">
+    
+    <!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+    <!-- Controles de Navegação de Leitura -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+    </div>
+
+    <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+        </div>
+<!--
+        <div class="voice-indicator" id="voiceIndicator"></div> -->
+
+      </div>
+    </button>
+
+    <!-- Outros atalhos -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+    </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+       <div id="arch-overlay"></div>  
+<!-- Scripts -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+</div>
+
+<style> 
+
+/* estado normal */
+.kob-tts-dock{
+  transition: transform .35s ease, opacity .65s ease;
+}
+
+/* quase invisível */
+.kob-tts-dock.idle{
+  opacity: .18;
+  transform: scale(.92);
+}
+
+/* quando passa o dedo ou mouse */
+.kob-tts-dock:hover{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kob-tts-dock{
+
+ 
+  box-shadow:none !important;
+}</style>
+
+
+
+<script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script>
+
+
+<!-- <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/kob-patch-orb.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/kob-patch-orbbark.js"></script> ╔══════════════════════════════════════════╗
+     ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
+     ║  Segurar 3s → edita data-url do botão   ║
+     ║  Clique curto → sistema externo cuida   ║
+     ╚══════════════════════════════════════════╝ -->
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+<script>
+/* ============================================================
+   FUSION CORE + SYMBOLBAR UNIFIED (v8.1 – FINAL)
+   ============================================================ */
+(function () {
+  'use strict';
+
+  // ---------------------- 0. ELEMENTOS GLOBAIS ----------------------
+  const els = {
+    card: document.getElementById('mainCard'),
+    header: document.getElementById('cardHeader'),
+    avatarTgt: document.getElementById('avatarTarget'),
+    input: document.getElementById('inputUser'),
+    lblHello: document.getElementById('lblHello'),
+    lblName: document.getElementById('lblName'),
+    clock: document.getElementById('clockTime'),
+    smallPreview: document.getElementById('smallPreview'),
+    smallMiniAvatar: document.getElementById('smallMiniAvatar'),
+    smallText: document.getElementById('smallText'),
+    smallIdent: document.getElementById('smallIdent'),
+    actCard: document.getElementById('activationCard'),
+    actPre: document.getElementById('actPre'),
+    actName: document.getElementById('actName'),
+    actMiniAvatar: document.getElementById('actMiniAvatar'),
+    actBadge: document.getElementById('actBadge'),
+    btnModeCard: document.getElementById('btnModeCard'),
+    btnModeOrb: document.getElementById('btnModeOrb'),
+    btnModeHud: document.getElementById('btnModeHud'),
+    orbMenuTrigger: document.getElementById('orbMenuTrigger'),
+    hudMenuBtn: document.getElementById('hudMenuBtn'),
+    snapZone: document.getElementById('snap-zone'),
+    keysModal: document.getElementById('keysModal'),
+    keyList: document.getElementById('keyList'),
+    keyName: document.getElementById('keyNameInput'),
+    keyToken: document.getElementById('keyTokenInput'),
+    addKeyBtn: document.getElementById('addKeyBtn'),
+    closeKeysBtn: document.getElementById('closeKeysBtn'),
+    lockVaultBtn: document.getElementById('lockVaultBtn'),
+    vaultStatusText: document.getElementById('vaultStatusText'),
+    vaultModal: document.getElementById('vaultModal'),
+    vaultPass: document.getElementById('vaultPassInput'),
+    vaultUnlock: document.getElementById('vaultUnlockBtn'),
+    vaultCancel: document.getElementById('vaultCancelBtn'),
+    systemCard: document.getElementById('systemCard'),
+    saveSystemBtn: document.getElementById('saveSystemBtn'),
+    copyActBtn: document.getElementById('copyActBtn'),
+    frame: document.getElementById('frame'),
+  };
+
+  // ---------------------- 1. CRIPTOGRAFIA ----------------------
+  const CRYPTO = {
+    algo: { name: 'AES-GCM', length: 256 },
+    pbkdf2: { name: 'PBKDF2', hash: 'SHA-256', iterations: 100000 },
+    async getKey(password, salt) {
+      const enc = new TextEncoder();
+      const keyMaterial = await window.crypto.subtle.importKey('raw', enc.encode(password), 'PBKDF2', false, ['deriveKey']);
+      return window.crypto.subtle.deriveKey({ ...this.pbkdf2, salt: salt }, keyMaterial, this.algo, false, ['encrypt', 'decrypt']);
+    },
+    async encrypt(data, password) {
+      const salt = window.crypto.getRandomValues(new Uint8Array(16));
+      const iv = window.crypto.getRandomValues(new Uint8Array(12));
+      const key = await this.getKey(password, salt);
+      const encoded = new TextEncoder().encode(JSON.stringify(data));
+      const encrypted = await window.crypto.subtle.encrypt({ name: 'AES-GCM', iv: iv }, key, encoded);
+      const bundle = { s: Array.from(salt), iv: Array.from(iv), d: Array.from(new Uint8Array(encrypted)) };
+      return JSON.stringify(bundle);
+    },
+    async decrypt(bundleStr, password) {
+      try {
+        const bundle = JSON.parse(bundleStr);
+        const salt = new Uint8Array(bundle.s);
+        const iv = new Uint8Array(bundle.iv);
+        const data = new Uint8Array(bundle.d);
+        const key = await this.getKey(password, salt);
+        const decrypted = await window.crypto.subtle.decrypt({ name: 'AES-GCM', iv: iv }, key, data);
+        return JSON.parse(new TextDecoder().decode(decrypted));
+      } catch (e) {
+        throw new Error('Senha incorreta ou dados corrompidos');
+      }
+    },
+  };
+
+  // ---------------------- 2. ESTADO UNIFICADO (VERSIONADO) ----------------------
+  const STORAGE_KEY = 'fusion_os_data_v2';
+  const UI_STATE_KEY = 'fusion_os_ui_state';
+  const CURRENT_VERSION = 1;
+
+  let STATE = {
+    v: CURRENT_VERSION,
+    keys: [],
+    user: 'Convidado',
+    isEncrypted: false,
+    encryptedData: null,
+    symbolBars: {},          // { barId: { id, buttons: [{id, label, url, htmlContent?}] } }
+    activeBarId: 'main',
+    htmlContents: {},        // { buttonId: "html string" } para uploads
+  };
+  let SESSION_PASSWORD = null;
+
+  // Sincroniza di_* com o estado ativo
+  let apiKey = localStorage.getItem('di_apiKey') || '';
+  let modelName = localStorage.getItem('di_modelName') || 'nvidia/nemotron-3-nano-30b-a3b:free';
+  let userName = localStorage.getItem('di_userName') || '';
+  let infodoseName = localStorage.getItem('di_infodoseName') || '';
+
+  // ---------------------- 3. PERSISTÊNCIA (DEBOUNCED + VERSIONADA) ----------------------
+  let saveTimeout;
+  function saveDataDebounced() {
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(() => saveData(), 300);
+  }
+
+  async function saveData() {
+    const payload = {
+      v: CURRENT_VERSION,
+      keys: STATE.keys,
+      user: STATE.user,
+      symbolBars: STATE.symbolBars,
+      activeBarId: STATE.activeBarId,
+      htmlContents: STATE.htmlContents,
+    };
+    if (SESSION_PASSWORD) {
+      try {
+        const enc = await CRYPTO.encrypt(payload, SESSION_PASSWORD);
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({ isEncrypted: true, data: enc }));
+        STATE.isEncrypted = true;
+        STATE.encryptedData = enc;
+      } catch (e) {
+        console.error('Encryption error', e);
+        showToaster('Erro ao salvar dados criptografados', 'error');
+        return;
+      }
+    } else {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ isEncrypted: false, data: payload }));
+    }
+    updateSecurityUI();
+  }
+
+  async function loadData() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return;
+    const parsed = JSON.parse(raw);
+    if (parsed.isEncrypted) {
+      STATE.isEncrypted = true;
+      STATE.encryptedData = parsed.data;
+      updateSecurityUI();
+    } else {
+      const data = parsed.data;
+      // Se versão antiga, migrar silenciosamente
+      if (!data.v || data.v < CURRENT_VERSION) {
+        // Migração básica: adiciona campos faltantes
+        data.symbolBars = data.symbolBars || {};
+        data.activeBarId = data.activeBarId || 'main';
+        data.htmlContents = data.htmlContents || {};
+        data.v = CURRENT_VERSION;
+      }
+      STATE.keys = data.keys || [];
+      STATE.user = data.user || 'Convidado';
+      STATE.symbolBars = data.symbolBars;
+      STATE.activeBarId = data.activeBarId;
+      STATE.htmlContents = data.htmlContents || {};
+
+      // Restaura chave ativa para di_apiKey
+      const active = STATE.keys.find(k => k.active);
+      if (active && active.token) {
+        localStorage.setItem('di_apiKey', active.token);
+        apiKey = active.token;
+      }
+      if (STATE.user !== 'Convidado') {
+        localStorage.setItem('di_userName', STATE.user);
+        userName = STATE.user;
+        if (els.input) els.input.value = STATE.user;
+      }
+
+      updateInterface(STATE.user);
+      renderKeysList();
+
+      renderAllBars();
+      setActiveBar(STATE.activeBarId);
+    }
+
+    if (document.getElementById('apiKeyInput')) document.getElementById('apiKeyInput').value = apiKey;
+    if (document.getElementById('infodoseNameInput')) document.getElementById('infodoseNameInput').value = infodoseName;
+    if (document.getElementById('modelSelect')) document.getElementById('modelSelect').value = modelName;
+  }
+
+  // ---------------------- 4. RENDERIZAÇÃO DE BARRAS ----------------------
+  function createBarElement(barId, buttons = []) {
+    const existing = document.getElementById(barId);
+    if (existing) existing.remove();
+
+    const bar = document.createElement('div');
+    bar.id = barId;
+    bar.className = 'symbol-bar';
+    bar.setAttribute('data-sb-id', barId);
+
+    // Botão toggle (menu)
+    const toggleWrap = document.createElement('div');
+    toggleWrap.className = 'symbol-wrap static';
+    const toggleBtn = document.createElement('button');
+    toggleBtn.className = 'symbol-button main-toggle';
+    toggleBtn.textContent = '≡';
+    toggleBtn.title = 'Menu / Iniciar';
+    toggleWrap.appendChild(toggleBtn);
+    bar.appendChild(toggleWrap);
+
+    // Controles de navegação
+    const navBtns = [
+      { id: 'btn-prev', text: '◀', title: 'Voltar Bloco' },
+      { id: 'btn-play', text: '▶', title: 'Play/Pause' },
+      { id: 'btn-next', text: '▶▶', title: 'Próximo Bloco' },
+    ];
+    navBtns.forEach(nav => {
+      const wrap = document.createElement('div');
+      wrap.className = 'symbol-wrap static';
+      const btn = document.createElement('button');
+      btn.id = nav.id;
+      btn.className = 'symbol-button';
+      btn.textContent = nav.text;
+      btn.title = nav.title;
+      wrap.appendChild(btn);
+      bar.appendChild(wrap);
+    });
+
+    // Botão de arquétipo (ORB)
+    const archWrap = document.createElement('div');
+    archWrap.className = 'symbol-wrap static';
+    const archBtn = document.createElement('button');
+    archBtn.id = 'btn-arch';
+    archBtn.className = 'symbol-button';
+    archBtn.title = 'Trocar Arquétipo de Voz';
+    archBtn.innerHTML = `<div class="orb-microphone-container"><div class="tts-orb-mini"><div class="orb" id="main-orb"><div class="orb-core"></div></div></div></div>`;
+    archWrap.appendChild(archBtn);
+    bar.appendChild(archWrap);
+
+    // Atalhos estáticos (presets)
+    const staticPresets = [
+      { id: 'phi', label: 'Φ', url: 'about:blank' },
+      { id: 'viv', label: '꩜', url: 'https://kodux78k.github.io/oiDual-Vivivi-1/' },
+      { id: 'home', label: '◌', url: 'https://kodux78k.github.io/oiDual-idHome/' },
+      { id: 'doc', label: '◘', url: 'https://kodux78k.github.io/info-Doc/index.html' },
+    ];
+    staticPresets.forEach(p => {
+      const wrap = document.createElement('div');
+      wrap.className = 'symbol-wrap static';
+      const btn = document.createElement('button');
+      btn.className = 'symbol-button';
+      btn.dataset.id = p.id;
+      btn.dataset.url = p.url;
+      btn.innerHTML = p.label;
+      wrap.appendChild(btn);
+      bar.appendChild(wrap);
+    });
+
+    // Botão de adicionar (+) – estático, mas aciona criação de novo botão
+    const addWrap = document.createElement('div');
+    addWrap.className = 'symbol-wrap static btn-add-wrap';
+    const addBtn = document.createElement('button');
+    addBtn.className = 'symbol-button btn-add-custom';
+    addBtn.textContent = '+';
+    addBtn.title = 'Adicionar novo botão';
+    addBtn.onclick = () => createNewButtonInBar(barId, '●', 'about:blank');
+    addWrap.appendChild(addBtn);
+    bar.appendChild(addWrap);
+
+    // Hud info
+    const hudInfo = document.createElement('div');
+    hudInfo.id = 'hudStatus';
+    hudInfo.className = 'hud-info';
+    hudInfo.textContent = 'KOBLLUX · ORB NEXUS';
+    bar.appendChild(hudInfo);
+
+    // Botões dinâmicos
+    buttons.forEach(btnData => {
+      const wrap = document.createElement('div');
+      wrap.className = 'symbol-wrap dynamic';
+      const btn = document.createElement('button');
+      btn.className = 'symbol-button';
+      btn.dataset.id = btnData.id;
+      // Se houver conteúdo HTML armazenado, marcamos como especial
+      if (STATE.htmlContents[btnData.id]) {
+        btn.dataset.url = `html:${btnData.id}`;
+      } else {
+        btn.dataset.url = btnData.url || '';
+      }
+      btn.innerHTML = btnData.label;
+      wrap.appendChild(btn);
+      bar.insertBefore(wrap, hudInfo);
+    });
+
+    document.body.appendChild(bar);
+    return bar;
+  }
+
+  function renderAllBars() {
+    for (const [barId, barData] of Object.entries(STATE.symbolBars)) {
+      const barElem = document.getElementById(barId);
+      if (barElem) {
+        // Remove dinâmicos existentes
+        const dynamics = barElem.querySelectorAll('.symbol-wrap.dynamic');
+        dynamics.forEach(el => el.remove());
+        // Adiciona os novos
+        const hudInfo = barElem.querySelector('.hud-info');
+        barData.buttons.forEach(btnData => {
+          const wrap = document.createElement('div');
+          wrap.className = 'symbol-wrap dynamic';
+          const btn = document.createElement('button');
+          btn.className = 'symbol-button';
+          btn.dataset.id = btnData.id;
+          if (STATE.htmlContents[btnData.id]) {
+            btn.dataset.url = `html:${btnData.id}`;
+          } else {
+            btn.dataset.url = btnData.url || '';
+          }
+          btn.innerHTML = btnData.label;
+          wrap.appendChild(btn);
+          if (hudInfo) barElem.insertBefore(wrap, hudInfo);
+          else barElem.appendChild(wrap);
+        });
+      } else {
+        createBarElement(barId, barData.buttons);
+      }
+    }
+    attachLongPressEvents(); // reaplica eventos nos botões novos
+  }
+
+  function setActiveBar(barId) {
+    STATE.activeBarId = barId;
+    saveDataDebounced();
+    // Destaque visual na barra ativa
+    document.querySelectorAll('.symbol-bar').forEach(bar => {
+      bar.style.transition = 'outline 0.2s ease';
+      bar.style.outline = bar.id === barId ? '2px solid var(--neon-cyan)' : 'none';
+      if (bar.id === barId) bar.style.boxShadow = '0 0 12px var(--neon-cyan)';
+      else bar.style.boxShadow = '';
+    });
+  }
+
+  // ---------------------- 5. FUNÇÕES DE MANIPULAÇÃO DE BOTÕES ----------------------
+  function getActiveBarData() {
+    if (!STATE.symbolBars[STATE.activeBarId]) {
+      STATE.symbolBars[STATE.activeBarId] = { id: STATE.activeBarId, buttons: [] };
+    }
+    return STATE.symbolBars[STATE.activeBarId];
+  }
+
+  function createNewButtonInBar(barId, label = '●', url = 'about:blank') {
+    const barData = STATE.symbolBars[barId] || { id: barId, buttons: [] };
+    const newId = `btn_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
+    barData.buttons.push({ id: newId, label, url });
+    STATE.symbolBars[barId] = barData;
+    saveDataDebounced();
+    renderAllBars();
+  }
+
+  function deleteButtonFromBar(barId, buttonId) {
+    const barData = STATE.symbolBars[barId];
+    if (!barData) return;
+    barData.buttons = barData.buttons.filter(b => b.id !== buttonId);
+    delete STATE.htmlContents[buttonId]; // remove conteúdo associado
+    STATE.symbolBars[barId] = barData;
+    saveDataDebounced();
+    renderAllBars();
+  }
+
+  function updateButtonInBar(barId, buttonId, newUrl, newLabel, htmlContent = null) {
+    const barData = STATE.symbolBars[barId];
+    if (!barData) return;
+    const btn = barData.buttons.find(b => b.id === buttonId);
+    if (btn) {
+      btn.url = newUrl;
+      btn.label = newLabel;
+      if (htmlContent !== null) {
+        STATE.htmlContents[buttonId] = htmlContent;
+        btn.url = ''; // não precisa mais da URL original
+      } else if (STATE.htmlContents[buttonId]) {
+        delete STATE.htmlContents[buttonId];
+      }
+      saveDataDebounced();
+      renderAllBars();
+    }
+  }
+
+  // ---------------------- 6. EDIÇÃO POR LONG-PRESS (4s) ----------------------
+  let pressTimer = null;
+  let currentEditingBtn = null;
+  let currentEditingBarId = null;
+
+  function closeEditor() {
+    const panel = document.getElementById('kblx-back');
+    if (panel) panel.style.display = 'none';
+    currentEditingBtn = null;
+    currentEditingBarId = null;
+    if (pressTimer) clearTimeout(pressTimer);
+  }
+
+  function enterEditMode(btn, barId) {
+    const panel = document.getElementById('kblx-back');
+    const input = document.getElementById('kblx-inp');
+    const title = document.getElementById('kblx-ttl');
+
+    if (!panel || !input || !title) return;
+
+    title.textContent = btn.dataset.id || 'Botão';
+    // Se for botão com conteúdo HTML, mostra um placeholder
+    const isHtml = btn.dataset.url && btn.dataset.url.startsWith('html:');
+    input.value = isHtml ? '(conteúdo HTML interno)' : (btn.dataset.url || '');
+
+    currentEditingBtn = btn;
+    currentEditingBarId = barId;
+    panel.style.display = 'flex';
+    input.focus();
+  }
+
+  function attachLongPressEvents() {
+    document.querySelectorAll('.symbol-button[data-id]').forEach(btn => {
+      const bar = btn.closest('.symbol-bar');
+      if (!bar) return;
+      const barId = bar.id;
+
+      // Remove listeners antigos (usando propriedades para evitar duplicatas)
+      const oldDown = btn._handlePointerDown;
+      const oldCancel = btn._handlePointerCancel;
+      if (oldDown) btn.removeEventListener('pointerdown', oldDown);
+      if (oldCancel) {
+        btn.removeEventListener('pointerup', oldCancel);
+        btn.removeEventListener('pointerleave', oldCancel);
+        btn.removeEventListener('pointercancel', oldCancel);
+      }
+
+      const handlePointerDown = (e) => {
+        if (currentEditingBtn) return;
+        pressTimer = setTimeout(() => {
+          enterEditMode(btn, barId);
+        }, 4000);
+      };
+      const handlePointerCancel = () => {
+        if (pressTimer) clearTimeout(pressTimer);
+      };
+
+      btn._handlePointerDown = handlePointerDown;
+      btn._handlePointerCancel = handlePointerCancel;
+
+      btn.addEventListener('pointerdown', handlePointerDown);
+      btn.addEventListener('pointerup', handlePointerCancel);
+      btn.addEventListener('pointerleave', handlePointerCancel);
+      btn.addEventListener('pointercancel', handlePointerCancel);
+    });
+  }
+
+  // ---------------------- 7. INTEGRAÇÃO COM O PAINEL EDITOR (kblx-back) ----------------------
+  function initEditorPanel() {
+    const panel = document.getElementById('kblx-back');
+    const saveBtn = document.getElementById('kblx-btn-save');
+    const closeBtn = document.getElementById('kblx-btn-close');
+    const inp = document.getElementById('kblx-inp');
+
+    if (!panel || !saveBtn || !closeBtn) return;
+
+    saveBtn.onclick = () => {
+      if (!currentEditingBtn || !currentEditingBarId) {
+        closeEditor();
+        return;
+      }
+      const newUrl = inp.value.trim();
+      const newLabel = currentEditingBtn.innerHTML;
+      // Se o campo estiver vazio ou contiver placeholder, mantém o conteúdo HTML se existir
+      if (newUrl === '' || newUrl === '(conteúdo HTML interno)') {
+        // Mantém o estado atual (não altera)
+        closeEditor();
+        return;
+      }
+      // Atualiza (se for URL normal, remove possível HTML armazenado)
+      updateButtonInBar(currentEditingBarId, currentEditingBtn.dataset.id, newUrl, newLabel);
+      closeEditor();
+    };
+
+    closeBtn.onclick = () => closeEditor();
+    panel.addEventListener('click', (e) => {
+      if (e.target === panel) closeEditor();
+    });
+  }
+
+  function addDeleteButtonToPanel() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel || document.getElementById('kblx-btn-delete')) return;
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.id = 'kblx-btn-delete';
+    deleteBtn.textContent = '🗑 Remover Botão';
+    deleteBtn.className = 'kblx-btn';
+    deleteBtn.style.background = '#ff3366';
+    deleteBtn.style.color = '#fff';
+    deleteBtn.style.border = 'none';
+
+    const row = panel.querySelector('.kblx-row');
+    if (row) row.appendChild(deleteBtn);
+
+    deleteBtn.onclick = () => {
+      if (!currentEditingBtn || !currentEditingBarId) return;
+      deleteButtonFromBar(currentEditingBarId, currentEditingBtn.dataset.id);
+      closeEditor();
+    };
+  }
+
+  // Upload de arquivo HTML com armazenamento no STATE.htmlContents
+  function addFileUploadToPanel() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel) return;
+
+    let fileInput = document.getElementById('kblx-file-upload');
+    if (!fileInput) {
+      fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.id = 'kblx-file-upload';
+      fileInput.accept = '.html';
+      fileInput.style.marginTop = '10px';
+      fileInput.style.width = '100%';
+      fileInput.style.padding = '6px';
+      fileInput.style.background = '#1e1e2f';
+      fileInput.style.color = '#fff';
+      fileInput.style.border = '1px solid #2a2a3a';
+      fileInput.style.borderRadius = '6px';
+
+      const container = panel.querySelector('.p-lbl');
+      if (container && container.parentNode) {
+        container.parentNode.insertBefore(fileInput, container.nextSibling);
+      } else {
+        panel.appendChild(fileInput);
+      }
+    }
+
+    fileInput.onchange = (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        const content = ev.target.result;
+        if (currentEditingBtn && currentEditingBarId) {
+          // Armazena o conteúdo HTML e marca o botão como especial
+          updateButtonInBar(currentEditingBarId, currentEditingBtn.dataset.id, '', currentEditingBtn.innerHTML, content);
+          closeEditor();
+        }
+      };
+      reader.readAsText(file);
+      fileInput.value = '';
+    };
+  }
+
+  // ---------------------- 8. PRESETS INFODOSE ----------------------
+  const PRESETS = [
+    { id: 'home', label: '◌ Home', url: 'https://kodux78k.github.io/oiDual-idHome/' },
+    { id: 'viv', label: '꩜ Viv', url: 'https://kodux78k.github.io/oiDual-Vivivi-1/' },
+    { id: 'doc', label: '◘ Doc', url: 'https://kodux78k.github.io/info-Doc/index.html' },
+    { id: 'phi', label: 'Φ Blank', url: 'about:blank' },
+  ];
+
+  function addPresetSelector() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel || document.getElementById('kblx-presets')) return;
+
+    const presetsDiv = document.createElement('div');
+    presetsDiv.id = 'kblx-presets';
+    presetsDiv.style.marginTop = '15px';
+    presetsDiv.innerHTML = '<div style="font-size:0.8rem;margin-bottom:6px;color:rgba(255,255,255,0.6)">PRESETS INFODOSE</div>';
+
+    PRESETS.forEach(p => {
+      const btn = document.createElement('button');
+      btn.textContent = p.label;
+      btn.className = 'kblx-btn';
+      btn.style.margin = '4px';
+      btn.style.padding = '6px 12px';
+      btn.style.fontSize = '0.8rem';
+
+      btn.onclick = () => {
+        if (currentEditingBtn && currentEditingBarId) {
+          updateButtonInBar(currentEditingBarId, currentEditingBtn.dataset.id, p.url, p.label);
+          closeEditor();
+        } else {
+          createNewButtonInBar(STATE.activeBarId, p.label, p.url);
+          closeEditor();
+        }
+      };
+
+      presetsDiv.appendChild(btn);
+    });
+
+    const fileInput = document.getElementById('kblx-file-upload');
+    if (fileInput && fileInput.parentNode) {
+      fileInput.parentNode.insertBefore(presetsDiv, fileInput.nextSibling);
+    } else {
+      panel.appendChild(presetsDiv);
+    }
+  }
+
+  // ---------------------- 9. DUPLICAR BARRA ----------------------
+  function duplicateBar(barId = STATE.activeBarId) {
+    const source = STATE.symbolBars[barId];
+    if (!source) return;
+    const newId = `${barId}_copy_${Date.now()}`;
+    const newButtons = source.buttons.map(btn => {
+      const newId = `btn_${Date.now()}_${Math.random().toString(36).substr(2, 8)}`;
+      // Copia conteúdo HTML se existir
+      if (STATE.htmlContents[btn.id]) {
+        STATE.htmlContents[newId] = STATE.htmlContents[btn.id];
+      }
+      return { ...btn, id: newId };
+    });
+    STATE.symbolBars[newId] = { id: newId, buttons: newButtons };
+    saveDataDebounced();
+    renderAllBars();
+    setActiveBar(newId);
+  }
+
+  function addDuplicateButtonToPanel() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel || document.getElementById('kblx-btn-dup')) return;
+
+    const dupBtn = document.createElement('button');
+    dupBtn.id = 'kblx-btn-dup';
+    dupBtn.textContent = '⧉ Duplicar Barra';
+    dupBtn.className = 'kblx-btn';
+    dupBtn.style.marginLeft = '8px';
+
+    const row = panel.querySelector('.kblx-row');
+    if (row) row.appendChild(dupBtn);
+
+    dupBtn.onclick = () => {
+      duplicateBar(STATE.activeBarId);
+      closeEditor();
+    };
+  }
+
+  // ---------------------- 10. SELETOR DE BARRAS (no painel) ----------------------
+  function addBarSelector() {
+    const panel = document.getElementById('kblx-back');
+    if (!panel || document.getElementById('kblx-bar-selector')) return;
+
+    const selectorDiv = document.createElement('div');
+    selectorDiv.id = 'kblx-bar-selector';
+    selectorDiv.style.marginTop = '15px';
+    selectorDiv.style.borderTop = '1px solid rgba(255,255,255,0.1)';
+    selectorDiv.style.paddingTop = '12px';
+
+    const label = document.createElement('div');
+    label.textContent = 'BARRA ATIVA:';
+    label.style.fontSize = '0.7rem';
+    label.style.marginBottom = '6px';
+    label.style.color = 'rgba(255,255,255,0.5)';
+    selectorDiv.appendChild(label);
+
+    const select = document.createElement('select');
+    select.id = 'barSelect';
+    select.style.width = '100%';
+    select.style.padding = '6px';
+    select.style.background = '#1e1e2f';
+    select.style.color = '#fff';
+    select.style.border = '1px solid #2a2a3a';
+    select.style.borderRadius = '6px';
+
+    function updateBarSelect() {
+      const currentBars = Object.keys(STATE.symbolBars);
+      select.innerHTML = '';
+      currentBars.forEach(barId => {
+        const option = document.createElement('option');
+        option.value = barId;
+        option.textContent = barId === STATE.activeBarId ? `★ ${barId}` : barId;
+        if (barId === STATE.activeBarId) option.selected = true;
+        select.appendChild(option);
+      });
+    }
+
+    select.onchange = () => {
+      setActiveBar(select.value);
+      updateBarSelect();
+    };
+
+    selectorDiv.appendChild(select);
+    panel.appendChild(selectorDiv);
+
+    // Atualiza sempre que as barras mudarem (pode ser chamado em renderAllBars)
+    window.updateBarSelect = updateBarSelect;
+    updateBarSelect();
+  }
+
+  // ---------------------- 11. CLIQUE DOS BOTÕES (IFRAME + BLOB) ----------------------
+  function setupButtonClicks() {
+    document.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.symbol-button[data-url]');
+      if (!btn) return;
+      let url = btn.dataset.url;
+      if (!url) return;
+
+      // Se for um marcador de HTML interno
+      if (url.startsWith('html:')) {
+        const buttonId = url.substring(5);
+        const htmlContent = STATE.htmlContents[buttonId];
+        if (htmlContent) {
+          const blob = new Blob([htmlContent], { type: 'text/html' });
+          const blobUrl = URL.createObjectURL(blob);
+          if (els.frame) {
+            els.frame.src = blobUrl;
+            // Limpa o blob depois que carregar (ou depois de um tempo)
+            els.frame.onload = () => URL.revokeObjectURL(blobUrl);
+          } else {
+            window.open(blobUrl, '_blank');
+            setTimeout(() => URL.revokeObjectURL(blobUrl), 1000);
+          }
+          showToaster('Carregando módulo local...', 'success');
+          return;
+        }
+      }
+
+      // URL normal
+      if (els.frame) {
+        els.frame.src = url;
+        showToaster('Carregando módulo...', 'success');
+      } else {
+        window.open(url, '_blank');
+      }
+    });
+  }
+
+  // ---------------------- 12. SINCRO COM MODO DO KARD (todas as barras) ----------------------
+  let currentMode = 'card';
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.symbol-bar').forEach(bar => {
+      if (mode === 'orb') {
+        bar.classList.add('floating');
+        bar.classList.remove('attached-top');
+      } else if (mode === 'hud') {
+        bar.classList.add('attached-top');
+        bar.classList.remove('floating');
+      } else {
+        bar.classList.remove('floating', 'attached-top');
+      }
+    });
+    if (window.originalSetMode) window.originalSetMode(mode);
+  }
+
+  // ---------------------- 13. FUNÇÕES AUXILIARES (KARD) ----------------------
+  function updateInterface(name) {
+    const safe = name || 'Convidado';
+    if (els.lblName) els.lblName.innerText = safe;
+    if (els.input) els.input.value = safe;
+    const activeKey = STATE.keys.find(k => k.active);
+    if (els.smallIdent) els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+    if (els.actBadge) els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+    const hashStr = s => { let h = 0xdeadbeef; for (let i = 0; i < s.length; i++) { h = Math.imul(h ^ s.charCodeAt(i), 2654435761); } return (h ^ h >>> 16) >>> 0; };
+    const line = `+${'-'.repeat(safe.length + 4)}+`;
+    if (els.actPre) els.actPre.innerText = `${line}\n| ${safe.toUpperCase()} |\n${line}\nID: ${hashStr(safe).toString(16)}`;
+  }
+
+  function renderKeysList() {
+    if (!els.keyList) return;
+    els.keyList.innerHTML = '';
+    if (STATE.keys.length === 0) {
+      els.keyList.innerHTML = '<div style="color:rgba(255,255,255,0.3);text-align:center;padding:20px">Nenhuma chave armazenada.</div>';
+      return;
+    }
+    STATE.keys.forEach(k => {
+      const div = document.createElement('div');
+      div.className = `key-item ${k.active ? 'active-item' : ''}`;
+      div.innerHTML = `
+        <div class="meta" style="flex:1"><div style="font-weight:700;font-size:0.9rem">${escapeHtml(k.name)}</div></div>
+        <div class="actions">
+          ${!k.active ? `<button class="small-btn" onclick="window.setActiveKey('${k.id}')">ATIVAR</button>` : `<span style="font-size:0.7rem;font-weight:700;color:var(--neon-cyan);margin-right:10px">ATIVA</span>`}
+          <button class="small-btn danger" onclick="window.removeKey('${k.id}')"><i data-lucide="trash-2" style="width:14px"></i></button>
+        </div>`;
+      els.keyList.appendChild(div);
+    });
+    if (window.lucide) lucide.createIcons();
+  }
+
+  function updateSecurityUI() {
+    if (!els.vaultStatusText) return;
+    if (SESSION_PASSWORD) {
+      els.vaultStatusText.innerText = 'Cofre Protegido (Destrancado)';
+      if (els.lockVaultBtn) els.lockVaultBtn.innerText = 'TRANCAR';
+    } else if (STATE.isEncrypted) {
+      els.vaultStatusText.innerText = 'Cofre Trancado';
+      if (els.lockVaultBtn) els.lockVaultBtn.innerText = 'REDEFINIR';
+    } else {
+      els.vaultStatusText.innerText = 'Cofre Aberto (Sem senha)';
+      if (els.lockVaultBtn) els.lockVaultBtn.innerText = 'CRIAR SENHA';
+    }
+  }
+
+  function showToaster(txt, type = 'default') {
+    const t = document.createElement('div');
+    t.className = `toaster ${type}`;
+    t.innerText = txt;
+    const wrap = document.getElementById('toasterWrap');
+    if (wrap) wrap.appendChild(t);
+    setTimeout(() => t.classList.add('show'), 10);
+    setTimeout(() => { t.classList.remove('show'); setTimeout(() => t.remove(), 300); }, 2500);
+  }
+
+  function escapeHtml(s) {
+    if (!s) return '';
+    return s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  }
+
+  // ---------------------- 14. ARQUÉTIPOS (da barra original) ----------------------
+  const ARCHS = ['kobllux','kodux','atlas','nova','vitalis','pulse','artemis','serena','kaos','genus','lumine','solus','rhea','aion','uno','dual','trinity','infodose','horus'];
+  let archIndex = ARCHS.indexOf(document.body.dataset.voiceArch || 'kobllux');
+  if (archIndex < 0) archIndex = 0;
+  function setVoiceArch(name) {
+    if (!name) return;
+    document.body.dataset.voiceArch = name;
+    const neb = document.querySelector('.nebula');
+    if (neb) neb.dataset.voiceArch = name;
+    const hud = document.getElementById('hudStatus');
+    if (hud) hud.textContent = 'KOBLLUX · ' + name.toUpperCase();
+    const dock = document.querySelector('.kob-tts-dock, .symbol-bar');
+    if (dock) dock.animate([{transform:'scale(1)'},{transform:'scale(1.03)'},{transform:'scale(1)'}], {duration: 420, easing:'ease-out'});
+  }
+  document.addEventListener('click', (e) => {
+    const orbBtn = e.target.closest('#btn-arch');
+    if (orbBtn) {
+      archIndex = (archIndex + 1) % ARCHS.length;
+      setVoiceArch(ARCHS[archIndex]);
+    }
+  });
+  let archTimer;
+  const orbBtnElem = document.getElementById('btn-arch');
+  if (orbBtnElem) {
+    orbBtnElem.addEventListener('pointerdown', () => {
+      archTimer = setTimeout(() => {
+        archIndex = (archIndex - 1 + ARCHS.length) % ARCHS.length;
+        setVoiceArch(ARCHS[archIndex]);
+      }, 450);
+    });
+    orbBtnElem.addEventListener('pointerup', () => clearTimeout(archTimer));
+    orbBtnElem.addEventListener('pointerleave', () => clearTimeout(archTimer));
+  }
+
+  // ---------------------- 15. IDLE DOCK ----------------------
+  const dock = document.querySelector('.kob-tts-dock') || document.querySelector('.symbol-bar');
+  let idleTimer;
+  function resetIdle() {
+    if (!dock) return;
+    dock.classList.remove('idle');
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(() => dock.classList.add('idle'), 1870);
+  }
+  ['pointerdown','pointermove','touchstart','mousemove','keydown'].forEach(ev => document.addEventListener(ev, resetIdle, {passive:true}));
+  resetIdle();
+
+  // ---------------------- 16. INICIALIZAÇÃO ----------------------
+  async function init() {
+    await loadData();
+    // Se não houver barras, cria uma padrão
+    if (Object.keys(STATE.symbolBars).length === 0) {
+      const defaultButtons = [
+        { id: 'home', label: '◌ Home', url: 'https://kodux78k.github.io/oiDual-idHome/' },
+        { id: 'viv', label: '꩜ Viv', url: 'https://kodux78k.github.io/oiDual-Vivivi-1/' },
+        { id: 'doc', label: '◘ Doc', url: 'https://kodux78k.github.io/info-Doc/index.html' },
+        { id: 'phi', label: 'Φ Blank', url: 'about:blank' },
+      ];
+      STATE.symbolBars['main'] = { id: 'main', buttons: defaultButtons };
+      STATE.activeBarId = 'main';
+      await saveData();
+    }
+    renderAllBars();
+    setActiveBar(STATE.activeBarId);
+    attachLongPressEvents();
+    initEditorPanel();
+    addDeleteButtonToPanel();
+    addFileUploadToPanel();
+    addPresetSelector();
+    addDuplicateButtonToPanel();
+    addBarSelector();
+    setupButtonClicks();
+
+    // Relógio
+    setInterval(() => {
+      if (els.clock) els.clock.innerText = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }, 1000);
+  }
+
+  // ---------------------- 17. API GLOBAL ----------------------
+  window.Fusion = {
+    STATE,
+    setMode,
+    duplicateBar,
+    createNewButtonInBar,
+    deleteButtonFromBar,
+    updateButtonInBar,
+    setActiveBar,
+    saveData,
+  };
+
+  // Inicialização
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body></html>
