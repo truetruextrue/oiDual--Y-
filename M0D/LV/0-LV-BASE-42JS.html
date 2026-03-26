@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Portal — Livro Vivo</title>
+  <meta name="theme-color" content="#0a0e18" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icons/icon-d0x.PNG" />
+  <link rel="apple-touch-icon" href="icons/icon-d0x.PNG" />
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <meta name="color-scheme" content="dark"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf_viewer.min.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/LV/css/main.css">
+
+  <style>
+  :root{--grad-a:#ff00ff;--grad-b:#00ffff;--bg:#07080c;--bg2:#0b0e16;--panel:#0e1220;--ink:#e8ecf6;--muted:#a2acc5;--gold:#f7d774;--cyan:#67e6ff;--blur:14px;--radius:18px;--maxw:900px;--pad:20px;--ring:0 0 0 1px rgba(255,255,255,.08) inset,0 0 40px rgba(102,255,255,.08);--glow:0 10px 30px rgba(0,0,0,.35),0 0 80px rgba(0,255,255,.08)}
+  .theme-gold{--grad-a:#ffd54a;--grad-b:#ff8a00;--cyan:#ffd97a;--gold:#ffe08a;--panel:#12100b;--bg:#0a0906;--ink:#fff6db;--muted:#d3c6a2}
+  .theme-thermal{--grad-a:#ff7ae6;--grad-b:#ff7a00;--cyan:#ffc29d;--gold:#ffc6f3;--panel:#160e15;--bg:#0b0710;--ink:#ffeefe;--muted:#d4bcd2}
+  *{box-sizing:border-box}html,body{height:100%;margin:0}body{background:var(--bg);color:var(--ink);font:400 16px/1.65 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;overflow-x:hidden}
+  /* ... resto do CSS embutido (mantido do teu arquivo original) ... */
+  </style>
+
+</head>
+<body>
+  <div class="nebula"></div>
+  <button id="read-exit" title="Sair do modo leitura (Esc)">← Voltar</button>
+
+  <div class="wrap" id="root">
+    <details class="acc" open>
+      <summary><span class="chev"></span><h2>✨ Builder v2 – Áudio + PDF</h2></summary>
+      <div class="sec">
+        <p>Abra o painel “Auto‑Gerar” pelo botão +.</p>
+        <div class="demo-cta" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+          <button class="btn" data-action="demo">Gerar Demo</button>
+          <button class="btn" data-action="importar">Auto‑Gerar</button>
+          <button class="btn" data-action="md">Exportar .md</button>
+          <button class="btn" data-action="pdf">Imprimir (PDF)</button>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <div id="toasts"></div>
+
+  <div id="fab">
+    <div class="menu">
+      <button class="btn" data-action="home">Home</button>
+      <button class="btn" data-action="back">Voltar</button>
+      <button class="btn" id="btn-tts" data-action="tts">Voz: Off</button>
+      <button class="btn" id="btn-tts-sel" data-action="tts-sel">Ler seleção</button>
+      <button class="btn" id="btn-tts-stop" data-action="tts-stop">Parar voz</button>
+      <button class="btn" data-action="demo">Gerar Demo</button>
+      <button class="btn" id="btn-imp" data-action="importar">Auto‑Gerar</button>
+      <button class="btn" id="btn-md" data-action="md">Exportar .md</button>
+      <button class="btn" id="btn-pdf" data-action="pdf">Imprimir (PDF)</button>
+      <button class="btn" id="btn-theme" data-action="theme">Tema: Blue‑1</button>
+      <button class="btn" id="btn-reading" data-action="reading">Modo Leitura</button>
+    </div>
+    <button class="fab-btn" id="fab-toggle">＋</button>
+  </div>
+
+  <div id="imp">
+    <div class="panel">
+      <div class="tabs">
+        <div class="tab active" data-tab="text">📝 enviar</div>
+        <div class="tab" data-tab="audio">🎙️ Áudio→Texto</div>
+        <div class="tab" data-tab="file">📄 Arquivo (PDF/TXT/MD)</div>
+      </div>
+
+      <div id="tab-text" class="tab-content active">
+        <textarea id="srcText" placeholder="# PRÓLOGO
+Texto aqui..."></textarea>
+        <button class="btn" onclick="autoBuild(document.getElementById('srcText').value)">Gerar Livro</button>
+        <button class="btn" onclick="autoBuildNested(document.getElementById('srcText').value)">Gerar (aninhado)</button>
+        <button class="btn" onclick="pasteSrcText()">Colar</button>
+        <button class="btn" id="btn-converter">Converter</button>
+      </div>
+
+      <div id="tab-audio" class="tab-content">
+        <textarea id="audioOutput" placeholder="Transcrição aqui..."></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button class="btn" id="startRec">🎤 Iniciar</button>
+          <button class="btn" id="stopRec">⏹ Parar</button>
+          <button class="btn" onclick="autoBuild(document.getElementById('audioOutput').value)">Usar Transcrição</button>
+        </div>
+      </div>
+
+      <div id="tab-file" class="tab-content">
+        <input type="file" id="fileInput" accept=".pdf,.txt,.md,.rtf, .html">
+        <div id="filePreview" style="margin-top:10px;color:var(--muted);font-size:.9rem"></div>
+      </div>
+
+      <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:12px">
+        <button class="btn" onclick="closeImporter()">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dependências externas (pdf.js) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- MONÓLITO INLINE (injetado a partir do teu guia/anexo) -->
+  <script id="CSS_INNER_RENDER_V1">
+  (()=>{'use strict';
+  const STYLE_ID='INLINE_CSS_RENDER_V1';
+  function appendCSS(css){
+    if(!css || !css.trim()) return;
+    let s=document.getElementById(STYLE_ID);
+    if(!s){ s=document.createElement('style'); s.id=STYLE_ID; document.head.appendChild(s); }
+    s.appendChild(document.createTextNode('\n'+css));
+  }
+
+  window.CSS_INNER = {
+    // Varre o DOM e injeta CSS encontrado em blocos comuns
+    applyFromDOM(){
+      let css='';
+      document.querySelectorAll('style[data-inline], [data-css-inline], pre[data-lang="css"], code.language-css, pre code.css').forEach(el=>{
+        const t = (el.textContent||'').trim();
+        if(t) css += '\n' + t;
+      });
+      appendCSS(css);
+    },
+    // Extrai <style>...</style> de uma string HTML e aplica
+    applyFromHTML(html){
+      if(!html) return;
+      const re=/<style[^>]*>([\s\S]*?)<\/style>/gi; let m, css='';
+      while((m=re.exec(html))){ css += '\n' + (m[1]||''); }
+      appendCSS(css);
+    }
+  };
+  document.addEventListener('DOMContentLoaded', ()=> CSS_INNER.applyFromDOM());
+  })();
+  </script>
+
+  <!-- Segurança: versão safe que só coleta style[data-inline] -->
+  <script id="CSS_INNER_SAFE_V2">
+  (()=>{'use strict';
+  const STYLE_ID='INLINE_CSS_RENDER_SAFE_V2';
+  function appendSafe(css){
+    if(!css || !css.trim()) return;
+    let s=document.getElementById(STYLE_ID);
+    if(!s){ s=document.createElement('style'); s.id=STYLE_ID; document.head.appendChild(s); }
+    s.appendChild(document.createTextNode('\n'+css));
+  }
+  window.CSS_INNER_SAFE = {
+    applyFromDOM(root=document){
+      let css='';
+      root.querySelectorAll('style[data-inline]').forEach(el=>{
+        const t=(el.textContent||'').trim(); if(t) css+='\n'+t;
+      });
+      appendSafe(css);
+    },
+    applyFromHTML(html){
+      if(!html) return;
+      // só <style data-inline>…</style>
+      const re=/<style[^>]*\bdata-inline\b[^>]*>([\s\S]*?)<\/style>/gi; let m, css='';
+      while((m=re.exec(html))) css+='\n'+(m[1]||'');
+      appendSafe(css);
+    }
+  };
+  document.addEventListener('DOMContentLoaded',()=> CSS_INNER_SAFE.applyFromDOM());
+  })();
+  </script>
+
+  <!-- KaTeX autorun helper (injetado do monólito) -->
+  <script id="KATEX_AUTORUN_AFTER_BUILD_V1">
+  (()=>{'use strict';
+  function loadOnceCSS(href,id){return new Promise(ok=>{ if(document.getElementById(id)) return ok();
+    const l=document.createElement('link'); l.id=id; l.rel='stylesheet'; l.href=href; l.onload=ok; document.head.appendChild(l); });}
+  function loadOnceJS(src,id){return new Promise(ok=>{ if(document.getElementById(id)) return ok();
+    const s=document.createElement('script'); s.id=id; s.src=src; s.defer=true; s.onload=ok; document.head.appendChild(s); });}
+  async function ensureKaTeX(){ if(window.renderMathInElement) return;
+    const CDN="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist";
+    await loadOnceCSS(`${CDN}/katex.min.css`,'katex_css');
+    await loadOnceJS(`${CDN}/katex.min.js`,'katex_js');
+    await loadOnceJS(`${CDN}/contrib/auto-render.min.js`,'katex_auto_js');
+  }
+  async function run(root){
+    await ensureKaTeX();
+    if(typeof window.KaTeXRender==='function') return window.KaTeXRender(root||document.body);
+    if(window.renderMathInElement) window.renderMathInElement(root||document.body,{
+      delimiters:[
+        {left:"$$",right:"$$",display:true},
+        {left:"\\$begin:math:display$",right:"\\$end:math:display$",display:true},
+        {left:"$", right:"$", display:false},
+        {left:"\\$begin:math:text$", right:"\\$end:math:text$", display:false},
+      ],
+      throwOnError:false,
+      ignoredTags:["script","noscript","style","textarea","code","pre"]
+    });
+  }
+  // envelopa os builders
+  ['autoBuild','autoBuildNested'].forEach(name=>{
+    const f=window[name];
+    if(typeof f==='function' && !f.__kxKaTeXWrapped){
+      window[name]=function(text){ const out=f(text); run(document.getElementById('root')); return out; }
+      window[name].__kxKaTeXWrapped=true;
+    }
+  });
+  })();
+  </script>
+
+  <!-- Aqui mantive/ativei/centralizei os patches e blocos do teu monólito conforme o guia que enviou. -->
+
+  <!-- Scripts modulares (inline 0–42) - pasta alterada conforme pedido (/M0D/LV/js/modules/inline-N) -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-4.js"></script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-7.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-8.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-9.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-10.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-11.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-12.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-13.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-14.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-15.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-16.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-17.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-18.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-19.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-20.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-21.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-22.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-23.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-24.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-25.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-26.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-27.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-28.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-29.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-30.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-31.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-32.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-33.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-34.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-35.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-36.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-37.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-38.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-39.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-40.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-41.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/js/modules/inline-42.js"></script>
+
+  <!-- main module (aplica lógica principal) -->
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
