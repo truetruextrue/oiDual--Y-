@@ -731,3 +731,32 @@ button.btn[onclick="closeImporter()"]{
     background:rgba(0,0,0,.3);border-radius:999px;backdrop-filter:blur(4px)
   }
 
+/* estado normal do dock (único bloco) */
+    .kob-tts-dock {
+      transition: transform .35s ease, opacity .65s ease;
+      box-shadow: none !important;
+    }
+    .kob-tts-dock.idle {
+      opacity: .18;
+      transform: scale(.92);
+    }
+    .kob-tts-dock:hover {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+
+/* Remove o padding do wrap do HUD */
+#fusion-root .wrap {
+  background: transparent;
+  max-width: var(--maxw);
+  margin: 0 auto;
+  padding: 0;
+}
+
+/* Remove o padding do wrap do HUD */
+#fusion-root .wrap {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-width: none !important;
+}
