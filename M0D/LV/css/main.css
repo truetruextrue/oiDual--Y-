@@ -426,6 +426,7 @@ button.btn[onclick="closeImporter()"]{
     background:#000;
   }
 
+
   /* Se estiver em coluna estreita, deixa um pouco mais compacto */
   @media (max-width: 480px){
     #root iframe,
@@ -760,3 +761,4 @@ button.btn[onclick="closeImporter()"]{
   margin: 0 !important;
   max-width: none !important;
 }
+iframe{background:transparent !important;}
