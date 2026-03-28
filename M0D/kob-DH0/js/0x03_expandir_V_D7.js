@@ -15,7 +15,7 @@
    VERDADE × INTEGRAR ÷ Δ = ∞  ·  3×6×9×7=1134  ·  α=1/137
 ═══════════════════════════════════════════════════════════ */
 (function(){
-  const LP   = 3000;          // ms para long-press
+  const LP   = 1870;          // ms para long-press
   const DASH = 119.38;        // 2π × 19 (r=19)
 
   let _activeBtn = null;
