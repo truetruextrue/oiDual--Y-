@@ -16,7 +16,7 @@
       --radius-sm: 12px;
     }
 
-    /* ARQUÉTIPOS - ESPECTRO DE FREQUÊNCIA (Cores) */
+    /* ARQUÉTIPOS - ESPECTRO DE FREQUÊNCIA (Cores) *
     body[data-arch="atlas"]   { --kob-voice-primary: #38bdf8; }
     body[data-arch="nova"]    { --kob-voice-primary: #f72585; }
     body[data-arch="vitalis"] { --kob-voice-primary: #22c55e; }
@@ -24,7 +24,24 @@
     body[data-arch="kaos"]    { --kob-voice-primary: #facc15; }
     body[data-arch="kodux"]   { --kob-voice-primary: #f97316; }
     body[data-arch="lumine"]  { --kob-voice-primary: #00f2fe; }
-    body[data-arch="aion"]    { --kob-voice-primary: #8b5cf6; }
+    body[data-arch="aion"]    { --kob-voice-primary: #8b5cf6; } */
+    
+     body[data-arch="atlas"]   { --kob-voice-primary: #38bdf8; --kob-voice-secondary: #1e3a8a; }
+    body[data-arch="nova"]    { --kob-voice-primary: #f72585; --kob-voice-secondary: #7209b7; }
+    body[data-arch="vitalis"] { --kob-voice-primary: #22c55e; --kob-voice-secondary: #166534; }
+    body[data-arch="pulse"]   { --kob-voice-primary: #ec4899; --kob-voice-secondary: #831843; }
+    body[data-arch="artemis"] { --kob-voice-primary: #a855f7; --kob-voice-secondary: #5b21b6; }
+    body[data-arch="serena"]  { --kob-voice-primary: #38bdf8; --kob-voice-secondary: #1e3a8a; }
+    body[data-arch="kaos"]    { --kob-voice-primary: #facc15; --kob-voice-secondary: #b45309; }
+    body[data-arch="genus"]   { --kob-voice-primary: #e5e7eb; --kob-voice-secondary: #4b5563; }
+    body[data-arch="lumine"]  { --kob-voice-primary: #fde047; --kob-voice-secondary: #ca8a04; }
+    body[data-arch="solus"]   { --kob-voice-primary: #0ea5e9; --kob-voice-secondary: #0369a1; }
+    body[data-arch="rhea"]    { --kob-voice-primary: #22c55e; --kob-voice-secondary: #166534; }
+    body[data-arch="aion"]    { --kob-voice-primary: #4f46e5; --kob-voice-secondary: #3730a3; }
+    /* aliases para compatibilidade */
+    body[data-arch="kodux"]   { --kob-voice-primary: #f97316; --kob-voice-secondary: #c2410c; }
+
+ 
 
     /* RESET & BASE */
     * { box-sizing: border-box; margin: 0; padding: 0; }
