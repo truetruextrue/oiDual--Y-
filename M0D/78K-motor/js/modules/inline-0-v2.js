@@ -1,12 +1,41 @@
 
     (function(){
       // ===== CONSTANTES =====
-      const ARCHETYPES = ["atlas","nova","vitalis","pulse","artemis","serena","kaos","genus","lumine","solus","rhea","aion","kodux"];
-      const ARCH_NAMES = {
-        atlas:"Atlas", nova:"Nova", vitalis:"Vitalis", pulse:"Pulse", artemis:"Artemis",
-        serena:"Serena", kaos:"Kaos", genus:"Genus", lumine:"Lumine", solus:"Solus",
-        rhea:"Rhea", aion:"Aion", kodux:"Kodux"
-      };
+      //const ARCHETYPES = ["atlas","nova","vitalis","pulse","artemis","serena","kaos","genus","lumine","solus","rhea","aion","kodux"];
+      //const ARCH_NAMES = {
+        //atlas:"Atlas", nova:"Nova", vitalis:"Vitalis", pulse:"Pulse", artemis:"Artemis",
+        //serena:"Serena", kaos:"Kaos", genus:"Genus", lumine:"Lumine", solus:"Solus",
+        //rhea:"Rhea", aion:"Aion", kodux:"Kodux"};
+const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
+
+const ARCH_NAMES = {
+  atlas:"Atlas",
+  nova:"Nova",
+  vitalis:"Vitalis",
+  pulse:"Pulse",
+  kaos:"Kaos",
+  kodux:"Kodux",
+  lumine:"Lumine",
+  aion:"Aion",
+  kobllux:"Kobllux",
+  artemis:"Artemis",
+  serena:"Serena",
+  genus:"Genus",
+  solus:"Solus",
+  rhea:"Rhea",
+  uno:"Uno",
+  dual:"Dual",
+  trinity:"Trinity",
+  infodose:"Infodose",
+  horus:"Horus",
+  bllue:"Bllue"
+};
+
+// adiciona dinamicamente o nome do usuário no ARCH_NAMES
+const di_userName = localStorage.getItem("di_userName");
+if (di_userName) {
+  ARCH_NAMES[di_userName.toLowerCase()] = di_userName;
+}
 
       // ===== DOM =====
       const dom = {
