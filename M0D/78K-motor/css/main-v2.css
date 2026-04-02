@@ -49,6 +49,7 @@
       font-family: var(--font-main);
       min-height: 100vh;
       overflow-x: hidden;
+    overflow-y: auto;
       transition: background 0.8s ease;
     }
     ::-webkit-scrollbar { width: 6px; }
