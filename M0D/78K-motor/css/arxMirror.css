@@ -1,0 +1,121 @@
+/* ============================================================
+   KOBLLUX ARCH THEME - MIRROR SYSTEM (v2)
+   Suporta data-arch (legacy) e data-voice-arch (novo)
+   ============================================================ */
+
+/* KOBLLUX */
+body[data-arch="kobllux"], body[data-voice-arch="kobllux"] { 
+  --kob-voice-primary: #22D3EE; --kob-voice-secondary: #0E7C9E; 
+}
+
+/* KODUX */
+body[data-arch="kodux"], body[data-voice-arch="kodux"] { 
+  --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; 
+}
+
+/* ATLAS */
+body[data-arch="atlas"], body[data-voice-arch="atlas"] { 
+  --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; 
+}
+
+/* NOVA */
+body[data-arch="nova"], body[data-voice-arch="nova"] { 
+  --kob-voice-primary: #F72585; --kob-voice-secondary: #7209B7; 
+}
+
+/* VITALIS */
+body[data-arch="vitalis"], body[data-voice-arch="vitalis"] { 
+  --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; 
+}
+
+/* PULSE */
+body[data-arch="pulse"], body[data-voice-arch="pulse"] { 
+  --kob-voice-primary: #EC4899; --kob-voice-secondary: #831843; 
+}
+
+/* ARTEMIS */
+body[data-arch="artemis"], body[data-voice-arch="artemis"] { 
+  --kob-voice-primary: #A855F7; --kob-voice-secondary: #5B21B6; 
+}
+
+/* SERENA */
+body[data-arch="serena"], body[data-voice-arch="serena"] { 
+  --kob-voice-primary: #38BDF8; --kob-voice-secondary: #1E3A8A; 
+}
+
+/* KAOS */
+body[data-arch="kaos"], body[data-voice-arch="kaos"] { 
+  --kob-voice-primary: #FACC15; --kob-voice-secondary: #B45309; 
+}
+
+/* GENUS */
+body[data-arch="genus"], body[data-voice-arch="genus"] { 
+  --kob-voice-primary: #E5E7EB; --kob-voice-secondary: #4B5563; 
+}
+
+/* LUMINE */
+body[data-arch="lumine"], body[data-voice-arch="lumine"] { 
+  --kob-voice-primary: #FDE047; --kob-voice-secondary: #CA8A04; 
+}
+
+/* SOLUS */
+body[data-arch="solus"], body[data-voice-arch="solus"] { 
+  --kob-voice-primary: #0EA5E9; --kob-voice-secondary: #0369A1; 
+}
+
+/* RHEA */
+body[data-arch="rhea"], body[data-voice-arch="rhea"] { 
+  --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; 
+}
+
+/* AION */
+body[data-arch="aion"], body[data-voice-arch="aion"] { 
+  --kob-voice-primary: #4F46E5; --kob-voice-secondary: #3730A3; 
+}
+
+/* UNO */
+body[data-arch="uno"], body[data-voice-arch="uno"] { 
+  --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; 
+}
+
+/* DUAL */
+body[data-arch="dual"], body[data-voice-arch="dual"] { 
+  --kob-voice-primary: #06B6D4; --kob-voice-secondary: #0E7C9E; 
+}
+
+/* TRINITY */
+body[data-arch="trinity"], body[data-voice-arch="trinity"] { 
+  --kob-voice-primary: #EC4899; --kob-voice-secondary: #831843; 
+}
+
+/* INFODOSE */
+body[data-arch="infodose"], body[data-voice-arch="infodose"] { 
+  --kob-voice-primary: #22C55E; --kob-voice-secondary: #166534; 
+}
+
+/* HORUS */
+body[data-arch="horus"], body[data-voice-arch="horus"] { 
+  --kob-voice-primary: #F59E0B; --kob-voice-secondary: #B45309; 
+}
+
+/* 🔵 NOVO — BLLUE */
+body[data-arch="bllue"], body[data-voice-arch="bllue"] { 
+  --kob-voice-primary: #3B82F6; --kob-voice-secondary: #1E40AF; 
+}
+
+/* ============================================================
+   APLICAÇÃO DINÂMICA (Fallback para cores via JS)
+   Se as variáveis forem injetadas via style inline pela engine, 
+   o CSS abaixo garante a aplicação correta.
+   ============================================================ */
+:root {
+  /* Default Kodux */
+  --kob-voice-primary: #F97316;
+  --kob-voice-secondary: #C2410C;
+}
+
+#orbe, .voice-orb, .orb {
+  background: radial-gradient(circle at 30% 30%, var(--kob-voice-primary), var(--kob-voice-secondary));
+  box-shadow: 0 0 24px color-mix(in srgb, var(--kob-voice-primary) 55%, transparent);
+  transition: all 0.4s ease;
+}
