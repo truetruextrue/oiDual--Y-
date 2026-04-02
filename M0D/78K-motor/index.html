@@ -49,14 +49,26 @@
             <label>Frequência Inicial (Arquétipo)</label>
             <select id="startArch">
               <option value="atlas">Atlas (Ordem/Estrutura)</option>
-              <option value="nova">Nova (Energia/Inovação)</option>
-              <option value="vitalis">Vitalis (Crescimento/Vida)</option>
-              <option value="pulse">Pulse (Ritmo/Ação)</option>
-              <option value="kaos">Kaos (Desconstrução)</option>
-              <option value="kodux" selected="">Kodux (Síntese/Mestre)</option>
-              <option value="lumine">Lumine (Clareza/Luz)</option>
-              <option value="aion">Aion (Tempo/Eternidade)</option>
-            </select>
+<option value="nova">Nova (Energia/Inovação)</option>
+<option value="vitalis">Vitalis (Crescimento/Vida)</option>
+<option value="pulse">Pulse (Ritmo/Ação)</option>
+<option value="kaos">Kaos (Desconstrução)</option>
+<option value="kodux" selected>Kodux (Síntese/Mestre)</option>
+<option value="lumine">Lumine (Clareza/Luz)</option>
+<option value="aion">Aion (Tempo/Eternidade)</option>
+<option value="kobllux">Kobllux (Origem/Núcleo)</option>
+<option value="artemis">Artemis (Foco/Estratégia)</option>
+<option value="serena">Serena (Equilíbrio/Calma)</option>
+<option value="genus">Genus (Lógica/Inteligência)</option>
+<option value="solus">Solus (Isolamento/Profundidade)</option>
+<option value="rhea">Rhea (Fluxo/Natureza)</option>
+<option value="uno">Uno (Unidade/Essência)</option>
+<option value="dual">Dual (Polaridade/Espelho)</option>
+<option value="trinity">Trinity (Integração/Totalidade)</option>
+<option value="infodose">Infodose (Síntese/Rápida)</option>
+<option value="horus">Horus (Visão/Consciência)</option>
+<option value="bllue">Bllue (Expansão/Digital)</option>
+<option value="user" id="diUserOption"></option>            </select>
           </div>
           
           <label class="checkbox-wrapper" title="Alterna os arquétipos sequencialmente para cada parágrafo gerado">
@@ -106,7 +118,14 @@
 
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/js/modules/inline-0-v2.js"></script>
 
+<script>
+const userName = localStorage.getItem("di_userName") || "User";
+const userOption = document.getElementById("diUserOption");
 
+userOption.value = userName.toLowerCase();
+userOption.textContent = `${userName} (Usuário/Núcleo)`;
+
+</script>
 
 </body></html>
 
