@@ -54,88 +54,99 @@ window.App = window.App || {};
   };
 
   // 2. Accordion com memória de estado por sessão
-  const ACCORDION_STORAGE_KEY = 'kobllux_accordion_state_v1';
-  let accordionEngineBound = false;
+  // 2. Accordion com memória de estado por sessão
+const ACCORDION_STORAGE_KEY = 'kobllux_accordion_state_v2';
+let accordionEngineBound = false;
 
-  function readAccordionState() {
-    try {
-      return JSON.parse(sessionStorage.getItem(ACCORDION_STORAGE_KEY) || '{}');
-    } catch {
-      return {};
-    }
+function readAccordionState() {
+  try {
+    return JSON.parse(sessionStorage.getItem(ACCORDION_STORAGE_KEY) || '{}');
+  } catch {
+    return {};
   }
+}
 
-  function writeAccordionState(state) {
-    try {
-      sessionStorage.setItem(ACCORDION_STORAGE_KEY, JSON.stringify(state));
-    } catch (err) {
-      console.warn('Não foi possível salvar o estado do accordion:', err);
-    }
+function writeAccordionState(state) {
+  try {
+    sessionStorage.setItem(ACCORDION_STORAGE_KEY, JSON.stringify(state));
+  } catch (err) {
+    console.warn('Não foi possível salvar o estado do accordion:', err);
   }
+}
 
-  function restoreAccordionState() {
-    const state = readAccordionState();
+function restoreAccordionState() {
+  const state = readAccordionState();
 
+  document.querySelectorAll('.view-section').forEach((section) => {
+    const panels = Array.from(section.querySelectorAll('.panel'));
+    const openList = Array.isArray(state[section.id]) ? state[section.id] : [];
+
+    panels.forEach((panel, idx) => {
+      panel.classList.toggle('collapsed', !openList.includes(idx));
+    });
+  });
+}
+
+function initAccordionEngine() {
+  if (!accordionEngineBound) {
     document.querySelectorAll('.view-section').forEach((section) => {
       const panels = Array.from(section.querySelectorAll('.panel'));
-      const openIndex = Number.isInteger(state[section.id]) ? state[section.id] : -1;
 
       panels.forEach((panel, idx) => {
-        panel.classList.toggle('collapsed', idx !== openIndex);
-      });
-    });
-  }
+        const title = panel.querySelector('.section-title');
+        if (!title) return;
 
-  function initAccordionEngine() {
-    if (!accordionEngineBound) {
-      document.querySelectorAll('.view-section').forEach((section) => {
-        const panels = Array.from(section.querySelectorAll('.panel'));
+        title.setAttribute('role', 'button');
+        title.setAttribute('tabindex', '0');
+        title.title = 'Toque para abrir/fechar';
 
-        panels.forEach((panel, idx) => {
-          const title = panel.querySelector('.section-title');
-          if (!title) return;
+        const togglePanel = () => {
+          const state = readAccordionState();
+          const current = Array.isArray(state[section.id]) ? state[section.id] : [];
+          const isOpen = !panel.classList.contains('collapsed');
 
-          title.setAttribute('role', 'button');
-          title.setAttribute('tabindex', '0');
-          title.title = 'Toque para abrir/fechar';
+          if (isOpen) {
+            panel.classList.add('collapsed');
+            state[section.id] = current.filter(i => i !== idx);
+          } else {
+            panel.classList.remove('collapsed');
+            state[section.id] = [...new Set([...current, idx])];
+          }
 
-          const togglePanel = () => {
-            const wasCollapsed = panel.classList.contains('collapsed');
-            const state = readAccordionState();
+          writeAccordionState(state);
+        };
 
-            // Fecha todos os painéis da seção
-            panels.forEach(p => p.classList.add('collapsed'));
+        title.addEventListener('click', togglePanel);
 
-            if (wasCollapsed) {
-              // Abre apenas o clicado
-              panel.classList.remove('collapsed');
-              state[section.id] = idx;
-            } else {
-              // Mantém tudo fechado
-              state[section.id] = -1;
-            }
-
-            writeAccordionState(state);
-          };
-
-          title.addEventListener('click', togglePanel);
-
-          title.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              togglePanel();
-            }
-          });
+        title.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            togglePanel();
+          }
         });
       });
+    });
 
-      accordionEngineBound = true;
-    }
-
-    // Na primeira carga, todos começam fechados.
-    // Depois, restaura o último estado salvo nesta sessão.
-    restoreAccordionState();
+    accordionEngineBound = true;
   }
+
+  // Na primeira carga, tudo fechado.
+  // Depois, restaura o último estado salvo nesta sessão.
+  restoreAccordionState();
+}
+
+// Inicialização
+document.addEventListener('DOMContentLoaded', () => {
+  initAccordionEngine();
+  if (window.lucide) {
+    lucide.createIcons();
+  }
+});
+
+// Reaplica quando a página volta do cache do navegador
+window.addEventListener('pageshow', () => {
+  restoreAccordionState();
+});
 
   // 3. Header Toggle (Esconde/Mostra a área principal)
   const headerTrigger = document.getElementById('main-header');
