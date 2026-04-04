@@ -14,16 +14,65 @@
     <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/css/main-patch.css">
 
 <style>
-        
-  html, body{
+/* RESET BASE */
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* body NÃO rola */
+  background: var(--bg-dark, #05070a);
+}
 
-      overflow-y: auto !important;
-      margin: 0;
-      padding: 0;
-      background: var(--bg-dark, #05070a);
-    }
+/* HEADER FIXO */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 10;
+}
 
-      </style></head>
+/* NAV FIXA */
+nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 1000;
+}
+
+/* CONTAINER PRINCIPAL (SCROLL REAL) */
+.main-area {
+  position: fixed;
+  top: 70px; /* altura do header */
+  bottom: 70px; /* altura do nav */
+  left: 0;
+  right: 0;
+
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+
+  padding: 3px;
+}
+
+/* iOS SAFE AREAS */
+.main-area {
+  padding-top: calc(16px + env(safe-area-inset-top));
+  padding-bottom: calc(16px + env(safe-area-inset-bottom));
+}
+
+/* EVITA BLOQUEIO DE TOQUE */
+* {
+  touch-action: manipulation;
+}
+
+/* GARANTE QUE SEÇÕES NÃO QUEBREM SCROLL */
+.view-section {
+  min-height: 100%;
+}
+</style>
+
+</head>
 <body>
 
   <!-- HEADER (Agora funciona como um botão sanfonado) -->
