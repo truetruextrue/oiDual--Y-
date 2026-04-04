@@ -1,0 +1,503 @@
+<html lang="pt-BR"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOBLLUX Monolith - Shell Integrado</title>
+
+<!-- Links originais do BaseFSFm -->
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFS.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSm.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSF.css">
+
+<style>
+/* ==========================================================================
+   MAIN ADDON & WINDOW SYSTEM
+   ========================================================================== */
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: auto !important;
+  background-color: #0f0f13; /* Fundo escuro para destacar o glassmorphism */
+  color: #fff;
+  font-family: 'Orbitron', system-ui, sans-serif;
+}
+
+.main-addon {
+  padding: 20px;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+/* -------------------------------------------------------------------------- */
+/* SESSION WINDOW / STACK (Card Sanfonado)                                    */
+/* -------------------------------------------------------------------------- */
+.main-addon .session-window {
+  background: rgba(30, 30, 35, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  margin-bottom: 20px; margin-top:78px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1); /* Transição fluida (Serena) */
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  height: 600px; /* Altura padrão para ver o iframe */
+}
+
+/* Estado Colapsado (Sanfonado) */
+.main-addon .session-window.collapsed {
+  height: 52px !important;
+}
+
+/* Estado Minimizado (Escondido e mandado pro Dock) */
+.main-addon .session-window.minimized {
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9) translateY(50px);
+  position: absolute;
+}
+
+/* Estado Maximizado (Tela cheia) */
+.main-addon .session-window.maximized {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  border-radius: 0;
+  margin: 0;
+  height: 100vh !important;
+  border: none;
+}
+
+/* Cabeçalho da Janela */
+.main-addon .win-hdr {
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  background: rgba(255,255,255,0.03);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  user-select: none;
+}
+
+.main-addon .win-title {
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Controles (Botões) */
+.main-addon .win-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.main-addon .win-controls button {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 0;
+  cursor: pointer;
+  font-size: 10px;
+  background: rgba(255,255,255,0.1);
+  color: white;
+  transition: 0.2s;
+  display: grid;
+  place-items: center;
+}
+
+.main-addon .win-controls button:hover {
+  background: rgba(255,255,255,0.2);
+  transform: scale(1.1);
+}
+
+/* Iframe ocupando o corpo da janela (Artemis) */
+.main-addon .win-frame {
+  width: 100%;
+  flex: 1; /* Ocupa todo o espaço restante */
+  border: 0;
+  background: transparent;
+}
+
+/* -------------------------------------------------------------------------- */
+/* DOCK (MINIMIZED WINDOWS)                                                    */
+/* -------------------------------------------------------------------------- */
+.main-addon #dock {
+  position: fixed;
+  bottom: 20px;
+  left: -33px;
+
+  display: flex;
+  gap: 12px;
+  padding: 10px 20px;
+  border-radius: 40px;
+  background: rgba(0,0,0,0.4);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.1);
+  z-index: 2500;
+  transition: 0.3s;
+}
+
+.main-addon #dock:empty {
+  opacity: 0;
+  transform: translate(-50%, 20px);
+  pointer-events: none;
+}
+
+.main-addon .dock-bubble {
+
+
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  font-size: 20px;
+  transition: 0.3s;
+}
+
+.main-addon .dock-bubble:hover {
+  transform: translateY(-5px);
+  background: rgba(255,255,255,0.2);
+  box-shadow: 0 10px 20px rgba(0,242,255,0.2);
+
+
+}
+
+</style>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/css/main-patch.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/css/acordion.css"></head>
+<body class="main-addon">
+
+  <!-- Dock para onde as janelas minimizadas vão -->
+  <div id="dock"></div>
+
+  <!-- Container principal das janelas -->
+  <div id="stackWrap">
+
+    <!-- Card Sanfonado (Janela do Sistema) encapsulando o Iframe -->
+    <div class="session-window" id="session-iframe">
+      
+      <!-- Header da janela (Clique para colapsar/expandir a sanfona) -->
+      <div class="win-hdr" onclick="toggleCollapse('session-iframe')">
+        <div class="win-title">🌐 KOB LV BASE (Iframe)</div>
+        
+        <!-- Botões de Controle -->
+        <div class="win-controls" onclick="event.stopPropagation()">
+          <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+          <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+          <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">✕</button>
+        </div>
+      </div>
+
+      <!-- O Seu Iframe atuando como o 'corpo' da janela -->
+      <iframe class="win-frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/LV/000-kob-LV-BASE.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
+      </iframe>
+
+    </div>
+
+  </div>
+
+  <!-- Scripts do Motor de Janelas (Pulse / Kaos / Vitalis) -->
+  <script>
+    // Colapsar (Sanfonar)
+    function toggleCollapse(id) {
+      const el = document.getElementById(id);
+      // Remove maximizado se estiver colapsando
+      if (el.classList.contains('maximized')) {
+        el.classList.remove('maximized');
+      }
+      el.classList.toggle('collapsed');
+    }
+
+    // Maximizar
+    function toggleMaximize(id) {
+      const el = document.getElementById(id);
+      // Remove colapsado se estiver maximizando
+      if (el.classList.contains('collapsed')) {
+        el.classList.remove('collapsed');
+      }
+      el.classList.toggle('maximized');
+    }
+
+    // Minimizar (Envia pro Dock)
+    function minimizeWindow(id) {
+      const el = document.getElementById(id);
+      el.classList.add('minimized');
+
+      const dock = document.getElementById('dock');
+      
+      // Cria a bolha no dock
+      const bubble = document.createElement('div');
+      bubble.className = 'dock-bubble';
+      bubble.innerText = '🌐';
+      bubble.title = "Restaurar Iframe";
+
+      // Lógica para restaurar
+      bubble.onclick = () => {
+        el.classList.remove('minimized');
+        bubble.remove(); // Tira a bolha do dock quando restaurado
+      };
+
+      dock.appendChild(bubble);
+    }
+  </script>
+
+ 
+
+
+
+
+  <!-- HEADER -->
+  <header class="topbar accordion-header" id="main-header" title="Clique para minimizar/expandir">
+    <div class="brand">
+      <div class="orb"><i data-lucide="infinity" style="width:20px;height:20px;"></i></div>
+      <div>
+        <h1>KOBLLUX FUSION</h1>
+        <p>ULTIMATE ASCII ARCHITECT</p>
+      </div>
+    </div>
+    <div class="status-dot"></div>
+    <div id="user-badge" style="margin-left: auto; font-size: 12px; background: rgba(0,0,0,0.3); padding: 4px 12px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1);">
+      <i data-lucide="user" style="width:14px;height:14px; display:inline-block; vertical-align:middle;"></i>
+      <span id="user-name-display" style="vertical-align:middle;">—</span>
+    </div>
+  </header>
+
+  <!-- APP CONTAINER -->
+  <main class="main-area accordion-content" id="main-content">
+
+    <!-- =========================
+         1. TEXT FORGE
+         ========================= -->
+    <section id="view-text" class="view-section active">
+      
+      <!-- Panel 1: Controles -->
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="type"></i> Forja Tipográfica</h2>
+        <div class="panel-collapse">
+          <div class="panel-body">
+            <div class="panel-body-inner">
+              <div class="field">
+                <label>Texto Alvo</label>
+                <input type="text" id="txt-input" placeholder="Ex: KOBLLUX FUSION" value="KOBLLUX">
+              </div>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="field">
+                  <label>Preenchimento</label>
+                  <select id="txt-fill">
+                    <option value="█">Bloco Sólido (█)</option>
+                    <option value="#">Denso (#)</option>
+                    <option value="@">Luma (@)</option>
+                    <option value="*">Brilho (*)</option>
+                    <option value="+">Matrix (+)</option>
+                  </select>
+                </div>
+                <div class="field">
+                  <label>Modo</label>
+                  <select id="txt-mode">
+                    <option value="banner">Banner Clássico</option>
+                    <option value="frame">Moldura</option>
+                    <option value="wave">Onda Mística</option>
+                  </select>
+                </div>
+              </div>
+              <div class="btn-row">
+                <button class="btn primary" onclick="TextForge.generate()"><i data-lucide="zap"></i> Processar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Render -->
+      <div class="panel collapsed">
+        <h2 class="section-title"><i data-lucide="monitor"></i> Render</h2>
+        <div class="panel-collapse">
+          <div class="panel-body">
+            <div class="panel-body-inner">
+              <pre class="ascii-output glow-fx" id="txt-output"></pre>
+              <div class="btn-row">
+                <button class="btn" onclick="App.copyToClipboard('txt-output')">
+                  <i data-lucide="copy"></i> Copiar
+                </button>
+                <button class="btn" onclick="App.downloadRenderPNG('txt-output', 'kobllux-render.png')">
+                  <i data-lucide="download"></i> PNG
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         2. VISION FORGE
+         ========================= -->
+    <section id="view-vision" class="view-section">
+      
+      <!-- Panel 1: Controles -->
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="image"></i> Lente de Luma (Visão)</h2>
+        <div class="panel-collapse">
+          <div class="panel-body">
+            <div class="panel-body-inner">
+              <div class="field">
+                <div class="file-drop" id="img-drop" onclick="document.getElementById('img-input').click()">
+                  <i data-lucide="camera" style="width:32px;height:32px;color:var(--muted)"></i>
+                  <span id="img-label" style="font-size:12px;color:var(--muted)">Toque para carregar uma Imagem</span>
+                  <input type="file" id="img-input" accept="image/*" hidden="">
+                </div>
+              </div>
+              <div class="field">
+                <label>Lente (Charset)</label>
+                <select id="img-lens">
+                  <option value="atlas">Atlas (Clássico Detalhado)</option>
+                  <option value="nova">Nova (Blocos Brutalistas)</option>
+                  <option value="kaos">Kaos (Binário 0/1)</option>
+                  <option value="kobllux">Kobllux (Assinatura Textual)</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Densidade (Resolução: <span id="img-slider-val">80</span> cols)</label>
+                <input type="range" id="img-slider" min="20" max="150" value="80" oninput="document.getElementById('img-slider-val').innerText=this.value">
+              </div>
+              <div class="btn-row">
+                <button class="btn primary" onclick="ImageForge.generate()"><i data-lucide="scan-face"></i> Extrair Matriz</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Panel 2: Render -->
+      <div class="panel collapsed">
+        <h2 class="section-title"><i data-lucide="monitor"></i> Render</h2>
+        <div class="panel-collapse">
+          <div class="panel-body">
+            <div class="panel-body-inner">
+              <pre class="ascii-output dense" id="img-output">[ A G U A R D A N D O   I M A G E M ]</pre>
+              <div class="btn-row">
+                <button class="btn" onclick="App.copyToClipboard('img-output')">
+                  <i data-lucide="copy"></i> Copiar
+                </button>
+                <button class="btn" onclick="App.downloadRenderPNG('img-output', 'kobllux-img-render.png')">
+                  <i data-lucide="download"></i> PNG
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         3. SIGIL ENGINE + V.E.E.B CORE
+         ========================= -->
+    <section id="view-sigil" class="view-section">
+      <div class="panel text-center">
+        <h2 class="section-title justify-center"><i data-lucide="fingerprint"></i> Matriz de Identidade</h2>
+        <div class="panel-collapse">
+          <div class="panel-body">
+            <div class="panel-body-inner">
+              <div class="sigil-wrap" onclick="SigilEngine.regenerate()">
+                <canvas id="cvs-sigil" width="512" height="512"></canvas>
+              </div>
+              <p style="font-size:10px; color:var(--muted); font-family:var(--font-mono); margin-bottom:16px;">Toque no Sigilo para transmutar</p>
+
+              <div class="field text-left">
+                <label>Nome do Projeto / Arquétipo</label>
+                <input type="text" id="sigil-name" value="FUSION" oninput="SigilEngine.regenerate(); updateArchetypeAndVeeb()">
+              </div>
+
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+                <div class="field text-left">
+                  <label>Cor Core</label>
+                  <input type="color" id="sigil-color" value="#6ee7ff" style="height:46px; padding:4px;" oninput="SigilEngine.regenerate()">
+                </div>
+                <div class="field text-left">
+                  <label>Cor Void (Fundo)</label>
+                  <input type="color" id="sigil-bg" value="#000000" style="height:46px; padding:4px;" oninput="SigilEngine.regenerate()">
+                </div>
+              </div>
+
+              <div class="veeb-panel" id="veeb-live" style="margin-top: 15px; text-align: left;">
+                <strong>🌀 V.E.E.B Core</strong><br>
+                <span id="veeb-content">Sincronizando construtos...</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =========================
+         4. BUILD / EXPORT
+         ========================= -->
+    <section id="view-build" class="view-section">
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="archive"></i> Engine de Empacotamento</h2>
+        <div class="panel-collapse">
+          <div class="panel-body">
+            <div class="panel-body-inner">
+              <div class="metrics">
+                <div class="metric"><strong id="stat-text">0 b</strong><span>Arte Texto</span></div>
+                <div class="metric"><strong id="stat-img">0 b</strong><span>Arte Imagem</span></div>
+                <div class="metric"><strong id="stat-sigil">0 b</strong><span>Sigilo (PNG)</span></div>
+                <div class="metric" style="border-color:var(--accent);"><strong id="stat-total" style="color:var(--text);">0 KB</strong><span>Total Estimado (ZIP)</span></div>
+              </div>
+              <p style="font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:16px;">
+                O sistema FUSION irá coletar suas artes e seu sigilo, gerando um pacote estruturado `.zip` que inclui uma <strong>Mini-Galeria HTML</strong> autônoma para apresentação.
+              </p>
+              <div class="btn-row">
+                <button class="btn success" style="width:100%; height:56px;" onclick="Packer.downloadZip()">
+                  <i data-lucide="download-cloud"></i> Compilar &amp; Baixar ZIP
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- NAVIGATION BOTTOM -->
+  <nav>
+    <div class="nav-item active" onclick="App.navigate('text', this)"><i data-lucide="type"></i><span>Forja</span></div>
+    <div class="nav-item" onclick="App.navigate('vision', this)"><i data-lucide="image"></i><span>Visão</span></div>
+    <div class="nav-item" onclick="App.navigate('sigil', this)"><i data-lucide="fingerprint"></i><span>Sigilo</span></div>
+    <div class="nav-item" onclick="App.navigate('build', this)"><i data-lucide="archive"></i><span>Build</span></div>
+  </nav>
+
+  <div class="toast-wrap" id="toast-wrap"></div>
+  <canvas id="cvs-offline" style="display:none;"></canvas>
+
+  <!-- SCRIPTS EXTERNOS -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-0-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-patch.js"></script>
+
+  <!-- LÓGICA INTERNA DE APP E SANFONA -->
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/acordion.js"></script>
+
+
+
+
+
+<script src="https://unpkg.com/lucide@latest"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-0-2.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-patch.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/acordion.js"></script></body></html>
