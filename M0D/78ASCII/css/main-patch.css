@@ -1,0 +1,59 @@
+ /* ===== OVERRIDES DE ARQUÉTIPO (data-arch) E USUÁRIO (data-user) ===== */
+    
+    /* Exemplo: quando o arquétipo for "kobllux" */
+    html[data-arch="kobllux"] .panel {
+      border-color: #ffb347;
+      box-shadow: 0 0 15px rgba(255, 180, 71, 0.1);
+    }
+    
+    /* Exemplo: quando o arquétipo for "kaos" */
+    html[data-arch="kaos"] .ascii-output {
+      color: #0f0;
+      text-shadow: 0 0 2px #0f0;
+      background: #000;
+      font-family: monospace;
+    }
+
+    /* Exemplo de fusão: Usuário + Arquétipo */
+    html[data-user="luminara"][data-arch="kobllux"] .brand h1::after {
+      content: " ✨";
+      color: gold;
+    }
+
+    /* ===== ESTRUTURA V.E.E.B ===== */
+    .veeb-panel {
+      margin-top: 20px;
+      padding: 12px;
+      background: rgba(0,0,0,0.4);
+      border-radius: 20px;
+      font-size: 13px;
+      line-height: 1.5;
+      text-align: left;
+      font-family: monospace;
+      border: 1px solid var(--accent, #333);
+    }
+
+    /* ===== EFEITO SANFONA (ACCORDION) NO HEADER ===== */
+    .accordion-header {
+      cursor: pointer;
+      transition: background 0.3s ease;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .accordion-header:hover {
+      background: rgba(255, 255, 255, 0.03);
+    }
+    .accordion-content {
+      transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease, padding 0.3s, margin 0.3s;
+      overflow: hidden;
+      max-height: 2500px; /* Valor alto para garantir que caberá o conteúdo */
+      opacity: 1;
+    }
+    .accordion-content.collapsed {
+      max-height: 0 !important;
+      opacity: 0;
+      padding-top: 0 !important;
+      padding-bottom: 0 !important;
+      margin-top: 0 !important;
+      margin-bottom: 0 !important;
+      pointer-events: none;
+    }
