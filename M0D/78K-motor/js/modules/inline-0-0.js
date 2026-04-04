@@ -306,8 +306,8 @@ if (userOption && di_userName) {
 
       /* =========================================
          HUD MAGNÉTICO (ARRASTO)
-         ========================================= 
-      const hudBar = document.getElementById('hudBar');
+         ========================================= */
+      /* const hudBar = document.getElementById('hudBar');
       const dragHandle = document.getElementById('hudDrag');
       let isDragging = false, currentX, currentY, initialX, initialY, xOffset = 0, yOffset = 0;
       
@@ -328,5 +328,6 @@ if (userOption && di_userName) {
       }
       hudBar.addEventListener("touchstart", dragStart, { passive: false }); document.addEventListener("touchend", dragEnd, { passive: false }); document.addEventListener("touchmove", drag, { passive: false });
       hudBar.addEventListener("mousedown", dragStart); document.addEventListener("mouseup", dragEnd); document.addEventListener("mousemove", drag);
+    */
     });
-  */
+  
