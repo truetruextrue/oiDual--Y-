@@ -1,0 +1,133 @@
+:root {
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+      --bg-dark: #05070a;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      background: var(--bg-dark);
+      touch-action: manipulation;
+    }
+
+    /* ==========================================================================
+       LAYOUT ESTRUTURAL
+       ========================================================================== */
+    .topbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+    }
+
+    nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+
+    .main-area {
+      position: fixed;
+      top: 70px;
+      bottom: 70px;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      padding: 3px;
+      padding-top: calc(16px + env(safe-area-inset-top));
+      padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    }
+
+    .view-section {
+      min-height: 100%;
+      padding-bottom: 20px;
+    }
+
+    /* ==========================================================================
+       ACCORDION ENGINE (SANFONA DOS PANELS) - Animação Fluida via Grid
+       ========================================================================== */
+    .panel {
+      background: rgba(15, 15, 20, 0.6);
+      border: 1px solid rgba(255,255,255,0.05);
+      border-radius: 12px;
+      margin-bottom: 12px;
+      overflow: hidden;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .section-title {
+      cursor: pointer;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 16px;
+      margin: 0;
+      font-size: 14px;
+      background: transparent;
+      transition: background 0.2s;
+    }
+
+    .section-title:hover {
+      background: rgba(255,255,255,0.03);
+    }
+
+    .section-title::after {
+      content: "▾";
+      margin-left: auto;
+      opacity: 0.5;
+      transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .panel.collapsed .section-title::after {
+      transform: rotate(-90deg);
+    }
+
+    /* O Segredo da transição de altura sem JS calculado */
+    .panel-collapse {
+      display: grid;
+      grid-template-rows: 1fr;
+      transition: grid-template-rows 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .panel.collapsed .panel-collapse {
+      grid-template-rows: 0fr;
+    }
+
+    .panel-body {
+      overflow: hidden;
+    }
+
+    /* Padding fica no interior para que o Grid 0fr feche perfeitamente */
+    .panel-body-inner {
+      padding: 0 16px 16px 16px;
+      opacity: 1;
+      transition: opacity 0.3s ease 0.1s; /* Atraso leve na opacidade ao abrir */
+    }
+
+    .panel.collapsed .panel-body-inner {
+      opacity: 0;
+      transition: opacity 0.2s ease 0s;
+    }
+
+    /* ==========================================================================
+       HEADER COLLAPSE
+       ========================================================================== */
+    .accordion-header {
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+    
+    .accordion-content {
+      transition: opacity 0.3s ease;
+    }
