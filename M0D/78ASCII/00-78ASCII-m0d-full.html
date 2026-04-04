@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+ <!-- <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"> -->
+  <meta name="apple-mobile-web-app-title" content="KOBLLUX FUSION">
+  <title>KOBLLUX FUSION · Ultimate Architect</title>
+
+ <link rel="manifest" href="manifest.json"> 
+
+<link rel="apple-touch-icon" href="icon-192.png">
+
+ <!-- Core Libs (Fusion Blade Engine) -->
+  
+ <script src="https://unpkg.com/lucide@latest"></script>
+ 
+ <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/css/main.css"> 
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-sw.css">
+
+
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="orb"><i data-lucide="infinity" style="width:20px;height:20px;"></i></div>
+      <div>
+        <h1>KOBLLUX FUSION</h1>
+        <p>ULTIMATE ASCII ARCHITECT</p>
+      </div>
+    </div>
+    <div class="status-dot"></div>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main class="main-area">
+
+    <!-- 1. TEXT FORGE (Text to ASCII) -->
+    <section id="view-text" class="view-section active">
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="type"></i> Forja Tipográfica</h2>
+        
+        <div class="field">
+          <label>Texto Alvo</label>
+          <input type="text" id="txt-input" placeholder="Ex: KOBLLUX FUSION" value="KOBLLUX">
+        </div>
+        
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="field">
+            <label>Preenchimento</label>
+            <select id="txt-fill">
+              <option value="█">Bloco Sólido (█)</option>
+              <option value="#">Denso (#)</option>
+              <option value="@">Luma (@)</option>
+              <option value="*">Brilho (*)</option>
+              <option value="+">Matrix (+)</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Modo</label>
+            <select id="txt-mode">
+              <option value="banner">Banner Clássico</option>
+              <option value="frame">Moldura</option>
+              <option value="wave">Onda Mística</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="btn-row">
+          <button class="btn primary" onclick="TextForge.generate()"><i data-lucide="zap"></i> Processar</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="monitor"></i> Render</h2>
+        <pre class="ascii-output glow-fx" id="txt-output"></pre>
+        <div class="btn-row">
+          <button class="btn" onclick="App.copyToClipboard('txt-output')"><i data-lucide="copy"></i> Copiar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. VISION FORGE (Image to ASCII) -->
+    <section id="view-vision" class="view-section">
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="image"></i> Lente de Luma (Visão)</h2>
+        
+        <div class="field">
+          <div class="file-drop" id="img-drop" onclick="document.getElementById('img-input').click()">
+            <i data-lucide="camera" style="width:32px;height:32px;color:var(--muted)"></i>
+            <span id="img-label" style="font-size:12px;color:var(--muted)">Toque para carregar uma Imagem</span>
+            <input type="file" id="img-input" accept="image/*" hidden="">
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Lente (Charset)</label>
+          <select id="img-lens">
+            <option value="atlas">Atlas (Clássico Detalhado)</option>
+            <option value="nova">Nova (Blocos Brutalistas)</option>
+            <option value="kaos">Kaos (Binário 0/1)</option>
+            <option value="kobllux">Kobllux (Assinatura Textual)</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label>Densidade (Resolução: <span id="img-slider-val">80</span> cols)</label>
+          <input type="range" id="img-slider" min="20" max="150" value="80" oninput="document.getElementById('img-slider-val').innerText=this.value">
+        </div>
+
+        <div class="btn-row">
+          <button class="btn primary" onclick="ImageForge.generate()"><i data-lucide="scan-face"></i> Extrair Matriz</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="monitor"></i> Render</h2>
+        <pre class="ascii-output dense" id="img-output">[ A G U A R D A N D O   I M A G E M ]</pre>
+        <div class="btn-row">
+          <button class="btn" onclick="App.copyToClipboard('img-output')"><i data-lucide="copy"></i> Copiar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. SIGIL ENGINE (Identity Canvas) -->
+    <section id="view-sigil" class="view-section">
+      <div class="panel text-center">
+        <h2 class="section-title justify-center"><i data-lucide="fingerprint"></i> Matriz de Identidade</h2>
+        
+        <div class="sigil-wrap" onclick="SigilEngine.regenerate()">
+          <canvas id="cvs-sigil" width="512" height="512"></canvas>
+        </div>
+        <p style="font-size:10px; color:var(--muted); font-family:var(--font-mono); margin-bottom:16px; text-align:center;">Toque no Sigilo para transmutar</p>
+
+        <div class="field text-left">
+          <label>Nome do Projeto</label>
+          <input type="text" id="sigil-name" value="FUSION" oninput="SigilEngine.regenerate()">
+        </div>
+
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="field text-left">
+            <label>Cor Core</label>
+            <input type="color" id="sigil-color" value="#6ee7ff" style="height:46px; padding:4px;" oninput="SigilEngine.regenerate()">
+          </div>
+          <div class="field text-left">
+            <label>Cor Void (Fundo)</label>
+            <input type="color" id="sigil-bg" value="#000000" style="height:46px; padding:4px;" oninput="SigilEngine.regenerate()">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. BUILD / EXPORT (Packer) -->
+    <section id="view-build" class="view-section">
+      <div class="panel">
+        <h2 class="section-title"><i data-lucide="archive"></i> Engine de Empacotamento</h2>
+        
+        <div class="metrics">
+          <div class="metric">
+            <strong id="stat-text">0 b</strong>
+            <span>Arte Texto</span>
+          </div>
+          <div class="metric">
+            <strong id="stat-img">0 b</strong>
+            <span>Arte Imagem</span>
+          </div>
+          <div class="metric">
+            <strong id="stat-sigil">0 b</strong>
+            <span>Sigilo (PNG)</span>
+          </div>
+          <div class="metric" style="border-color:var(--accent);">
+            <strong id="stat-total" style="color:var(--text);">0 KB</strong>
+            <span>Total Estimado (ZIP)</span>
+          </div>
+        </div>
+
+        <p style="font-size:12px; color:var(--muted); line-height:1.5; margin-bottom:16px;">
+          O sistema FUSION irá coletar suas artes e seu sigilo, gerando um pacote estruturado `.zip` que inclui uma <strong>Mini-Galeria HTML</strong> autônoma para apresentação.
+        </p>
+
+        <div class="btn-row">
+          <button class="btn success" style="width:100%; height:56px; font-size:14px; letter-spacing:.1em; text-transform:uppercase;" onclick="Packer.downloadZip()">
+            <i data-lucide="download-cloud"></i> Compilar &amp; Baixar ZIP
+          </button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- BOTTOM NAV -->
+  <nav>
+    <div class="nav-item active" onclick="App.navigate('text', this)">
+      <i data-lucide="type"></i><span>Forja</span>
+    </div>
+    <div class="nav-item" onclick="App.navigate('vision', this)">
+      <i data-lucide="image"></i><span>Visão</span>
+    </div>
+    <div class="nav-item" onclick="App.navigate('sigil', this)">
+      <i data-lucide="fingerprint"></i><span>Sigilo</span>
+    </div>
+    <div class="nav-item" onclick="App.navigate('build', this)">
+      <i data-lucide="archive"></i><span>Build</span>
+    </div>
+  </nav>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-wrap" id="toast-wrap"></div>
+
+  <!-- OFFLINE CANVAS PARA PROCESSAMENTO DE IMAGEM -->
+  <canvas id="cvs-offline" style="display:none;"></canvas>
+
+  <!-- ==================== LÓGICA CORE ==================== -->
+  
+
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-0-2.js"></script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-patch-0.js"></script>
+  
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78ASCII/js/modules/inline-di-0.js"></script>
+
+</body></html>
