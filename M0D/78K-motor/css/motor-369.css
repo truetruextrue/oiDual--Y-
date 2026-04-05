@@ -1,0 +1,63 @@
+/* Estilos complementares para o Motor 3·6·9 */
+    .engine-controls {
+      grid-column: 1 / -1;
+      display: grid;
+      gap: 12px;
+      margin-top: 16px;
+      padding: 12px 0;
+      border-top: 1px solid rgba(255,255,255,0.1);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .engine-controls .btn-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .engine-controls .engine-btn {
+      padding: 8px 14px;
+      border-radius: 40px;
+      border: 1px solid rgba(255,255,255,0.2);
+      background: rgba(255,255,255,0.03);
+      color: inherit;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      backdrop-filter: blur(2px);
+    }
+    .engine-controls .engine-btn:hover {
+      transform: translateY(-2px);
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(255,255,255,0.4);
+    }
+    .engine-controls .engine-btn.is-active {
+      border-color: var(--kob-voice-primary, #a97cff);
+      background: rgba(169,124,255,0.2);
+      box-shadow: 0 0 6px rgba(169,124,255,0.3);
+    }
+    .engine-controls label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-weight: 600;
+      opacity: 0.7;
+      margin-right: 8px;
+    }
+    .engine-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+      justify-content: space-between;
+    }
+    @media (max-width: 720px) {
+      .engine-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+
+.engine-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+}
