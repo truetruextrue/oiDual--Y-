@@ -36,7 +36,7 @@
 
     .symbol-bar {
       position: fixed !important;
-      right: 18px;
+      right: auto;
       top: 50%;
       transform: translateY(-50%);
       z-index: 9999;
@@ -695,7 +695,7 @@
       localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
       bar.style.left = '';
       bar.style.top = '';
-      bar.style.right = '18px';
+      bar.style.right = '';
       bar.style.transform = 'translateY(-50%)';
       bar.classList.remove('horizontal', 'connected', 'snap', 'dragging', 'magnet-preview');
     }
