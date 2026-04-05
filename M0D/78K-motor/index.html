@@ -19,7 +19,7 @@
   
 
  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/main-0-1.css">
-
+ <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/css/motor-369.css">
 </head>
 <body data-arch="kodux">
 
@@ -76,6 +76,51 @@
             <span>Modo Roda Viva (Ciclagem)</span>
           </label>
         </div>
+<!-- PAINEL MOTOR 3·6·9 -->
+<div class="engine-controls accordion is-collapsed">
+
+  <div class="accordion-header">
+    <div class="arch-tag">
+      ⚙️ Motor 3·6·9 ·
+    </div>
+  </div>
+
+  <div class="collapsible-body">
+    <div class="engine-row">
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>⚡ Motor</label>
+        <div class="btn-group">
+          <!-- NOVO BOTÃO NEUTRO + ÍCONES EM TODOS -->
+          <button type="button" class="engine-btn" data-engine="1" title="Estado Neutro - Sem avanço de arquétipos">⚪ Neutro</button>
+          <button type="button" class="engine-btn" data-engine="3" title="+3">➕3</button>
+          <button type="button" class="engine-btn" data-engine="6" title="+6">➕6</button>
+          <button type="button" class="engine-btn" data-engine="9" title="+9">➕9</button>
+        </div>
+      </div>
+
+      <!-- o resto do engine-row fica IGUAL (Direção, Salto, Ciclo Especial) -->
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>🔄 Direção</label>
+        <button type="button" class="engine-btn" id="reverseToggle">Reverse: OFF</button>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>⤴️ Salto</label>
+        <div class="btn-group">
+          <button type="button" class="engine-btn" data-jump="0">0</button>
+          <button type="button" class="engine-btn" data-jump="3">+3</button>
+          <button type="button" class="engine-btn" data-jump="6">+6</button>
+          <button type="button" class="engine-btn" data-jump="9">+9</button>
+        </div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <label>🌀 Ciclo Especial</label>
+        <button type="button" class="engine-btn" id="cycle3697">3-6-9-7: OFF</button>
+      </div>
+    </div>
+  </div>
+</div>
 
         <button class="btn-generate" id="genBtn">Integrar Fractais de Texto</button>
       </div>
@@ -114,7 +159,7 @@
       <div class="archetypes-grid" id="archetypes-grid"></div>
     </section>
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/js/modules/inline-0-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/js/modules/inline-1-369.js"></script>
 
 
 <style>
