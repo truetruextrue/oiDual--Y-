@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR" data-voice-arch="kobllux">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>KOBLLUX · AURA + WIN</title>
+  <meta name="theme-color" content="#0f0f11">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="./icon-192.png">
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- CSS externos originais do kob-aura -->
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+
+  <!-- ═══════════════════════════════════════════════════
+       SISTEMA DE JANELAS · CSS
+       Fonte: FS-win-BASE-fix → limpo + integrado
+  ═══════════════════════════════════════════════════ -->
+
+  <style id="win-system-css">
+
+    /* ── CAMADA DE JANELAS ─────────────────────────── */
+    #stackWrap {
+      position: fixed;
+      inset: 0;
+      pointer-events: none; /* passa cliques pro iframe/conteúdo */
+      z-index: 4000;
+    }
+
+    /* ── SESSION WINDOW ────────────────────────────── */
+    .session-window {
+      position: absolute;
+      pointer-events: all;
+      width: 320px;
+      height: 480px;
+      min-width: 220px;
+      min-height: 80px;
+      background: rgba(10, 14, 26, 0.85);
+      backdrop-filter: blur(22px) saturate(160%);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      border: 1px solid rgba(0, 240, 255, 0.22);
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.04) inset,
+        0 0 36px rgba(0,240,255,0.1),
+        0 24px 64px rgba(0,0,0,0.7);
+      transition:
+        height 0.28s cubic-bezier(0.16,1,0.3,1),
+        opacity 0.22s,
+        transform 0.22s,
+        border-color 0.3s;
+      animation: win-in 0.32s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+
+    .session-window.win-focus {
+      border-color: rgba(0, 240, 255, 0.5);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.06) inset,
+        0 0 50px rgba(0,240,255,0.2),
+        0 24px 64px rgba(0,0,0,0.8);
+      z-index: 4500 !important; /* sobrepõe as outras */
+    }
+
+    /* Estados */
+    .session-window.collapsed {
+      height: 46px !important;
+    }
+    .session-window.collapsed .win-body {
+      display: none !important;
+    }
+    .session-window.minimized {
+      opacity: 0;
+      transform: scale(0.88) translateY(20px);
+      pointer-events: none;
+    }
+    .session-window.maximized {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100vh !important;
+      border-radius: 0 !important;
+      z-index: 8000 !important;
+    }
+    .session-window.win-closing {
+      opacity: 0;
+      transform: scale(0.9);
+      pointer-events: none;
+    }
+
+    /* Header */
+    .win-hdr {
+      height: 46px;
+      min-height: 46px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      cursor: grab;
+      user-select: none;
+      background: rgba(0, 240, 255, 0.04);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      flex-shrink: 0;
+    }
+    .win-hdr:active { cursor: grabbing; }
+    .win-hdr.grabbing { cursor: grabbing; }
+
+    .win-title {
+      font-family: 'JetBrains Mono', 'Orbitron', monospace;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      color: rgba(0, 240, 255, 0.85);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-transform: uppercase;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 180px;
+    }
+
+    .win-controls {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .win-btn {
+      width: 20px; height: 20px;
+      border-radius: 50%; border: 0;
+      cursor: pointer; font-size: 8px; font-weight: 900;
+      display: grid; place-items: center;
+      transition: filter 0.15s, transform 0.15s;
+      padding: 0;
+    }
+    .win-btn:hover { filter: brightness(1.3); transform: scale(1.15); }
+    .win-btn-col  { background: rgba(255,165,0,0.75); color: rgba(0,0,0,0.8); }
+    .win-btn-max  { background: rgba(50,200,100,0.75); color: rgba(0,0,0,0.8); }
+    .win-btn-min  { background: rgba(255,200,50,0.75); color: rgba(0,0,0,0.8); }
+    .win-btn-cls  { background: rgba(255,55,55,0.75);  color: rgba(0,0,0,0.8); }
+
+    /* Body */
+    .win-body {
+      flex: 1;
+      position: relative;
+      background: #000;
+      overflow: hidden;
+    }
+    .win-body iframe {
+      width: 100%; height: 100%;
+      border: 0; display: block;
+    }
+    /* shield anti-drag sobre iframe */
+    .win-body .drag-shield {
+      position: absolute; inset: 0;
+      z-index: 10; display: none;
+      background: transparent;
+    }
+
+    /* ── DOCK DE JANELAS ───────────────────────────── */
+    #win-dock {
+      position: fixed;
+      bottom: 88px; /* acima do symbol-bar */
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      padding: 8px 16px;
+      border-radius: 36px;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.07);
+      z-index: 5000;
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+      opacity: 0;
+    }
+    #win-dock:not(:empty) {
+      pointer-events: all;
+      opacity: 1;
+    }
+
+    .win-dock-bubble {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: grid; place-items: center;
+      cursor: pointer; font-size: 17px;
+      background: rgba(0,240,255,0.12);
+      border: 1px solid rgba(0,240,255,0.3);
+      transition: 0.28s cubic-bezier(0.16,1,0.3,1);
+      animation: win-in 0.28s cubic-bezier(0.16,1,0.3,1) both;
+      position: relative;
+      flex-shrink: 0;
+      color: #fff;
+    }
+    .win-dock-bubble:hover {
+      transform: translateY(-7px) scale(1.12);
+      background: rgba(0,240,255,0.25);
+      box-shadow: 0 8px 18px rgba(0,240,255,0.25);
+    }
+    .win-dock-bubble::after {
+      content: '';
+      position: absolute; bottom: -4px;
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: rgba(0,240,255,0.85);
+      box-shadow: 0 0 6px rgba(0,240,255,0.85);
+    }
+
+    /* ── DRAG-TO-MATERIALIZE · GHOST ──────────────── */
+    #kdm-ghost {
+      position: fixed;
+      z-index: 99999;
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      font-size: 22px;
+      color: #fff;
+      background: rgba(0, 240, 255, 0.18);
+      border: 1.5px solid rgba(0, 240, 255, 0.7);
+      box-shadow: 0 0 24px rgba(0,240,255,0.5);
+      transition: box-shadow 0.18s, border-color 0.18s;
+      will-change: left, top;
+    }
+    #kdm-ghost.snap-edge {
+      border-color: rgba(0, 255, 180, 0.9);
+      box-shadow: 0 0 32px rgba(0,255,180,0.6), 0 0 8px rgba(0,255,180,0.3) inset;
+    }
+
+    /* Zona de snap */
+    #kdm-snap-zone {
+      position: fixed;
+      top: 0; bottom: 0;
+      width: 56px;
+      background: linear-gradient(to right, rgba(0,255,180,0.1), transparent);
+      border-right: 1px solid rgba(0,255,180,0.15);
+      pointer-events: none;
+      z-index: 99990;
+      opacity: 0;
+      transition: opacity 0.18s;
+    }
+    #kdm-snap-zone.right {
+      right: 0; left: auto;
+      background: linear-gradient(to left, rgba(0,255,180,0.1), transparent);
+      border-right: none;
+      border-left: 1px solid rgba(0,255,180,0.15);
+    }
+    #kdm-snap-zone.visible { opacity: 1; }
+
+    /* Botão armado */
+    .symbol-button.kdm-armed {
+      box-shadow: 0 0 18px rgba(0,240,255,0.6) !important;
+      border-color: rgba(0,240,255,0.7) !important;
+      transform: scale(1.15) !important;
+      transition: transform 0.15s, box-shadow 0.15s !important;
+    }
+
+    /* Animação */
+    @keyframes win-in {
+      from { opacity: 0; transform: scale(0.84); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+
+    /* Idle do dock nativo */
+    .kob-tts-dock { transition: transform .35s ease, opacity .65s ease; }
+    .kob-tts-dock.idle { opacity:.18; transform:scale(.92); }
+    .kob-tts-dock:hover { opacity:1; transform:scale(1); }
+    .kob-tts-dock { box-shadow: none !important; }
+
+  </style>
+
+</head>
+<body>
+
+<!-- ── EDITOR DE ROTA (Long-press 3s) ─────────────── -->
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html ou https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ROOT ──────────────────────────────────────── -->
+
+<div id="root">
+
+  <!-- Scripts base do kob -->
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+  <div class="wrap">
+    <div class="content">
+      <iframe id="frame" src="about:blank"></iframe>
+      <div id="kob-tts-outline"></div>
+    </div>
+
+```
+<!-- HUD / Symbol Bar -->
+<div class="symbol-bar floating" id="symbolBar">
+
+  <div class="toggle-wrap">
+    <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+  </div>
+
+  <div class="symbol-wrap">
+    <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+  </div>
+  <div class="symbol-wrap">
+    <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+  </div>
+  <div class="symbol-wrap">
+    <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+  </div>
+
+  <!-- ORB / Arquétipo -->
+  <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+    <div class="orb-microphone-container">
+      <div class="tts-orb-mini">
+        <div class="orb" id="main-orb">
+          <div class="orb-core"></div>
+        </div>
+      </div>
+    </div>
+  </button>
+
+  <!-- Botões com data-url (esses são os que o drag-to-materialize usa) -->
+  <div class="symbol-wrap">
+    <button class="symbol-button" data-id="phi" data-url="about:blank" title="Phi">Φ</button>
+  </div>
+  <div class="symbol-wrap">
+    <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/" title="Vivivi">꩜</button>
+  </div>
+  <div class="symbol-wrap">
+    <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/" title="Home">◌</button>
+  </div>
+  <div class="symbol-wrap">
+    <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html" title="Doc">◘</button>
+  </div>
+
+  <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+</div>
+```
+
+  </div>
+
+  <div id="arch-overlay"></div>
+</div>
+
+<!-- ── CAMADA DE JANELAS ─────────────────────────── -->
+
+<div id="stackWrap"></div>
+<div id="win-dock"></div>
+<div id="kdm-snap-zone"></div>
+
+<!-- Scripts externos do kob (long-press editor) -->
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+<!-- ═══════════════════════════════════════════════════
+     SISTEMA DE JANELAS · JS
+     Motor limpo: create / focus / collapse / maximize /
+     minimize / restore / close + draggable header
+═══════════════════════════════════════════════════ -->
+
+<script id="win-system-js">
+(function () {
+  'use strict';
+
+  const stackWrap = document.getElementById('stackWrap');
+  const winDock   = document.getElementById('win-dock');
+
+  let zTop    = 4100;
+  let winMap  = {}; // id → { el, url, label, icon, status }
+
+  /* ── helpers ───────────────────────────────────── */
+  function nextZ()   { return ++zTop; }
+  function uid(id)   { return 'kwin-' + id + '-' + Date.now(); }
+
+  function focusWin(el) {
+    document.querySelectorAll('.session-window').forEach(w => w.classList.remove('win-focus'));
+    el.style.zIndex = nextZ();
+    el.classList.add('win-focus');
+  }
+
+  /* ── criar janela ──────────────────────────────── */
+  function createWindow({ url, label, icon, id, left, top }) {
+    const winId = id || uid('w');
+
+    // Se já existe, apenas restaura
+    if (winMap[winId]) { restoreWindow(winId); return winId; }
+
+    const W = window.innerWidth, H = window.innerHeight;
+    const ww = 320, wh = 480;
+    const cx = left != null ? Math.min(left, W - ww - 8) : (W - ww) / 2 + (Math.random() * 60 - 30);
+    const cy = top  != null ? Math.min(top,  H - wh - 8) : (H - wh) / 2 + (Math.random() * 40 - 20);
+
+    const win = document.createElement('div');
+    win.className = 'session-window win-focus';
+    win.id = winId;
+    win.style.cssText = `left:${Math.round(cx)}px; top:${Math.round(cy)}px; z-index:${nextZ()};`;
+
+    win.innerHTML = `
+      <div class="win-hdr">
+        <div class="win-title">
+          <span style="font-size:15px">${icon || '◌'}</span>
+          <span>${(label || url || 'APP').toUpperCase()}</span>
+        </div>
+        <div class="win-controls">
+          <button class="win-btn win-btn-col" data-act="col" title="Colapsar">—</button>
+          <button class="win-btn win-btn-max" data-act="max" title="Maximizar">⬜</button>
+          <button class="win-btn win-btn-min" data-act="min" title="Minimizar">⬇</button>
+          <button class="win-btn win-btn-cls" data-act="cls" title="Fechar">✕</button>
+        </div>
+      </div>
+      <div class="win-body">
+        <iframe
+          src="${url || 'about:blank'}"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+          allow="fullscreen; clipboard-write; accelerometer"
+          loading="lazy">
+        </iframe>
+        <div class="drag-shield"></div>
+      </div>
+    `;
+
+    stackWrap.appendChild(win);
+    winMap[winId] = { el: win, url, label, icon, status: 'active', id: winId };
+
+    /* foco ao clicar em qualquer ponto */
+    win.addEventListener('pointerdown', () => focusWin(win));
+
+    /* botões */
+    win.querySelectorAll('[data-act]').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const act = btn.dataset.act;
+        if (act === 'col') toggleCollapse(winId);
+        if (act === 'max') toggleMaximize(winId);
+        if (act === 'min') minimizeWindow(winId);
+        if (act === 'cls') closeWindow(winId);
+      });
+    });
+
+    /* drag do header */
+    makeHeaderDraggable(win);
+
+    return winId;
+  }
+
+  /* ── controles de estado ───────────────────────── */
+  function toggleCollapse(id) {
+    const e = winMap[id]; if (!e) return;
+    const el = e.el;
+    if (el.classList.contains('maximized')) toggleMaximize(id);
+    el.classList.toggle('collapsed');
+    focusWin(el);
+  }
+
+  function toggleMaximize(id) {
+    const e = winMap[id]; if (!e) return;
+    const el = e.el;
+    el.classList.remove('collapsed');
+    el.classList.toggle('maximized');
+    focusWin(el);
+  }
+
+  function minimizeWindow(id) {
+    const e = winMap[id]; if (!e) return;
+    e.el.classList.add('minimized');
+    e.status = 'minimized';
+    addDockBubble(id);
+  }
+
+  function restoreWindow(id) {
+    const e = winMap[id]; if (!e) return;
+    e.el.classList.remove('minimized', 'collapsed');
+    e.status = 'active';
+    focusWin(e.el);
+    removeDockBubble(id);
+  }
+
+  function closeWindow(id) {
+    const e = winMap[id]; if (!e) return;
+    e.el.classList.add('win-closing');
+    removeDockBubble(id);
+    setTimeout(() => {
+      e.el.remove();
+      delete winMap[id];
+    }, 240);
+  }
+
+  /* ── dock ──────────────────────────────────────── */
+  function addDockBubble(id) {
+    if (document.getElementById('wdb-' + id)) return;
+    const e = winMap[id]; if (!e) return;
+    const b = document.createElement('div');
+    b.className = 'win-dock-bubble';
+    b.id = 'wdb-' + id;
+    b.innerHTML = e.icon || '◌';
+    b.title = 'Restaurar ' + (e.label || '');
+    b.addEventListener('click', () => restoreWindow(id));
+    winDock.appendChild(b);
+  }
+
+  function removeDockBubble(id) {
+    const b = document.getElementById('wdb-' + id);
+    if (b) b.remove();
+  }
+
+  /* ── drag do header da janela ──────────────────── */
+  function makeHeaderDraggable(win) {
+    const hdr    = win.querySelector('.win-hdr');
+    const shield = win.querySelector('.drag-shield');
+    let active = false, ox = 0, oy = 0;
+
+    hdr.addEventListener('pointerdown', (e) => {
+      if (e.target.closest('.win-btn')) return;
+      if (win.classList.contains('maximized') || win.classList.contains('collapsed')) return;
+      active = true;
+      ox = e.clientX - win.offsetLeft;
+      oy = e.clientY - win.offsetTop;
+      hdr.setPointerCapture(e.pointerId);
+      hdr.classList.add('grabbing');
+      if (shield) shield.style.display = 'block';
+      focusWin(win);
+    });
+
+    hdr.addEventListener('pointermove', (e) => {
+      if (!active) return;
+      let nx = e.clientX - ox;
+      let ny = Math.max(0, e.clientY - oy);
+      win.style.left = nx + 'px';
+      win.style.top  = ny + 'px';
+    });
+
+    const stop = () => {
+      active = false;
+      hdr.classList.remove('grabbing');
+      if (shield) shield.style.display = 'none';
+    };
+    hdr.addEventListener('pointerup',     stop);
+    hdr.addEventListener('pointercancel', stop);
+  }
+
+  /* ── API pública ───────────────────────────────── */
+  window.WIN = { createWindow, closeWindow, minimizeWindow, restoreWindow, toggleCollapse, toggleMaximize, focusWin };
+
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════
+     DRAG-TO-MATERIALIZE · v2 · kob-aura integration
+     Hold 1.2s → arm → move → ghost
+     Drop:  borda lateral → dock  |  centro → janela
+     Mantém click normal intacto (kob-glue cuida disso)
+═══════════════════════════════════════════════════ -->
+
+<script id="kdm-controller">
+(function () {
+  'use strict';
+
+  const CFG = {
+    HOLD_MS:   1200,  // ms para armar
+    THRESHOLD: 10,    // px de movimento para confirmar drag
+    SNAP_ZONE: 80,    // px da borda → dock
+  };
+
+  let S = {
+    srcBtn:   null,
+    holdTimer: null,
+    armed:    false,
+    dragging: false,
+    ghost:    null,
+    ox: 0, oy: 0,
+    sx: 0, sy: 0,
+  };
+
+  const snapZone = document.getElementById('kdm-snap-zone');
+
+  /* ── ghost ─────────────────────────────────────── */
+  function spawnGhost(btn) {
+    const r = btn.getBoundingClientRect();
+    const g = document.createElement('div');
+    g.id = 'kdm-ghost';
+    g.innerHTML = btn.innerHTML;
+    g.style.cssText = `
+      left:${r.left}px; top:${r.top}px;
+      width:${r.width}px; height:${r.height}px;
+    `;
+    document.body.appendChild(g);
+    return g;
+  }
+
+  /* ── snap visual ───────────────────────────────── */
+  function setSnap(clientX) {
+    if (!S.ghost) return;
+    const W = window.innerWidth;
+    if (clientX < CFG.SNAP_ZONE) {
+      S.ghost.classList.add('snap-edge');
+      S.ghost.dataset.snap = 'left';
+      snapZone.className = 'visible';
+    } else if (clientX > W - CFG.SNAP_ZONE) {
+      S.ghost.classList.add('snap-edge');
+      S.ghost.dataset.snap = 'right';
+      snapZone.className = 'right visible';
+    } else {
+      S.ghost.classList.remove('snap-edge');
+      delete S.ghost.dataset.snap;
+      snapZone.className = '';
+    }
+  }
+
+  /* ── dock quando solto na borda ────────────────── */
+  function dockBtn(btn) {
+    const winDock = document.getElementById('win-dock');
+    const id = 'kdmbubble-' + (btn.dataset.id || Date.now());
+    if (document.getElementById(id)) return;
+
+    const b = document.createElement('div');
+    b.className = 'win-dock-bubble';
+    b.id = id;
+    b.innerHTML = btn.textContent.trim() || btn.innerHTML;
+    b.title = btn.title || btn.getAttribute('data-title') || btn.dataset.id || 'App';
+
+    b.addEventListener('click', () => {
+      b.remove();
+      if (window.WIN) {
+        window.WIN.createWindow({
+          url:   btn.dataset.url,
+          label: btn.title || btn.getAttribute('data-title') || btn.dataset.id,
+          icon:  btn.textContent.trim() || '◌',
+          id:    'kdm-' + (btn.dataset.id || Date.now()),
+        });
+      }
+    });
+    winDock.appendChild(b);
+  }
+
+  /* ── materialize janela no centro ──────────────── */
+  function materialize(btn, dropX, dropY) {
+    if (!window.WIN) return;
+    const id    = 'kdm-' + (btn.dataset.id || Date.now());
+    const label = btn.title || btn.getAttribute('data-title') || btn.dataset.id || 'APP';
+    const icon  = btn.textContent.trim() || '◌';
+    const url   = btn.dataset.url || 'about:blank';
+
+    window.WIN.createWindow({
+      url, label, icon, id,
+      left: dropX - 160,
+      top:  dropY - 30,
+    });
+  }
+
+  /* ── cleanup ───────────────────────────────────── */
+  function cleanup() {
+    clearTimeout(S.holdTimer);
+    if (S.ghost) { S.ghost.remove(); S.ghost = null; }
+    if (S.srcBtn) {
+      S.srcBtn.style.opacity = '';
+      S.srcBtn.classList.remove('kdm-armed');
+    }
+    snapZone.className = '';
+    Object.assign(S, { srcBtn:null, holdTimer:null, armed:false, dragging:false, ghost:null });
+  }
+
+  /* ── events ────────────────────────────────────── */
+  document.addEventListener('pointerdown', (e) => {
+    // Só botões com data-url (sem capturar controles internos de janela)
+    const btn = e.target.closest('.symbol-button[data-url]');
+    if (!btn) return;
+    if (e.target.closest('#stackWrap, #win-dock')) return;
+
+    S.srcBtn = btn;
+    S.sx = e.clientX;
+    S.sy = e.clientY;
+
+    // Timer para armar
+    S.holdTimer = setTimeout(() => {
+      S.holdTimer = null;
+      S.armed = true;
+      S.srcBtn && S.srcBtn.classList.add('kdm-armed');
+    }, CFG.HOLD_MS);
+
+  }, { passive: true });
+
+  document.addEventListener('pointermove', (e) => {
+    if (!S.srcBtn) return;
+
+    const dx   = e.clientX - S.sx;
+    const dy   = e.clientY - S.sy;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+
+    // Movimento antes de armar → cancela (provavelmente é scroll)
+    if (!S.armed && S.holdTimer && dist > CFG.THRESHOLD * 2) {
+      cleanup();
+      return;
+    }
+
+    // Armado + movimento → ativa drag
+    if (S.armed && !S.dragging && dist > CFG.THRESHOLD) {
+      S.dragging = true;
+
+      // Cancela o editor de URL nativo (Escape)
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+
+      const r = S.srcBtn.getBoundingClientRect();
+      S.ox = e.clientX - r.left;
+      S.oy = e.clientY - r.top;
+      S.ghost = spawnGhost(S.srcBtn);
+      S.srcBtn.style.opacity = '0.3';
+    }
+
+    // Move ghost
+    if (S.dragging && S.ghost) {
+      S.ghost.style.left = (e.clientX - S.ox) + 'px';
+      S.ghost.style.top  = (e.clientY - S.oy) + 'px';
+      setSnap(e.clientX);
+    }
+
+  }, { passive: true });
+
+  document.addEventListener('pointerup', (e) => {
+    if (!S.srcBtn) return;
+
+    if (!S.dragging) {
+      // Apenas tap / hold curto → não faz nada aqui
+      cleanup();
+      return;
+    }
+
+    const snap = S.ghost && S.ghost.dataset.snap;
+    const btn  = S.srcBtn;
+    const dx   = e.clientX;
+    const dy   = e.clientY;
+
+    cleanup();
+
+    if (snap) {
+      dockBtn(btn);
+    } else {
+      materialize(btn, dx, dy);
+    }
+  });
+
+  document.addEventListener('pointercancel', cleanup);
+
+  // Previne scroll nativo durante drag
+  document.addEventListener('touchmove', (e) => {
+    if (S.dragging) e.preventDefault();
+  }, { passive: false });
+
+})();
+</script>
+
+<!-- ═══════════════════════════════════════════════════
+     IDLE DOCK · original do kob-aura (único, sem duplicata)
+═══════════════════════════════════════════════════ -->
+
+<script>
+(function () {
+  const dock = document.querySelector('.kob-tts-dock');
+  if (!dock) return;
+  let t;
+  function reset() {
+    dock.classList.remove('idle');
+    clearTimeout(t);
+    t = setTimeout(() => dock.classList.add('idle'), 1870);
+  }
+  ['pointerdown','pointermove','touchstart','mousemove']
+    .forEach(ev => document.addEventListener(ev, reset, { passive: true }));
+  reset();
+})();
+</script>
+
+<!-- kob-glue (TTS / arquétipos / HUD drag) -->
+
+<!-- Substitua pelo caminho real do seu kob-glue-dh10-2-oai.js -->
+
+<script src="./kob-glue-dh10-2-oai.js"></script>
+
+</body>
+</html>
