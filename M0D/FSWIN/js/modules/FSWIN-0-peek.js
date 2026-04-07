@@ -1,12 +1,12 @@
-<script>
+
     (() => {
       const STORAGE_KEY = 'kxtsk_unified_sessions_v1';
 
       const APPS = [
         { id: 'kob', name: 'KOB LV Base', icon: 'fa-globe', url: 'https://kodux78k.github.io/oiDual--Y-/M0D/LV/000-kob-LV-BASE.html' },
-        { id: 'atlas', name: 'Atlas Strategic', icon: 'fa-satellite-dish', url: 'https://duckduckgo.com' },
-        { id: 'serena', name: 'Serena AI', icon: 'fa-brain', url: 'https://wikipedia.org' },
-        { id: 'vortex', name: 'Vortex CRM', icon: 'fa-wind', url: 'https://bing.com' }
+        { id: 'atlas', name: 'Atlas Strategic', icon: 'fa-satellite-dish', url: 'https://kodux78k.github.io/PortalDual/index.html' },
+        { id: 'serena', name: 'Serena AI', icon: 'fa-brain', url: 'https://kodux78k.github.io/oiDuak-Tube-v0/' },
+        { id: 'vortex', name: 'Vortex CRM', icon: 'fa-wind', url: 'https://kodux78k.github.io/oiDual--Y-/M0D/78K-motor/' }
       ];
 
       const state = {
