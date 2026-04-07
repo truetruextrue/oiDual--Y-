@@ -313,7 +313,7 @@
       position: fixed;
       left: 1%;
       bottom: 88px;
-      transform: translateX(-50%);
+flex-direction: colunm;
       display: flex;
       gap: 12px;
       padding: 10px 20px;
