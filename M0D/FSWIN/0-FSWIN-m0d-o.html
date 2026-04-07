@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KOBLLUX Monolith - Shell Integrado</title>
+
+<!-- Links originais do BaseFSFm
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFS.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSm.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSF.css">
+
+-->
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN.css">
+
+</head>
+
+  <!-- Dock para onde as janelas minimizadas vão -->
+  <div id="dock"></div>
+
+  <!-- =========================================================
+       SUBSTITUIÇÃO DO IFRAME SECO PELO SISTEMA DE JANELAS
+       ========================================================= -->
+  <div id="stackWrap">
+    <div class="session-window" id="session-iframe" data-card-cycle="0" onclick="cycleSessionWindow('session-iframe')">
+      
+      <!-- Header da janela -->
+      <div class="win-hdr">
+        <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+        
+        <!-- Botões de Controle -->
+        <div class="win-controls" onclick="event.stopPropagation()">
+          <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+          <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+          <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+        </div>
+      </div>
+
+      <!-- Iframe Incorporado (com sua URL original do index.html) -->
+      <iframe
+        class="win-frame"
+        src="https://kodux78k.github.io/oiDual-H0/DH0-10.html"
+        sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox"
+        allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture"
+        loading="lazy">
+      </iframe>
+
+    </div>
+  </div>
+
+  <!-- Scripts do Motor de Janelas (Pulse / Kaos / Vitalis) -->
+ <!-- Scripts do Motor de Janelas Injetados <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script> -->
+   
+   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/FSWIN.js">
+  </script>
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script> 
+
+</body>
+</html>
