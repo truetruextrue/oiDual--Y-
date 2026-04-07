@@ -250,7 +250,7 @@ const FusionOS = (() => {
 
                 <button class="orb-trigger" id="orb-trigger" aria-label="Toggle Fusion OS">
                     <div class="orb-ring"></div>
-                    <div class="orb-core"></div>
+                    <div class="orb-core orb-core0"></div>
                 </button>
 
                 <div id="fusion-exit-ctrl" class="fixed top-8 left-1/2 -translate-x-1/2 hidden z-[10020] fusion-exit-ctrl-wrap" role="dialog" aria-hidden="true">
