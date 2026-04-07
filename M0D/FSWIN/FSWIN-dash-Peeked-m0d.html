@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05070a">
+  <title>KxTsK · Unified Patch Loader</title>
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <!-- Vendors -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <!-- Base CSS -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFS.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSm.css">
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN-0-peek.css">
+
+ 
+</head>
+
+<body class="mode-night">
+  <div class="ambient-light">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div id="kxtsk-shell">
+    <header class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Shell / Base Kernel</small>
+      </div>
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn" title="Logs"><i class="fa-solid fa-microchip"></i></button>
+      </div>
+    </header>
+
+    <main id="viewport">
+      <section id="view-home" class="view">
+        <div class="hero">
+          <div class="hero-card">
+            <div class="hero-title">KERNEL UNIFICADO</div>
+            <div class="hero-sub">
+              O KxTsK fica como base única. Os módulos antigos entram só como patch, sem duplicar estado, sem duplicar dock e sem duplicar manager.
+            </div>
+            <div class="status-line" id="bootStatus">Boot: aguardando inicialização...</div>
+          </div>
+          <div class="orb" id="coreOrb" title="Sincronizar núcleo"></div>
+        </div>
+
+        <div class="apps-grid" id="appsContainer"></div>
+      </section>
+
+      <section id="view-stack" class="view hidden">
+        <div class="stack-head">
+          <div class="title">PROCESS STACK</div>
+          <button class="soft-btn" id="clearAllBtn">TERMINAR TUDO</button>
+        </div>
+        <div id="stackWrap"></div>
+      </section>
+
+      <section id="view-logs" class="view hidden">
+        <div class="stack-head">
+          <div class="title">SYSTEM LOGS</div>
+          <button class="soft-btn" id="clearLogsBtn">LIMPAR</button>
+        </div>
+        <div id="terminal" class="log-box"></div>
+      </section>
+    </main>
+
+    <div id="dock"></div>
+
+    <nav class="nav-bar">
+      <div class="nav-item active" data-view="home">
+        <i class="fa-solid fa-house-chimney-window"></i>
+        <span>HOME</span>
+      </div>
+      <div class="nav-item" data-view="stack">
+        <i class="fa-solid fa-layer-group"></i>
+        <span>STACK</span>
+      </div>
+      <div class="nav-item" data-view="logs">
+        <i class="fa-solid fa-microchip"></i>
+        <span>LOGS</span>
+      </div>
+    </nav>
+  </div>
+
+  <div id="modal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px">
+        <div style="font-family:Orbitron,sans-serif;font-weight:800;letter-spacing:1px">PATCH REGISTRY</div>
+        <button class="small-btn" id="closeModalBtn">X</button>
+      </div>
+      <div class="status-line">
+        O loader já está preparado para receber novos módulos via registro central.
+      </div>
+    </div>
+  </div>
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/FSWIN-0-peek.js"></script>
+  <!-- Legacy bridge -->
+  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+</body>
+</html>

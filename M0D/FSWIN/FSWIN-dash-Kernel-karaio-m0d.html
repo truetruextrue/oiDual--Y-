@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#05070a">
+  <title>KxTsK · Unified Patch Loader</title>
+
+  <!-- Fonts & Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Orbitron:wght@500;700;800&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <!-- Base Styles (only essential) -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN-0.css">
+
+
+</head>
+<body>
+  <div class="ambient-light">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div id="kxtsk-shell">
+    <header class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Patch Loader</small>
+      </div>
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn"><i class="fa-solid fa-terminal"></i> Logs</button>
+      </div>
+    </header>
+
+    <main id="viewport">
+      <section id="view-home" class="view">
+        <div class="hero-card">
+          <div class="hero-title">⚡ KERNEL UNIFICADO</div>
+          <div class="hero-sub">
+            Base única para módulos patch. Sistema de janelas flutuantes, colapsáveis, maximizáveis e persistente.
+          </div>
+          <div class="status-line" id="bootStatus">Boot: pronto</div>
+        </div>
+        <div class="apps-grid" id="appsContainer"></div>
+      </section>
+
+      <section id="view-stack" class="view hidden">
+        <div class="stack-head">
+          <div class="title">📌 PROCESS STACK</div>
+          <button class="soft-btn" id="clearAllBtn">🧹 Terminar tudo</button>
+        </div>
+        <div id="stackWrap"></div>
+      </section>
+
+      <section id="view-logs" class="view hidden">
+        <div class="stack-head">
+          <div class="title">📜 SYSTEM LOGS</div>
+          <button class="soft-btn" id="clearLogsBtn">Limpar</button>
+        </div>
+        <div id="terminal" class="log-box"></div>
+      </section>
+    </main>
+
+    <div id="dock"></div>
+
+    <nav class="nav-bar">
+      <div class="nav-item active" data-view="home"><i class="fa-solid fa-house"></i><span>HOME</span></div>
+      <div class="nav-item" data-view="stack"><i class="fa-solid fa-layer-group"></i><span>STACK</span></div>
+      <div class="nav-item" data-view="logs"><i class="fa-solid fa-microchip"></i><span>LOGS</span></div>
+    </nav>
+  </div>
+
+  
+
+  <!-- Legacy patches (carregados sem duplicar estrutura) -->
+  
+  
+  
+  
+   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/FSWIN-0.js"></script>
+  
+  
+  
+  
+  
+
+
+
+</body></html>
