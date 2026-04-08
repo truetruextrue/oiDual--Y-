@@ -1,0 +1,251 @@
+/* Base environment styles */
+    body {
+      margin: 0;
+      padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+      overflow: auto !important;
+      background: radial-gradient(circle at 50% 0%, #2a2a35 0%, #0f0f15 100%);
+      color: #fff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      min-height: 100vh;
+    }
+    
+    #chatSection {
+      position: relative;
+      min-height: 100vh;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+    }
+
+    /* Orb Menu Trigger Styling */
+    #orb-root {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 100000;
+    }
+
+    .orb-menu-trigger {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 30px;
+      padding: 8px 16px;
+      color: white;
+      font-size: 10px;
+      letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .orb-menu-trigger:hover {
+      background: rgba(255, 255, 255, 0.2);
+      transform: scale(1.05);
+      box-shadow: 0 6px 20px rgba(0, 242, 255, 0.2);
+    }
+    
+    /* ==========================================================================
+       MAIN ADDON & WINDOW SYSTEM (Provided CSS + Additions)
+       ========================================================================== */
+    #stackWrap {
+      width: 100%;
+      max-width: 800px;
+      padding: 9px;
+      box-sizing: border-box;
+      position: relative;
+      z-index: 1;
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    /* SESSION WINDOW / STACK (Card Sanfonado) */
+    .session-window {
+      background: rgba(30, 30, 35, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      margin-bottom: 20px; 
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      height: 60vh;
+      min-height: 387px;
+      width: 100%;
+    }
+
+    /* Estado com espaço para aparecer o header do iframe */
+    .session-window.peeked {
+      height: 87px !important;
+      min-height: 87px !important;
+    }
+
+    .session-window.peeked .win-frame {
+      flex: 0 0 26px;
+      height: 26px;
+      min-height: 26px;
+      max-height: 26px;
+      overflow: hidden;
+    }
+
+    .session-window.peeked .win-hdr {
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Estado Colapsado (Sanfonado) */
+    .session-window.collapsed {
+      height: 52px !important;
+      min-height: 52px !important;
+    }
+
+    .session-window.collapsed .win-frame {
+      display: none !important;
+    }
+
+    /* Estado Minimizado (Escondido e mandado pro Dock) */
+    .session-window.minimized {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.9) translateY(50px);
+      position: absolute;
+    }
+
+    /* Estado Maximizado (Tela cheia) */
+    .session-window.maximized {
+      position: fixed;
+      inset: 0;
+      z-index: 92000;
+      border-radius: 0;
+      margin: 0;
+      height: 100vh !important;
+      width: 100vw !important;
+      max-width: none !important;
+      border: none;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1), top 0.35s ease;
+    }
+
+    /* Comportamentos de Minimizado ENQUANTO Maximizado (Stack no topo) */
+    .session-window.maximized.peeked {
+      height: 87px !important;
+      bottom: auto;
+    }
+
+    .session-window.maximized.collapsed {
+      height: 52px !important;
+      bottom: auto;
+    }
+
+    /* Cabeçalho da Janela */
+    .win-hdr {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      user-select: none;
+      box-sizing: border-box;
+      min-height: 52px;
+    }
+
+    .win-title {
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Controles (Botões) */
+    .win-controls {
+      display: flex;
+      gap: 8px;
+    }
+
+    .win-controls button {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 0;
+      cursor: pointer;
+      font-size: 12px;
+      font-weight: bold;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      transition: 0.2s;
+      display: grid;
+      place-items: center;
+    }
+
+    .win-controls button:hover {
+      background: rgba(255,255,255,0.2);
+      transform: scale(1.1);
+    }
+
+    /* Iframe / Content ocupando o corpo da janela */
+    .win-frame {
+      width: 100%;
+      flex: 1;
+      border: 0;
+      background: rgba(0, 0, 0, 0.2);
+      color: #ccc;
+      padding: 20px;
+      box-sizing: border-box;
+      overflow-y: auto;
+    }
+
+    /* DOCK (MINIMIZED WINDOWS) */
+    #dock {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      padding: 10px 20px;
+      border-radius: 40px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.1);
+      z-index: 2500;
+      transition: 0.3s;
+    }
+
+    #dock:empty {
+      opacity: 0;
+      transform: translate(-50%, 20px);
+      pointer-events: none;
+    }
+
+    .dock-bubble {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    .dock-bubble:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.2);
+      box-shadow: 0 10px 20px rgba(0,242,255,0.2);
+    }
