@@ -1,0 +1,50 @@
+/* =========================
+   3. THEMES (SOLAR MODES)
+========================= */
+body.mode-day { background: var(--bg-day) !important; color: #1a1a1a !important; }
+body.mode-sunset { background: var(--bg-sunset) !important; color: #fff !important; }
+body.mode-night { background: var(--bg-night) !important; color: var(--text-main) !important; }
+
+/* Day Mode UI Adaptation */
+body.mode-day .msg-block.ai { background: rgba(0,0,0,0.05); color: #222; border-color: rgba(0,0,0,0.1); }
+body.mode-day .glass-input { background: rgba(255,255,255,0.8); color: #000; border-color: #ccc; }
+body.mode-day .btn-icon { color: #333; border-color: rgba(0,0,0,0.2); }
+body.mode-day .cockpit-item, body.mode-day .deck-item { background: rgba(0,0,0,0.05); color: #000; }
+body.mode-day .cockpit-input { color: #000; border-bottom-color: rgba(0,0,0,0.3); }
+body.mode-day .drawer-content { background: #fff; color: #222; }
+body.mode-day .sun-background { opacity: 0.5; }
+body.mode-day #particles-js { opacity: 0.6; }
+body.mode-day .input-dock { background: linear-gradient(to top, rgba(0,0,0,0.4) 8%, transparent); }
+body.mode-day .glass-input:focus { background: white; }
+
+/* =========================
+   4. BACKGROUND & AMBIENCE
+========================= */
+.sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.sun-background { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fffde7 0%, #fff176 40%, #ffb300 100%); filter: blur(60px); opacity: 0; transition: opacity 2s; animation: sun-orbit 60s linear infinite; }
+#particles-js { position: fixed; inset: 0; z-index: 0; opacity: 0.8; pointer-events: none; } /* KxT unificado com Splash */
+#bg-fake-custom { position: fixed; inset: 0; z-index: 1;mix-blend-mode:lighten; opacity: 0.12; background-size: cover; background-position: center; pointer-events: none; }
+
+.ambient-light { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.14; animation: float 25s infinite alternate ease-in-out; }
+.blob-1 { width: 60vw; height: 60vw; background: var(--neon-cyan); top: -20%; left: -20%; }
+.blob-2 { width: 50vw; height: 50vw; background: var(--neon-purple); bottom: -20%; right: -20%; animation-delay: -5s; }
+
+/* =========================
+   5. KxT CORE UI (Chat & Layout)
+========================= */
+.header-orb { position: fixed; top: 40px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; z-index: 15; animation: floatOrb 6s ease-in-out infinite; cursor: pointer; transition: all 0.5s ease; }
+.header-orb svg { width: 100%; height: 100%; transition: fill 0.5s ease; filter: drop-shadow(0 0 10px rgba(0,245,255,0.5)); }
+body.mode-day .header-orb svg { fill: #fff176; filter: drop-shadow(0 0 20px #ffb300); }
+body.mode-sunset .header-orb svg { fill: #ffb74d; filter: drop-shadow(0 0 30px #e65100); }
+body.mode-night .header-orb svg { fill: white; filter: drop-shadow(0 0 15px var(--primary)); }
+
+#usernameDisplay { position: fixed; top: 120px; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 0.75rem; color: var(--text-muted); opacity: 0.6; pointer-events: none; text-transform: uppercase; letter-spacing: 2px; }
+#modeIndicator { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: bold; opacity: 0.5; z-index: 20; text-transform: uppercase; letter-spacing: 1px; }
+body.field-closed .input-row { z-index: 0; opacity: 0; pointer-events: none; transform: translateY(20px); transition: opacity 0.3s ease, transform 0.3s ease, z-index 0s linear 0.3s; }
+body:not(.field-closed) .input-row { opacity: 1; pointer-events: auto; transform: translateY(0); }
+body.field-closed .input-dock { pointer-events: none; }
+body.field-closed #field-toggle-handle { pointer-events: auto; }
+
+
+   
