@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Orb OS Component</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFS/css/iFS.css">
+</head>
+<body>
+
+  <!-- Orb Menu Trigger -->
+  <div id="orb-root" class="relative flex items-center justify-center">
+    <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido" onclick="createNewWindow()">●●●</div>
+  </div>
+
+  <div id="chatSection">
+    
+    <div id="stackWrap">
+      <!-- Window 1 -->
+      <div class="session-window" id="win-1">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'win-1')">
+          <div class="win-title"><span>🌐</span> Browser</div>
+          <div class="win-controls">
+            <button onclick="togglePeek('win-1')" title="Peek">▽</button>
+            <button onclick="toggleCollapse('win-1')" title="Collapse">−</button>
+            <button onclick="toggleMaximize('win-1')" title="Maximize">□</button>
+            <button onclick="minimizeToDock('win-1', '🌐')" title="Minimize">↓</button>
+          </div>
+        </div>
+        <div class="win-frame">
+          <h2 class="text-xl font-bold mb-4">Welcome to Orb OS</h2>
+          <p>This is a simulated window environment based on the provided CSS.</p>
+          <ul class="list-disc ml-6 mt-4 space-y-2">
+            <li><strong>▽ Peek:</strong> Shows only a tiny sliver of content.</li>
+            <li><strong>− Collapse:</strong> Hides the content entirely, showing only the header.</li>
+            <li><strong>□ Maximize:</strong> Takes up the entire screen.</li>
+            <li><strong>↓ Minimize:</strong> Sends the window to the bottom dock.</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Window 2 -->
+      <div class="session-window" id="win-2">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'win-2')">
+          <div class="win-title"><span>💬</span> Chat Session</div>
+          <div class="win-controls">
+            <button onclick="togglePeek('win-2')" title="Peek">▽</button>
+            <button onclick="toggleCollapse('win-2')" title="Collapse">−</button>
+            <button onclick="toggleMaximize('win-2')" title="Maximize">□</button>
+            <button onclick="minimizeToDock('win-2', '💬')" title="Minimize">↓</button>
+          </div>
+        </div>
+        <div class="win-frame">
+          <div class="space-y-4">
+            <div class="bg-blue-600/30 p-3 rounded-lg max-w-[80%]">Hello! How can I help you today?</div>
+            <div class="bg-gray-600/30 p-3 rounded-lg max-w-[80%] ml-auto">Show me how this window system works!</div>
+            <div class="bg-blue-600/30 p-3 rounded-lg max-w-[80%]">Try clicking the window controls in the top right corner. You can even drag me down to the dock!</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dock container for minimized apps -->
+    <div id="dock"></div>
+
+  </div>
+
+  <    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/iFS/js/iFS.js"></script>
+</body>
+</html>
+
