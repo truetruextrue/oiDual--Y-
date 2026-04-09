@@ -17,12 +17,7 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-sw.css">
-
-
-<style> 
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css"><style> 
 
 /* estado normal */
 .kob-tts-dock{
@@ -53,7 +48,46 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style></head>
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
+  <div id="kxtsk-shell">
+    <div class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Patch Loader</small>
+      </div>
+
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn">Logs</button>
+      </div>
+    </div>
+
+    <div id="dock"></div>
+
+    <div id="stackWrap">
+      <div class="session-window" id="session-iframe">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+          </div>
+        </div>
+
+        <iframe class="win-frame" src="https://kodux78k.github.io/oiDual-H0/DH0-10.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+
+ 
+
+</head>
 <body>
 
 <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
@@ -213,77 +247,12 @@
 
 
 
-<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-00.js"></script>
 <!--
 <script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"></script>
 -->
 
-<!-- Links originais do BaseFSFm
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFS.css">
 
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSm.css">
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/mainFSF.css">
-
--->
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN-0.css">
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/FSWIN.css">
-
-
-
-
-<div id="kxtsk-shell">
-    <div class="os-topbar" style="margin-top:60px;">
-      <div class="os-brand">
-        KxTsK
-        <small>Unified Patch Loader</small>
-      </div>
-      <div class="top-actions">
-        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
-        <button class="soft-btn" id="openLogsBtn"><i class="fa-solid fa-terminal"></i> Logs</button>
-      </div>
-    </div>
-
-  <!-- Dock para onde as janelas minimizadas vão -->
-  <div id="dock"></div>
-
-  <!-- =========================================================
-       SUBSTITUIÇÃO DO IFRAME SECO PELO SISTEMA DE JANELAS
-       ========================================================= -->
-  <div id="stackWrap">
-    <div class="session-window" id="session-iframe" data-card-cycle="0" onclick="cycleSessionWindow('session-iframe')">
-      
-      <!-- Header da janela -->
-      <div class="win-hdr">
-        <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
-        
-        <!-- Botões de Controle -->
-        <div class="win-controls" onclick="event.stopPropagation()">
-          <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
-          <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
-          <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">✕</button>
-        </div>
-      </div>
-
-      <!-- Iframe Incorporado (com sua URL original do index.html) -->
-      <iframe class="win-frame" src="https://kodux78k.github.io/oiDual-H0/DH0-10.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
-      </iframe>
-
-    </div>
-  </div>
-
-
-   
-
-  <!-- Scripts do Motor de Janelas (Pulse / Kaos / Vitalis) -->
- <!-- Scripts do Motor de Janelas Injetados <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script> -->
-   
-   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/FSWIN.js">
-  </script>
-
- <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/FSWIN-0-peek.js"></script>
 
 
 
@@ -437,12 +406,7 @@ resetIdle();
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
 
 
-<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
-
-
-<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
-
-<script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script>
 
 const dock = document.querySelector('.kob-tts-dock');
 
@@ -464,10 +428,4 @@ function resetIdle(){
 });
 
 resetIdle();
-
-</script>
-
-<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-sw.js"></script> 
-
-
-</div></body></html>
+</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script></body></html>
