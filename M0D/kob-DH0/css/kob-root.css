@@ -16,3 +16,47 @@
   /* tempo padrão para transições do HUD */
   --kob-voice-theme-duration: 520ms;
 }
+
+
+.header-orb {
+  /* Definição das variáveis de voz */
+  --kob-voice-primary: #7df9ff;   /* tom ciano neon */
+  --kob-voice-secondary: #b68cff; /* tom violeta suave */
+
+  position: fixed;
+  
+  z-index: 30;
+  width: 52px;
+  height: 52px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  
+  /* Aplicação das variáveis no gradiente e na borda */
+  background: linear-gradient(
+    180deg,
+    rgba(125, 249, 255, 0.14) 0%,
+    rgba(182, 140, 255, 0.08) 100%
+  );
+  border: 1px solid var(--kob-voice-primary);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+              0 10px 30px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.header-orb svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--kob-voice-secondary); /* ícone usa a cor secundária */
+  fill: none;
+  stroke-width: 1.8;
+}
+
+/* Efeito hover com realce das cores de voz */
+.header-orb:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px var(--kob-voice-primary),
+              0 10px 30px rgba(0, 0, 0, 0.45);
+}
