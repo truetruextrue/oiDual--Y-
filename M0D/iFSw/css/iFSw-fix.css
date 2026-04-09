@@ -46,7 +46,7 @@
       display: flex;
       flex-direction: column;
       position: relative;
-     z-index:1;
+     z-index:10;
     }
 
     .os-topbar {
@@ -55,7 +55,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
-      background: rgba(8, 10, 14, .38);
+      background: rgba(8, 10, 14, .08);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(255,255,255,.06);
