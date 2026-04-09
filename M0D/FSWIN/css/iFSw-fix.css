@@ -40,11 +40,13 @@
       padding: 0;
     }
 
+    
     #kxtsk-shell {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       position: relative;
+     z-index:1;
     }
 
     .os-topbar {
@@ -53,14 +55,20 @@
       align-items: center;
       justify-content: space-between;
       padding: 0 20px;
-      background: rgba(8, 10, 14, .72);
+      background: rgba(8, 10, 14, .38);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid rgba(255,255,255,.06);
       flex-shrink: 0;
-      z-index: 93000;
+      z-index: 1000;
       position: sticky;
       top: 0;
+    }
+
+    .os-brand {
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 1.5px;
     }
 
     .os-brand {
