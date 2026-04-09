@@ -86,19 +86,33 @@ body.ui-safe-vertical .session-window.maximized {
   padding-bottom: var(--safe-bottom);
 }
 
-/* dock centralizado e sem invadir o home bar */
+/* ============================================================
+   DOCK — MODO COLUNA (STACK VERTICAL NA ESQUERDA)
+============================================================ */
+
 #dock {
   position: fixed;
-  left: 50%;
-  transform: translateX(-50%);
+
+  /* ancora na esquerda com leve “vazamento” pra fora */
+  left: -12px;
+  transform: none;
+
+  /* mantém ajuste de safe area inferior */
   bottom: calc(80px + var(--safe-bottom));
+
+  /* layout em coluna */
   display: flex;
-  gap: 12px;
-  padding: 10px 20px;
-  border-radius: 40px;
-  background: rgba(0,0,0,0.6);
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 10px;
+
+  border-radius: 24px;
+  background: rgba(0,0,0,0.55);
   backdrop-filter: blur(15px);
   border: 1px solid rgba(255,255,255,0.1);
+
   z-index: 2500;
   transition: 0.3s;
 }
