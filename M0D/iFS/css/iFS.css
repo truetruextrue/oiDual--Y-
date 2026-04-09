@@ -249,3 +249,126 @@
       background: rgba(255,255,255,0.2);
       box-shadow: 0 10px 20px rgba(0,242,255,0.2);
     }
+
+
+
+
+
+/* ============================================================
+   SAFE AREA OVERRIDE + IMMERSIVE MODE
+   Cola depois do CSS atual para sobrescrever o body
+============================================================ */
+
+:root {
+  --safe-top: env(safe-area-inset-top);
+  --safe-right: env(safe-area-inset-right);
+  --safe-bottom: env(safe-area-inset-bottom);
+  --safe-left: env(safe-area-inset-left);
+}
+
+/* zera o padding global do body */
+html,
+body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+body {
+  padding: 0 !important;
+  overflow: auto !important;
+  box-sizing: border-box;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* modo seguro: só topo e base, nunca laterais */
+body.ui-safe-vertical {
+  padding-top: var(--safe-top) !important;
+  padding-bottom: var(--safe-bottom) !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* modo imersivo total: tudo colado */
+body.ui-immersive {
+  padding: 0 !important;
+}
+
+/*   z-index: 1; stack sem recuo lateral */
+#stackWrap {
+  width: 100%;
+  padding: 0;
+  margin-top: 40px;
+  box-sizing: border-box;
+  position: relative;
+
+}
+
+/* janela */
+.session-window {
+  background: rgba(30, 30, 35, 0.4);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 20px;
+  margin: 0 0 20px 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+  height: 78vh;
+  min-height: 387px;
+  width: 100%;
+  cursor: pointer;
+}
+
+/* maximizado: usa viewport real e respeita safe-area só em cima/baixo */
+.session-window.maximized {
+  position: fixed;
+  inset: 0;
+
+  border-radius: 0;
+  margin: 0;
+  width: 100vw !important;
+  height: 100dvh !important;
+  border: none;
+}
+
+/* quando estiver maximizado, o shell pode ficar seguro */
+body.ui-safe-vertical .session-window.maximized {
+  padding-top: var(--safe-top);
+  padding-bottom: var(--safe-bottom);
+}
+
+/* ============================================================
+   DOCK — MODO COLUNA (STACK VERTICAL NA ESQUERDA)
+============================================================ */
+
+#dock {
+  position: fixed;
+
+  /* ancora na esquerda com leve “vazamento” pra fora */
+  left: -12px;
+  transform: none;
+
+  /* mantém ajuste de safe area inferior */
+  bottom: calc(80px + var(--safe-bottom));
+
+  /* layout em coluna */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  padding: 12px 10px;
+
+  border-radius: 24px;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255,255,255,0.1);
+
+
+  transition: 0.3s;
+}
