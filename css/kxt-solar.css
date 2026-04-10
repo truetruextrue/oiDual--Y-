@@ -165,135 +165,31 @@ body.field-closed #field-toggle-handle { pointer-events: auto; }
       stroke-width:1.8;
     }
 
-    .drawer{
-      position:fixed;
-      top:0;
-      right:-420px;
-      width:min(390px, 92vw);
-      height:100vh;
-      z-index:100;
-      transition:right .28s ease;
-      pointer-events:none;
-    }
-    .drawer.open{
-      right:0;
-      pointer-events:auto;
-    }
+    /* Drawers & Cockpit */
+.drawer { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(8px); z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.3s; display: flex; align-items: center; justify-content: center; }
+.drawer.open { opacity: 1; pointer-events: auto; }
+.drawer-content { width: 90%; max-width: 450px; max-height: 85vh; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); border-radius: 20px; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); transform: scale(0.9); transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+.drawer.open .drawer-content { transform: scale(1); }
+.drawer-header { padding: 15px 20px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); }
+.drawer-header h3 { margin: 0; font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+.drawer-body { padding: 20px; overflow-y: auto; flex: 1; }
 
-    .drawer-content{
-      height:100%;
-      background:var(--panel);
-      border-left:1px solid rgba(255,255,255,.10);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(16px);
-      display:flex;
-      flex-direction:column;
-    }
+.cockpit-grid { display: flex; flex-direction: column; gap: 15px; }
+.cockpit-item { background: rgba(255,255,255,0.03); padding: 10px 15px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
+.cockpit-label { font-size: 0.7rem; color: var(--primary); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+.cockpit-input { background: transparent; border: none; color: white; font-family: var(--font-code); font-size: 1rem; outline: none; width: 100%; border-bottom: 1px dashed rgba(255,255,255,0.1); padding-bottom: 5px; transition: 0.3s; }
+.cockpit-input:focus { border-bottom-color: var(--secondary); }
+.control-row { display: flex; gap: 10px; margin-top: 20px; }
+.btn-block { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: inherit; cursor: pointer; font-size: 0.85rem; font-weight: 600; transition: 0.2s; }
+.btn-block:hover { background: rgba(255,255,255,0.15); border-color: var(--primary); }
 
-    .drawer-header{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      padding:18px 18px 14px;
-      border-bottom:1px solid var(--line);
-    }
-    .drawer-header h3{
-      margin:0;
-      display:flex;
-      align-items:center;
-      gap:10px;
-      font-size:1rem;
-      letter-spacing:.02em;
-    }
-    .drawer-header svg{
-      width:20px;
-      height:20px;
-      stroke:var(--accent);
-      fill:none;
-      stroke-width:1.8;
-    }
+.deck-item { background: rgba(255,255,255,0.05); padding: 15px; border-radius: 10px; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+.deck-info h4 { margin: 0 0 5px 0; font-size: 0.9rem; }
+.deck-info span { font-size: 0.7rem; opacity: 0.7; }
+.form-group { margin-bottom: 15px; }
+.form-group label { display: block; margin-bottom: 5px; font-size: 0.8rem; color: var(--text-muted); }
+.glass-textarea { width: 100%; background: rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.2); color: inherit; padding: 10px; border-radius: 8px; min-height: 80px; }
 
-    .drawer-body{
-      padding:16px 18px 20px;
-      overflow:auto;
-    }
-
-    .cockpit-item{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.07);
-      border-radius:16px;
-      padding:14px;
-      margin-bottom:12px;
-    }
-
-    .cockpit-label{
-      font:700 12px/1.2 "JetBrains Mono", monospace;
-      letter-spacing:.08em;
-      color:var(--muted);
-      margin-bottom:10px;
-      text-transform:uppercase;
-    }
-
-    .cockpit-grid{
-      display:grid;
-      gap:12px;
-    }
-
-    .cockpit-input{
-      width:100%;
-      border:1px solid rgba(255,255,255,.10);
-      background:rgba(0,0,0,.25);
-      color:var(--text);
-      border-radius:12px;
-      padding:12px 12px;
-      outline:none;
-      font:500 14px/1.2 Montserrat, sans-serif;
-    }
-
-    .control-row{
-      display:flex;
-      gap:10px;
-    }
-
-    .btn-block{
-      flex:1;
-      border:none;
-      border-radius:12px;
-      padding:12px 14px;
-      background:linear-gradient(180deg, rgba(125,249,255,.16), rgba(125,249,255,.08));
-      color:var(--text);
-      font-weight:700;
-      cursor:pointer;
-      border:1px solid rgba(125,249,255,.20);
-    }
-
-    .drawer-close{
-      border:none;
-      width:38px;
-      height:38px;
-      border-radius:12px;
-      cursor:pointer;
-      color:var(--text);
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-
-    .drawer-overlay{
-      position:fixed;
-      inset:0;
-      z-index:90;
-      background:rgba(0,0,0,.42);
-      opacity:0;
-      pointer-events:none;
-      transition:opacity .25s ease;
-    }
-    .drawer-overlay.active{
-      opacity:1;
-      pointer-events:auto;
-    }
-
-    svg{ display:block; }
 
 .header-orb {
   /* Definição das variáveis de voz */
@@ -301,11 +197,10 @@ body.field-closed #field-toggle-handle { pointer-events: auto; }
   --kob-voice-secondary: #b68cff; /* tom violeta suave */
 
   position: fixed;
-  top: 14px;
-  right: 14px;
+  /* top: 14px;  right: 14px; */
   z-index: 30;
-  width: 52px;
-  height: 52px;
+  width: 39px;
+  height: 39px;
   display: grid;
   place-items: center;
   border-radius: 50%;
