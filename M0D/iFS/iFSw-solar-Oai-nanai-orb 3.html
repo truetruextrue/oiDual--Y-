@@ -1,0 +1,528 @@
+<html lang="pt-BR"><head>
+  <meta charset="UTF-8">
+  
+                <!-- PWA METADATA & VIEWPORT FIX -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#05070a">
+  <title>KOBLLUX Monolith - Shell Integrado</title>
+<!-- iOS Support -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="apple-touch-icon" href="./icon-192.png">
+
+<!-- Manifest -->
+<link rel="manifest" href="./manifest.json">
+  
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/uKxTsK-unified.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
+
+ 
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/sDKHWm_nebula_styles.css"><style> :root{
+      --bg: #05070a;
+      --panel: rgba(12, 16, 24, 0.96);
+      --line: rgba(255,255,255,.10);
+      --text: #f3f7ff;
+      --muted: rgba(255,255,255,.65);
+      --accent: #7df9ff;
+      --accent-2: #b68cff;
+      --secondary: #7df9ff;
+      --shadow: 0 24px 80px rgba(0,0,0,.45);
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{
+      margin:0;
+      width:100%;
+      min-height:100%;
+      background: radial-gradient(circle at top, #10172a 0%, var(--bg) 45%, #020305 100%);
+      color:var(--text);
+      font-family:Montserrat,system-ui,sans-serif;
+      overflow-x:hidden;
+    }
+
+    .sky-layer,.sun-background{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+    }
+
+    .sun-background{
+      background:
+        radial-gradient(circle at 50% 0%, rgba(125,249,255,.10), transparent 35%),
+        radial-gradient(circle at 50% 10%, rgba(182,140,255,.08), transparent 38%);
+      filter: blur(14px);
+    }
+
+    #modeIndicator{
+      position:fixed;
+      top:14px;
+      left:50%;
+      transform:translateX(-50%);
+      z-index:20;
+      font:600 12px/1 "JetBrains Mono", monospace;
+      letter-spacing:.18em;
+      color:rgba(255,255,255,.72);
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      padding:10px 14px;
+      border-radius:999px;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-orb{
+      position:fixed;
+     
+      z-index:30;
+      width:52px;
+      height:52px;
+      display:grid;
+      place-items:center;
+      border-radius:50%;
+      background:linear-gradient(180deg, rgba(125,249,255,.14), rgba(182,140,255,.08));
+      border:1px solid rgba(125,249,255,.35);
+      box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 10px 30px rgba(0,0,0,.35);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+    .header-orb:hover{
+      transform:scale(1.05);
+      box-shadow: 0 0 24px rgba(125,249,255,.22), 0 10px 30px rgba(0,0,0,.45);
+    }
+    .header-orb svg{
+      width:24px;
+      height:24px;
+      stroke:var(--accent);
+      fill:none;
+      stroke-width:1.8;
+    }
+
+    #yusernameDisplay{
+      position:fixed;
+      top:22px;
+      left:18px;
+      z-index:25;
+      font-weight:700;
+      color:rgba(255,255,255,.85);
+      text-shadow:0 0 18px rgba(125,249,255,.15);
+    }
+
+    .top-bar{
+      position:fixed;
+      top:76px;
+      right:14px;
+      z-index:25;
+      display:flex;
+      gap:10px;
+    }
+
+    .btn-icon{
+      width:44px;
+      height:44px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      display:grid;
+      place-items:center;
+      cursor:pointer;
+      backdrop-filter: blur(12px);
+    }
+    .btn-icon svg{
+      width:18px;
+      height:18px;
+      stroke:var(--text);
+      fill:none;
+      stroke-width:1.8;
+    }
+
+    .drawer{
+      position:fixed;
+      top:0;
+      right:-420px;
+      width:min(390px, 92vw);
+      height:100vh;
+      z-index:100;
+      transition:right .28s ease;
+      pointer-events:none;
+    }
+    .drawer.open{
+      right:0;
+      pointer-events:auto;
+    }
+
+    .drawer-content{
+      height:100%;
+      background:var(--panel);
+      border-left:1px solid rgba(255,255,255,.10);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      display:flex;
+      flex-direction:column;
+    }
+
+    .drawer-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+    }
+    .drawer-header h3{
+      margin:0;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-size:1rem;
+      letter-spacing:.02em;
+    }
+    .drawer-header svg{
+      width:20px;
+      height:20px;
+      stroke:var(--accent);
+      fill:none;
+      stroke-width:1.8;
+    }
+
+    .drawer-body{
+      padding:16px 18px 20px;
+      overflow:auto;
+    }
+
+    .cockpit-item{
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.07);
+      border-radius:16px;
+      padding:14px;
+      margin-bottom:12px;
+    }
+
+    .cockpit-label{
+      font:700 12px/1.2 "JetBrains Mono", monospace;
+      letter-spacing:.08em;
+      color:var(--muted);
+      margin-bottom:10px;
+      text-transform:uppercase;
+    }
+
+    .cockpit-grid{
+      display:grid;
+      gap:12px;
+    }
+
+    .cockpit-input{
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(0,0,0,.25);
+      color:var(--text);
+      border-radius:12px;
+      padding:12px 12px;
+      outline:none;
+      font:500 14px/1.2 Montserrat, sans-serif;
+    }
+
+    .control-row{
+      display:flex;
+      gap:10px;
+    }
+
+    .btn-block{
+      flex:1;
+      border:none;
+      border-radius:12px;
+      padding:12px 14px;
+      background:linear-gradient(180deg, rgba(125,249,255,.16), rgba(125,249,255,.08));
+      color:var(--text);
+      font-weight:700;
+      cursor:pointer;
+      border:1px solid rgba(125,249,255,.20);
+    }
+
+    .drawer-close{
+      border:none;
+      width:38px;
+      height:38px;
+      border-radius:12px;
+      cursor:pointer;
+      color:var(--text);
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .drawer-overlay{
+      position:fixed;
+      inset:0;
+      z-index:90;
+      background:rgba(0,0,0,.42);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+    }
+    .drawer-overlay.active{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    svg{ display:block; }
+
+.header-orb {
+  /* Definição das variáveis de voz */
+  --kob-voice-primary: #7df9ff;   /* tom ciano neon */
+  --kob-voice-secondary: #b68cff; /* tom violeta suave */
+
+ 
+  
+  /* Aplicação das variáveis no gradiente e na borda */
+  background: linear-gradient(
+    180deg,
+    rgba(125, 249, 255, 0.14) 0%,
+    rgba(182, 140, 255, 0.08) 100%
+  );
+  border: 1px solid var(--kob-voice-primary);
+  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.04) inset,
+              0 10px 30px rgba(0, 0, 0, 0.35);
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.header-orb svg {
+  width: 24px;
+  height: 24px;
+  stroke: var(--kob-voice-secondary); /* ícone usa a cor secundária */
+  fill: none;
+  stroke-width: 1.8;
+}
+
+/* Efeito hover com realce das cores de voz */
+.header-orb:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px var(--kob-voice-primary),
+              0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+/* =========================
+   4. BACKGROUND & AMBIENCE
+========================= */
+.sky-layer { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.sun-background { position: absolute; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle at 30% 30%, #fffde7 0%, #fff176 40%, #ffb300 100%); filter: blur(60px); opacity: 0; transition: opacity 2s; animation: sun-orbit 60s linear infinite; }
+#particles-js { position: fixed; inset: 0; z-index: 1000; opacity: 0.8; pointer-events: none; } /* KxT unificado com Splash */
+#bg-fake-custom { position: fixed; inset: 0; z-index: 1;mix-blend-mode:lighten; opacity: 0.12; background-size: cover; background-position: center; pointer-events: none; }
+
+.ambient-light { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.blob { position: absolute; border-radius: 50%; filter: blur(100px); opacity: 0.14; animation: float 25s infinite alternate ease-in-out; }
+.blob-1 { width: 60vw; height: 60vw; background: var(--neon-cyan); top: -20%; left: -20%; }
+.blob-2 { width: 50vw; height: 50vw; background: var(--neon-purple); bottom: -20%; right: -20%; animation-delay: -5s; }
+
+/* =========================
+   5. KxT CORE UI (Chat & Layout)
+========================= */
+.header-orb { position: fixed; top: 40px; left: 50%; transform: translateX(-50%); width: 70px; height: 70px; z-index: 15; animation: floatOrb 6s ease-in-out infinite; cursor: pointer; transition: all 0.5s ease; }
+.header-orb svg { width: 100%; height: 100%; transition: fill 0.5s ease; filter: drop-shadow(0 0 10px rgba(0,245,255,0.5)); }
+body.mode-day .header-orb svg { fill: #fff176; filter: drop-shadow(0 0 20px #ffb300); }
+body.mode-sunset .header-orb svg { fill: #ffb74d; filter: drop-shadow(0 0 30px #e65100); }
+body.mode-night .header-orb svg { fill: white; filter: drop-shadow(0 0 15px var(--primary)); }
+
+#usernameDisplay { position: fixed; top: 120px; left: 50%; transform: translateX(-50%); z-index: 10; font-size: 0.75rem; color: var(--text-muted); opacity: 0.6; pointer-events: none; text-transform: uppercase; letter-spacing: 2px; }
+#modeIndicator { position: fixed; top: 10px; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-weight: bold; opacity: 0.5; z-index: 20; text-transform: uppercase; letter-spacing: 1px; }
+
+.top-bar { position: fixed; top: 0; left: 0; right: 0; padding: 15px; display: flex; justify-content: space-between; z-index: 20; pointer-events: none; }
+.top-grp { display: flex; gap: 10px; pointer-events: auto; }
+
+
+  </style>
+
+<body class="field-closed mode-night">
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <!-- Distortion SVG Filter -->
+  <svg style="display: none;">
+    <filter id="distort">
+      <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"></feDisplacementMap>
+    </filter>
+  </svg>
+
+  <!-- Áudio Suave -->
+  <audio id="transitionSound" src="https://kodux78k.github.io/oiDual-oiio/suave_portal.mp3" preload="auto"></audio>
+
+  <!-- Partículas -->
+  <div id="particles-js"></div>
+
+  <!-- Logo com Transição -->
+  <div class="logo-container" id="logo" onclick="goToIndex()">
+    <object data="https://kodux78k.github.io/oiDual-oiio/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+  </div>
+
+  <!-- Título e Frase -->
+  <div class="infodose">dual.<strong>Infodose</strong></div>
+ 
+
+<svg style="display:none">
+    <symbol id="icon-orb" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="7"></circle>
+      <circle cx="12" cy="12" r="8"></circle>
+    </symbol>
+    <symbol id="icon-cards" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="16" height="16" rx="2"></rect>
+      <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
+    </symbol>
+    <symbol id="icon-gem" viewBox="0 0 24 24">
+      <path d="M6 3h12l4 6-10 12L2 9z"></path>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </symbol>
+    <symbol id="icon-voice" viewBox="0 0 24 24">
+      <rect x="9" y="1" width="6" height="12" rx="3"></rect>
+      <path d="M5 10a7 7 0 0 0 14 0"></path>
+      <line x1="12" y1="19" x2="12" y2="23"></line>
+      <line x1="8" y1="23" x2="16" y2="23"></line>
+    </symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </symbol>
+  </svg>
+
+  <div class="sky-layer"><div class="sun-background"></div></div>
+  <div id="bg-fake-custom"></div>
+  <div id="nv-toast"></div>
+  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+
+  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
+    <svg><use href="#icon-orb"></use></svg>
+  </div>
+
+  <div id="usernameDisplay"></div>
+
+ 
+
+  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+  <div id="drawerProfile" class="drawer" aria-hidden="true">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h3>
+          <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
+          Cockpit Solar
+        </h3>
+        <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
+          <div class="cockpit-label">Ciclo Solar</div>
+          <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
+          <div class="control-row">
+            <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
+            <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
+          </div>
+        </div>
+
+        <div class="cockpit-grid">
+          <div class="cockpit-item">
+            <div class="cockpit-label">Identificação</div>
+            <input type="text" id="inputUserId" class="cockpit-input" placeholder="Anônimo">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Modelo IA</div>
+            <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Background</div>
+            <div style="display:flex;justify-content:space-between;align-items:center;">
+              <span id="bgStatusText" style="font-size:0.8rem;color:var(--text-muted)">Nenhum</span>
+              <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
+                <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+                <svg><use href="#icon-cards"></use></svg>
+              </label>
+            </div>
+          </div>
+
+          <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  
+ 
+ <!-- Seus Scripts Originais -->
+  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  
+<!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+-->
+ </head>
+
+<body class="ui-safe-vertical">
+  <div id="kxtsk-shell">
+    <div class="os-topbar">
+      <div class="os-brand">
+        KxTsK
+        <small>Unified Patch Loader</small>
+      </div>
+
+      <div class="top-actions">
+        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+        <button class="soft-btn" id="openLogsBtn">Logs</button>
+      </div>
+    </div>
+
+    <div id="dock"></div>
+
+    <div id="stackWrap">
+      <div class="session-window" id="session-iframe">
+        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+
+          <div class="win-controls" onclick="event.stopPropagation()">
+            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+          </div>
+        </div>
+
+        <iframe class="win-frame" src="https://kodux78k.github.io/oiDual-H0/DH0-10.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+
+ 
+
+
+<script src="https://unpkg.com/lucide@latest"></script><script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script><script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script></body></html>
