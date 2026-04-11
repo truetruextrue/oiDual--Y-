@@ -29,10 +29,10 @@
     /* === BAU EMBED STYLES === */
     .bau-float-btn {
       position: fixed;
-      top: 20px;
+      top: 8px;
       right: 20px;
-      width: 52px;
-      height: 52px;
+      width: 39px;
+      height: 39px;
       border-radius: 30px;
       background: linear-gradient(145deg, #ff52e5, #00c5e5);
       border: none;
