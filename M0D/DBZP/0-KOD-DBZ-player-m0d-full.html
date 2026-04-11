@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KODUX • DBZ FUSION PLAYER</title>
+    
+    <!-- CDNs Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    
+    <!-- Suas CDNs Customizadas -->
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/dbzp.css">
+
+   
+</head>
+<body class="bg-[#0b0514] h-screen overflow-hidden text-white font-sans">
+
+    <div class="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-purple-900/20 pointer-events-none"></div>
+
+    <!-- Container do Player com classe inicial colapsada -->
+    <div id="dbz-player" class="player-collapsed">
+        <div class="dbz-wrapper">
+            <div class="dbz-scouter-lines"></div>
+
+            <!-- Top Bar Principal -->
+            <div class="dbz-topbar flex items-center pr-4">
+                
+                <!-- Botão de Play (Sempre Visível) -->
+                <div id="main-action-btn" class="ml-4 mr-2 flex-shrink-0 cursor-pointer">
+                    <i id="play-icon" class="ph-fill ph-play-circle text-[42px] text-orange-500 drop-shadow-[0_0_8px_rgba(255,107,0,0.5)]"></i>
+                </div>
+
+                <!-- Conteúdo que some ao colapsar -->
+                <div id="dynamic-content" class="content-fade opacity-0 flex items-center flex-grow overflow-hidden">
+                    <!-- Info da Faixa -->
+                    <div class="dbz-track-info cursor-pointer flex-grow overflow-hidden mr-2" id="expand-trigger">
+                        <div class="dbz-track-title truncate text-xs" id="dbz-track-title">Sintonizando...</div>
+                        <div class="dbz-track-artist text-[8px] opacity-60 uppercase">Dual Audio • Scouter</div>
+                    </div>
+
+                    <!-- Controles Rápidos -->
+                    <div class="dbz-controls flex items-center gap-2 flex-shrink-0">
+                        <button class="dbz-btn !bg-transparent p-1" id="next-track-btn">
+                            <i class="ph-fill ph-skip-forward-circle text-xl opacity-70 hover:opacity-100"></i>
+                        </button>
+                        <button class="dbz-btn !bg-transparent p-1" id="menu-toggle-btn">
+                            <i class="ph-fill ph-list text-xl opacity-70 hover:opacity-100"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Colapsável (Scouter Completo) -->
+            <div class="dbz-body" id="dbz-body" style="display: none; margin-top: 10px;">
+                <div class="dbz-power-level">
+                    <span class="dbz-power-label">RADAR KI</span>
+                    <div class="dbz-power-bar-bg">
+                        <div class="dbz-power-bar-fill" id="dbz-power-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="dbz-power-value" id="dbz-power-value">0000</span>
+                </div>
+
+                <div class="dbz-sc-frame">
+                    <iframe id="dbz-sc-iframe"
+                        scrolling="no" frameborder="no" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas&color=%23ff6b00&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=true">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Menu de Playlists -->
+            <div id="dbz-menu">
+                <div class="px-4 py-2 text-[8px] border-b border-orange-500/20 text-orange-400 font-bold tracking-[2px]">PLAYLISTS</div>
+                <div class="dbz-menu-item" data-url="https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas">RELÍQUIAS DO PRÍNCIPE</div>
+                <div class="dbz-menu-item" data-url="https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso">MAPEAMENTO PULSO</div>
+            </div>
+
+            <div class="dbz-energy-wave"></div>
+        </div>
+    </div>
+
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/dbzp-full.js"></script>
+
+</body>
+</html>
+
