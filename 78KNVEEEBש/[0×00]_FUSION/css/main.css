@@ -1,0 +1,18 @@
+/* KOBLLUX Reset */ * { margin:0; padding:0; box-sizing:border-box; } html, body { height:100%; } img, picture, video, canvas, svg { display:block; max-width:100%; } input, button, textarea, select { font:inherit; } p, h1, h2, h3, h4, h5, h6 { overflow-wrap:break-word; } /* ═══ KOBLLUX DNA SCALAR · injected by dual.mod ═══
+   S=Σbᵢ·2^(i-1) · V(n)=V₀×∏cos(3πk/6) · χ=V-E+F
+═══════════════════════════════════════════════════════ */
+:root {
+  --fs-base:  clamp(9px, 1.3vw + 0.4vh, 13px);
+  --fs-d1: calc(var(--fs-base)*0.55); --fs-d2: calc(var(--fs-base)*0.65);
+  --fs-d3: calc(var(--fs-base)*0.75); --fs-d4: calc(var(--fs-base)*0.82);
+  --fs-d5: calc(var(--fs-base)*0.90); --fs-d6: var(--fs-base);
+  --fs-d7: calc(var(--fs-base)*1.20); --fs-d8: calc(var(--fs-base)*1.50);
+  --sp-1:calc(var(--fs-base)*0.40); --sp-2:calc(var(--fs-base)*0.75);
+  --sp-3:calc(var(--fs-base)*1.20); --sp-4:calc(var(--fs-base)*2.00);
+  --phi:1.618; --fractal-1134:1134; --freq-natural:432;
+  --cor-0x00:#b978ff; --cor-0x01:#67e6ff; --cor-0x02:#7cffb2;
+  --cor-0x03:#4de0ff; --cor-0x04:#ff9ad1; --cor-0x05:#ff7a00;
+  --cor-0x06:#a8ff78; --cor-0x07:#ffd700; --cor-0x08:#00b894;
+  --cor-0x09:#6c5ce7; --cor-0x0A:#74b9ff; --cor-0x0B:#ff52e5;
+  --cor-0x0C:#f2c94c;
+}
