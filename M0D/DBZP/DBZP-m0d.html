@@ -1,0 +1,78 @@
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/dbzp.css">
+
+<!-- ════════════════════════════════════════════
+       DRAGON BALL Z · SOUNDCLOUD PLAYER
+       Opcode: 0x0A · TRANSMITIR · 432Hz
+  ════════════════════════════════════════════ -->
+  <div id="dbz-player">
+    <div class="dbz-wrapper">
+      <div class="dbz-scouter-lines"></div>
+
+      <!-- Top Bar (always visible) -->
+      <div class="dbz-topbar" onclick="DBZPlayer.toggle(event)">
+        <div class="dbz-topbar-left">
+          <div class="dbz-icon"></div>
+          <div class="dbz-track-info">
+            <div class="dbz-track-title" id="dbz-track-title">O Código Python que Compila a Alma</div>
+            <div class="dbz-track-artist">Oi Dual × Info Dose · INFODOSE TTS</div>
+          </div>
+        </div>
+
+        <!-- Audio Visualizer -->
+        <div class="dbz-visualizer" id="dbz-visualizer">
+          <div class="dbz-vis-bar" style="--bar-speed:0.3s;--bar-max:18px;height:4px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.45s;--bar-max:24px;height:8px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.35s;--bar-max:16px;height:12px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.5s;--bar-max:22px;height:6px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.28s;--bar-max:20px;height:10px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.42s;--bar-max:24px;height:14px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.38s;--bar-max:18px;height:8px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.32s;--bar-max:22px;height:5px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.48s;--bar-max:16px;height:10px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.36s;--bar-max:20px;height:7px"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="dbz-controls">
+          <button class="dbz-btn dbz-btn-collapse" onclick="DBZPlayer.collapse(event)" title="Colapsar">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </button>
+          <button class="dbz-btn dbz-btn-expand" onclick="DBZPlayer.expand(event)" title="Expandir">
+            <i data-lucide="chevron-up" class="w-4 h-4"></i>
+          </button>
+          <button class="dbz-btn dbz-btn-close" onclick="DBZPlayer.close(event)" title="Fechar">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Body (collapsible) -->
+      <div class="dbz-body" id="dbz-body">
+        <!-- Power Level -->
+        <div class="dbz-power-level">
+          <span class="dbz-power-label">Power Level</span>
+          <div class="dbz-power-bar-bg">
+            <div class="dbz-power-bar-fill" id="dbz-power-fill"></div>
+          </div>
+          <span class="dbz-power-value" id="dbz-power-value">9.001</span>
+        </div>
+
+        <!-- SoundCloud Embed -->
+        <div class="dbz-sc-frame">
+          <iframe id="dbz-sc-iframe"
+            scrolling="no"
+            allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2300541023&color=%23ff6b00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- Energy Wave -->
+      <div class="dbz-energy-wave"></div>
+    </div>
+  </div>
+
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/dbzp.js"></script>
+
+
