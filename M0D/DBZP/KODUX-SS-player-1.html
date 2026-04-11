@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>CÉREBRO-ORÁCULO • KODUX DUal</title>
+  
+  <!-- Tailwind + Ícones -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://w.soundcloud.com/player/api.js"></script>
+  
+  <style>
+    /* ===== VARIÁVEIS KODUX DINÂMICAS ===== */
+    :root {
+      --primary: #ff5500;
+      --secondary: #0b0f14;
+      --cob: #111827;
+      --voice: #ffffff;
+      --voice-muted: #9ca3af;
+      --dbz-gold: #ffaa00;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at 20% 30%, #1a1f2a, #0b0f14);
+      color: var(--voice);
+      min-height: 100vh;
+      padding-bottom: 100px;
+    }
+
+    /* Scrollbar Cósmico */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f14; }
+    ::-webkit-scrollbar-thumb { background: #2a2f3a; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    /* ===== VIDRO + GLOW ===== */
+    .glass-header {
+      background: rgba(8, 12, 18, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 85, 0, 0.2);
+    }
+
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 85, 0, 0.15);
+    }
+
+    .hero-glow {
+      box-shadow: 0 0 60px var(--primary);
+      opacity: 0.2;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 20px var(--primary);
+      transition: all 0.15s;
+    }
+    .btn-primary:active { transform: scale(0.94); filter: brightness(1.3); }
+
+    /* Item de faixa */
+    .track-item {
+      transition: background 0.2s;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+    .track-item.playing {
+      background: rgba(255, 85, 0, 0.08);
+      border-left: 3px solid var(--primary);
+    }
+    .track-item.playing .track-title { color: var(--primary); }
+
+    /* Animação Vinil/Capa */
+    @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+    .spin-anim { animation: spin-slow 12s linear infinite; }
+    .spin-paused { animation-play-state: paused; }
+
+    /* DBZ SCOUTER ELEMENT */
+    .ki-bar-container {
+      background: #1a1e2a;
+      border-radius: 20px;
+      padding: 2px;
+      border: 1px solid #3a3f55;
+    }
+    .ki-bar-fill {
+      height: 6px;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #ffbb00, #ff5500);
+      box-shadow: 0 0 12px #ff7700;
+      width: 0%;
+    }
+    .ki-value {
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 8px var(--primary);
+    }
+
+    /* Input flutuante para colar link */
+    .link-modal {
+      background: rgba(10, 14, 23, 0.95);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      box-shadow: 0 0 40px rgba(255,85,0,0.3);
+    }
+  </style>
+</head>
+<body class="antialiased flex flex-col">
+
+<!-- ========== HEADER MESTRE ========== -->
+<header class="glass-header sticky top-0 z-50 px-5 py-3 flex justify-between items-center w-full">
+  <div class="flex items-center gap-2">
+    <i data-lucide="zap" class="w-6 h-6" style="color: var(--primary)"></i>
+    <span class="font-bold text-xl tracking-widest bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">KODUX·ORÁCULO</span>
+  </div>
+  
+  <div class="flex items-center gap-3">
+    <!-- Upload Local -->
+    <label for="upload" class="cursor-pointer bg-[#1e2532] p-2 rounded-full hover:bg-[#2a3345] transition border border-white/10">
+      <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+      <input type="file" id="upload" accept="audio/*" multiple class="hidden">
+    </label>
+    
+    <!-- Botão COLAR LINK (SoundCloud / YouTube) -->
+    <button id="pasteLinkBtn" class="bg-[#1e2532] p-2 rounded-full hover:bg-[#2a3345] transition border border-white/10">
+      <i data-lucide="link" class="w-5 h-5"></i>
+    </button>
+  </div>
+</header>
+
+<!-- ========== MODAL PARA COLAR LINK ========== -->
+<div id="linkModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden bg-black/60 backdrop-blur-sm">
+  <div class="link-modal w-full max-w-md p-6 rounded-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-lg font-bold flex items-center gap-2"><i data-lucide="radio" class="w-5 h-5 text-orange-500"></i> SINTONIZAR LINK</h3>
+      <button id="closeModal" class="p-1"><i data-lucide="x" class="w-5 h-5"></i></button>
+    </div>
+    <input type="text" id="linkInput" placeholder="Cole URL do SoundCloud ou YouTube..." class="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-orange-500 outline-none mb-4">
+    <div class="flex gap-3">
+      <button id="addLinkBtn" class="btn-primary flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+        <i data-lucide="plus-circle" class="w-5 h-5"></i> ADICIONAR
+      </button>
+    </div>
+    <p class="text-[10px] text-gray-400 mt-3 text-center">Suporte: track/playlist do SoundCloud • vídeo do YouTube</p>
+  </div>
+</div>
+
+<main class="flex-1 w-full max-w-2xl mx-auto px-4 relative">
+  
+  <!-- ===== HERO SECTION (CAPA + VISUALIZADOR KI) ===== -->
+  <section class="pt-6 pb-2 flex flex-col items-center relative">
+    <div class="absolute inset-0 hero-glow rounded-full blur-3xl -z-10 w-80 h-80 mx-auto mt-6" id="heroGlow"></div>
+
+    <!-- Capa giratória -->
+    <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-2xl overflow-hidden shadow-2xl mb-4 border border-orange-500/30" id="coverContainer">
+      <img id="mainCover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop" alt="Cover" class="w-full h-full object-cover transition-transform duration-700">
+      <button id="heroPlayBtn" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition">
+        <div class="btn-primary p-5 rounded-full"><i data-lucide="play" class="w-8 h-8 ml-1"></i></div>
+      </button>
+    </div>
+
+    <div class="text-center w-full">
+      <h1 id="mainTitle" class="text-2xl font-bold truncate">CÉREBRO SILENCIOSO</h1>
+      <p id="mainArtist" class="text-gray-400 text-sm">Aguardando transmissão</p>
+    </div>
+
+    <!-- VISUALIZADOR KI + BARRA DBZ -->
+    <div class="w-full mt-5">
+      <canvas id="visualizer" class="w-full h-14 rounded-lg"></canvas>
+      
+      <!-- SCOUTER KI (estilo DBZ) -->
+      <div class="flex items-center gap-3 mt-2 px-2">
+        <span class="text-[10px] font-bold tracking-widest text-orange-300/70">RADAR KI</span>
+        <div class="ki-bar-container flex-1">
+          <div id="kiBarFill" class="ki-bar-fill" style="width:0%"></div>
+        </div>
+        <span id="kiValueDisplay" class="ki-value text-sm font-mono text-orange-400">0000</span>
+      </div>
+    </div>
+
+    <!-- Controles principais -->
+    <div class="flex items-center justify-center gap-8 mt-5 w-full">
+      <button onclick="prevTrack()" class="p-3 text-gray-400 hover:text-white transition"><i data-lucide="skip-back" class="w-7 h-7"></i></button>
+      <button id="mainPlayBtn" onclick="togglePlay()" class="btn-primary p-5 rounded-full text-white"><i data-lucide="play" id="playIconMain" class="w-8 h-8 ml-1"></i></button>
+      <button onclick="nextTrack()" class="p-3 text-gray-400 hover:text-white transition"><i data-lucide="skip-forward" class="w-7 h-7"></i></button>
+    </div>
+  </section>
+
+  <!-- ===== LISTA DE FAIXAS (BIBLIOTECA ORÁCULO) ===== -->
+  <section class="mt-8 pb-8">
+    <div class="flex justify-between items-end mb-3 px-2">
+      <h2 class="text-base font-bold uppercase tracking-wider text-orange-200/80">PLAYLISTS DO ORÁCULO</h2>
+      <span class="text-[10px] text-gray-500">KODUX.DUAL</span>
+    </div>
+    <div id="trackList" class="flex flex-col gap-0.5">
+      <!-- JS injeta as faixas -->
+      <div class="text-center text-gray-500 text-sm py-12">Nenhuma frequência sintonizada. Use ↑ upload ou cole link.</div>
+    </div>
+  </section>
+</main>
+
+<!-- ===== MINI PLAYER FIXO (ESTILO DBZ) ===== -->
+<div id="bottomPlayer" class="glass-panel fixed bottom-0 left-0 w-full px-4 py-3 flex items-center z-50 transform translate-y-full transition-transform duration-300 border-t border-orange-500/30">
+  <div class="absolute top-0 left-0 w-full h-1.5 bg-gray-800 cursor-pointer" id="progressContainer" onclick="seek(event)">
+    <div id="progressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-600 w-0 shadow-[0_0_10px_orange]"></div>
+  </div>
+
+  <div class="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer" onclick="scrollToTop()">
+    <img id="miniCover" src="" class="w-12 h-12 rounded-md object-cover border border-orange-500/40 spin-anim spin-paused">
+    <div class="flex flex-col truncate">
+      <span id="miniTitle" class="text-sm font-semibold truncate">—</span>
+      <div class="flex items-center gap-2">
+        <span id="miniTime" class="text-xs text-orange-400 font-medium">0:00 / 0:00</span>
+        <span id="sourceBadge" class="text-[9px] bg-orange-900/40 px-1.5 rounded text-orange-300">LOCAL</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 ml-3">
+    <button onclick="togglePlay()" class="text-white p-2"><i data-lucide="play" id="playIconMini" class="w-6 h-6"></i></button>
+  </div>
+</div>
+
+<!-- Players ocultos -->
+<audio id="audioElement" crossorigin="anonymous"></audio>
+<div id="sc-widget-container" style="display:none;"></div>
+<div id="yt-player-container" style="display:none;"></div>
+
+<script>
+  (function(){
+    "use strict";
+    
+    // ========== ÍCONES ==========
+    lucide.createIcons();
+    
+    // ========== DOM ELEMENTOS ==========
+    const audio = document.getElementById('audioElement');
+    const uploadInput = document.getElementById('upload');
+    const trackListEl = document.getElementById('trackList');
+    const bottomPlayer = document.getElementById('bottomPlayer');
+    const mainCover = document.getElementById('mainCover');
+    const miniCover = document.getElementById('miniCover');
+    const mainTitle = document.getElementById('mainTitle');
+    const miniTitle = document.getElementById('miniTitle');
+    const mainArtist = document.getElementById('mainArtist');
+    const heroGlow = document.getElementById('heroGlow');
+    const playIconMain = document.getElementById('playIconMain');
+    const playIconMini = document.getElementById('playIconMini');
+    const heroPlayBtn = document.getElementById('heroPlayBtn');
+    const progressBar = document.getElementById('progressBar');
+    const progressContainer = document.getElementById('progressContainer');
+    const miniTime = document.getElementById('miniTime');
+    const sourceBadge = document.getElementById('sourceBadge');
+    const canvas = document.getElementById('visualizer');
+    const canvasCtx = canvas.getContext('2d');
+    const kiBarFill = document.getElementById('kiBarFill');
+    const kiValueDisplay = document.getElementById('kiValueDisplay');
+    
+    // Modal
+    const linkModal = document.getElementById('linkModal');
+    const pasteLinkBtn = document.getElementById('pasteLinkBtn');
+    const closeModal = document.getElementById('closeModal');
+    const linkInput = document.getElementById('linkInput');
+    const addLinkBtn = document.getElementById('addLinkBtn');
+    
+    // ========== ESTADO GLOBAL ==========
+    let tracks = [];                // { type, url, title, artist, cover, id, duration }
+    let currentIndex = -1;
+    let isPlaying = false;
+    let currentSourceType = null;    // 'local', 'soundcloud', 'youtube'
+    
+    // APIs externas
+    let scWidget = null;
+    let ytPlayer = null;
+    let ytReady = false;
+    let scWidgetLoaded = false;
+    
+    // AudioContext / Visualizer
+    let audioCtx, analyser, sourceNode, dataArray;
+    let isAudioCtxInit = false;
+    
+    // Timers
+    let progressInterval;
+    let scDuration = 0;
+    
+    // ========== COR DINÂMICA (HORA) ==========
+    function updateThemeColor() {
+      const hour = new Date().getHours();
+      let color = '#ff5500';
+      if (hour >= 5 && hour < 12) color = '#f59e0b';
+      else if (hour >= 12 && hour < 18) color = '#ff5500';
+      else if (hour >= 18 && hour < 23) color = '#a855f7';
+      else color = '#ef4444';
+      document.documentElement.style.setProperty('--primary', color);
+    }
+    updateThemeColor(); setInterval(updateThemeColor, 60000);
+    
+    // ========== VISUALIZADOR ==========
+    function initVisualizerForLocal() {
+      if (isAudioCtxInit) return;
+      try {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioCtx.createAnalyser();
+        sourceNode = audioCtx.createMediaElementSource(audio);
+        sourceNode.connect(analyser);
+        analyser.connect(audioCtx.destination);
+        analyser.fftSize = 128;
+        dataArray = new Uint8Array(analyser.frequencyBinCount);
+        isAudioCtxInit = true;
+        drawVisualizer();
+      } catch(e) { console.warn("AudioContext error:", e); }
+    }
+    
+    function drawVisualizer() {
+      requestAnimationFrame(drawVisualizer);
+      if (!isPlaying && currentSourceType !== 'local') return;
+      canvas.width = canvas.clientWidth || 300;
+      canvas.height = canvas.clientHeight || 56;
+      
+      if (currentSourceType === 'local' && analyser && dataArray) {
+        analyser.getByteFrequencyData(dataArray);
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+        const barWidth = (canvas.width / dataArray.length) * 1.6;
+        let x = 0;
+        const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+        for (let i=0; i<dataArray.length; i++) {
+          const h = (dataArray[i]/255) * canvas.height;
+          canvasCtx.fillStyle = primary;
+          canvasCtx.shadowBlur = 10;
+          canvasCtx.shadowColor = primary;
+          canvasCtx.fillRect(x, canvas.height-h, barWidth-2, h);
+          x += barWidth;
+        }
+        const bass = dataArray[0] || 0;
+        heroGlow.style.opacity = 0.1 + (bass/255)*0.4;
+      } else {
+        // fallback para SC/YT: barras dummy piscando
+        canvasCtx.clearRect(0,0,canvas.width,canvas.height);
+        if (isPlaying) {
+          canvasCtx.fillStyle = '#ff7700';
+          for (let i=0;i<20;i++) {
+            const h = 8 + Math.random()*20;
+            canvasCtx.fillRect(i*15, canvas.height-h, 8, h);
+          }
+        }
+      }
+    }
+    
+    // ========== SINCRONIZAÇÃO UI ==========
+    function updatePlayIcons(icon) {
+      playIconMain.setAttribute('data-lucide', icon);
+      playIconMini.setAttribute('data-lucide', icon);
+      lucide.createIcons({ icons: { play: lucide.icons.Play, pause: lucide.icons.Pause } });
+    }
+    
+    function updateMetaUI(track) {
+      mainTitle.innerText = track.title || 'Desconhecido';
+      mainArtist.innerText = track.artist || (track.type==='soundcloud'?'SoundCloud': track.type==='youtube'?'YouTube':'Local');
+      mainCover.src = track.cover || 'https://picsum.photos/500/500?random='+Date.now();
+      miniCover.src = mainCover.src;
+      miniTitle.innerText = track.title;
+      sourceBadge.innerText = track.type.toUpperCase();
+      sourceBadge.className = `text-[9px] px-1.5 rounded ${track.type==='local'?'bg-blue-900/40 text-blue-300': track.type==='soundcloud'?'bg-orange-900/40 text-orange-300':'bg-red-900/40 text-red-300'}`;
+      renderTrackList();
+    }
+    
+    function formatTime(sec) {
+      if(isNaN(sec)) return '0:00';
+      const m = Math.floor(sec/60), s = Math.floor(sec%60);
+      return `${m}:${s<10?'0':''}${s}`;
+    }
+    
+    // ========== RENDER LISTA ==========
+    function renderTrackList() {
+      if(!tracks.length) { trackListEl.innerHTML = '<div class="text-center text-gray-500 py-10">PLAYLIST VAZIA</div>'; return; }
+      trackListEl.innerHTML = '';
+      tracks.forEach((t,i) => {
+        const active = i===currentIndex;
+        const div = document.createElement('div');
+        div.className = `track-item flex items-center gap-3 px-4 py-2.5 cursor-pointer ${active?'playing':''}`;
+        div.onclick = (e) => {
+          if(currentIndex===i) togglePlay();
+          else { loadTrack(i); playAudio(); }
+        };
+        div.innerHTML = `
+          <img src="${t.cover}" class="w-11 h-11 rounded-md object-cover border ${active?'border-orange-500':'border-white/10'}">
+          <div class="flex-1 min-w-0">
+            <div class="track-title text-sm font-semibold truncate ${active?'text-orange-400':''}">${t.title}</div>
+            <div class="text-[10px] text-gray-400 flex items-center gap-1"><span>${t.artist||'—'}</span><span class="bg-white/10 px-1 rounded text-[8px]">${t.type}</span></div>
+          </div>
+          ${active && isPlaying ? '<i data-lucide="volume-2" class="w-4 h-4 text-orange-500"></i>' : ''}
+        `;
+        trackListEl.appendChild(div);
+      });
+      lucide.createIcons();
+    }
+    
+    // ========== CARREGAR FAIXA ==========
+    function loadTrack(index) {
+      if(index<0 || index>=tracks.length) return;
+      currentIndex = index;
+      const track = tracks[index];
+      currentSourceType = track.type;
+      updateMetaUI(track);
+      
+      // Parar fontes anteriores
+      audio.pause();
+      if(scWidget) scWidget.pause();
+      if(ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+      
+      // Ativar player correto
+      if(track.type === 'local') {
+        audio.src = track.url;
+        audio.load();
+        if(!isAudioCtxInit) initVisualizerForLocal();
+      } else if(track.type === 'soundcloud') {
+        if(!scWidget) {
+          const iframe = document.createElement('iframe');
+          iframe.id = 'sc-iframe';
+          iframe.allow = 'autoplay';
+          iframe.style.display = 'none';
+          document.getElementById('sc-widget-container').appendChild(iframe);
+          scWidget = SC.Widget(iframe);
+          scWidget.bind(SC.Widget.Events.READY, () => { scWidgetLoaded = true; });
+          scWidget.bind(SC.Widget.Events.PLAY, () => { isPlaying=true; updatePlayIcons('pause'); heroPlayBtn.classList.add('hidden'); });
+          scWidget.bind(SC.Widget.Events.PAUSE, () => { isPlaying=false; updatePlayIcons('play'); heroPlayBtn.classList.remove('hidden'); });
+          scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+            const pct = e.relativePosition;
+            progressBar.style.width = (pct*100)+'%';
+            kiBarFill.style.width = (pct*100)+'%';
+            kiValueDisplay.innerText = Math.floor(pct*9001).toString().padStart(4,'0');
+            miniTime.innerText = `${formatTime(e.currentPosition/1000)} / ${formatTime(scDuration)}`;
+          });
+        }
+        scWidget.load(track.url, { auto_play: false, visual: false });
+        scWidget.getDuration(d => scDuration = d/1000);
+      } else if(track.type === 'youtube') {
+        if(!ytPlayer) {
+          ytPlayer = new YT.Player('yt-player-container', {
+            height: '0', width: '0',
+            events: {
+              onReady: () => { ytReady = true; if(currentIndex>=0 && tracks[currentIndex].type==='youtube') ytPlayer.loadVideoById(tracks[currentIndex].id); },
+              onStateChange: (e) => {
+                if(e.data === YT.PlayerState.PLAYING) { isPlaying=true; updatePlayIcons('pause'); heroPlayBtn.classList.add('hidden'); }
+                else if(e.data === YT.PlayerState.PAUSED) { isPlaying=false; updatePlayIcons('play'); heroPlayBtn.classList.remove('hidden'); }
+                else if(e.data === YT.PlayerState.ENDED) nextTrack();
+              }
+            }
+          });
+        }
+        if(ytReady) ytPlayer.loadVideoById(track.id);
+        else setTimeout(()=> ytPlayer.loadVideoById(track.id), 500);
+      }
+      
+      bottomPlayer.classList.remove('translate-y-full');
+      renderTrackList();
+    }
+    
+    // ========== PLAY/PAUSE ==========
+    function togglePlay() {
+      if(tracks.length===0) return;
+      if(currentIndex===-1) loadTrack(0);
+      const track = tracks[currentIndex];
+      
+      if(track.type==='local') {
+        if(audio.paused) { audio.play(); isPlaying=true; updatePlayIcons('pause'); heroPlayBtn.classList.add('hidden'); if(audioCtx?.state==='suspended') audioCtx.resume(); }
+        else { audio.pause(); isPlaying=false; updatePlayIcons('play'); heroPlayBtn.classList.remove('hidden'); }
+      } else if(track.type==='soundcloud') {
+        scWidget.toggle();
+      } else if(track.type==='youtube') {
+        if(ytPlayer) {
+          const state = ytPlayer.getPlayerState();
+          if(state===1) ytPlayer.pauseVideo(); else ytPlayer.playVideo();
+        }
+      }
+      miniCover.classList.toggle('spin-paused', !isPlaying);
+    }
+    
+    function playAudio() { if(tracks.length) { if(currentIndex===-1) loadTrack(0); togglePlay(); } }
+    function nextTrack() { if(tracks.length) { let n = (currentIndex+1)%tracks.length; loadTrack(n); playAudio(); } }
+    function prevTrack() {
+      if(!tracks.length) return;
+      if(audio.currentTime>3 || (currentSourceType!=='local')) { 
+        if(currentSourceType==='local') audio.currentTime=0; 
+        else if(currentSourceType==='soundcloud') scWidget.seekTo(0);
+        else if(ytPlayer) ytPlayer.seekTo(0);
+      } else {
+        let p = currentIndex-1; if(p<0) p=tracks.length-1;
+        loadTrack(p); playAudio();
+      }
+    }
+    
+    // Progresso Local + YT
+    audio.addEventListener('timeupdate', ()=>{
+      if(currentSourceType!=='local') return;
+      const pct = audio.currentTime/audio.duration||0;
+      progressBar.style.width = (pct*100)+'%';
+      kiBarFill.style.width = (pct*100)+'%';
+      kiValueDisplay.innerText = Math.floor(pct*9001).toString().padStart(4,'0');
+      miniTime.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+    });
+    audio.addEventListener('ended', nextTrack);
+    
+    // YT progress
+    setInterval(()=>{
+      if(currentSourceType==='youtube' && ytPlayer && isPlaying) {
+        const dur = ytPlayer.getDuration(); const cur = ytPlayer.getCurrentTime();
+        if(dur) { const pct = cur/dur; progressBar.style.width=(pct*100)+'%'; kiBarFill.style.width=(pct*100)+'%'; kiValueDisplay.innerText=Math.floor(pct*9001).toString().padStart(4,'0'); miniTime.innerText=`${formatTime(cur)} / ${formatTime(dur)}`; }
+      }
+    },500);
+    
+    function seek(e) {
+      const rect = progressContainer.getBoundingClientRect();
+      const pct = (e.clientX-rect.left)/rect.width;
+      if(currentSourceType==='local') audio.currentTime = pct*audio.duration;
+      else if(currentSourceType==='soundcloud') scWidget.seekTo(pct*scDuration*1000);
+      else if(ytPlayer) ytPlayer.seekTo(pct*ytPlayer.getDuration());
+    }
+    
+    // ========== UPLOAD LOCAL ==========
+    uploadInput.addEventListener('change', (e)=>{
+      Array.from(e.target.files).forEach(f=>{
+        const url = URL.createObjectURL(f);
+        tracks.push({
+          type:'local', url, title: f.name.replace(/\.[^/.]+$/,""), artist:'Upload Local',
+          cover: `https://picsum.photos/seed/${Math.random()}/500/500`
+        });
+      });
+      renderTrackList(); if(currentIndex===-1) { loadTrack(0); bottomPlayer.classList.remove('translate-y-full'); }
+    });
+    
+    // ========== COLAR LINK (SC/YT) ==========
+    pasteLinkBtn.onclick = ()=> linkModal.classList.remove('hidden');
+    closeModal.onclick = ()=> linkModal.classList.add('hidden');
+    
+    async function addLink(url) {
+      let type, resolvedUrl=url, id, title, artist='', cover='';
+      if(url.includes('soundcloud.com')) {
+        type='soundcloud';
+        // usa oembed para título e capa
+        try {
+          const res = await fetch(`https://soundcloud.com/oembed?url=${encodeURIComponent(url)}&format=json`);
+          const data = await res.json();
+          title = data.title; cover = data.thumbnail_url;
+        } catch { title = 'SoundCloud Track'; cover = 'https://picsum.photos/500/500?sc'; }
+      } else if(url.includes('youtube.com') || url.includes('youtu.be')) {
+        type='youtube';
+        const vid = url.match(/(?:v=|\/)([0-9A-Za-z_-]{11})/);
+        id = vid ? vid[1] : null; if(!id) return alert('ID inválido');
+        resolvedUrl = `https://youtu.be/${id}`;
+        try {
+          const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(resolvedUrl)}&format=json`);
+          const data = await res.json();
+          title = data.title; cover = data.thumbnail_url;
+          artist = data.author_name;
+        } catch { title = 'YouTube Video'; cover = `https://img.youtube.com/vi/${id}/hqdefault.jpg`; }
+      } else return alert('URL não suportada');
+      
+      tracks.push({ type, url: type==='soundcloud'?url:resolvedUrl, id, title, artist, cover });
+      renderTrackList(); linkModal.classList.add('hidden'); linkInput.value='';
+      if(currentIndex===-1) { loadTrack(0); bottomPlayer.classList.remove('translate-y-full'); }
+    }
+    
+    addLinkBtn.onclick = ()=> { if(linkInput.value) addLink(linkInput.value); };
+    
+    // ========== PRESET LINKS (KODUX) ==========
+    (function presetLinks(){
+      tracks.push(
+        { type:'soundcloud', url:'https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas', title:'RELÍQUIAS DO PRÍNCIPE', artist:'KODUX', cover:'https://picsum.photos/500/500?reliquias' },
+        { type:'soundcloud', url:'https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso', title:'MAPEAMENTO PULSO', artist:'DUAL X', cover:'https://picsum.photos/500/500?pulso' }
+      );
+      // Exemplo YouTube
+      tracks.push({ type:'youtube', id:'dQw4w9WgXcQ', url:'https://youtu.be/dQw4w9WgXcQ', title:'Never Gonna Give You Up', artist:'Rick Astley', cover:'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg' });
+      renderTrackList();
+      loadTrack(0);
+    })();
+    
+    // Helpers
+    window.togglePlay = togglePlay;
+    window.nextTrack = nextTrack;
+    window.prevTrack = prevTrack;
+    window.seek = seek;
+    window.scrollToTop = ()=> window.scrollTo({top:0,behavior:'smooth'});
+    
+    // Inicializar YT API
+    if(!window.YT) {
+      const tag = document.createElement('script'); tag.src = "https://www.youtube.com/iframe_api";
+      document.head.appendChild(tag);
+    }
+    window.onYouTubeIframeAPIReady = ()=> { ytReady = true; };
+    
+    drawVisualizer();
+  })();
+</script>
+</body>
+</html>

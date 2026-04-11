@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0c14">
+    <title>KODUX | Super Saiyan Player</title>
+    
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        :root {
+            /* KODUX Core Variables */
+            --kob-voice-primary: #32d7cb;
+            --kob-voice-bg-soft: rgba(10, 12, 20, 0.8);
+            --bg: #050505;
+            --ink: #ffffff;
+            --text: #f0f3f9;
+            --muted: rgba(255, 255, 255, 0.4);
+            --border: rgba(255, 255, 255, 0.08);
+            --panel-blur: blur(20px) saturate(180%);
+            
+            /* Dynamic State Variable (Changes via JS) */
+            --primary: var(--kob-voice-primary);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden; /* Prevent body scroll, handle inside main */
+            height: 100vh;
+            height: 100dvh;
+        }
+
+        /* Ambiente Cinematográfico */
+        .nébula {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% -20%, var(--kob-voice-bg-soft), var(--bg) 80%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nébula::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.03"/></svg>');
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glassmorphism utilities */
+        .glass {
+            background: var(--kob-voice-bg-soft);
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border-top: 1px solid var(--border);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+        /* UI Elements */
+        .upload-btn {
+            background: linear-gradient(135deg, var(--primary), #1a1a2e);
+            box-shadow: 0 0 20px -5px var(--primary);
+            transition: all 0.3s ease;
+        }
+        
+        .track-card {
+            transition: transform 0.2s, background 0.2s;
+            border: 1px solid transparent;
+        }
+        .track-card:active {
+            transform: scale(0.98);
+            background: var(--border);
+        }
+
+        /* Waveform glow */
+        #waveform-canvas {
+            filter: drop-shadow(0 0 8px var(--primary));
+        }
+
+        /* Player Animations */
+        .player-full {
+            transition: transform 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            will-change: transform;
+        }
+
+        .cover-art-full {
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.8);
+            transition: transform 0.3s ease;
+        }
+        
+        .playing .cover-art-full {
+            transform: scale(1.02);
+        }
+
+        /* Gestures */
+        .drag-handle {
+            width: 40px; height: 4px;
+            background: var(--muted);
+            border-radius: 4px;
+            margin: 12px auto;
+        }
+
+        /* Mini Player Progress */
+        .mini-progress {
+            height: 2px;
+            background: rgba(255,255,255,0.1);
+            position: absolute;
+            top: 0; left: 0; right: 0;
+        }
+        .mini-progress-bar {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+
+<div class="nébula relative z-10">
+    
+    <!-- HEADER -->
+    <header class="flex justify-between items-center px-6 py-4 glass absolute top-0 w-full z-20 border-b border-white/5">
+        <div class="flex items-center gap-2">
+            <i class="ph-fill ph-waveform text-2xl" style="color: var(--primary)"></i>
+            <h1 class="text-xl font-bold tracking-widest text-white uppercase" style="text-shadow: 0 0 10px var(--primary);">KODUX</h1>
+        </div>
+        
+        <label class="cursor-pointer flex items-center justify-center w-10 h-10 rounded-full upload-btn">
+            <i class="ph ph-upload-simple text-white text-lg"></i>
+            <input type="file" id="upload-input" accept="audio/*" class="hidden" multiple>
+        </label>
+    </header>
+
+    <!-- MAIN FEED (SCROLLABLE) -->
+    <main class="flex-1 overflow-y-auto pt-24 pb-28 px-4" id="feed">
+        
+        <!-- Hero Section: Daily Mix -->
+        <div class="relative rounded-2xl overflow-hidden mb-8 h-64 group cursor-pointer" onclick="playDailyMix()">
+            <img src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1000&auto=format&fit=crop" class="absolute inset-0 w-full h-full object-cover opacity-60" alt="Daily Mix">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0a0c14] to-transparent"></div>
+            <div class="absolute bottom-0 left-0 p-6 w-full">
+                <p class="text-[10px] text-[var(--primary)] font-bold tracking-[0.2em] mb-1">KI RESONANCE</p>
+                <h2 class="text-3xl font-bold mb-2">Daily Mix 01</h2>
+                <div class="flex items-center gap-3">
+                    <button class="w-12 h-12 rounded-full bg-[var(--primary)] text-black flex items-center justify-center pl-1 shadow-[0_0_15px_var(--primary)]">
+                        <i class="ph-fill ph-play text-xl"></i>
+                    </button>
+                    <span class="text-xs text-var(--muted)">Baseado na sua frequência</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: Your Library -->
+        <div class="mb-4 flex items-center justify-between">
+            <h3 class="text-sm font-semibold tracking-wider text-[var(--muted)]">UPLOADED TRACKS</h3>
+            <i class="ph ph-sort-ascending text-[var(--muted)]"></i>
+        </div>
+
+        <!-- Track List Container -->
+        <div id="track-list" class="flex flex-col gap-2">
+            <!-- Populated via JS -->
+            <div class="text-center py-10 opacity-40 text-sm">
+                <i class="ph ph-music-notes-simple text-4xl mb-2"></i>
+                <p>Nenhuma faixa detectada no radar.<br>Faça o upload de áudios locais.</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- MINI PLAYER (FIXED BOTTOM) -->
+    <div id="player-mini" class="glass fixed bottom-0 w-full h-20 z-30 transform translate-y-full transition-transform duration-300 flex items-center px-4 gap-4 pb-safe">
+        <div class="mini-progress"><div class="mini-progress-bar" id="mini-progress-bar"></div></div>
+        
+        <img id="mini-cover" src="" class="w-12 h-12 rounded-md object-cover shadow-lg" alt="Cover">
+        
+        <div class="flex-1 overflow-hidden" onclick="expandPlayer()">
+            <h4 id="mini-title" class="text-sm font-semibold truncate text-white">Track Title</h4>
+            <p id="mini-artist" class="text-xs text-[var(--muted)] truncate">Unknown Artist</p>
+        </div>
+        
+        <div class="flex items-center gap-4 pr-2">
+            <button class="text-white hover:text-[var(--primary)] transition" onclick="togglePlayPause(event)">
+                <i id="mini-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- FULLSCREEN PLAYER OVERLAY -->
+    <div id="player-full" class="player-full fixed inset-0 z-50 bg-[var(--bg)] flex flex-col transform translate-y-full">
+        <!-- Blur Background -->
+        <div class="absolute inset-0 z-0 overflow-hidden opacity-30">
+            <img id="full-bg" src="" class="w-full h-full object-cover blur-3xl scale-110" alt="">
+            <div class="absolute inset-0 bg-black/60"></div>
+        </div>
+
+        <!-- Content -->
+        <div class="relative z-10 flex flex-col h-full">
+            <!-- Header (Drag target) -->
+            <div class="pt-safe" id="drag-area">
+                <div class="drag-handle"></div>
+                <div class="flex justify-between items-center px-6 py-2">
+                    <button onclick="collapsePlayer()"><i class="ph ph-caret-down text-2xl text-white"></i></button>
+                    <span class="text-xs tracking-widest text-[var(--muted)] uppercase font-semibold">Tocando de: Uploads</span>
+                    <button><i class="ph ph-dots-three text-2xl text-white"></i></button>
+                </div>
+            </div>
+
+            <!-- Artwork -->
+            <div class="flex-1 flex items-center justify-center p-8">
+                <img id="full-cover" src="" class="cover-art-full w-full max-w-[320px] aspect-square rounded-2xl object-cover" alt="Cover">
+            </div>
+
+            <!-- Metadata & Controls Area -->
+            <div class="px-8 pb-12 pb-safe flex flex-col gap-6">
+                <!-- Info -->
+                <div class="flex justify-between items-end">
+                    <div class="flex-1 overflow-hidden pr-4">
+                        <h2 id="full-title" class="text-2xl font-bold text-white truncate mb-1">Track Title</h2>
+                        <p id="full-artist" class="text-sm text-[var(--primary)] truncate">KODUX Audio System</p>
+                    </div>
+                    <button><i class="ph-fill ph-heart text-2xl text-[var(--muted)] hover:text-[var(--primary)] transition"></i></button>
+                </div>
+
+                <!-- Canvas Waveform / Progress -->
+                <div class="w-full h-16 relative" id="waveform-container">
+                    <!-- The canvas for visualizer -->
+                    <canvas id="waveform-canvas" class="w-full h-full absolute inset-0"></canvas>
+                    <!-- Input range overlaid for scrubbing -->
+                    <input type="range" id="progress-slider" min="0" max="100" value="0" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10">
+                </div>
+                
+                <div class="flex justify-between text-[10px] text-[var(--muted)] -mt-4 font-mono">
+                    <span id="time-current">0:00</span>
+                    <span id="time-total">0:00</span>
+                </div>
+
+                <!-- Main Controls -->
+                <div class="flex items-center justify-between px-2">
+                    <button class="text-[var(--muted)] hover:text-white"><i class="ph ph-shuffle text-2xl"></i></button>
+                    <button onclick="playPrev()" class="text-white hover:text-[var(--primary)]"><i class="ph-fill ph-skip-back text-4xl"></i></button>
+                    
+                    <button onclick="togglePlayPause()" class="w-20 h-20 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)] hover:scale-105 transition-transform">
+                        <i id="full-play-icon" class="ph-fill ph-play text-4xl pl-1"></i>
+                    </button>
+                    
+                    <button onclick="playNext()" class="text-white hover:text-[var(--primary)]"><i class="ph-fill ph-skip-forward text-4xl"></i></button>
+                    <button class="text-[var(--muted)] hover:text-white"><i class="ph ph-repeat text-2xl"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- Core Audio Engine -->
+<audio id="audio-engine" crossorigin="anonymous"></audio>
+
+<script>
+    /* =========================================
+       KODUX CORE - LOGIC & STATE
+       ========================================= */
+    const UI = {
+        list: document.getElementById('track-list'),
+        upload: document.getElementById('upload-input'),
+        playerMini: document.getElementById('player-mini'),
+        playerFull: document.getElementById('player-full'),
+        audio: document.getElementById('audio-engine'),
+        canvas: document.getElementById('waveform-canvas'),
+        slider: document.getElementById('progress-slider'),
+        
+        // Dynamic fields
+        titles: [document.getElementById('mini-title'), document.getElementById('full-title')],
+        covers: [document.getElementById('mini-cover'), document.getElementById('full-cover'), document.getElementById('full-bg')],
+        playIcons: [document.getElementById('mini-play-icon'), document.getElementById('full-play-icon')],
+        timeCurr: document.getElementById('time-current'),
+        timeTot: document.getElementById('time-total'),
+        miniBar: document.getElementById('mini-progress-bar')
+    };
+
+    let State = {
+        tracks: [],
+        currentIndex: -1,
+        isPlaying: false,
+        audioContext: null,
+        analyser: null,
+        animationId: null
+    };
+
+    // Pre-loaded Demo Tracks for "Daily Mix"
+    const DEMO_TRACKS = [
+        {
+            name: "Lofi Study Vibe (Demo)",
+            artist: "KODUX Sync",
+            url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3",
+            cover: "https://images.unsplash.com/photo-1578070181910-f1e514afdd08?q=80&w=500&auto=format&fit=crop"
+        },
+        {
+            name: "Cyberpunk Runner (Demo)",
+            artist: "Dual System",
+            url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3",
+            cover: "https://images.unsplash.com/photo-1535295972055-1c762f4483e5?q=80&w=500&auto=format&fit=crop"
+        }
+    ];
+
+    /* =========================================
+       DYNAMIC THEME (Time-based Ki Form)
+       ========================================= */
+    function updateAesthetic() {
+        const hour = new Date().getHours();
+        const root = document.documentElement;
+        // 0-6: SSJ Rose (Night) | 6-12: SSJ Gold (Morning) | 12-18: DBZ Orange (Day) | 18-24: SSJ Blue/KODUX
+        if (hour < 6) root.style.setProperty('--primary', '#f43f5e'); // Rose
+        else if (hour < 12) root.style.setProperty('--primary', '#f59e0b'); // Gold
+        else if (hour < 18) root.style.setProperty('--primary', '#ff5500'); // Orange Base
+        else root.style.setProperty('--primary', '#32d7cb'); // KODUX Blue
+    }
+    updateAesthetic();
+    setInterval(updateAesthetic, 60 * 60 * 1000); // Check every hour
+
+    /* =========================================
+       UPLOAD & FEED LOGIC
+       ========================================= */
+    UI.upload.addEventListener('change', (e) => {
+        const files = Array.from(e.target.files);
+        if (!files.length) return;
+
+        files.forEach(file => {
+            const track = {
+                name: file.name.replace(/\.[^/.]+$/, ""), // Remove extension
+                artist: "Upload Local",
+                url: URL.createObjectURL(file),
+                cover: `https://picsum.photos/seed/${Math.random()}/500` // Random aesthetic cover
+            };
+            State.tracks.push(track);
+        });
+        
+        renderFeed();
+    });
+
+    function playDailyMix() {
+        State.tracks = [...DEMO_TRACKS, ...State.tracks]; // Prepend demos
+        renderFeed();
+        loadTrack(0);
+        playAudio();
+    }
+
+    function renderFeed() {
+        if(State.tracks.length === 0) return;
+        
+        UI.list.innerHTML = '';
+        State.tracks.forEach((t, i) => {
+            const el = document.createElement('div');
+            el.className = 'track-card flex items-center gap-4 p-3 rounded-xl cursor-pointer hover:bg-[var(--border)]';
+            const isPlayingNow = i === State.currentIndex;
+            const titleColor = isPlayingNow ? 'text-[var(--primary)]' : 'text-white';
+            
+            el.innerHTML = `
+                <img src="${t.cover}" class="w-14 h-14 rounded-lg object-cover shadow-md">
+                <div class="flex-1 overflow-hidden">
+                    <h4 class="text-sm font-semibold ${titleColor} truncate">${t.name}</h4>
+                    <p class="text-xs text-[var(--muted)]">${t.artist}</p>
+                </div>
+                <button class="w-8 h-8 rounded-full border border-[var(--border)] flex items-center justify-center">
+                    <i class="ph-fill ${isPlayingNow && State.isPlaying ? 'ph-pause' : 'ph-play'} text-white"></i>
+                </button>
+            `;
+            el.onclick = () => {
+                if(i === State.currentIndex) {
+                    togglePlayPause();
+                } else {
+                    loadTrack(i);
+                    playAudio();
+                }
+                renderFeed(); // Update UI highlights
+            };
+            UI.list.appendChild(el);
+        });
+    }
+
+    /* =========================================
+       AUDIO ENGINE & CONTROLS
+       ========================================= */
+    function loadTrack(index) {
+        if(index < 0 || index >= State.tracks.length) return;
+        State.currentIndex = index;
+        const track = State.tracks[index];
+
+        UI.audio.src = track.url;
+        UI.audio.load();
+
+        // Update Text & Images
+        UI.titles.forEach(el => el.innerText = track.name);
+        document.getElementById('full-artist').innerText = track.artist;
+        document.getElementById('mini-artist').innerText = track.artist;
+        UI.covers.forEach(el => el.src = track.cover);
+
+        // Show Mini Player if hidden
+        UI.playerMini.classList.remove('translate-y-full');
+        
+        initAudioContext();
+    }
+
+    function togglePlayPause(e) {
+        if(e) e.stopPropagation(); // prevent expanding player if clicking mini button
+        if(State.isPlaying) pauseAudio();
+        else playAudio();
+    }
+
+    function playAudio() {
+        if(State.currentIndex === -1 && State.tracks.length > 0) loadTrack(0);
+        if(!UI.audio.src) return;
+
+        // Resume context if suspended (Browser policy)
+        if(State.audioContext && State.audioContext.state === 'suspended') {
+            State.audioContext.resume();
+        }
+
+        UI.audio.play();
+        State.isPlaying = true;
+        updateIcons(true);
+        UI.playerFull.classList.add('playing');
+        renderFeed();
+    }
+
+    function pauseAudio() {
+        UI.audio.pause();
+        State.isPlaying = false;
+        updateIcons(false);
+        UI.playerFull.classList.remove('playing');
+        renderFeed();
+    }
+
+    function playNext() {
+        let next = State.currentIndex + 1;
+        if(next >= State.tracks.length) next = 0; // Loop
+        loadTrack(next);
+        playAudio();
+    }
+
+    function playPrev() {
+        if(UI.audio.currentTime > 3) {
+            UI.audio.currentTime = 0; // Restart if passed 3s
+        } else {
+            let prev = State.currentIndex - 1;
+            if(prev < 0) prev = State.tracks.length - 1;
+            loadTrack(prev);
+        }
+        playAudio();
+    }
+
+    function updateIcons(playing) {
+        const iconClass = playing ? 'ph-pause' : 'ph-play';
+        const miniClass = playing ? 'ph-pause-circle' : 'ph-play-circle';
+        
+        UI.playIcons[0].className = `ph-fill ${miniClass} text-4xl`;
+        UI.playIcons[1].className = `ph-fill ${iconClass} text-4xl pl-1`;
+        if(playing) UI.playIcons[1].classList.remove('pl-1'); // fix pause icon centering
+        else UI.playIcons[1].classList.add('pl-1');
+    }
+
+    /* =========================================
+       WAVEFORM CANVAS & PROGRESS
+       ========================================= */
+    function initAudioContext() {
+        if(State.audioContext) return;
+        try {
+            State.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            State.analyser = State.audioContext.createAnalyser();
+            const source = State.audioContext.createMediaElementSource(UI.audio);
+            source.connect(State.analyser);
+            State.analyser.connect(State.audioContext.destination);
+            
+            State.analyser.fftSize = 128; // Lower for thicker bars
+            drawWaveform();
+        } catch(e) {
+            console.log("Web Audio API CORS restriction for external URLs, fallback to simple progress.");
+        }
+    }
+
+    function drawWaveform() {
+        if(!State.analyser) return;
+        const ctx = UI.canvas.getContext('2d');
+        const bufferLength = State.analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        // Fix canvas scaling
+        UI.canvas.width = UI.canvas.offsetWidth * window.devicePixelRatio;
+        UI.canvas.height = UI.canvas.offsetHeight * window.devicePixelRatio;
+        
+        function renderFrame() {
+            State.animationId = requestAnimationFrame(renderFrame);
+            
+            const w = UI.canvas.width;
+            const h = UI.canvas.height;
+            ctx.clearRect(0, 0, w, h);
+
+            if(!State.isPlaying) return; // Freeze waveform when paused
+
+            State.analyser.getByteFrequencyData(dataArray);
+
+            const barWidth = (w / bufferLength) * 2;
+            let barHeight;
+            let x = 0;
+
+            const computedStyle = getComputedStyle(document.documentElement);
+            const primaryColor = computedStyle.getPropertyValue('--primary').trim() || '#32d7cb';
+
+            for(let i = 0; i < bufferLength; i++) {
+                barHeight = (dataArray[i] / 255) * h;
+                
+                // DBZ Energy Ki gradient
+                const gradient = ctx.createLinearGradient(0, h, 0, h - barHeight);
+                gradient.addColorStop(0, primaryColor + '40'); // Transparent base
+                gradient.addColorStop(1, primaryColor); // Solid top
+
+                ctx.fillStyle = gradient;
+                // Draw rounded bars (pseudo)
+                ctx.fillRect(x, h - barHeight, barWidth - 2, barHeight);
+                
+                x += barWidth;
+            }
+        }
+        renderFrame();
+    }
+
+    // Progress updates
+    UI.audio.addEventListener('timeupdate', () => {
+        const curr = UI.audio.currentTime;
+        const total = UI.audio.duration;
+        
+        if(total) {
+            const percent = (curr / total) * 100;
+            UI.slider.value = percent;
+            UI.miniBar.style.width = `${percent}%`;
+            
+            UI.timeCurr.innerText = formatTime(curr);
+            UI.timeTot.innerText = formatTime(total);
+        }
+    });
+
+    UI.audio.addEventListener('ended', playNext);
+
+    UI.slider.addEventListener('input', (e) => {
+        const total = UI.audio.duration;
+        if(total) {
+            UI.audio.currentTime = (e.target.value / 100) * total;
+        }
+    });
+
+    function formatTime(seconds) {
+        if(isNaN(seconds)) return "0:00";
+        const m = Math.floor(seconds / 60);
+        const s = Math.floor(seconds % 60);
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+    }
+
+    /* =========================================
+       GESTURES & UI STATE (Drag to close)
+       ========================================= */
+    function expandPlayer() {
+        UI.playerFull.classList.remove('translate-y-full');
+    }
+
+    function collapsePlayer() {
+        UI.playerFull.classList.add('translate-y-full');
+    }
+
+    // Touch Drag Physics
+    let startY = 0;
+    let currentY = 0;
+    const dragArea = document.getElementById('drag-area');
+
+    dragArea.addEventListener('touchstart', e => {
+        startY = e.touches[0].clientY;
+        UI.playerFull.style.transition = 'none'; // remove transition for direct drag
+    }, {passive: true});
+
+    dragArea.addEventListener('touchmove', e => {
+        currentY = e.touches[0].clientY - startY;
+        if(currentY > 0) { // Only drag down
+            UI.playerFull.style.transform = `translateY(${currentY}px)`;
+        }
+    }, {passive: true});
+
+    dragArea.addEventListener('touchend', e => {
+        UI.playerFull.style.transition = 'transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)';
+        if(currentY > 150) {
+            collapsePlayer(); // Snap close
+        } else {
+            UI.playerFull.style.transform = ''; // Snap back open
+        }
+        currentY = 0;
+    });
+
+</script>
+</body>
+</html>
+
+

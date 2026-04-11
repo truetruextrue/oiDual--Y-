@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>CÉREBRO-ORÁCULO • KODUX DUAL</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://w.soundcloud.com/player/api.js"></script>
+
+  <style>
+    :root {
+      --primary: #ff5500;
+      --secondary: #0b0f14;
+      --cob: #111827;
+      --voice: #ffffff;
+      --voice-muted: #9ca3af;
+      --dbz-gold: #ffaa00;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: radial-gradient(circle at 20% 30%, #1a1f2a, #0b0f14);
+      color: var(--voice);
+      padding-bottom: 100px;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0f14; }
+    ::-webkit-scrollbar-thumb { background: #2a2f3a; border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+    .glass-header {
+      background: rgba(8, 12, 18, 0.75);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(255, 85, 0, 0.2);
+    }
+
+    .glass-panel {
+      background: rgba(17, 24, 39, 0.7);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 85, 0, 0.15);
+    }
+
+    .hero-glow {
+      box-shadow: 0 0 60px var(--primary);
+      opacity: 0.2;
+      transition: opacity 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 20px var(--primary);
+      transition: all 0.15s;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.94);
+      filter: brightness(1.3);
+    }
+
+    .track-item {
+      transition: background 0.2s, transform 0.15s;
+      border-bottom: 1px solid rgba(255,255,255,0.03);
+    }
+
+    .track-item:active {
+      transform: scale(0.99);
+    }
+
+    .track-item.playing {
+      background: rgba(255, 85, 0, 0.08);
+      border-left: 3px solid var(--primary);
+    }
+
+    .track-item.playing .track-title {
+      color: var(--primary);
+    }
+
+    @keyframes spin-slow {
+      100% { transform: rotate(360deg); }
+    }
+
+    .spin-anim {
+      animation: spin-slow 12s linear infinite;
+    }
+
+    .spin-paused {
+      animation-play-state: paused;
+    }
+
+    .ki-bar-container {
+      background: #1a1e2a;
+      border-radius: 20px;
+      padding: 2px;
+      border: 1px solid #3a3f55;
+    }
+
+    .ki-bar-fill {
+      height: 6px;
+      border-radius: 20px;
+      background: linear-gradient(90deg, #ffbb00, #ff5500);
+      box-shadow: 0 0 12px #ff7700;
+      width: 0%;
+    }
+
+    .ki-value {
+      font-family: 'Courier New', monospace;
+      text-shadow: 0 0 8px var(--primary);
+    }
+
+    .link-modal {
+      background: rgba(10, 14, 23, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--primary);
+      box-shadow: 0 0 40px rgba(255,85,0,0.3);
+    }
+  </style>
+</head>
+<body class="antialiased flex flex-col">
+
+  <header class="glass-header sticky top-0 z-50 px-5 py-3 flex justify-between items-center w-full">
+    <div class="flex items-center gap-2">
+      <i data-lucide="zap" class="w-6 h-6" style="color: var(--primary)"></i>
+      <span class="font-bold text-xl tracking-widest bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">KODUX·ORÁCULO</span>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <label for="upload" class="cursor-pointer bg-[#1e2532] p-2 rounded-full hover:bg-[#2a3345] transition border border-white/10">
+        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
+        <input type="file" id="upload" accept="audio/*" multiple class="hidden" />
+      </label>
+
+      <button id="pasteLinkBtn" type="button" class="bg-[#1e2532] p-2 rounded-full hover:bg-[#2a3345] transition border border-white/10">
+        <i data-lucide="link" class="w-5 h-5"></i>
+      </button>
+    </div>
+  </header>
+
+  <div id="linkModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden bg-black/60 backdrop-blur-sm">
+    <div class="link-modal w-full max-w-md p-6 rounded-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-bold flex items-center gap-2">
+          <i data-lucide="radio" class="w-5 h-5 text-orange-500"></i>
+          SINTONIZAR LINK
+        </h3>
+        <button id="closeModal" type="button" class="p-1">
+          <i data-lucide="x" class="w-5 h-5"></i>
+        </button>
+      </div>
+
+      <input
+        type="text"
+        id="linkInput"
+        placeholder="Cole URL do SoundCloud ou YouTube..."
+        class="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-orange-500 outline-none mb-4"
+      />
+
+      <div class="flex gap-3">
+        <button id="addLinkBtn" type="button" class="btn-primary flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
+          <i data-lucide="plus-circle" class="w-5 h-5"></i> ADICIONAR
+        </button>
+      </div>
+
+      <p class="text-[10px] text-gray-400 mt-3 text-center">Suporte: track/playlist do SoundCloud • vídeo do YouTube</p>
+    </div>
+  </div>
+
+  <main class="flex-1 w-full max-w-2xl mx-auto px-4 relative">
+    <section class="pt-6 pb-2 flex flex-col items-center relative">
+      <div class="absolute inset-0 hero-glow rounded-full blur-3xl -z-10 w-80 h-80 mx-auto mt-6" id="heroGlow"></div>
+
+      <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-2xl overflow-hidden shadow-2xl mb-4 border border-orange-500/30" id="coverContainer">
+        <img
+          id="mainCover"
+          src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop"
+          alt="Cover"
+          class="w-full h-full object-cover transition-transform duration-700"
+        />
+        <button id="heroPlayBtn" type="button" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition">
+          <div class="btn-primary p-5 rounded-full">
+            <i data-lucide="play" class="w-8 h-8 ml-1"></i>
+          </div>
+        </button>
+      </div>
+
+      <div class="text-center w-full">
+        <h1 id="mainTitle" class="text-2xl font-bold truncate">CÉREBRO SILENCIOSO</h1>
+        <p id="mainArtist" class="text-gray-400 text-sm">Aguardando transmissão</p>
+      </div>
+
+      <div class="w-full mt-5">
+        <canvas id="visualizer" class="w-full h-14 rounded-lg"></canvas>
+
+        <div class="flex items-center gap-3 mt-2 px-2">
+          <span class="text-[10px] font-bold tracking-widest text-orange-300/70">RADAR KI</span>
+          <div class="ki-bar-container flex-1">
+            <div id="kiBarFill" class="ki-bar-fill" style="width:0%"></div>
+          </div>
+          <span id="kiValueDisplay" class="ki-value text-sm font-mono text-orange-400">0000</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-center gap-8 mt-5 w-full">
+        <button type="button" onclick="prevTrack()" class="p-3 text-gray-400 hover:text-white transition">
+          <i data-lucide="skip-back" class="w-7 h-7"></i>
+        </button>
+
+        <button id="mainPlayBtn" type="button" onclick="togglePlay()" class="btn-primary p-5 rounded-full text-white">
+          <i data-lucide="play" id="playIconMain" class="w-8 h-8 ml-1"></i>
+        </button>
+
+        <button type="button" onclick="nextTrack()" class="p-3 text-gray-400 hover:text-white transition">
+          <i data-lucide="skip-forward" class="w-7 h-7"></i>
+        </button>
+      </div>
+    </section>
+
+    <section class="mt-8 pb-8">
+      <div class="flex justify-between items-end mb-3 px-2">
+        <h2 class="text-base font-bold uppercase tracking-wider text-orange-200/80">PLAYLISTS DO ORÁCULO</h2>
+        <span class="text-[10px] text-gray-500">KODUX.DUAL</span>
+      </div>
+
+      <div id="trackList" class="flex flex-col gap-0.5">
+        <div class="text-center text-gray-500 text-sm py-12">Nenhuma frequência sintonizada. Use upload ou cole link.</div>
+      </div>
+    </section>
+  </main>
+
+  <div id="bottomPlayer" class="glass-panel fixed bottom-0 left-0 w-full px-4 py-3 flex items-center z-50 transform translate-y-full transition-transform duration-300 border-t border-orange-500/30">
+    <div class="absolute top-0 left-0 w-full h-1.5 bg-gray-800 cursor-pointer" id="progressContainer" onclick="seek(event)">
+      <div id="progressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-600 w-0 shadow-[0_0_10px_orange]"></div>
+    </div>
+
+    <div class="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer" onclick="scrollToTop()">
+      <img id="miniCover" src="" class="w-12 h-12 rounded-md object-cover border border-orange-500/40 spin-anim spin-paused" />
+      <div class="flex flex-col truncate">
+        <span id="miniTitle" class="text-sm font-semibold truncate">—</span>
+        <div class="flex items-center gap-2">
+          <span id="miniTime" class="text-xs text-orange-400 font-medium">0:00 / 0:00</span>
+          <span id="sourceBadge" class="text-[9px] bg-orange-900/40 px-1.5 rounded text-orange-300">LOCAL</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3 ml-3">
+      <button type="button" onclick="togglePlay()" class="text-white p-2">
+        <i data-lucide="play" id="playIconMini" class="w-6 h-6"></i>
+      </button>
+    </div>
+  </div>
+
+  <audio id="audioElement" crossorigin="anonymous"></audio>
+  <div id="sc-widget-container" style="display:none;"></div>
+  <div id="yt-player-container" style="display:none;"></div>
+
+  <script>
+    (function () {
+      "use strict";
+
+      lucide.createIcons();
+
+      const audio = document.getElementById('audioElement');
+      const uploadInput = document.getElementById('upload');
+      const trackListEl = document.getElementById('trackList');
+      const bottomPlayer = document.getElementById('bottomPlayer');
+      const mainCover = document.getElementById('mainCover');
+      const miniCover = document.getElementById('miniCover');
+      const mainTitle = document.getElementById('mainTitle');
+      const miniTitle = document.getElementById('miniTitle');
+      const mainArtist = document.getElementById('mainArtist');
+      const heroGlow = document.getElementById('heroGlow');
+      const heroPlayBtn = document.getElementById('heroPlayBtn');
+      const playIconMain = document.getElementById('playIconMain');
+      const playIconMini = document.getElementById('playIconMini');
+      const progressBar = document.getElementById('progressBar');
+      const progressContainer = document.getElementById('progressContainer');
+      const miniTime = document.getElementById('miniTime');
+      const sourceBadge = document.getElementById('sourceBadge');
+      const canvas = document.getElementById('visualizer');
+      const canvasCtx = canvas.getContext('2d');
+      const kiBarFill = document.getElementById('kiBarFill');
+      const kiValueDisplay = document.getElementById('kiValueDisplay');
+
+      const linkModal = document.getElementById('linkModal');
+      const pasteLinkBtn = document.getElementById('pasteLinkBtn');
+      const closeModal = document.getElementById('closeModal');
+      const linkInput = document.getElementById('linkInput');
+      const addLinkBtn = document.getElementById('addLinkBtn');
+
+      let tracks = [];
+      let currentIndex = -1;
+      let isPlaying = false;
+      let currentSourceType = null;
+
+      let scWidget = null;
+      let scDuration = 0;
+
+      let ytPlayer = null;
+      let ytPlayerReady = false;
+      let ytApiLoaded = false;
+      let ytPending = null;
+
+      let audioCtx = null;
+      let analyser = null;
+      let sourceNode = null;
+      let dataArray = null;
+      let isAudioCtxInit = false;
+
+      function updateThemeColor() {
+        const hour = new Date().getHours();
+        let color = '#ff5500';
+        if (hour >= 5 && hour < 12) color = '#f59e0b';
+        else if (hour >= 12 && hour < 18) color = '#ff5500';
+        else if (hour >= 18 && hour < 23) color = '#a855f7';
+        else color = '#ef4444';
+
+        document.documentElement.style.setProperty('--primary', color);
+      }
+
+      function refreshIcons() {
+        lucide.createIcons();
+      }
+
+      function updatePlayIcons(icon) {
+        playIconMain.setAttribute('data-lucide', icon);
+        playIconMini.setAttribute('data-lucide', icon);
+        refreshIcons();
+      }
+
+      function setPlayingUI(playing) {
+        isPlaying = playing;
+        updatePlayIcons(playing ? 'pause' : 'play');
+        heroPlayBtn.classList.toggle('hidden', playing);
+        miniCover.classList.toggle('spin-paused', !playing);
+      }
+
+      function formatTime(sec) {
+        if (!isFinite(sec) || sec < 0) return '0:00';
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${m}:${s < 10 ? '0' : ''}${s}`;
+      }
+
+      function extractYouTubeID(url) {
+        try {
+          const u = new URL(url);
+
+          if (u.hostname.includes('youtu.be')) {
+            return u.pathname.split('/').filter(Boolean)[0] || null;
+          }
+
+          const v = u.searchParams.get('v');
+          if (v) return v;
+
+          const shorts = u.pathname.match(/\/shorts\/([0-9A-Za-z_-]{11})/);
+          if (shorts) return shorts[1];
+
+          const embed = u.pathname.match(/\/embed\/([0-9A-Za-z_-]{11})/);
+          if (embed) return embed[1];
+
+          return null;
+        } catch {
+          const m = url.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([0-9A-Za-z_-]{11})/);
+          return m ? m[1] : null;
+        }
+      }
+
+      function getYouTubeThumb(url, quality = 'hqdefault') {
+        const id = extractYouTubeID(url);
+        return id ? `https://img.youtube.com/vi/${id}/${quality}.jpg` : '';
+      }
+
+      function updateMetaUI(track) {
+        mainTitle.innerText = track.title || 'Desconhecido';
+        mainArtist.innerText = track.artist || (
+          track.type === 'soundcloud' ? 'SoundCloud' :
+          track.type === 'youtube' ? 'YouTube' : 'Local'
+        );
+
+        const fallback =
+          track.type === 'youtube'
+            ? getYouTubeThumb(track.url)
+            : `https://picsum.photos/500/500?random=${Date.now()}`;
+
+        const cover = track.cover || fallback;
+
+        mainCover.src = cover;
+        miniCover.src = cover;
+        miniTitle.innerText = track.title || '—';
+
+        sourceBadge.innerText = track.type.toUpperCase();
+        sourceBadge.className = `text-[9px] px-1.5 rounded ${
+          track.type === 'local'
+            ? 'bg-blue-900/40 text-blue-300'
+            : track.type === 'soundcloud'
+              ? 'bg-orange-900/40 text-orange-300'
+              : 'bg-red-900/40 text-red-300'
+        }`;
+
+        renderTrackList();
+      }
+
+      function renderTrackList() {
+        if (!tracks.length) {
+          trackListEl.innerHTML = '<div class="text-center text-gray-500 py-10">PLAYLIST VAZIA</div>';
+          return;
+        }
+
+        trackListEl.innerHTML = '';
+        tracks.forEach((t, i) => {
+          const active = i === currentIndex;
+          const div = document.createElement('div');
+          div.className = `track-item flex items-center gap-3 px-4 py-2.5 cursor-pointer ${active ? 'playing' : ''}`;
+          div.onclick = () => {
+            if (currentIndex === i) {
+              togglePlay();
+              return;
+            }
+            loadTrack(i, { autoplay: true });
+          };
+
+          div.innerHTML = `
+            <img src="${t.cover || (t.type === 'youtube' ? getYouTubeThumb(t.url) : 'https://picsum.photos/500/500?random=' + i)}" class="w-11 h-11 rounded-md object-cover border ${active ? 'border-orange-500' : 'border-white/10'}" />
+            <div class="flex-1 min-w-0">
+              <div class="track-title text-sm font-semibold truncate ${active ? 'text-orange-400' : ''}">${t.title || 'Sem título'}</div>
+              <div class="text-[10px] text-gray-400 flex items-center gap-1">
+                <span>${t.artist || '—'}</span>
+                <span class="bg-white/10 px-1 rounded text-[8px]">${t.type}</span>
+              </div>
+            </div>
+            ${active && isPlaying ? '<i data-lucide="volume-2" class="w-4 h-4 text-orange-500"></i>' : ''}
+          `;
+
+          trackListEl.appendChild(div);
+        });
+
+        refreshIcons();
+      }
+
+      function initVisualizerForLocal() {
+        if (isAudioCtxInit) return;
+
+        try {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+          analyser = audioCtx.createAnalyser();
+          sourceNode = audioCtx.createMediaElementSource(audio);
+          sourceNode.connect(analyser);
+          analyser.connect(audioCtx.destination);
+          analyser.fftSize = 128;
+          dataArray = new Uint8Array(analyser.frequencyBinCount);
+          isAudioCtxInit = true;
+        } catch (e) {
+          console.warn('AudioContext error:', e);
+        }
+      }
+
+      function drawVisualizer() {
+        requestAnimationFrame(drawVisualizer);
+
+        canvas.width = canvas.clientWidth || 300;
+        canvas.height = canvas.clientHeight || 56;
+
+        if (currentSourceType === 'local' && analyser && dataArray && isPlaying) {
+          analyser.getByteFrequencyData(dataArray);
+          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+          const barWidth = (canvas.width / dataArray.length) * 1.6;
+          let x = 0;
+          const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+
+          for (let i = 0; i < dataArray.length; i++) {
+            const h = (dataArray[i] / 255) * canvas.height;
+            canvasCtx.fillStyle = primary;
+            canvasCtx.shadowBlur = 10;
+            canvasCtx.shadowColor = primary;
+            canvasCtx.fillRect(x, canvas.height - h, barWidth - 2, h);
+            x += barWidth;
+          }
+
+          const bass = dataArray[0] || 0;
+          heroGlow.style.opacity = 0.1 + (bass / 255) * 0.4;
+          return;
+        }
+
+        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+        if (isPlaying) {
+          const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
+          canvasCtx.fillStyle = primary;
+          canvasCtx.shadowBlur = 10;
+          canvasCtx.shadowColor = primary;
+
+          for (let i = 0; i < 20; i++) {
+            const h = 8 + Math.random() * 20;
+            canvasCtx.fillRect(i * 15, canvas.height - h, 8, h);
+          }
+        }
+      }
+
+      function pauseAllNonLocal() {
+        if (scWidget) {
+          try { scWidget.pause(); } catch (_) {}
+        }
+        if (ytPlayer && ytPlayer.pauseVideo) {
+          try { ytPlayer.pauseVideo(); } catch (_) {}
+        }
+      }
+
+      function stopCurrentPlayback() {
+        audio.pause();
+        pauseAllNonLocal();
+        setPlayingUI(false);
+      }
+
+      function loadSoundCloudTrack(track, autoplay) {
+        const container = document.getElementById('sc-widget-container');
+
+        const createWidget = () => {
+          if (!scWidget) {
+            const iframe = document.createElement('iframe');
+            iframe.id = 'sc-iframe';
+            iframe.allow = 'autoplay';
+            iframe.style.display = 'none';
+            container.innerHTML = '';
+            container.appendChild(iframe);
+
+            scWidget = SC.Widget(iframe);
+
+            scWidget.bind(SC.Widget.Events.PLAY, () => {
+              setPlayingUI(true);
+            });
+
+            scWidget.bind(SC.Widget.Events.PAUSE, () => {
+              setPlayingUI(false);
+            });
+
+            scWidget.bind(SC.Widget.Events.FINISH, () => {
+              nextTrack();
+            });
+
+            scWidget.bind(SC.Widget.Events.READY, () => {
+              scWidget.load(track.url, {
+                auto_play: autoplay,
+                visual: false
+              });
+
+              setTimeout(() => {
+                scWidget.getDuration((d) => {
+                  scDuration = (d || 0) / 1000;
+                });
+              }, 900);
+            });
+
+            scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
+              const pct = e.relativePosition || 0;
+              progressBar.style.width = (pct * 100) + '%';
+              kiBarFill.style.width = (pct * 100) + '%';
+              kiValueDisplay.innerText = Math.floor(pct * 9001).toString().padStart(4, '0');
+              miniTime.innerText = `${formatTime((e.currentPosition || 0) / 1000)} / ${formatTime(scDuration)}`;
+            });
+          } else {
+            scWidget.load(track.url, {
+              auto_play: autoplay,
+              visual: false
+            });
+
+            setTimeout(() => {
+              scWidget.getDuration((d) => {
+                scDuration = (d || 0) / 1000;
+              });
+            }, 900);
+          }
+        };
+
+        createWidget();
+      }
+
+      function ensureYTPlayer(track, autoplay) {
+        ytPending = { track, autoplay };
+
+        const start = () => {
+          if (!window.YT || !YT.Player) {
+            setTimeout(start, 100);
+            return;
+          }
+
+          if (!ytPlayer) {
+            ytPlayer = new YT.Player('yt-player-container', {
+              height: '0',
+              width: '0',
+              videoId: track.id,
+              playerVars: {
+                playsinline: 1,
+                modestbranding: 1,
+                rel: 0,
+                iv_load_policy: 3
+              },
+              events: {
+                onReady: () => {
+                  ytPlayerReady = true;
+                  if (ytPending) {
+                    const pending = ytPending;
+                    ytPending = null;
+                    if (pending.autoplay) {
+                      ytPlayer.loadVideoById(pending.track.id);
+                    } else {
+                      ytPlayer.cueVideoById(pending.track.id);
+                    }
+                  }
+                },
+                onStateChange: (e) => {
+                  if (e.data === YT.PlayerState.PLAYING) {
+                    setPlayingUI(true);
+                  } else if (e.data === YT.PlayerState.PAUSED) {
+                    setPlayingUI(false);
+                  } else if (e.data === YT.PlayerState.ENDED) {
+                    nextTrack();
+                  }
+                }
+              }
+            });
+          } else if (ytPlayerReady) {
+            if (autoplay) ytPlayer.loadVideoById(track.id);
+            else ytPlayer.cueVideoById(track.id);
+          } else {
+            ytPlayer.cueVideoById(track.id);
+          }
+        };
+
+        start();
+      }
+
+      function loadTrack(index, options = {}) {
+        const autoplay = !!options.autoplay;
+
+        if (index < 0 || index >= tracks.length) return;
+
+        currentIndex = index;
+        const track = tracks[index];
+        currentSourceType = track.type;
+
+        updateMetaUI(track);
+        progressBar.style.width = '0%';
+        kiBarFill.style.width = '0%';
+        kiValueDisplay.innerText = '0000';
+        miniTime.innerText = '0:00 / 0:00';
+
+        audio.pause();
+        pauseAllNonLocal();
+
+        if (track.type === 'local') {
+          audio.src = track.url;
+          audio.load();
+
+          if (!isAudioCtxInit) initVisualizerForLocal();
+
+          if (autoplay) {
+            audio.play().then(() => {
+              if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+              setPlayingUI(true);
+            }).catch(() => {
+              setPlayingUI(false);
+            });
+          } else {
+            setPlayingUI(false);
+          }
+        }
+
+        if (track.type === 'soundcloud') {
+          loadSoundCloudTrack(track, autoplay);
+          setPlayingUI(autoplay);
+        }
+
+        if (track.type === 'youtube') {
+          ensureYTPlayer(track, autoplay);
+          setPlayingUI(autoplay);
+        }
+
+        bottomPlayer.classList.remove('translate-y-full');
+        renderTrackList();
+      }
+
+      function playCurrentTrack() {
+        if (currentIndex === -1) {
+          if (tracks.length) loadTrack(0, { autoplay: true });
+          return;
+        }
+
+        const track = tracks[currentIndex];
+        if (track.type === 'local') {
+          audio.play().then(() => {
+            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+            setPlayingUI(true);
+          }).catch(() => {
+            setPlayingUI(false);
+          });
+          return;
+        }
+
+        if (track.type === 'soundcloud' && scWidget) {
+          try { scWidget.play(); } catch (_) {}
+          return;
+        }
+
+        if (track.type === 'youtube' && ytPlayer) {
+          try {
+            const state = ytPlayer.getPlayerState ? ytPlayer.getPlayerState() : null;
+            if (state !== 1) ytPlayer.playVideo();
+          } catch (_) {}
+        }
+      }
+
+      function pauseCurrentTrack() {
+        if (currentIndex === -1) return;
+
+        const track = tracks[currentIndex];
+
+        if (track.type === 'local') {
+          audio.pause();
+          setPlayingUI(false);
+          return;
+        }
+
+        if (track.type === 'soundcloud' && scWidget) {
+          try { scWidget.pause(); } catch (_) {}
+          return;
+        }
+
+        if (track.type === 'youtube' && ytPlayer) {
+          try { ytPlayer.pauseVideo(); } catch (_) {}
+        }
+      }
+
+      function togglePlay() {
+        if (!tracks.length) return;
+
+        if (currentIndex === -1) {
+          loadTrack(0, { autoplay: true });
+          return;
+        }
+
+        if (isPlaying) pauseCurrentTrack();
+        else playCurrentTrack();
+
+        refreshIcons();
+      }
+
+      function nextTrack() {
+        if (!tracks.length) return;
+        const shouldAutoplay = isPlaying;
+        let n = currentIndex + 1;
+        if (n >= tracks.length) n = 0;
+        loadTrack(n, { autoplay: shouldAutoplay });
+      }
+
+      function prevTrack() {
+        if (!tracks.length) return;
+
+        const shouldAutoplay = isPlaying;
+        const track = tracks[currentIndex];
+
+        if (track && track.type === 'local' && audio.currentTime > 3) {
+          audio.currentTime = 0;
+          return;
+        }
+
+        if (track && track.type === 'soundcloud' && scWidget) {
+          try {
+            scWidget.getPosition((pos) => {
+              if ((pos || 0) > 3000) {
+                scWidget.seekTo(0);
+              } else {
+                let p = currentIndex - 1;
+                if (p < 0) p = tracks.length - 1;
+                loadTrack(p, { autoplay: shouldAutoplay });
+              }
+            });
+            return;
+          } catch (_) {}
+        }
+
+        if (track && track.type === 'youtube' && ytPlayer) {
+          try {
+            const cur = ytPlayer.getCurrentTime ? ytPlayer.getCurrentTime() : 0;
+            if (cur > 3) {
+              ytPlayer.seekTo(0);
+              return;
+            }
+          } catch (_) {}
+        }
+
+        let p = currentIndex - 1;
+        if (p < 0) p = tracks.length - 1;
+        loadTrack(p, { autoplay: shouldAutoplay });
+      }
+
+      function seek(e) {
+        const rect = progressContainer.getBoundingClientRect();
+        const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+
+        if (currentSourceType === 'local' && audio.duration) {
+          audio.currentTime = pct * audio.duration;
+        } else if (currentSourceType === 'soundcloud' && scWidget && scDuration) {
+          scWidget.seekTo(pct * scDuration * 1000);
+        } else if (currentSourceType === 'youtube' && ytPlayer && ytPlayer.getDuration) {
+          ytPlayer.seekTo(pct * ytPlayer.getDuration(), true);
+        }
+      }
+
+      function addLocalFiles(files) {
+        Array.from(files).forEach((file, index) => {
+          const url = URL.createObjectURL(file);
+          tracks.push({
+            type: 'local',
+            url,
+            title: file.name.replace(/\.[^/.]+$/, ''),
+            artist: 'Upload Local',
+            cover: `https://picsum.photos/seed/${encodeURIComponent(file.name + index)}/500/500`
+          });
+        });
+
+        renderTrackList();
+
+        if (currentIndex === -1 && tracks.length) {
+          loadTrack(0, { autoplay: false });
+          bottomPlayer.classList.remove('translate-y-full');
+        }
+      }
+
+      async function addLink(url) {
+        let type = null;
+        let resolvedUrl = url;
+        let id = null;
+        let title = '';
+        let artist = '';
+        let cover = '';
+
+        const clean = url.trim();
+
+        if (clean.includes('soundcloud.com')) {
+          type = 'soundcloud';
+
+          try {
+            const res = await fetch(`https://soundcloud.com/oembed?url=${encodeURIComponent(clean)}&format=json`);
+            const data = await res.json();
+            title = data.title || 'SoundCloud Track';
+            cover = data.thumbnail_url || '';
+            artist = data.author_name || 'SoundCloud';
+          } catch {
+            title = 'SoundCloud Track';
+            artist = 'SoundCloud';
+            cover = 'https://picsum.photos/500/500?sc';
+          }
+        } else if (clean.includes('youtube.com') || clean.includes('youtu.be') || clean.includes('youtube.com/shorts')) {
+          type = 'youtube';
+          id = extractYouTubeID(clean);
+
+          if (!id) {
+            alert('ID inválido');
+            return;
+          }
+
+          resolvedUrl = `https://youtu.be/${id}`;
+
+          try {
+            const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(resolvedUrl)}&format=json`);
+            const data = await res.json();
+            title = data.title || 'YouTube Video';
+            cover = data.thumbnail_url || getYouTubeThumb(resolvedUrl);
+            artist = data.author_name || 'YouTube';
+          } catch {
+            title = 'YouTube Video';
+            artist = 'YouTube';
+            cover = getYouTubeThumb(resolvedUrl);
+          }
+        } else {
+          alert('URL não suportada');
+          return;
+        }
+
+        tracks.push({
+          type,
+          url: type === 'soundcloud' ? clean : resolvedUrl,
+          id,
+          title,
+          artist,
+          cover
+        });
+
+        renderTrackList();
+        linkModal.classList.add('hidden');
+        linkInput.value = '';
+
+        if (currentIndex === -1) {
+          loadTrack(0, { autoplay: false });
+          bottomPlayer.classList.remove('translate-y-full');
+        }
+      }
+
+      uploadInput.addEventListener('change', (e) => {
+        if (!e.target.files || !e.target.files.length) return;
+        addLocalFiles(e.target.files);
+        e.target.value = '';
+      });
+
+      pasteLinkBtn.addEventListener('click', () => {
+        linkModal.classList.remove('hidden');
+        setTimeout(() => linkInput.focus(), 50);
+      });
+
+      closeModal.addEventListener('click', () => {
+        linkModal.classList.add('hidden');
+      });
+
+      linkModal.addEventListener('click', (e) => {
+        if (e.target === linkModal) linkModal.classList.add('hidden');
+      });
+
+      addLinkBtn.addEventListener('click', () => {
+        if (linkInput.value.trim()) addLink(linkInput.value.trim());
+      });
+
+      linkInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' && linkInput.value.trim()) {
+          addLink(linkInput.value.trim());
+        }
+      });
+
+      audio.addEventListener('timeupdate', () => {
+        if (currentSourceType !== 'local') return;
+
+        const pct = audio.duration ? (audio.currentTime / audio.duration) : 0;
+        progressBar.style.width = (pct * 100) + '%';
+        kiBarFill.style.width = (pct * 100) + '%';
+        kiValueDisplay.innerText = Math.floor(pct * 9001).toString().padStart(4, '0');
+        miniTime.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
+      });
+
+      audio.addEventListener('ended', () => {
+        nextTrack();
+      });
+
+      function syncYouTubeProgress() {
+        if (currentSourceType === 'youtube' && ytPlayer && isPlaying && ytPlayer.getDuration) {
+          try {
+            const dur = ytPlayer.getDuration();
+            const cur = ytPlayer.getCurrentTime();
+            if (dur) {
+              const pct = cur / dur;
+              progressBar.style.width = (pct * 100) + '%';
+              kiBarFill.style.width = (pct * 100) + '%';
+              kiValueDisplay.innerText = Math.floor(pct * 9001).toString().padStart(4, '0');
+              miniTime.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
+            }
+          } catch (_) {}
+        }
+      }
+
+      setInterval(syncYouTubeProgress, 500);
+
+      function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      window.togglePlay = togglePlay;
+      window.nextTrack = nextTrack;
+      window.prevTrack = prevTrack;
+      window.seek = seek;
+      window.scrollToTop = scrollToTop;
+
+      function injectYouTubeAPI() {
+        if (window.YT && window.YT.Player) {
+          ytApiLoaded = true;
+          return;
+        }
+
+        if (document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) return;
+
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(tag);
+      }
+
+      window.onYouTubeIframeAPIReady = () => {
+        ytApiLoaded = true;
+        if (ytPending && !ytPlayerReady) {
+          ensureYTPlayer(ytPending.track, ytPending.autoplay);
+        }
+      };
+
+      updateThemeColor();
+      setInterval(updateThemeColor, 60000);
+
+      injectYouTubeAPI();
+
+      (function presetLinks() {
+        const yt1 = 'https://youtu.be/Bt_rLbMjJDk?si=zyeH5r5dwSXUalRQ';
+        const yt2 = 'https://youtu.be/_0wVkryxanE?si=mxUNmCAkvAeArkNh';
+
+        tracks.push(
+          {
+            type: 'soundcloud',
+            url: 'https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas',
+            title: 'RELÍQUIAS DO PRÍNCIPE',
+            artist: 'KODUX',
+            cover: 'https://picsum.photos/500/500?reliquias'
+          },
+          {
+            type: 'soundcloud',
+            url: 'https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso',
+            title: 'MAPEAMENTO PULSO',
+            artist: 'DUAL X',
+            cover: 'https://picsum.photos/500/500?pulso'
+          },
+          {
+            type: 'youtube',
+            url: yt1,
+            id: extractYouTubeID(yt1),
+            title: 'Trilhas Potencializadoras dos Aromas',
+            artist: 'Dual.NextLevel Soundtracks',
+            cover: getYouTubeThumb(yt1)
+          },
+          {
+            type: 'youtube',
+            url: yt2,
+            id: extractYouTubeID(yt2),
+            title: 'Desperte a magia dos 12 arquétipos',
+            artist: 'Dual.NextLevel Soundtracks',
+            cover: getYouTubeThumb(yt2)
+          }
+        );
+
+        renderTrackList();
+        loadTrack(0, { autoplay: false });
+      })();
+
+      drawVisualizer();
+      refreshIcons();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,534 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>KODUX | Super Saiyan Player</title>
+    
+    <!-- Tailwind CSS para estruturação rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* VARIÁVEIS ROOT (KODUX STYLE) */
+        :root {
+            /* O --primary será sobrescrito dinamicamente pelo JS baseado na hora */
+            --primary: #ff5500; 
+            --secondary: #0b0f14;
+            --cob: #111827;
+            --voice: #ffffff;
+            --voice-muted: #9ca3af;
+        }
+
+        /* RESET & BASE */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--secondary);
+            color: var(--voice);
+            overflow-x: hidden;
+            padding-bottom: 100px; /* Espaço para o player fixo */
+        }
+
+        /* CUSTOM SCROLLBAR MINIMALISTA */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--cob); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+
+        /* UTILITÁRIOS CINEMATOGRÁFICOS */
+        .glass-header {
+            background: rgba(11, 15, 20, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-player {
+            background: rgba(17, 24, 39, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .hero-glow {
+            box-shadow: 0 0 40px var(--primary);
+            opacity: 0.15;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3), 0 0 20px var(--primary);
+            transition: transform 0.2s, filter 0.2s;
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.95);
+            filter: brightness(1.2);
+        }
+
+        .track-item {
+            transition: background 0.2s;
+        }
+        
+        .track-item:active, .track-item.playing {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .track-item.playing .track-title {
+            color: var(--primary);
+        }
+
+        /* ANIMAÇÃO DE ROTAÇÃO (VINIL/CAPA) */
+        @keyframes spin-slow { 100% { transform: rotate(360deg); } }
+        .spin-anim { animation: spin-slow 15s linear infinite; }
+        .spin-paused { animation-play-state: paused; }
+    </style>
+</head>
+<body class="antialiased flex flex-col min-h-screen">
+
+    <!-- HEADER INVISÍVEL & STICKY -->
+    <header class="glass-header sticky top-0 z-50 px-5 py-4 flex justify-between items-center w-full">
+        <div class="flex items-center gap-2">
+            <i data-lucide="zap" class="w-6 h-6" style="color: var(--primary)"></i>
+            <span class="font-bold text-lg tracking-wider">KODUX</span>
+        </div>
+        
+        <!-- UPLOAD CUSTOMIZADO -->
+        <label for="upload" class="cursor-pointer bg-[var(--cob)] p-2 rounded-full hover:bg-gray-800 transition">
+            <i data-lucide="upload-cloud" class="w-5 h-5 text-[var(--voice)]"></i>
+            <input type="file" id="upload" accept="audio/*" class="hidden">
+        </label>
+    </header>
+
+    <main class="flex-1 w-full max-w-md mx-auto relative">
+        
+        <!-- HERO SECTION (A MÚSICA ATUAL) -->
+        <section class="p-6 flex flex-col items-center relative">
+            <!-- Glow background -->
+            <div class="absolute inset-0 hero-glow rounded-full blur-3xl -z-10 mt-10 w-64 h-64 mx-auto" id="heroGlow"></div>
+
+            <!-- Capa da Música -->
+            <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-2xl overflow-hidden shadow-2xl mb-6 border border-gray-800" id="coverContainer">
+                <img id="mainCover" src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop" alt="Cover" class="w-full h-full object-cover transition-transform duration-700">
+                
+                <!-- Play button Overlay (Visível apenas se pausado) -->
+                <button id="heroPlayBtn" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
+                    <div class="btn-primary p-4 rounded-full text-white">
+                        <i data-lucide="play" class="w-8 h-8 ml-1"></i>
+                    </div>
+                </button>
+            </div>
+
+            <!-- Informações -->
+            <div class="text-center w-full px-4">
+                <h1 id="mainTitle" class="text-2xl font-bold truncate text-[var(--voice)]">Nenhuma batida carregada</h1>
+                <p id="mainArtist" class="text-[var(--voice-muted)] text-sm mt-1">Faça o upload para começar</p>
+            </div>
+
+            <!-- WAVEFORM VISUALIZER (Super Saiyan Energy) -->
+            <div class="w-full h-16 mt-6 mb-2 relative">
+                <canvas id="visualizer" class="w-full h-full"></canvas>
+            </div>
+            
+            <!-- Controles Principais -->
+            <div class="flex items-center justify-center gap-6 mt-4 w-full">
+                <button onclick="prevTrack()" class="p-3 text-[var(--voice-muted)] hover:text-white transition">
+                    <i data-lucide="skip-back" class="w-6 h-6"></i>
+                </button>
+                
+                <button id="mainPlayBtn" onclick="togglePlay()" class="btn-primary p-4 rounded-full text-white flex items-center justify-center">
+                    <i data-lucide="play" id="playIconMain" class="w-7 h-7 ml-1"></i>
+                </button>
+
+                <button onclick="nextTrack()" class="p-3 text-[var(--voice-muted)] hover:text-white transition">
+                    <i data-lucide="skip-forward" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- LISTA DE FAIXAS (LIBRARY) -->
+        <section class="mt-4 pb-10">
+            <div class="px-6 mb-4 flex justify-between items-end">
+                <h2 class="text-lg font-bold">Suas Faixas</h2>
+                <span class="text-xs text-[var(--voice-muted)] uppercase tracking-wider">Local Session</span>
+            </div>
+            <div id="trackList" class="flex flex-col">
+                <!-- Lista injetada via JS -->
+                <div class="text-center text-[var(--voice-muted)] text-sm py-10">
+                    A fila está vazia. <br> Upe um som clicando na nuvem lá em cima.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PLAYER FIXO (BOTTOM) -->
+    <div id="bottomPlayer" class="glass-player fixed bottom-0 left-0 w-full px-4 py-3 flex items-center justify-between z-50 transform translate-y-full transition-transform duration-300">
+        <!-- Progress Bar -->
+        <div class="absolute top-0 left-0 w-full h-1 bg-gray-800 cursor-pointer" id="progressContainer" onclick="seek(event)">
+            <div id="progressBar" class="h-full bg-[var(--primary)] w-0 relative">
+                <div class="absolute right-0 top-1/2 transform -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow shadow-[var(--primary)]"></div>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-3 flex-1 overflow-hidden mt-1 cursor-pointer" onclick="scrollToTop()">
+            <img id="miniCover" src="" alt="Mini Cover" class="w-12 h-12 rounded-md object-cover spin-anim spin-paused">
+            <div class="flex flex-col truncate">
+                <span id="miniTitle" class="text-sm font-semibold truncate">Faixa</span>
+                <span id="miniTime" class="text-xs text-[var(--primary)] font-medium">0:00 / 0:00</span>
+            </div>
+        </div>
+
+        <div class="flex items-center gap-4 ml-4">
+            <button onclick="togglePlay()" class="text-white p-2">
+                <i data-lucide="play" id="playIconMini" class="w-6 h-6"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- AUDIO ELEMENT OCULTO -->
+    <audio id="audioElement" crossorigin="anonymous"></audio>
+
+    <script>
+        // INICIALIZAÇÃO DE ÍCONES
+        lucide.createIcons();
+
+        // ELEMENTOS DO DOM
+        const audio = document.getElementById('audioElement');
+        const uploadInput = document.getElementById('upload');
+        const trackListEl = document.getElementById('trackList');
+        const bottomPlayer = document.getElementById('bottomPlayer');
+        
+        const mainCover = document.getElementById('mainCover');
+        const miniCover = document.getElementById('miniCover');
+        const mainTitle = document.getElementById('mainTitle');
+        const miniTitle = document.getElementById('miniTitle');
+        const mainArtist = document.getElementById('mainArtist');
+        const heroGlow = document.getElementById('heroGlow');
+        
+        const playIconMain = document.getElementById('playIconMain');
+        const playIconMini = document.getElementById('playIconMini');
+        const heroPlayBtn = document.getElementById('heroPlayBtn');
+        
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const miniTime = document.getElementById('miniTime');
+        const canvas = document.getElementById('visualizer');
+        const canvasCtx = canvas.getContext('2d');
+
+        // ESTADO GLOBAL
+        let tracks = [];
+        let currentIndex = -1;
+        let isPlaying = false;
+        
+        // WEB AUDIO API (Para o visualizador)
+        let audioCtx;
+        let analyser;
+        let source;
+        let dataArray;
+        let isAudioCtxInitialized = false;
+
+        // 1. CORES DINÂMICAS (MUTAÇÃO BASEADA NO TEMPO)
+        function updateThemeColor() {
+            const hour = new Date().getHours();
+            const root = document.documentElement;
+            let themeColor = '';
+            
+            if (hour >= 5 && hour < 12) themeColor = '#f59e0b';      // Manhã: Âmbar
+            else if (hour >= 12 && hour < 18) themeColor = '#ff5500'; // Tarde: Laranja SoundCloud
+            else if (hour >= 18 && hour < 23) themeColor = '#8b5cf6'; // Noite: Roxo
+            else themeColor = '#ef4444';                              // Madrugada: Vermelho KODUX
+
+            root.style.setProperty('--primary', themeColor);
+            
+            // Atualiza os ícones caso a cor tenha mudado
+            lucide.createIcons();
+        }
+        updateThemeColor();
+        setInterval(updateThemeColor, 60000); // Checa a cada minuto
+
+        // 2. SETUP DO VISUALIZADOR (WAVEFORM)
+        function initAudioVisualizer() {
+            if (isAudioCtxInitialized) return;
+            
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                analyser = audioCtx.createAnalyser();
+                source = audioCtx.createMediaElementSource(audio);
+                
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                
+                analyser.fftSize = 128; // Tamanho das barras
+                const bufferLength = analyser.frequencyBinCount;
+                dataArray = new Uint8Array(bufferLength);
+                
+                isAudioCtxInitialized = true;
+                drawVisualizer();
+            } catch (e) {
+                console.log("Erro no AudioContext (provavelmente CORS de mídia externa, upe arquivo local)", e);
+            }
+        }
+
+        function drawVisualizer() {
+            if (!isPlaying) {
+                requestAnimationFrame(drawVisualizer);
+                return;
+            }
+
+            requestAnimationFrame(drawVisualizer);
+
+            // Ajusta tamanho do canvas pro display real
+            canvas.width = canvas.clientWidth;
+            canvas.height = canvas.clientHeight;
+
+            analyser.getByteFrequencyData(dataArray);
+
+            canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = (canvas.width / dataArray.length) * 1.5;
+            let barHeight;
+            let x = 0;
+            
+            // Pega a cor atual do CSS Root
+            const rootStyles = getComputedStyle(document.documentElement);
+            const primaryColor = rootStyles.getPropertyValue('--primary').trim();
+
+            for (let i = 0; i < dataArray.length; i++) {
+                barHeight = (dataArray[i] / 255) * canvas.height;
+
+                // Gradiente e Brilho (Estilo KODUX)
+                canvasCtx.fillStyle = primaryColor;
+                canvasCtx.shadowBlur = 10;
+                canvasCtx.shadowColor = primaryColor;
+                
+                // Desenha a barra a partir do centro (visual clássico)
+                const y = canvas.height - barHeight;
+                canvasCtx.fillRect(x, y, barWidth - 2, barHeight);
+
+                x += barWidth;
+            }
+            
+            // Ajusta o brilho do Hero baseado na intensidade do grave
+            const bassAvg = (dataArray[0] + dataArray[1] + dataArray[2]) / 3;
+            heroGlow.style.opacity = 0.1 + (bassAvg / 255) * 0.4;
+            
+            // Efeito de pulso sutil na capa se bater forte
+            if (bassAvg > 220) {
+                mainCover.style.transform = 'scale(1.03)';
+            } else {
+                mainCover.style.transform = 'scale(1)';
+            }
+        }
+
+        // 3. UPLOAD DE ARQUIVOS
+        uploadInput.addEventListener('change', (e) => {
+            const files = e.target.files;
+            if (files.length === 0) return;
+
+            Array.from(files).forEach(file => {
+                const url = URL.createObjectURL(file);
+                
+                // Gera imagens aleatórias e imersivas para as capas
+                const randomId = Math.floor(Math.random() * 1000);
+                const coverUrl = `https://picsum.photos/seed/${randomId}/500/500`;
+
+                tracks.push({
+                    name: file.name.replace(/\.[^/.]+$/, ""), // Remove extensão
+                    artist: 'Local Upload',
+                    url: url,
+                    cover: coverUrl
+                });
+            });
+
+            renderTrackList();
+            
+            // Se for a primeira música, carrega automaticamente
+            if (currentIndex === -1) {
+                loadTrack(0);
+                bottomPlayer.classList.remove('translate-y-full'); // Mostra o player
+            }
+        });
+
+        // 4. RENDERIZAR LISTA
+        function renderTrackList() {
+            if (tracks.length === 0) return;
+            trackListEl.innerHTML = '';
+
+            tracks.forEach((track, i) => {
+                const isActive = i === currentIndex;
+                const div = document.createElement('div');
+                div.className = `track-item flex items-center gap-4 px-6 py-3 cursor-pointer border-b border-gray-800/50 ${isActive ? 'playing' : ''}`;
+                
+                div.innerHTML = `
+                    <div class="relative w-12 h-12 flex-shrink-0">
+                        <img src="${track.cover}" class="w-full h-full object-cover rounded-md">
+                        ${isActive && isPlaying ? `<div class="absolute inset-0 bg-black/50 flex items-center justify-center rounded-md">
+                            <div class="w-1.5 h-1.5 bg-[var(--primary)] rounded-full animate-ping"></div>
+                        </div>` : ''}
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h3 class="track-title text-sm font-semibold truncate ${isActive ? 'text-[var(--primary)]' : 'text-[var(--voice)]'}">${track.name}</h3>
+                        <p class="text-xs text-[var(--voice-muted)] truncate">${track.artist}</p>
+                    </div>
+                    ${isActive ? `<i data-lucide="bar-chart-2" class="w-4 h-4 text-[var(--primary)]"></i>` : ''}
+                `;
+                
+                div.onclick = () => {
+                    if (currentIndex === i) {
+                        togglePlay();
+                    } else {
+                        loadTrack(i);
+                        playAudio();
+                    }
+                };
+                
+                trackListEl.appendChild(div);
+            });
+            
+            lucide.createIcons();
+        }
+
+        // 5. CONTROLES DO PLAYER
+        function loadTrack(index) {
+            if (index < 0 || index >= tracks.length) return;
+            currentIndex = index;
+            const track = tracks[index];
+
+            audio.src = track.url;
+            
+            // UI Principal
+            mainTitle.innerText = track.name;
+            mainArtist.innerText = track.artist;
+            mainCover.src = track.cover;
+            
+            // UI Mini Player
+            miniTitle.innerText = track.name;
+            miniCover.src = track.cover;
+            
+            renderTrackList(); // Atualiza classe ativa
+        }
+
+        function togglePlay() {
+            if (tracks.length === 0) return;
+            
+            // Precisa de interação do usuário para iniciar o Contexto de Áudio
+            if (!isAudioCtxInitialized) {
+                initAudioVisualizer();
+            }
+
+            if (audio.paused) {
+                playAudio();
+            } else {
+                pauseAudio();
+            }
+        }
+
+        function playAudio() {
+            audio.play().then(() => {
+                isPlaying = true;
+                updatePlayIcons('pause');
+                miniCover.classList.remove('spin-paused');
+                heroPlayBtn.classList.add('hidden'); // Esconde o overlay de play da capa grande
+                renderTrackList(); // Atualiza indicador de tocando
+                
+                // Reinicia AudioContext se tiver sido suspenso (política de navegadores)
+                if (audioCtx && audioCtx.state === 'suspended') {
+                    audioCtx.resume();
+                }
+            }).catch(e => console.error("Erro ao tocar:", e));
+        }
+
+        function pauseAudio() {
+            audio.pause();
+            isPlaying = false;
+            updatePlayIcons('play');
+            miniCover.classList.add('spin-paused');
+            heroPlayBtn.classList.remove('hidden'); // Mostra overlay de play
+            renderTrackList();
+        }
+
+        function updatePlayIcons(iconName) {
+            playIconMain.setAttribute('data-lucide', iconName);
+            playIconMini.setAttribute('data-lucide', iconName);
+            // Recria apenas os ícones alterados para performance
+            lucide.createIcons({
+                icons: { play: lucide.icons.Play, pause: lucide.icons.Pause },
+                nameAttr: 'data-lucide',
+                attrs: { class: playIconMain.className }
+            });
+            // Gambiarra rápida pro lucide não sobrescrever classes
+            playIconMain.className = 'w-7 h-7 ml-1';
+            playIconMini.className = 'w-6 h-6';
+            if(iconName === 'pause') playIconMain.classList.remove('ml-1'); // Ajusta centro do ícone de pause
+        }
+
+        function nextTrack() {
+            if (tracks.length <= 1) return;
+            let next = currentIndex + 1;
+            if (next >= tracks.length) next = 0; // Loop list
+            loadTrack(next);
+            playAudio();
+        }
+
+        function prevTrack() {
+            if (tracks.length <= 1) return;
+            // Se passou de 3s, reinicia a música. Se não, volta uma.
+            if (audio.currentTime > 3) {
+                audio.currentTime = 0;
+            } else {
+                let prev = currentIndex - 1;
+                if (prev < 0) prev = tracks.length - 1;
+                loadTrack(prev);
+                playAudio();
+            }
+        }
+
+        // 6. PROGRESSO & TEMPO
+        audio.addEventListener('timeupdate', () => {
+            if (!audio.duration) return;
+            
+            // Barra de progresso
+            const percent = (audio.currentTime / audio.duration) * 100;
+            progressBar.style.width = `${percent}%`;
+
+            // Textos de tempo
+            const current = formatTime(audio.currentTime);
+            const total = formatTime(audio.duration);
+            miniTime.innerText = `${current} / ${total}`;
+        });
+
+        audio.addEventListener('ended', nextTrack);
+
+        function seek(e) {
+            if (!audio.duration) return;
+            const rect = progressContainer.getBoundingClientRect();
+            const clickX = e.clientX - rect.left;
+            const percent = clickX / rect.width;
+            audio.currentTime = percent * audio.duration;
+        }
+
+        function formatTime(seconds) {
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m}:${s < 10 ? '0' : ''}${s}`;
+        }
+
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+    </script>
+</body>
+</html>
