@@ -1,0 +1,430 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Espaço Vivo | Códex Fusion - Feeling Decor</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        vivivi: {
+                            dark: '#050414',
+                            deep: '#1a103c',
+                            gold: '#f0c775',
+                            neonGold: '#ffd700',
+                            rose: '#ff2e63',
+                            tiffany: '#08f7fe',
+                        },
+                        brand: {
+                            dark: '#0f1115',
+                            gold: '#f0c775',
+                            cream: '#fcfaf6',
+                            text: '#2c2c2c'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                        tech: ['Orbitron', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'neon-gold': '0 0 15px rgba(240, 199, 117, 0.4)',
+                        'neon-blue': '0 0 15px rgba(8, 247, 254, 0.3)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        :root { --brand-grad: linear-gradient(135deg, #0f1115 0%, #1a103c 100%); }
+        body { background-color: #fcfaf6; color: #2c2c2c; scroll-behavior: smooth; }
+
+        .glass-dark {
+            background: rgba(15, 17, 21, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(240, 199, 117, 0.2);
+        }
+
+        .hero-mask {
+            background: linear-gradient(to bottom, rgba(15,17,21,0.9) 0%, rgba(15,17,21,0.2) 100%), 
+                        url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .scanlines {
+            position: fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:50;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.02) 50%, rgba(0,0,0,0.02));
+            background-size: 100% 4px; opacity: 0.3;
+        }
+
+        .video-row { display: flex; gap: 12px; overflow-x: auto; padding: 10px 0; scroll-behavior: smooth; }
+        .vid-card { min-width: 160px; flex-shrink: 0; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #f0c775; border-radius: 10px; }
+
+        .animate-float { animation: float 6s ease-in-out infinite; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="scanlines"></div>
+
+    <!-- NAVEGAÇÃO -->
+    <nav class="fixed top-0 w-full z-[100] px-6 py-4 flex justify-between items-center glass-dark text-white border-b border-brand-gold/10">
+        <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full border border-brand-gold flex items-center justify-center">
+                <i class="fa-solid fa-dna text-brand-gold text-xs"></i>
+            </div>
+            <span class="font-serif font-bold tracking-widest text-lg uppercase">Espaço Vivo</span>
+        </div>
+        <div class="hidden md:flex gap-8 text-[10px] uppercase tracking-[0.2em] font-semibold">
+            <a href="#portfolio" class="hover:text-brand-gold transition">Portfólio</a>
+            <a href="#codex" class="hover:text-brand-gold transition">Códex Interativo</a>
+            <a href="#contato" class="hover:text-brand-gold transition">Contato</a>
+        </div>
+        <button onclick="document.getElementById('codex').scrollIntoView()" class="bg-brand-gold text-brand-dark px-5 py-2 rounded-full text-[10px] font-bold uppercase tracking-wider hover:bg-white transition">
+            Sintonizar
+        </button>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="relative min-h-screen flex items-center pt-20 overflow-hidden hero-mask">
+        <div class="container mx-auto px-6 md:px-12 z-10">
+            <div class="max-w-3xl">
+                <p class="text-brand-gold font-tech text-xs tracking-[0.4em] mb-4 uppercase">Feeling Decor & ViViVi</p>
+                <h1 class="font-serif text-5xl md:text-8xl text-white leading-tight mb-6">
+                    A Mente Reflete.<br><span class="italic text-brand-gold/80">O Espaço Responde.</span>
+                </h1>
+                <p class="text-gray-300 text-lg md:text-xl font-light mb-10 max-w-xl">
+                    Energia ativa, fluxo Chi e ativação arquetípica. Transformamos metros quadrados em ecossistemas de bem-estar.
+                </p>
+                <div class="flex flex-wrap gap-4">
+                    <button onclick="document.getElementById('codex').scrollIntoView()" class="bg-white text-brand-dark px-10 py-4 rounded-full font-bold hover:bg-brand-gold transition-all shadow-xl">
+                        ACESSAR CÓDEX
+                    </button>
+                    <button onclick="document.getElementById('portfolio').scrollIntoView()" class="border border-white/30 text-white px-10 py-4 rounded-full font-bold hover:bg-white/10 transition-all">
+                        VER PORTFÓLIO
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Abstract Element -->
+        <div class="absolute right-[-10%] bottom-[-10%] w-[60%] h-[80%] opacity-20 pointer-events-none animate-float">
+            <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="w-full h-full object-contain" onerror="this.style.display='none'">
+        </div>
+    </header>
+
+    <!-- PORTFOLIO PREVIEW -->
+    <section id="portfolio" class="py-24 bg-white">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-12 border-b border-gray-100 pb-8">
+                <div>
+                    <h2 class="font-serif text-4xl text-brand-dark">Curadoria Visual</h2>
+                    <p class="text-gray-500 uppercase tracking-widest text-[10px] mt-2">Espaços com Alma e Ativação</p>
+                </div>
+                <span class="text-gray-300 font-tech text-xl hidden md:block">01 // PROJECTS</span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="group overflow-hidden rounded-2xl bg-brand-cream relative aspect-square shadow-sm hover:shadow-xl transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-8 flex flex-col justify-end">
+                        <h3 class="text-white font-serif text-2xl">Harmonia</h3>
+                        <p class="text-brand-gold text-xs uppercase tracking-widest">Ativação Inocente</p>
+                    </div>
+                </div>
+                <div class="group overflow-hidden rounded-2xl bg-brand-cream relative aspect-square shadow-sm hover:shadow-xl transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-8 flex flex-col justify-end">
+                        <h3 class="text-white font-serif text-2xl">Fluxo Chi</h3>
+                        <p class="text-brand-gold text-xs uppercase tracking-widest">Ativação Sábio</p>
+                    </div>
+                </div>
+                <div class="group overflow-hidden rounded-2xl bg-brand-cream relative aspect-square shadow-sm hover:shadow-xl transition-all duration-500">
+                    <img src="https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=800" class="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-110 transition-all duration-700">
+                    <div class="absolute inset-0 bg-gradient-to-t from-brand-dark/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-8 flex flex-col justify-end">
+                        <h3 class="text-white font-serif text-2xl">Triunfo</h3>
+                        <p class="text-brand-gold text-xs uppercase tracking-widest">Ativação Herói</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CÓDEX SECTION (A FUSÃO) -->
+    <section id="codex" class="py-24 bg-brand-dark relative overflow-hidden text-white">
+        <!-- Background Elements -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-vivivi-tiffany blur-[120px]"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-gold blur-[120px]"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="font-tech text-3xl md:text-4xl text-brand-gold mb-4 tracking-wider">CÓDEX INFODOSE</h2>
+                    <p class="text-gray-400 font-light text-lg">Descubra sua frequência arquetípica e o aroma ideal para seu ambiente.</p>
+                </div>
+
+                <!-- APP INTERFACE -->
+                <div id="quiz-app" class="glass-dark rounded-3xl overflow-hidden border border-white/10 shadow-2xl min-h-[500px] flex flex-col">
+                    
+                    <!-- View: Landing -->
+                    <div id="view-landing" class="flex-1 flex flex-col items-center justify-center p-12 text-center animate-fade-in">
+                        <div class="w-24 h-24 rounded-full border-2 border-brand-gold/50 flex items-center justify-center mb-8 animate-pulse shadow-neon-gold">
+                            <i class="fa-solid fa-wand-magic-sparkles text-4xl text-brand-gold"></i>
+                        </div>
+                        <h3 class="text-2xl font-serif mb-4">Inicie a Sintonização</h3>
+                        <p class="text-gray-400 text-sm mb-10 max-w-xs leading-relaxed">O algoritmo Haski calculará sua frequência para alinhar mente e espaço.</p>
+                        <button onclick="app.startQuiz()" class="w-full max-w-xs py-4 bg-brand-gold text-brand-dark font-bold rounded-xl hover:bg-white transition-all tracking-widest text-xs">
+                            INICIAR PROTOCOLO
+                        </button>
+                    </div>
+
+                    <!-- View: Quiz -->
+                    <div id="view-quiz" class="hidden flex-1 flex flex-col p-8 md:p-12">
+                        <div class="flex justify-between items-end mb-6">
+                            <span class="font-tech text-[10px] text-brand-gold tracking-[0.2em]">Entrada de Dados</span>
+                            <span class="text-[10px] font-mono text-gray-500"><span id="q-current">1</span> / 6</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/5 rounded-full mb-10">
+                            <div id="progress-bar" class="h-full bg-brand-gold shadow-neon-gold transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <h4 id="question-text" class="text-xl md:text-2xl font-serif mb-12 min-h-[3em]">Carregando pergunta...</h4>
+                        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Options injected here -->
+                        </div>
+                    </div>
+
+                    <!-- View: Result -->
+                    <div id="view-result" class="hidden flex-1 p-8 md:p-12">
+                        <div class="text-center mb-10">
+                            <p class="text-[10px] uppercase tracking-[0.3em] text-vivivi-tiffany font-bold mb-2">Arquétipo Identificado</p>
+                            <h3 id="result-archetype" class="text-4xl md:text-5xl font-serif mb-4">O Herói</h3>
+                            <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-brand-gold/30 bg-brand-gold/10">
+                                <i class="fa-solid fa-spray-can text-brand-gold text-[10px]"></i>
+                                <span id="result-aroma" class="text-[10px] font-bold uppercase tracking-widest text-brand-gold">Aroma do Triunfo</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                            <!-- Details Card -->
+                            <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                                <h4 class="text-[10px] font-bold text-brand-gold uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-fingerprint"></i> Decodificação
+                                </h4>
+                                <div id="result-traits" class="space-y-3 text-sm text-gray-300 leading-relaxed">
+                                    <!-- Traits injected here -->
+                                </div>
+                            </div>
+                            <!-- Aroma Card -->
+                            <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                                <h4 class="text-[10px] font-bold text-vivivi-tiffany uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-flask"></i> Fórmula Ativadora
+                                </h4>
+                                <p id="aroma-desc" class="text-sm italic text-white mb-4">"Lavanda, Cedro e Menta."</p>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-[9px] text-gray-500 uppercase font-bold">Ambiente</p>
+                                        <p id="aroma-env" class="text-[10px] text-gray-300">Escritório, Home Office</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-gray-500 uppercase font-bold">Efeito</p>
+                                        <p id="aroma-effect" class="text-[10px] text-gray-300">Foco e Determinação</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Video Recommendations -->
+                        <div class="mb-12">
+                            <h4 class="text-[10px] font-bold text-gray-400 uppercase tracking-[0.2em] mb-4">Curadoria Haski (Frequências)</h4>
+                            <div id="video-container" class="video-row scroll-hide">
+                                <!-- Videos injected here -->
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="app.activateHaski()" class="flex-1 py-4 bg-brand-gold text-brand-dark font-bold rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-all">
+                                ATIVAR HASKI AI
+                            </button>
+                            <button onclick="location.reload()" class="px-8 py-4 border border-white/10 text-gray-400 rounded-xl text-xs hover:text-white transition-all">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer id="contato" class="py-20 bg-brand-cream border-t-4 border-brand-gold text-brand-dark">
+        <div class="container mx-auto px-6 text-center">
+            <h2 class="font-serif text-4xl mb-6 italic">Feeling Decor</h2>
+            <p class="text-brand-text/70 mb-10 max-w-lg mx-auto">
+                Viviani Costa Barros • Ativação Viva • Feng Shui Integrado.<br>
+                O próximo nível da sua experiência espacial.
+            </p>
+            <div class="flex justify-center gap-6 mb-12">
+                <a href="#" class="w-12 h-12 rounded-full border border-brand-dark/10 flex items-center justify-center hover:bg-brand-gold hover:border-brand-gold transition-all"><i class="fa-brands fa-instagram"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border border-brand-dark/10 flex items-center justify-center hover:bg-brand-gold hover:border-brand-gold transition-all"><i class="fa-brands fa-whatsapp"></i></a>
+                <a href="#" class="w-12 h-12 rounded-full border border-brand-dark/10 flex items-center justify-center hover:bg-brand-gold hover:border-brand-gold transition-all"><i class="fa-brands fa-pinterest"></i></a>
+            </div>
+            <p class="text-[10px] uppercase tracking-widest text-gray-400">© 2024 Espaço Vivo - Fusion Edition v4.2</p>
+        </div>
+    </footer>
+
+    <!-- Overlay Player -->
+    <div id="player-overlay" class="fixed inset-0 z-[200] bg-black/95 hidden flex-col items-center justify-center p-6 backdrop-blur-xl">
+        <button onclick="app.closePlayer()" class="absolute top-8 right-8 text-white/50 hover:text-white transition text-2xl"><i class="fa-solid fa-xmark"></i></button>
+        <div id="yt-embed" class="w-full max-w-4xl aspect-video bg-black rounded-3xl overflow-hidden border border-brand-gold/20 shadow-neon-gold"></div>
+    </div>
+
+    <script>
+        const DB = {
+            archetypes: {
+                innocent: { name: "Inocente", aromaId: "paz", traits: ["Paz e harmonia nas formas.", "Lealdade pura em cada detalhe.", "Cores pastéis e luz natural."] },
+                explorer: { name: "Explorador", aromaId: "jornada", traits: ["Autonomia e espaços abertos.", "Materiais naturais e rústicos.", "O ambiente como ponto de partida."] },
+                sage: { name: "Sábio", aromaId: "mente", traits: ["Minimalismo intelectual.", "Foco em biblioteca e luz de leitura.", "Organização baseada em dados."] },
+                hero: { name: "Herói", aromaId: "triunfo", traits: ["Alta performance e simetria.", "Cores vibrantes que impulsionam.", "Foco em soluções e conquistas."] },
+                magician: { name: "Mago", aromaId: "prosperidade", traits: ["Transformação sensorial.", "Luzes indiretas e espelhos.", "Espaços que manifestam intenções."] },
+                ruler: { name: "Governante", aromaId: "poder", traits: ["Liderança e materiais nobres.", "Estrutura e comando visual.", "Legacy e autoridade no design."] }
+            },
+            aromas: {
+                paz: { name: "Aroma da Paz", ingredients: "Lavanda, Camomila, Capim-limão", env: "Quarto, Zen", effect: "Serenidade" },
+                jornada: { name: "Aroma da Jornada", ingredients: "Cedro, Eucalipto, Pimenta Rosa", env: "Home Office", effect: "Expansão" },
+                mente: { name: "Aroma da Mente", ingredients: "Sândalo, Alecrim, Olíbano", env: "Biblioteca", effect: "Clareza" },
+                triunfo: { name: "Aroma do Triunfo", ingredients: "Limão Siciliano, Gengibre", env: "Academia", effect: "Energia" },
+                prosperidade: { name: "Aroma da Abundância", ingredients: "Canela, Patchouli", env: "Hall, Entrada", effect: "Atração" },
+                poder: { name: "Aroma do Poder", ingredients: "Vetiver, Jasmim, Cedro", env: "Sala de Jantar", effect: "Confiança" }
+            }
+        };
+
+        const QUESTIONS = [
+            { text: "Qual a sua busca essencial no seu espaço hoje?", options: [{ l: "Paz e Harmonia", t: ['innocent'] }, { l: "Poder e Sucesso", t: ['ruler','hero'] }, { l: "Liberdade e Aventura", t: ['explorer'] }, { l: "Sabedoria e Ordem", t: ['sage','magician'] }] },
+            { text: "Seu maior medo ao decorar:", options: [{ l: "Caos e Bagunça", t: ['ruler','sage'] }, { l: "Tédio e Prisão", t: ['explorer'] }, { l: "Incompreensão", t: ['magician'] }, { l: "Conflito", t: ['innocent','hero'] }] },
+            { text: "Escolha um Elemento Dominante:", options: [{ l: "Fogo (Ação)", t: ['hero','magician'] }, { l: "Terra (Corpo)", t: ['ruler'] }, { l: "Ar (Mente)", t: ['sage','explorer'] }, { l: "Água (Emoção)", t: ['innocent'] }] },
+            { text: "Como você lida com imprevistos?", options: [{ l: "Luto para vencer", t: ['hero','ruler'] }, { l: "Inovo a saída", t: ['magician','explorer'] }, { l: "Analiso os fatos", t: ['sage'] }, { l: "Mantenho a calma", t: ['innocent'] }] },
+            { text: "Prosperidade para você é:", options: [{ l: "Segurança", t: ['innocent','ruler'] }, { l: "Legado", t: ['magician','hero'] }, { l: "Liberdade", t: ['explorer'] }, { l: "Conhecimento", t: ['sage'] }] },
+            { text: "Qual sensação você quer ao entrar em casa?", options: [{ l: "Acolhimento", t: ['innocent'] }, { l: "Impulso", t: ['hero','ruler'] }, { l: "Inspiração", t: ['magician','explorer'] }, { l: "Silêncio", t: ['sage'] }] }
+        ];
+
+        const VIDEOS = {
+            'hero': ['Bt_rLbMjJDk', 'NBWDV6xjUP0'],
+            'sage': ['qldgs0aLdB0', 'koKhjQKGJSc'],
+            'magician': ['FbutKMpd8MY', '1L9_rFmIGJ8'],
+            'innocent': ['hfQ1L6fCfAo', 'Tq99vQNQ6dQ'],
+            'explorer': ['KrtOVrk8aDk', 'GSBv45vigRE'],
+            'ruler': ['dGYbN8jgdNQ', 'JBjFhAutIVk']
+        };
+
+        const app = {
+            state: { currentQ: 0, scores: {}, winner: null },
+
+            startQuiz: function() {
+                this.state.scores = { innocent:0, explorer:0, sage:0, hero:0, magician:0, ruler:0 };
+                this.state.currentQ = 0;
+                document.getElementById('view-landing').classList.add('hidden');
+                document.getElementById('view-quiz').classList.remove('hidden');
+                this.renderQuestion();
+            },
+
+            renderQuestion: function() {
+                const q = QUESTIONS[this.state.currentQ];
+                document.getElementById('q-current').innerText = this.state.currentQ + 1;
+                document.getElementById('question-text').innerText = q.text;
+                document.getElementById('progress-bar').style.width = `${((this.state.currentQ)/QUESTIONS.length)*100}%`;
+                
+                const container = document.getElementById('options-container');
+                container.innerHTML = '';
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    btn.className = "p-5 text-left border border-white/10 rounded-2xl bg-white/5 hover:border-brand-gold hover:bg-brand-gold/10 transition-all text-sm";
+                    btn.innerText = opt.l;
+                    btn.onclick = () => this.handleAnswer(opt.t);
+                    container.appendChild(btn);
+                });
+            },
+
+            handleAnswer: function(tags) {
+                tags.forEach(t => this.state.scores[t]++);
+                this.state.currentQ++;
+                if(this.state.currentQ < QUESTIONS.length) this.renderQuestion();
+                else this.finish();
+            },
+
+            finish: function() {
+                const winner = Object.keys(this.state.scores).reduce((a, b) => this.state.scores[a] > this.state.scores[b] ? a : b);
+                this.state.winner = winner;
+                this.showResult(winner);
+            },
+
+            showResult: function(key) {
+                const arch = DB.archetypes[key];
+                const aroma = DB.aromas[arch.aromaId];
+
+                document.getElementById('result-archetype').innerText = arch.name;
+                document.getElementById('result-aroma').innerText = aroma.name;
+                document.getElementById('aroma-desc').innerText = `"${aroma.ingredients}"`;
+                document.getElementById('aroma-env').innerText = aroma.env;
+                document.getElementById('aroma-effect').innerText = aroma.effect;
+
+                const traitsList = document.getElementById('result-traits');
+                traitsList.innerHTML = arch.traits.map(t => `<div class="flex gap-2"><span class="text-brand-gold">▸</span><span>${t}</span></div>`).join('');
+
+                // Videos
+                const vCont = document.getElementById('video-container');
+                vCont.innerHTML = (VIDEOS[key] || []).map(id => `
+                    <div onclick="app.playVideo('${id}')" class="vid-card group cursor-pointer">
+                        <div class="relative w-full aspect-video rounded-xl overflow-hidden bg-black mb-2">
+                            <img src="https://img.youtube.com/vi/${id}/mqdefault.jpg" class="w-full h-full object-cover opacity-60 group-hover:opacity-100 transition">
+                            <i class="fa-solid fa-play absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-white/50 group-hover:text-white"></i>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('view-quiz').classList.add('hidden');
+                document.getElementById('view-result').classList.remove('hidden');
+            },
+
+            playVideo: function(id) {
+                const overlay = document.getElementById('player-overlay');
+                document.getElementById('yt-embed').innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${id}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+                overlay.classList.remove('hidden');
+                overlay.classList.add('flex');
+            },
+
+            closePlayer: function() {
+                document.getElementById('player-overlay').classList.add('hidden');
+                document.getElementById('yt-embed').innerHTML = '';
+            },
+
+            activateHaski: function() {
+                const text = `Sintonização Completa: Sou Arquétipo ${DB.archetypes[this.state.winner].name}. Viviani, como podemos ativar isso no meu espaço?`;
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
+            }
+        };
+    </script>
+</body>
+</html>
+
+
