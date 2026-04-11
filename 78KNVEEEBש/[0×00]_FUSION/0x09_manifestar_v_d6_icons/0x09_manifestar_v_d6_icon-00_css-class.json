@@ -1,0 +1,24 @@
+{
+  "kobllux": {
+    "opcode": "0x09",
+    "nome": "MANIFESTAR",
+    "veeb": "V",
+    "drung": "D6",
+    "freq_hz": 963,
+    "note": "Ícone · campo→forma · Φ(r)=q/4πε₀r"
+  },
+  "icon": {
+    "tag": "css-icon",
+    "src": "",
+    "cls": "play-hint-icon",
+    "alt": "",
+    "type": "css-class",
+    "isExternal": "",
+    "isLocal": "",
+    "isCssClass": true
+  },
+  "usage": "Classe CSS: play-hint-icon — importar biblioteca de ícones na pasta external/",
+  "law": "VERDADE×INTEGRAR÷Δ=∞",
+  "fractal": "3×6×9×7=1134",
+  "generated": "2026-03-24T18:41:48.866Z"
+}

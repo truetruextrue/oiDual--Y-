@@ -1,0 +1,27 @@
+{
+  "kobllux": {
+    "opcode": "0x09",
+    "nome": "manifestar",
+    "geom": "♾",
+    "freq_hz": 963,
+    "veeb": "Vibração",
+    "drung": "D6",
+    "cor": "#6c5ce7",
+    "dim": "S²·Esfera",
+    "chi": 2
+  },
+  "path": "fusion-os-vision-ultimate-v5-forge/0x09_manifestar_V_D6_icons",
+  "desc": "Ícones detectados no HTML. Total: 1. Φ(r)=q/4πε₀r · campo→forma.",
+  "veeb_formulas": {
+    "V": "f_total = f_432 + f_7.83·sin(θ)",
+    "E": "E = ∫₀ᵀ Φ(t)·ω(t)dt",
+    "E2": "χ = V-E+F  ·  D = log(N)/log(1/r)",
+    "B": "S = Σbᵢ·2^(i-1),  bᵢ∈{0,1}"
+  },
+  "fractal": "3×6×9×7=1134",
+  "law": "VERDADE×INTEGRAR÷Δ=∞",
+  "contents": [
+    "0x09_manifestar_V_D6_icon-00_css-class.json"
+  ],
+  "generated": "2026-03-24T18:41:48.872Z"
+}
