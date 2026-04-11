@@ -1,11 +1,11 @@
 {
-  "name": "ViViVi - Códex Arquétipos & Haski",
-  "short_name": "ViViVi",
+  "name": "78FFD - Códex Arquétipos & Haski",
+  "short_name": "78FFD",
   "description": "",
   "lang": "pt-BR",
   "start_url": "./",
   "display": "standalone",
-  "background_color": "#ffffff",
+  "background_color": "#000",
   "theme_color": "#2563eb",
   "orientation": "any",
   "icons": [
