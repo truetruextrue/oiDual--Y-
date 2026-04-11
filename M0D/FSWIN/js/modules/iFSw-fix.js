@@ -153,7 +153,8 @@
         const id = `session-${Date.now()}-${windowCounter++}`;
 
         const section = document.createElement('div');
-        section.className = 'session-window';
+        section.className = 'session-window collapsed';
+
         section.id = id;
 
         section.innerHTML = `
