@@ -1,0 +1,119 @@
+   <!-- CÓDEX SECTION (A FUSÃO) -->
+    <section id="codex" class="py-24 bg-brand-dark relative overflow-hidden text-white">
+        <!-- Background Elements -->
+        <div class="absolute top-0 left-0 w-full h-full opacity-10 pointer-events-none">
+            <div class="absolute top-1/4 left-1/4 w-96 h-96 bg-vivivi-tiffany blur-[120px] rounded-full"></div>
+            <div class="absolute bottom-1/4 right-1/4 w-96 h-96 bg-brand-gold blur-[120px] rounded-full"></div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-10">
+            <div class="max-w-4xl mx-auto">
+                <div class="text-center mb-16">
+                    <h2 class="font-tech text-3xl md:text-4xl text-brand-gold mb-4 tracking-wider">CÓDEX INFODOSE</h2>
+                    <p class="text-gray-400 font-light text-lg">Descubra sua frequência arquetípica e o aroma ideal para seu ambiente.</p>
+                </div>
+
+                <!-- APP INTERFACE -->
+                <div id="quiz-app" class="glass-dark rounded-3xl overflow-hidden border border-white/10 shadow-2xl min-h-[500px] flex flex-col">
+                    
+                    <!-- View: Landing -->
+                    <div id="view-landing" class="flex-1 flex flex-col items-center justify-center p-12 text-center animate-fade-in">
+                        <div class="w-24 h-24 rounded-full border-2 border-brand-gold/50 flex items-center justify-center mb-8 animate-pulse shadow-neon-gold bg-brand-gold/5">
+                            <i class="fa-solid fa-wand-magic-sparkles text-4xl text-brand-gold"></i>
+                        </div>
+                        <h3 class="text-2xl font-serif mb-4">Inicie a Sintonização</h3>
+                        <p class="text-gray-400 text-sm mb-10 max-w-xs leading-relaxed">O algoritmo Haski calculará sua frequência para alinhar mente e espaço.</p>
+                        <button onclick="app.startQuiz()" class="w-full max-w-xs py-4 bg-brand-gold text-brand-dark font-bold rounded-xl hover:bg-white transition-all tracking-widest text-xs">
+                            INICIAR PROTOCOLO
+                        </button>
+                    </div>
+
+                    <!-- View: Quiz -->
+                    <div id="view-quiz" class="hidden flex-1 flex flex-col p-8 md:p-12 animate-fade-in">
+                        <div class="flex justify-between items-end mb-6">
+                            <span class="font-tech text-[10px] text-brand-gold tracking-[0.2em]">Entrada de Dados</span>
+                            <span class="text-[10px] font-mono text-gray-500"><span id="q-current">1</span> / 6</span>
+                        </div>
+                        <div class="w-full h-1 bg-white/5 rounded-full mb-10">
+                            <div id="progress-bar" class="h-full bg-brand-gold shadow-neon-gold transition-all duration-500" style="width: 15%"></div>
+                        </div>
+                        <h4 id="question-text" class="text-xl md:text-2xl font-serif mb-12 min-h-[3em]">O que você busca ao entrar em casa?</h4>
+                        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Options mock -->
+                            <button onclick="app.answerQuiz()" class="p-4 rounded-xl border border-white/10 bg-white/5 text-left hover:bg-brand-gold hover:text-brand-dark transition-all">Paz e total silêncio</button>
+                            <button onclick="app.answerQuiz()" class="p-4 rounded-xl border border-white/10 bg-white/5 text-left hover:bg-brand-gold hover:text-brand-dark transition-all">Inspiração e criatividade</button>
+                            <button onclick="app.answerQuiz()" class="p-4 rounded-xl border border-white/10 bg-white/5 text-left hover:bg-brand-gold hover:text-brand-dark transition-all">Organização perfeita</button>
+                            <button onclick="app.answerQuiz()" class="p-4 rounded-xl border border-white/10 bg-white/5 text-left hover:bg-brand-gold hover:text-brand-dark transition-all">Acolhimento da família</button>
+                        </div>
+                    </div>
+
+                    <!-- View: Result -->
+                    <div id="view-result" class="hidden flex-1 p-8 md:p-12 animate-fade-in">
+                        <div class="text-center mb-10">
+                            <p class="text-[10px] uppercase tracking-[0.3em] text-vivivi-tiffany font-bold mb-2">Arquétipo Identificado</p>
+                            <h3 id="result-archetype" class="text-4xl md:text-5xl font-serif mb-4">O Criador</h3>
+                            <div class="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-brand-gold/30 bg-brand-gold/10">
+                                <i class="fa-solid fa-spray-can text-brand-gold text-[10px]"></i>
+                                <span id="result-aroma" class="text-[10px] font-bold uppercase tracking-widest text-brand-gold">Aroma da Inovação</span>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                            <!-- Details Card -->
+                            <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                                <h4 class="text-[10px] font-bold text-brand-gold uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-fingerprint"></i> Decodificação
+                                </h4>
+                                <div id="result-traits" class="space-y-3 text-sm text-gray-300 leading-relaxed">
+                                    <p>• Precisa de espaços com luz natural ampla.</p>
+                                    <p>• Beneficia-se de cantos assimétricos.</p>
+                                    <p>• Cores recomendadas: Mostarda e Tiffany.</p>
+                                </div>
+                            </div>
+                            <!-- Aroma Card -->
+                            <div class="p-6 rounded-2xl bg-white/5 border border-white/10">
+                                <h4 class="text-[10px] font-bold text-vivivi-tiffany uppercase tracking-widest mb-4 flex items-center gap-2">
+                                    <i class="fa-solid fa-flask"></i> Fórmula Ativadora
+                                </h4>
+                                <p id="aroma-desc" class="text-sm italic text-white mb-4">"Alecrim, Bergamota e Sândalo."</p>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <p class="text-[9px] text-gray-500 uppercase font-bold">Ambiente</p>
+                                        <p id="aroma-env" class="text-[10px] text-gray-300">Estúdio / Atelier</p>
+                                    </div>
+                                    <div>
+                                        <p class="text-[9px] text-gray-500 uppercase font-bold">Efeito</p>
+                                        <p id="aroma-effect" class="text-[10px] text-gray-300">Expansão de Ideias</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap gap-4">
+                            <button onclick="app.activateHaski()" class="flex-1 py-4 bg-brand-gold text-brand-dark font-bold rounded-xl text-xs tracking-widest hover:scale-[1.02] transition-all">
+                                ATIVAR HASKI AI
+                            </button>
+                            <button onclick="app.resetQuiz()" class="px-8 py-4 border border-white/10 text-gray-400 rounded-xl text-xs hover:text-white transition-all">
+                                <i class="fa-solid fa-rotate-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO / GRID SECTION -->
+    <section id="portfolio" class="py-24 bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6 md:px-12">
+            <!-- Header Portfolio -->
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-200 pb-8">
+                <div>
+                    <h2 class="font-serif text-5xl md:text-6xl text-brand-dark font-medium">[ PORTFÓLIO ]</h2>
+                    <p class="text-brand-textMuted mt-4 tracking-widest uppercase text-sm">Página pronta • Showcase live</p>
+                </div>
+                <div class="mt-6 md:mt-0 flex items-center space-x-2 text-brand-dark hover:text-brand-gold transition-colors cursor-pointer">
+                    <span class="font-semibold">Ver todos os projetos</span>
+                    <svg class="w-6 h-6 bg-brand-dark text-white rounded-full p-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </div>
+            </div>

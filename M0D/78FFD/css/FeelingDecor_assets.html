@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feeling Decor | Viviani Costa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            dark: '#0f1115',
+                            gold: '#f0c775',
+                            goldHover: '#e0b560',
+                            cream: '#fcfaf6',
+                            creamDark: '#f3ece1',
+                            text: '#2c2c2c',
+                            textMuted: '#666666'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    backgroundImage: {
+                        'hero-pattern': "linear-gradient(to right, rgba(15, 17, 21, 0.9) 20%, rgba(15, 17, 21, 0.6) 60%, rgba(15, 17, 21, 0.2)), url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop')",
+                        'organic-shape': "url('data:image/svg+xml;utf8,<svg viewBox=\"0 0 100 100\" xmlns=\"http://www.w3.org/2000/svg\"><path fill=\"%23f3ece1\" d=\"M45.7,-76.1C58.9,-69.3,68.9,-54.8,76.5,-40.4C84.1,-26,89.3,-11.7,87.6,2C85.9,15.7,77.3,28.8,68.1,41.1C58.9,53.4,49.1,64.9,36.5,72.6C23.9,80.3,8.5,84.2,-6.1,82.8C-20.7,81.4,-34.5,74.7,-47.3,66C-60.1,57.3,-71.9,46.6,-79.8,32.7C-87.7,18.8,-91.7,1.7,-88.4,-14.2C-85.1,-30.1,-74.5,-44.8,-61.2,-53.4C-47.9,-62,-31.9,-64.5,-17.1,-67.2C-2.3,-69.9,11.3,-72.8,25.4,-75.6C39.5,-78.4,54.1,-81.1,45.7,-76.1Z\" transform=\"translate(50 50)\" /></svg>')"
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+        
+        /* Subtle fade-in animation */
+        .fade-in { animation: fadeIn 1.5s ease-in-out; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Image hover zoom */
+        .img-zoom { transition: transform 0.5s ease; }
+        .img-container:hover .img-zoom { transform: scale(1.05); }
+    </style>
+</head>
+<body class="font-sans text-brand-text bg-brand-cream antialiased selection:bg-brand-gold selection:text-brand-dark">
+
+    <!-- HERO SECTION -->
+    <header class="relative bg-brand-dark min-h-[90vh] flex flex-col">
+        <!-- Navbar -->
+        <nav class="absolute top-0 w-full z-20 px-6 py-6 md:px-12 flex justify-between items-center text-white/90">
+            <div class="flex items-center space-x-3">
+                <!-- Abstract Logo Icon -->
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-brand-gold">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    <path d="M2 12h20"></path>
+                </svg>
+                <span class="font-serif font-semibold text-xl tracking-wide">Espaço Vivo</span>
+            </div>
+            <div class="hidden md:flex space-x-8 text-sm uppercase tracking-widest font-medium">
+                <a href="#conceito" class="hover:text-brand-gold transition-colors">Conceito</a>
+                <a href="#portfolio" class="hover:text-brand-gold transition-colors">Portfólio</a>
+                <a href="#contato" class="hover:text-brand-gold transition-colors">Contato</a>
+            </div>
+            <button class="bg-brand-gold text-brand-dark px-6 py-2 rounded-full text-sm font-semibold hover:bg-brand-goldHover transition-colors hidden md:block">
+                Ativação Viva
+            </button>
+            <!-- Mobile Menu Button -->
+            <button class="md:hidden text-white">
+                <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"></path></svg>
+            </button>
+        </nav>
+
+        <!-- Hero Content -->
+        <div class="flex-grow bg-cover bg-center bg-no-repeat relative flex items-center pt-24 pb-16 overflow-hidden" data-bg-asset="hero/bg" data-bg-fallback="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop">
+            <div class="container mx-auto px-6 md:px-12 z-10 relative">
+                <div class="max-w-2xl fade-in">
+                    <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-white leading-tight mb-4">
+                        Feeling Decor<br>
+                        Viviani Costa<br>
+                        Espaço Vivo
+                    </h1>
+                    <p class="text-gray-300 text-lg md:text-xl font-light mb-8 max-w-lg leading-relaxed">
+                        Energia ativa. Curiosidade e Fluxo. A arte de alinhar espaços à sua essência interior.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <a href="#portfolio" class="bg-brand-gold text-brand-dark px-8 py-3 rounded-full font-semibold text-center hover:bg-brand-goldHover transition-colors">
+                            Explorar Projetos
+                        </a>
+                        <a href="#conceito" class="border border-white/30 text-white px-8 py-3 rounded-full font-semibold text-center hover:bg-white/10 transition-colors">
+                            Descobrir Sensações
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!-- Decorative Right Element (simulating the mandala/statue from mockup) -->
+            <div class="absolute right-0 top-1/2 -translate-y-1/2 w-1/3 h-full hidden lg:block opacity-40 pointer-events-none mix-blend-screen">
+                <img data-asset="hero/ornament" data-fallback="https://images.unsplash.com/photo-1618220179428-22790b46a0eb?q=80&w=800&auto=format&fit=crop" src="" alt="Abstract Art" class="w-full h-full object-cover mask-image-linear-left">
+            </div>
+        </div>
+    </header>
+
+    <!-- GOLDEN BANNER -->
+    <div class="bg-brand-gold py-5 border-b-4 border-brand-dark/10">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-wrap justify-between items-center text-brand-dark font-semibold tracking-wide text-sm md:text-base">
+                <div class="flex items-center space-x-2 mb-2 md:mb-0">
+                    <span class="font-serif text-lg">Feeling Decor</span>
+                </div>
+                <div class="flex items-center space-x-2 mb-2 md:mb-0">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><path d="M22 6l-10 7L2 6"></path></svg>
+                    <span>Projetos</span>
+                </div>
+                <div class="flex items-center space-x-2 mb-2 md:mb-0">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><path d="M8 14s1.5 2 4 2 4-2 4-2"></path><line x1="9" y1="9" x2="9.01" y2="9"></line><line x1="15" y1="9" x2="15.01" y2="9"></line></svg>
+                    <span>Sensações</span>
+                </div>
+                <div class="flex items-center space-x-2">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    <span>Transformação</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    
+<!-- TRILHAS & ATIVAÇÕES -->
+<section id="trilhas" class="py-24 bg-white border-b border-gray-100">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-200 pb-8">
+            <div>
+                <h2 class="font-serif text-5xl md:text-6xl text-brand-dark font-medium">[ TRILHAS & ATIVAÇÕES ]</h2>
+                <p class="text-brand-textMuted mt-4 tracking-widest uppercase text-sm">Vídeos e playlists já conectados</p>
+            </div>
+            <div class="mt-6 md:mt-0 text-brand-textMuted text-sm max-w-xl md:text-right">
+                Base pronta para trocar os links depois sem mexer no layout.
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/koKhjQKGJSc" title="Manipulação da energia - O poder das cortinas" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Manipulação da energia</h3>
+                    <p class="text-brand-textMuted">O poder das cortinas</p>
+                </div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/KrtOVrk8aDk" title="Poder sob seus pés - Pisos criam fluxos de energia e trazem paz" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Poder sob seus pés</h3>
+                    <p class="text-brand-textMuted">Pisos criam fluxos de energia e trazem paz</p>
+                </div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/JBjFhAutIVk" title="Como manipular seu subconsciente" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Como manipular seu subconsciente</h3>
+                    <p class="text-brand-textMuted">Infodose • base mental</p>
+                </div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/Bt_rLbMjJDk" title="Trilhas Potencializadoras dos Aromas" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Trilhas Potencializadoras dos Aromas</h3>
+                    <p class="text-brand-textMuted">Ativação sensorial</p>
+                </div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream lg:col-span-2">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/_0wVkryxanE" title="Desperte a magia dos 12 arquétipos" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Desperte a magia dos 12 arquétipos</h3>
+                    <p class="text-brand-textMuted">Arquétipos • trilha principal</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-10">
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/videoseries?list=PL_XiIUPFx4DSKFuJZZiKCxVUy20PtDdaB" title="Infodose - Se chegou até você merece saber" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Se chegou até você merece saber</h3>
+                    <p class="text-brand-textMuted">Playlist Infodose</p>
+                </div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-brand-cream">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/videoseries?list=PL_XiIUPFx4DQam6tyiwimO5b3X_T1Y1wd" title="Sinopse dos Livros" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-2xl text-brand-dark mb-2">Sinopse dos Livros</h3>
+                    <p class="text-brand-textMuted">O Espaço da Mente • A Fórmula da Dopamina Sexy</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<!-- SINOPSES, CONHECIMENTOS E MEDITAÇÕES -->
+<section id="sinopses" class="py-24 bg-brand-creamDark border-b border-gray-100">
+    <div class="container mx-auto px-6 md:px-12">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-200 pb-8">
+            <div>
+                <h2 class="font-serif text-5xl md:text-6xl text-brand-dark font-medium">[ SINOPSES & MENTE ]</h2>
+                <p class="text-brand-textMuted mt-4 tracking-widest uppercase text-sm">Conhecimento fundamental e meditações</p>
+            </div>
+            <div class="mt-6 md:mt-0 text-brand-textMuted text-sm max-w-xl md:text-right">
+                Tudo organizado para virar blocos, playlists e cartões de conteúdo.
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-10">
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/Id2NI9tv1r4" title="Infodose - Pra quem merece saber" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">Pra quem merece saber</h3><p class="text-brand-textMuted">Infodose</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/qldgs0aLdB0" title="Sinopse - A Fórmula da Dopamina Sexy" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">A Fórmula da Dopamina Sexy</h3><p class="text-brand-textMuted">Sinopse</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/FbutKMpd8MY" title="Sinopse - O Espaço da Mente" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">O Espaço da Mente</h3><p class="text-brand-textMuted">Sinopse</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/1L9_rFmIGJ8" title="Sinopse - A recompensa" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">A recompensa</h3><p class="text-brand-textMuted">Sinopse</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white md:col-span-2">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/videoseries?list=PL_XiIUPFx4DQam6tyiwimO5b3X_T1Y1wd" title="Sinopse dos Livros" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">Sinopse dos Livros</h3><p class="text-brand-textMuted">O Espaço da Mente e A Fórmula da Dopamina Sexy</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/hfQ1L6fCfAo" title="Meditação Guiada - A deriva no espaço da mente" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">A deriva no espaço da mente</h3><p class="text-brand-textMuted">Meditação Guiada</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/Tq99vQNQ6dQ" title="Meditação Guiada - A deriva na mente do espaço da mente" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">A deriva na mente do espaço da mente</h3><p class="text-brand-textMuted">Meditação Guiada</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/DTDfkHwuMic" title="Meditação Guiada - Navegando pelo Universo da Mente" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">Navegando pelo Universo da Mente</h3><p class="text-brand-textMuted">Meditação Guiada</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/OVfqxW_Xlhw" title="Meditação Guiada - Sinfonia da Expansão Criativa" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">Sinfonia da Expansão Criativa</h3><p class="text-brand-textMuted">Meditação Guiada</p></div>
+            </div>
+
+            <div class="rounded-3xl overflow-hidden shadow-lg border border-gray-100 bg-white md:col-span-2">
+                <div class="aspect-video">
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/kCHvLOtJIwQ" title="Meditação Guiada - Uma Jornada de Transformação" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                </div>
+                <div class="p-6"><h3 class="font-serif text-xl text-brand-dark mb-2">Uma Jornada de Transformação</h3><p class="text-brand-textMuted">Meditação Guiada</p></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- MAIN CONTENT SECTION 1: Feng Shui ON -->
+    <section id="conceito" class="py-24 relative overflow-hidden">
+        <!-- Decorative organic background blob -->
+        <div class="absolute top-0 right-0 w-[800px] h-[800px] bg-organic-shape bg-no-repeat bg-contain opacity-40 -z-10 translate-x-1/3 -translate-y-1/4"></div>
+        
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center gap-16">
+                <!-- Left Text -->
+                <div class="w-full lg:w-1/3">
+                    <p class="text-brand-textMuted uppercase tracking-widest text-sm font-semibold mb-3">Energia Ativa</p>
+                    <h2 class="font-serif text-4xl md:text-5xl font-bold mb-6 text-brand-dark">Feng Shui ON.<br>Cores guiam.</h2>
+                    <p class="text-brand-textMuted leading-relaxed mb-6">
+                        Viviani da Costa Barros traz uma abordagem única onde a harmonia e o fluxo chi são prioridades. Cada elemento é escolhido não apenas pela estética, mas pela vibração que emana.
+                    </p>
+                    <p class="text-brand-textMuted leading-relaxed mb-8">
+                        A mente reflete, o espaço responde. Quando seu ambiente está alinhado, a energia flui livremente, criando um oásis de tranquilidade e inspiração no seu dia a dia.
+                    </p>
+                    <button class="text-brand-dark font-semibold border-b-2 border-brand-gold pb-1 hover:text-brand-gold transition-colors inline-flex items-center">
+                        Entenda o processo
+                        <svg class="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                    </button>
+                </div>
+                
+                <!-- Right Staggered Images Grid -->
+                <div class="w-full lg:w-2/3 flex justify-center lg:justify-end gap-4 md:gap-6">
+                    <div class="w-1/3 img-container overflow-hidden rounded-lg shadow-lg">
+                        <img data-asset="conceito/zen-1" data-fallback="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=600&auto=format&fit=crop" src="" alt="Decoração Interior 1" class="w-full h-full object-cover img-zoom">
+                    </div>
+                    <div class="w-1/3 mt-12 img-container overflow-hidden rounded-lg shadow-lg">
+                        <img data-asset="conceito/zen-2" data-fallback="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=600&auto=format&fit=crop" src="" alt="Decoração Interior 2" class="w-full h-full object-cover img-zoom">
+                    </div>
+                    <div class="w-1/3 img-container overflow-hidden rounded-lg shadow-lg">
+                        <img data-asset="conceito/zen-3" data-fallback="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=600&auto=format&fit=crop" src="" alt="Decoração Interior 3" class="w-full h-full object-cover img-zoom">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MAIN CONTENT SECTION 2: Mente Reflete -->
+    <section class="py-24 bg-brand-creamDark relative overflow-hidden">
+        <div class="container mx-auto px-6 md:px-12 relative z-10">
+            <div class="flex flex-col lg:flex-row-reverse items-center gap-16">
+                <!-- Right Text -->
+                <div class="w-full lg:w-1/3">
+                    <p class="text-brand-textMuted uppercase tracking-widest text-sm font-semibold mb-3">Sensações</p>
+                    <h2 class="font-serif text-4xl md:text-5xl font-bold mb-6 text-brand-dark">Mente reflete.<br>Espaço responde.</h2>
+                    <p class="text-brand-textMuted leading-relaxed mb-6">
+                        O design de interiores vai além dos móveis e cores; é a arte de criar um refúgio. Através de práticas de Ativação Viva e Feng Shui, transformamos espaços estáticos em ecossistemas vibrantes.
+                    </p>
+                    <p class="text-brand-textMuted leading-relaxed mb-8">
+                        Seu ambiente afeta diretamente seu bem-estar, produtividade e paz de espírito. Próximo Nível de decoração consciente.
+                    </p>
+                    <a href="#portfolio" class="inline-block bg-brand-gold text-brand-dark px-8 py-3 rounded-full font-semibold text-center hover:bg-brand-dark hover:text-brand-gold transition-colors shadow-md">
+                        Ver Projetos
+                    </a>
+                </div>
+                
+                <!-- Left Large Image -->
+                <div class="w-full lg:w-2/3 img-container overflow-hidden rounded-2xl shadow-2xl relative">
+                    <!-- Subtle overlay text like in mockup -->
+                    <img data-asset="destaque/main" data-fallback="https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1200&auto=format&fit=crop" src="" alt="Living Room Mandala" class="w-full h-[500px] object-cover img-zoom">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTFOLIO / GRID SECTION (Onime laneiaj mockup equivalent) -->
+    <section id="portfolio" class="py-24 bg-white border-t border-gray-100">
+        <div class="container mx-auto px-6 md:px-12">
+            <!-- Header Portfolio -->
+            <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-gray-200 pb-8">
+                <div>
+                    <h2 class="font-serif text-5xl md:text-6xl text-brand-dark font-medium">[ PORTFÓLIO ]</h2>
+                    <p class="text-brand-textMuted mt-4 tracking-widest uppercase text-sm">Página pronta • Showcase live</p>
+                </div>
+                <div class="mt-6 md:mt-0 flex items-center space-x-2 text-brand-dark hover:text-brand-gold transition-colors cursor-pointer">
+                    <span class="font-semibold">Ver todos os projetos</span>
+                    <svg class="w-6 h-6 bg-brand-dark text-white rounded-full p-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </div>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 lg:gap-16">
+                <!-- Item 1 -->
+                <div class="group cursor-pointer">
+                    <div class="bg-brand-cream rounded-2xl p-6 md:p-10 mb-6 flex justify-center items-center h-64 shadow-sm group-hover:shadow-md transition-shadow">
+                        <div class="w-full h-full overflow-hidden rounded-md relative">
+                            <img data-asset="portfolio/harmonia" data-fallback="https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600&auto=format&fit=crop" src="" alt="Projeto Harmonia" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-brand-dark">Harmonia</h3>
+                        <p class="text-sm text-brand-textMuted mt-1">Equilíbrio & Luz</p>
+                    </div>
+                </div>
+
+                <!-- Item 2 -->
+                <div class="group cursor-pointer">
+                    <div class="bg-brand-cream rounded-2xl p-6 md:p-10 mb-6 flex justify-center items-center h-64 shadow-sm group-hover:shadow-md transition-shadow">
+                        <div class="w-full h-full overflow-hidden rounded-md relative">
+                            <img data-asset="portfolio/fluxo-chi" data-fallback="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=600&auto=format&fit=crop" src="" alt="Projeto Fluxo Chi" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-brand-dark">Fluxo Chi</h3>
+                        <p class="text-sm text-brand-textMuted mt-1">Energia Vital</p>
+                    </div>
+                </div>
+
+                <!-- Item 3 -->
+                <div class="group cursor-pointer">
+                    <div class="bg-brand-cream rounded-2xl p-6 md:p-10 mb-6 flex justify-center items-center h-64 shadow-sm group-hover:shadow-md transition-shadow">
+                        <div class="w-full h-full overflow-hidden rounded-md relative">
+                            <img data-asset="portfolio/ativacao-viva" data-fallback="https://images.unsplash.com/photo-1505691938895-1758d7def511?q=80&w=600&auto=format&fit=crop" src="" alt="Projeto Ativação" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-brand-dark">Ativação Viva</h3>
+                        <p class="text-sm text-brand-textMuted mt-1">Cores Guiam</p>
+                    </div>
+                </div>
+
+                <!-- Item 4 -->
+                <div class="group cursor-pointer">
+                    <div class="bg-brand-cream rounded-2xl p-6 md:p-10 mb-6 flex justify-center items-center h-64 shadow-sm group-hover:shadow-md transition-shadow">
+                        <div class="w-full h-full overflow-hidden rounded-md relative">
+                            <img data-asset="portfolio/sensacoes" data-fallback="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop" src="" alt="Projeto Sensações" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-brand-dark">Sensações</h3>
+                        <p class="text-sm text-brand-textMuted mt-1">Refúgio Urbano</p>
+                    </div>
+                </div>
+
+                <!-- Item 5 -->
+                <div class="group cursor-pointer">
+                    <div class="bg-brand-cream rounded-2xl p-6 md:p-10 mb-6 flex justify-center items-center h-64 shadow-sm group-hover:shadow-md transition-shadow">
+                        <div class="w-full h-full overflow-hidden rounded-md relative">
+                            <img data-asset="portfolio/transformacao" data-fallback="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600&auto=format&fit=crop" src="" alt="Projeto Transformação" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-brand-dark">Transformação</h3>
+                        <p class="text-sm text-brand-textMuted mt-1">O Espaço Responde</p>
+                    </div>
+                </div>
+
+                <!-- Item 6 -->
+                <div class="group cursor-pointer">
+                    <div class="bg-brand-cream rounded-2xl p-6 md:p-10 mb-6 flex justify-center items-center h-64 shadow-sm group-hover:shadow-md transition-shadow">
+                        <div class="w-full h-full overflow-hidden rounded-md relative">
+                            <img data-asset="portfolio/proximo-nivel" data-fallback="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=600&auto=format&fit=crop" src="" alt="Projeto Próximo Nível" class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-500">
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <h3 class="font-serif text-xl font-bold text-brand-dark">Próximo Nível</h3>
+                        <p class="text-sm text-brand-textMuted mt-1">Mente & Ambiente</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA / FOOTER SECTION -->
+    <footer id="contato" class="bg-brand-dark text-white pt-20 pb-10 border-t-8 border-brand-gold">
+        <div class="container mx-auto px-6 md:px-12 text-center">
+            <h2 class="font-serif text-4xl md:text-5xl mb-6">Próximo Nível do Seu Espaço</h2>
+            <p class="text-gray-400 mb-10 max-w-xl mx-auto font-light">
+                Descubra como a Ativação Viva e o Feng Shui podem transformar sua casa ou escritório em um ambiente de pura harmonia.
+            </p>
+            <button class="bg-brand-gold text-brand-dark px-10 py-4 rounded-full font-bold text-lg hover:bg-white transition-colors mb-16 shadow-lg shadow-brand-gold/20">
+                Iniciar Transformação
+            </button>
+            
+            <!-- Minimalist bottom footer -->
+            <div class="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-white/10 text-sm text-gray-500">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="text-brand-gold">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                    </svg>
+                    <span class="font-serif text-white/80">Espaço Vivo por Viviani da Costa Barros</span>
+                </div>
+                <div class="space-x-6">
+                    <a href="#" class="hover:text-brand-gold transition-colors">Instagram</a>
+                    <a href="#" class="hover:text-brand-gold transition-colors">Pinterest</a>
+                    <a href="#" class="hover:text-brand-gold transition-colors">Contato</a>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Subtle ASCII showcase comment within source code -->
+        <!-- 
+        ╔══════════════╗
+        ║  FEELING     ║
+        ║   DECOR      ║
+        ║  ✧ ✦ ✧       ║
+        ║  Espaço Vivo ║
+        ╚══════════════╝
+        -->
+    </footer>
+
+
+<script>
+    (function () {
+        const BASE = 'https://kodux78k.github.io/Vivivi-1/media';
+        const EXTENSIONS = ['webp', 'jpg', 'jpeg', 'png', 'svg', 'xml'];
+        const FALLBACKS = {'hero/bg': 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop', 'hero/ornament': 'https://images.unsplash.com/photo-1618220179428-22790b46a0eb?q=80&w=800&auto=format&fit=crop', 'conceito/zen-1': 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=600&auto=format&fit=crop', 'conceito/zen-2': 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=600&auto=format&fit=crop', 'conceito/zen-3': 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=600&auto=format&fit=crop', 'destaque/main': 'https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1200&auto=format&fit=crop', 'portfolio/harmonia': 'https://images.unsplash.com/photo-1513694203232-719a280e022f?q=80&w=600&auto=format&fit=crop', 'portfolio/fluxo-chi': 'https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=600&auto=format&fit=crop', 'portfolio/ativacao-viva': 'https://images.unsplash.com/photo-1505691938895-1758d7def511?q=80&w=600&auto=format&fit=crop', 'portfolio/sensacoes': 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=600&auto=format&fit=crop', 'portfolio/transformacao': 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=600&auto=format&fit=crop', 'portfolio/proximo-nivel': 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?q=80&w=600&auto=format&fit=crop'};
+
+        function buildCandidates(key, fallback) {
+            const candidates = EXTENSIONS.map(ext => `${BASE}/${key}.${ext}`);
+            if (fallback) candidates.push(fallback);
+            return candidates;
+        }
+
+        function loadImage(img) {
+            const key = img.dataset.asset;
+            if (!key) return;
+            const fallback = img.dataset.fallback || FALLBACKS[key] || '';
+            const candidates = buildCandidates(key, fallback);
+            let index = 0;
+
+            const tryNext = () => {
+                if (index >= candidates.length) {
+                    img.style.opacity = '0.45';
+                    return;
+                }
+                const candidate = candidates[index++];
+                const probe = new Image();
+                probe.onload = () => { img.src = candidate; };
+                probe.onerror = tryNext;
+                probe.src = candidate;
+            };
+
+            img.loading = img.loading || 'lazy';
+            img.decoding = 'async';
+            tryNext();
+        }
+
+        function loadBackground(el) {
+            const key = el.dataset.bgAsset;
+            if (!key) return;
+            const fallback = el.dataset.bgFallback || FALLBACKS[key] || '';
+            const candidates = buildCandidates(key, fallback);
+            let index = 0;
+
+            const tryNext = () => {
+                if (index >= candidates.length) return;
+                const candidate = candidates[index++];
+                const probe = new Image();
+                probe.onload = () => {
+                    el.style.backgroundImage = `linear-gradient(to right, rgba(15, 17, 21, 0.9) 20%, rgba(15, 17, 21, 0.6) 60%, rgba(15, 17, 21, 0.2)), url('${candidate}')`;
+                };
+                probe.onerror = tryNext;
+                probe.src = candidate;
+            };
+
+            tryNext();
+        }
+
+        document.querySelectorAll('img[data-asset]').forEach(loadImage);
+        document.querySelectorAll('[data-bg-asset]').forEach(loadBackground);
+    })();
+</script>
+
+</body>
+</html>
+
