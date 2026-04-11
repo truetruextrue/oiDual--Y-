@@ -1,0 +1,19 @@
+{
+  "name": "Fusion Os Vision Ultimate V5 Forge",
+  "short_name": "fusion-os-vi",
+  "description": "KOBLLUX DNA · VERDADE×INTEGRAR÷Δ=∞ · fusion-os-vision-ultimate-v5-forge",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0b0b0f",
+  "theme_color": "#5d7cff",
+  "icons": [],
+  "kobllux": {
+    "opcode": "0x02",
+    "nome": "INTEGRAR",
+    "freq": 528,
+    "veeb": "E",
+    "fractal": "3×6×9×7=1134",
+    "law": "VERDADE×INTEGRAR÷Δ=∞",
+    "dna_module": "./js/0x02_integrar_B_D7_kobllux-dna.js"
+  }
+}

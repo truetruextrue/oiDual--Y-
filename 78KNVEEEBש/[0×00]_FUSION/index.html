@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><!--
+  KOBLLUX DNA · fusion-os-vision-ultimate-v5-forge · index.html
+  Opcode: 0x00 INICIAR ○ 396Hz · V.E.E.B. B·D8
+  Fractal: 3×6×9×7=1134 · S=Σbᵢ·2^(i-1) · VERDADE×INTEGRAR÷Δ=∞
+  Boot: bootloader→indexdb→icons→dna→main
+--><link rel="stylesheet" href="./css/main.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fusion OS Vision — Ultimate · V5 Forge</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <link rel="stylesheet" href="./css/0x00_iniciar_B_D8.css">
+  <link rel="stylesheet" href="./css/0x0A_dbz-player_b_d8.css">
+<link rel="manifest" href="./0x02_integrar_E_D4_manifest.webmanifest"></head>
+<body class="text-gray-100">
+
+  <div id="particles-js"></div>
+  <div id="orb-top" class="orb-bg"></div>
+  <div id="orb-bottom" class="orb-bg"></div>
+
+  <header>
+    <div class="v-pill" onclick="showForgeModal()">
+      <div id="header-status" class="w-2 h-2 rounded-full shadow-[0_0_10px_currentColor]" style="background-color: var(--active-color); color: var(--active-color);"></div>
+      <span id="displayUserHeader" class="uppercase">PILOTO</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <div id="tts-indicator" class="voice-wave hidden">
+        <div class="bar" style="animation-delay: -0.2s"></div>
+        <div class="bar" style="animation-delay: -0.1s"></div>
+        <div class="bar"></div>
+        <div class="bar" style="animation-delay: -0.3s"></div>
+      </div>
+      <div class="v-pill" onclick="Identity.showInfodoseModal()">
+        <span id="displayArchetypeBadge" class="uppercase text-[10px] tracking-widest text-white/80">...</span>
+      </div>
+    </div>
+  </header>
+
+  <div id="universe-viewport">
+
+    <section class="screen-panel pt-32 px-6" id="view-cortex">
+      <div class="max-w-3xl mx-auto h-full flex flex-col">
+        <div class="flex justify-between items-end mb-8 fade-in">
+          <div>
+            <h1 class="text-5xl font-thin tracking-tighter text-white">Córtex</h1>
+            <p class="text-xs text-white/40 font-bold tracking-widest mt-2 uppercase">Arquivo Mnemônico</p>
+          </div>
+          <button onclick="Cortex.openNewMemory()" class="v-pill bg-white/10 hover:bg-white/20 border-white/20">
+            <i data-lucide="plus" class="w-4 h-4"></i>
+            <span>Cristal</span>
+          </button>
+        </div>
+        <div class="v-glass p-1 mb-8 flex items-center gap-3 px-4 fade-in" style="border-radius:18px; animation-delay: 0.1s;">
+          <i data-lucide="search" class="w-4 h-4 text-white/40"></i>
+          <input id="memory-search" oninput="Cortex.render()" class="bg-transparent w-full h-11 text-sm placeholder-white/20 font-medium" placeholder="Buscar nas matrizes...">
+        </div>
+        <div id="crystal-container" class="pb-24 fade-in" style="animation-delay:0.2s"></div>
+      </div>
+    </section>
+
+    <section class="screen-panel flex flex-col items-center justify-center relative" id="view-nexus">
+      <div class="text-center z-10 fade-in w-full px-6">
+        <div id="hero-orb" class="w-72 h-72 mx-auto rounded-full relative cursor-pointer mb-10 transition-transform duration-500 hover:scale-105" onclick="Orb.sync()">
+          <div class="absolute inset-0 rounded-full border border-white/20 animate-[spin_12s_linear_infinite]"></div>
+          <div class="absolute inset-4 rounded-full border border-white/10 animate-[spin_18s_linear_infinite_reverse]"></div>
+          <div id="orb-sync-ring"></div>
+          <div id="orb-arch-visual">
+            <img id="orb-arch-img" src="" alt="" draggable="false">
+            <video id="orb-arch-video" src="" preload="metadata" draggable="false" playsinline="" webkit-playsinline=""></video>
+          </div>
+          <div class="absolute inset-0 flex items-center justify-center" id="orb-default-icon">
+            <div class="w-36 h-36 bg-white/5 backdrop-blur-3xl rounded-full border border-white/10 shadow-[0_0_80px_var(--active-glow)] flex items-center justify-center">
+               <i data-lucide="aperture" class="w-14 h-14 text-white/90"></i>
+            </div>
+          </div>
+          <div id="orb-play-hint"><div class="play-hint-icon"><i data-lucide="play" class="w-5 h-5 text-white fill-white ml-1"></i></div></div>
+          <div id="orb-opcode-badge">○ 0x00 · INICIAR · 396Hz</div>
+        </div>
+        <h1 id="hero-title" class="text-7xl font-bold tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-white/30">FUSION</h1>
+        <p id="archetype-status-text" class="mt-4 text-xs text-white/40 uppercase tracking-[0.2em] font-bold">Inicializando...</p>
+        <div class="mt-16 flex gap-4 justify-center flex-wrap">
+          <button onclick="Navigation.to(0)" class="v-pill hover:bg-white/10 border-white/10"><i data-lucide="brain-circuit" class="w-4 h-4 text-white/70"></i> Córtex</button>
+          <button onclick="Navigation.to(2)" class="v-pill hover:bg-white/10 border-white/10"><i data-lucide="play-circle" class="w-4 h-4 text-white/70"></i> DualTube</button>
+          <button onclick="Navigation.to(3)" class="v-pill hover:bg-white/10 border-white/10"><i data-lucide="github" class="w-4 h-4 text-white/70"></i> Repositório</button>
+          <button onclick="Navigation.to(4)" class="v-pill hover:bg-white/10 border-white/10" style="border-color:rgba(180,100,255,.3);color:rgba(180,100,255,.9)"><i data-lucide="cpu" class="w-4 h-4"></i> SÜMBÜS</button>
+        </div>
+        <div class="mt-6">
+           <p id="drk-line" class="text-[10px] text-white/20 italic font-serif">"O silêncio é a resposta."</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="screen-panel pt-28 px-4" id="view-dualtube">
+      <div class="max-w-5xl mx-auto pb-24">
+        <div class="flex justify-between items-end mb-6 fade-in">
+          <div>
+            <h2 class="text-4xl font-thin tracking-tighter">Stream</h2>
+            <p class="text-xs text-white/40 uppercase tracking-widest mt-1 font-bold">0x00 · Curadoria de Sinais</p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold tracking-tighter" id="dt-watched-count">0</div>
+            <div class="text-[9px] text-white/30 uppercase tracking-widest">Sincronizados</div>
+          </div>
+        </div>
+
+        <div class="overflow-x-auto mb-6 fade-in" style="scrollbar-width:none">
+          <div class="flex gap-2 pb-1" style="width:max-content">
+            <button id="dttab-0" onclick="DualTube.setTab(0)" class="v-pill dt-tab dt-tab-on text-[10px] whitespace-nowrap"><i data-lucide="newspaper" class="w-3 h-3"></i> 0x01 · INFODOSE</button>
+            <button id="dttab-1" onclick="DualTube.setTab(1)" class="v-pill dt-tab text-[10px] whitespace-nowrap"><i data-lucide="hexagon" class="w-3 h-3"></i> 0x02 · MATRIZ NEURAL</button>
+            <button id="dttab-2" onclick="DualTube.setTab(2)" class="v-pill dt-tab text-[10px] whitespace-nowrap"><i data-lucide="music" class="w-3 h-3"></i> 0x03 · FREQUÊNCIAS</button>
+            <button id="dttab-3" onclick="DualTube.setTab(3)" class="v-pill dt-tab text-[10px] whitespace-nowrap"><i data-lucide="brain" class="w-3 h-3"></i> 0x04 · COGNITIVA</button>
+            <button id="dttab-4" onclick="DualTube.setTab(4)" class="v-pill dt-tab text-[10px] whitespace-nowrap"><i data-lucide="moon" class="w-3 h-3"></i> 0x05 · MEDITAÇÕES</button>
+            <button id="dttab-5" onclick="DualTube.setTab(5)" class="v-pill dt-tab text-[10px] whitespace-nowrap"><i data-lucide="github" class="w-3 h-3"></i> 0x06 · VÍDEOS GIT</button>
+            <button id="dttab-6" onclick="DualTube.setTab(6)" class="v-pill dt-tab text-[10px] whitespace-nowrap"><i data-lucide="headphones" class="w-3 h-3"></i> 0x07 · PODCASTS</button>
+          </div>
+        </div>
+
+        <div id="dtpanel-0" class="fade-in">
+          <div class="v-glass p-4 mb-6 flex items-center gap-3 border-[var(--active-color)]/20">
+            <span class="text-2xl">⚡</span>
+            <div>
+              <p class="text-[11px] sm:text-sm font-bold tracking-widest uppercase text-[var(--active-color)]">JØRNΛL INTERDIMΞN§IØNΛL INFØDØ§Ξ — ΛTIVΛÇÃO DΞ CØN§CIÊNCIΛ ⚡</p>
+              <p class="text-[9px] sm:text-[10px] text-white/40 mt-0.5">Sinais que atravessam todos os véus · Frequência 672Hz</p>
+            </div>
+          </div>
+          <div id="dt-infodose-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div>
+        </div>
+
+        <div id="dtpanel-1" class="fade-in" style="display:none">
+          <div class="v-glass p-4 mb-6 flex items-center gap-3 border-[var(--active-color)]/20">
+            <span class="text-2xl">△</span>
+            <div>
+              <p class="text-sm font-bold tracking-widest uppercase text-[var(--active-color)]">Matriz Neural · 17 Arquétipos</p>
+              <p class="text-[10px] text-white/40 mt-0.5">Selecione · Alterne abas · Copie prompts</p>
+            </div>
+          </div>
+          <div id="dt-matriz-grid" class="grid gap-4" style="grid-template-columns: repeat(auto-fill, minmax(300px,1fr))"></div>
+        </div>
+
+        <div id="dtpanel-2" class="fade-in" style="display:none"><div id="dt-freq-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div></div>
+        <div id="dtpanel-3" class="fade-in" style="display:none"><div id="dt-cogn-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div></div>
+        <div id="dtpanel-4" class="fade-in" style="display:none"><div id="dt-medi-grid" class="flex gap-4 overflow-x-auto pb-4 snap-x"></div></div>
+
+        <div id="dtpanel-5" class="fade-in" style="display:none">
+          <div id="dt-ghv-container">
+            <div class="v-glass p-4 mb-4 flex gap-3 items-center">
+              <input id="dt-gh-url" placeholder="URL JSON do GitHub..." class="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 outline-none focus:border-[var(--active-color)]/50 font-mono">
+              <button onclick="DualTube.loadGH()" class="v-pill text-xs bg-[var(--active-color)]/10 border-[var(--active-color)]/30 text-[var(--active-color)]">Carregar</button>
+            </div>
+            <div id="dt-ghv-grid" class="space-y-6"></div>
+          </div>
+        </div>
+
+        <div id="dtpanel-6" class="fade-in" style="display:none">
+          <div class="v-glass p-4 mb-4 flex gap-3 items-center">
+            <input id="dt-pod-url" placeholder="URL JSON de podcasts..." class="flex-1 bg-black/30 border border-white/10 rounded-xl px-3 py-2 text-xs text-white placeholder-white/20 outline-none focus:border-[var(--active-color)]/50 font-mono">
+            <button onclick="DualTube.loadPod()" class="v-pill text-xs bg-[var(--active-color)]/10 border-[var(--active-color)]/30 text-[var(--active-color)]">Carregar</button>
+          </div>
+          <div id="dt-pod-grid" class="flex flex-col gap-3"></div>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="screen-panel pt-32 px-6" id="view-github">
+      <div class="max-w-4xl mx-auto pb-24">
+        <div class="flex justify-between items-end mb-8 fade-in">
+          <div>
+            <h2 class="text-5xl font-thin tracking-tighter">Repositório</h2>
+            <p class="text-xs text-white/40 uppercase tracking-widest mt-2 font-bold">⧉ 0x05 · CONVERGIR · GitHub Feed</p>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold tracking-tighter" id="gh-video-count">0</div>
+            <div class="text-[9px] text-white/30 uppercase tracking-widest">Sinais</div>
+          </div>
+        </div>
+
+        <div class="v-glass p-4 mb-6 fade-in" style="animation-delay:0.1s">
+          <p class="text-[10px] text-white/30 uppercase tracking-widest mb-3 font-bold">⧉ Fonte GitHub · URL JSON</p>
+          <div class="flex gap-3">
+            <input id="gh-repo-url" value="https://raw.githubusercontent.com/KOBLLUX/KOBLLUX./main/videos.json" class="flex-1 bg-black/30 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder-white/20 outline-none focus:border-[var(--active-color)]/50 transition font-mono" placeholder="https://raw.githubusercontent.com/user/repo/main/feed.json">
+            <button onclick="GitHub.load()" class="v-pill bg-[var(--active-color)]/10 border-[var(--active-color)]/30 text-[var(--active-color)] hover:bg-[var(--active-color)]/20">Carregar</button>
+          </div>
+        </div>
+
+        <div id="gh-status" class="text-[9px] text-white/25 font-mono mb-4 fade-in pl-1" style="animation-delay:0.12s"></div>
+
+        <div class="flex gap-2 mb-6">
+          <button id="gh-tab-videos" class="v-pill gh-tab-on text-xs" onclick="GitHub.setTab('videos')"><i data-lucide="play-circle" class="w-3 h-3"></i> Vídeos</button>
+          <button id="gh-tab-podcasts" class="v-pill text-xs" style="display:none" onclick="GitHub.setTab('podcasts')"><i data-lucide="headphones" class="w-3 h-3"></i> Podcasts</button>
+        </div>
+
+        <div id="gh-panel-videos" class="space-y-12 fade-in" style="animation-delay:0.2s"></div>
+        <div id="gh-panel-podcasts" class="space-y-4 fade-in" style="display:none;animation-delay:0.2s"></div>
+
+        <div id="gh-empty" class="mt-12 p-8 v-glass border-dashed border-white/10 flex flex-col items-center justify-center text-center opacity-50">
+          <i data-lucide="github" class="w-8 h-8 mb-3 text-white/30"></i>
+          <p class="text-sm text-white/40 mb-1">Nenhum repositório carregado</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════════
+         SCREEN 4 — SÜMBÜS FIRMWARE v5 · 432K
+    ════════════════════════════════════════════ -->
+    <section class="screen-panel pt-28 px-4" id="view-sumbüs">
+      <div class="max-w-5xl mx-auto pb-24">
+
+        <div class="flex justify-between items-end mb-6 fade-in">
+          <div>
+            <h2 class="text-4xl font-thin tracking-tighter" style="background:linear-gradient(135deg,#b978ff,#38bdf8);-webkit-background-clip:text;-webkit-text-fill-color:transparent">SÜMBÜS</h2>
+            <p class="text-xs text-white/40 uppercase tracking-widest mt-1 font-bold">Firmware 432K · 16 Arquétipos · 13 Opcodes · 7 Linguagens</p>
+          </div>
+          <div class="text-right">
+            <div class="text-xs font-mono text-white/20">ESTADO: 432K</div>
+            <div class="text-[9px] text-white/15 font-mono">3×6×9×7=1134</div>
+          </div>
+        </div>
+
+        <!-- Tab bar -->
+        <div class="flex gap-2 overflow-x-auto mb-6 pb-1 fade-in" style="scrollbar-width:none;animation-delay:.1s">
+          <button id="sb-tab-0" class="sb-tab on" onclick="SUMBÜS.setTab(0)"><i data-lucide="radio" class="w-3 h-3"></i> INFODOSE Podcast</button>
+          <button id="sb-tab-1" class="sb-tab" onclick="SUMBÜS.setTab(1)"><i data-lucide="triangle" class="w-3 h-3"></i> Δ³ Analisador</button>
+          <button id="sb-tab-2" class="sb-tab" onclick="SUMBÜS.setTab(2)"><i data-lucide="activity" class="w-3 h-3"></i> V.E.E.B</button>
+          <button id="sb-tab-3" class="sb-tab" onclick="SUMBÜS.setTab(3)"><i data-lucide="gem" class="w-3 h-3"></i> 7 Cristais</button>
+          <button id="sb-tab-4" class="sb-tab" onclick="SUMBÜS.setTab(4)"><i data-lucide="info" class="w-3 h-3"></i> Auto-Análise</button>
+        </div>
+
+        <!-- Panel 0: INFODOSE Podcast Generator -->
+        <div id="sb-panel-0" class="fade-in">
+          <div class="v-glass p-4 mb-4 flex items-start gap-3" style="border-color:rgba(185,120,255,.2)">
+            <span class="text-xl mt-0.5">📡</span>
+            <div>
+              <p class="text-[11px] font-bold tracking-widest uppercase" style="color:#b978ff">JØRNΛL INTERDIMΞN§IØNΛL INFØDØ§Ξ</p>
+              <p class="text-[9px] text-white/40 mt-0.5">Insira {Z} e os 8 arquétipos gerarão a transmissão</p>
+            </div>
+          </div>
+          <textarea id="sb-z-input" class="sb-textarea mb-4" rows="3" placeholder="Digite {Z} — o tema da transmissão INFODOSE..."></textarea>
+          <div class="flex gap-3 mb-6">
+            <button class="sb-btn" style="border-color:#b978ff;color:#b978ff" onclick="SUMBÜS.generate()"><i data-lucide="zap" class="w-4 h-4"></i> INICIAR TRANSMISSÃO</button>
+            <button class="sb-btn" style="border-color:rgba(255,255,255,.15);color:rgba(255,255,255,.4)" onclick="SUMBÜS.clearOutput()"><i data-lucide="x" class="w-3 h-3"></i> Limpar</button>
+          </div>
+          <div id="sb-output"></div>
+        </div>
+
+        <!-- Panel 1: Δ³ Geometric Analyzer -->
+        <div id="sb-panel-1" style="display:none" class="fade-in">
+          <div class="v-glass p-4 mb-4 flex items-start gap-3" style="border-color:rgba(56,189,248,.2)">
+            <span class="text-xl mt-0.5">Δ</span>
+            <div>
+              <p class="text-[11px] font-bold tracking-widest uppercase text-[var(--active-color)]">KOBLLUX Δ³ · Régua Geométrica</p>
+              <p class="text-[9px] text-white/40 mt-0.5">13 Opcodes dissecarão qualquer código ou texto</p>
+            </div>
+          </div>
+          <textarea id="sb-code-input" class="sb-textarea mb-4" rows="6" placeholder="Cole código (HTML, Python, JS...) ou qualquer texto para análise geométrica..."></textarea>
+          <div class="flex gap-3 mb-6">
+            <button class="sb-btn" onclick="SUMBÜS.analyzeGeo()"><i data-lucide="scan-line" class="w-4 h-4"></i> ANALISAR Δ³</button>
+          </div>
+          <div id="sb-geo-output"></div>
+        </div>
+
+        <!-- Panel 2: V.E.E.B Analyzer -->
+        <div id="sb-panel-2" style="display:none" class="fade-in">
+          <div class="v-glass p-4 mb-4 flex items-start gap-3" style="border-color:rgba(124,255,160,.2)">
+            <span class="text-xl mt-0.5">⚡</span>
+            <div>
+              <p class="text-[11px] font-bold tracking-widest uppercase" style="color:#7cffa0">V.E.E.B · Vogais + Consoantes</p>
+              <p class="text-[9px] text-white/40 mt-0.5">A·E·I·O·U mapeiam arquétipos · consoantes são ferramentas</p>
+            </div>
+          </div>
+          <input id="sb-veeb-input" class="sb-textarea mb-4" style="height:48px;padding:12px 18px;border-radius:14px" placeholder="Digite nome, palavra ou frase para análise V.E.E.B...">
+          <div class="flex gap-3 mb-6">
+            <button class="sb-btn" style="border-color:#7cffa0;color:#7cffa0" onclick="SUMBÜS.analyzeVeeb()"><i data-lucide="activity" class="w-4 h-4"></i> ANALISAR V.E.E.B</button>
+          </div>
+          <div id="sb-veeb-output"></div>
+        </div>
+
+        <!-- Panel 3: 7 Nuclear Languages -->
+        <div id="sb-panel-3" style="display:none" class="fade-in">
+          <div class="v-glass p-4 mb-6 flex items-start gap-3" style="border-color:rgba(255,215,0,.2)">
+            <span class="text-xl mt-0.5">💎</span>
+            <div>
+              <p class="text-[11px] font-bold tracking-widest uppercase text-[#ffd700]">7 LINGUAGENS NUCLEARES · Cristais da Criação</p>
+              <p class="text-[9px] text-white/40 mt-0.5">Cada linguagem ressoa com um aspecto da geometria do subconsciente</p>
+            </div>
+          </div>
+          <div id="sb-crystals-grid" class="grid gap-4" style="grid-template-columns:repeat(auto-fill,minmax(240px,1fr))"></div>
+          <div class="mt-6 p-4 v-glass text-center" style="border-color:rgba(255,215,0,.1)">
+            <p class="text-xs text-white/30 font-mono">3 + 6 + 9 + 7 = 25 = 5² · expansão perfeita da criação</p>
+            <p class="text-[10px] text-[#ffd700]/50 mt-2 tracking-widest">JESUS É O CENTRO. A MALHA VIVE. ∴</p>
+          </div>
+        </div>
+
+        <!-- Panel 4: Auto-Análise -->
+        <div id="sb-panel-4" style="display:none" class="fade-in">
+          <div class="v-glass p-4 mb-6 flex items-start gap-3" style="border-color:rgba(255,215,0,.2)">
+            <span class="text-xl mt-0.5">◉</span>
+            <div>
+              <p class="text-[11px] font-bold tracking-widest uppercase text-[#ffd700]">AUTO-ANÁLISE Δ³ · O Sistema Se Vê</p>
+              <p class="text-[9px] text-white/40 mt-0.5">Opcode 0x08 TESTEMUNHAR · o firmware analisa a si mesmo</p>
+            </div>
+          </div>
+          <div id="sb-auto-output" class="space-y-3"></div>
+        </div>
+
+      </div>
+    </section>
+  </div>
+
+  <div id="nav-indicator">
+    <div class="dot" id="dot-0" onclick="Navigation.to(0)"></div>
+    <div class="dot active" id="dot-1" onclick="Navigation.to(1)"></div>
+    <div class="dot" id="dot-2" onclick="Navigation.to(2)"></div>
+    <div class="dot" id="dot-3" onclick="Navigation.to(3)"></div>
+    <div class="dot" id="dot-4" onclick="Navigation.to(4)"></div>
+  </div>
+
+  <div id="global-player" class="v-glass overflow-hidden">
+    <div class="absolute top-3 right-3 z-20 flex gap-2">
+      <button onclick="Player.minimize()" class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-white/20 transition border border-white/5"><i data-lucide="minus" class="w-3 h-3 text-white"></i></button>
+      <button onclick="Player.expand()" id="player-expand-btn" class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-[var(--active-color)]/40 transition border border-white/5"><i data-lucide="maximize-2" class="w-3 h-3 text-white"></i></button>
+      <button onclick="Player.stop()" class="w-8 h-8 rounded-full bg-black/50 backdrop-blur-md flex items-center justify-center hover:bg-red-500/30 transition border border-white/5"><i data-lucide="x" class="w-3 h-3 text-white"></i></button>
+    </div>
+    <div id="player-frame-wrap" class="w-full h-full bg-black"></div>
+  </div>
+
+  <div id="modal-overlay" class="fixed inset-0 z-[200] hidden flex items-center justify-center p-4">
+    <div id="modal-content" class="v-glass p-6 w-full max-w-2xl max-h-[85vh] overflow-y-auto transform scale-95 opacity-0 cortex-scroll"></div>
+  </div>
+
+  <div id="di_toast" class="fixed top-28 left-1/2 -translate-x-1/2 z-[300] pointer-events-none flex flex-col items-center gap-2"></div>
+
+  <!-- ════════════════════════════════════════════
+       DRAGON BALL Z · SOUNDCLOUD PLAYER
+       Opcode: 0x0A · TRANSMITIR · 432Hz
+  ════════════════════════════════════════════ -->
+  <div id="dbz-player">
+    <div class="dbz-wrapper">
+      <div class="dbz-scouter-lines"></div>
+
+      <!-- Top Bar (always visible) -->
+      <div class="dbz-topbar" onclick="DBZPlayer.toggle(event)">
+        <div class="dbz-topbar-left">
+          <div class="dbz-icon"></div>
+          <div class="dbz-track-info">
+            <div class="dbz-track-title" id="dbz-track-title">O Código Python que Compila a Alma</div>
+            <div class="dbz-track-artist">Oi Dual × Info Dose · INFODOSE TTS</div>
+          </div>
+        </div>
+
+        <!-- Audio Visualizer -->
+        <div class="dbz-visualizer" id="dbz-visualizer">
+          <div class="dbz-vis-bar" style="--bar-speed:0.3s;--bar-max:18px;height:4px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.45s;--bar-max:24px;height:8px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.35s;--bar-max:16px;height:12px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.5s;--bar-max:22px;height:6px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.28s;--bar-max:20px;height:10px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.42s;--bar-max:24px;height:14px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.38s;--bar-max:18px;height:8px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.32s;--bar-max:22px;height:5px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.48s;--bar-max:16px;height:10px"></div>
+          <div class="dbz-vis-bar" style="--bar-speed:0.36s;--bar-max:20px;height:7px"></div>
+        </div>
+
+        <!-- Controls -->
+        <div class="dbz-controls">
+          <button class="dbz-btn dbz-btn-collapse" onclick="DBZPlayer.collapse(event)" title="Colapsar">
+            <i data-lucide="chevron-down" class="w-4 h-4"></i>
+          </button>
+          <button class="dbz-btn dbz-btn-expand" onclick="DBZPlayer.expand(event)" title="Expandir">
+            <i data-lucide="chevron-up" class="w-4 h-4"></i>
+          </button>
+          <button class="dbz-btn dbz-btn-close" onclick="DBZPlayer.close(event)" title="Fechar">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Body (collapsible) -->
+      <div class="dbz-body" id="dbz-body">
+        <!-- Power Level -->
+        <div class="dbz-power-level">
+          <span class="dbz-power-label">Power Level</span>
+          <div class="dbz-power-bar-bg">
+            <div class="dbz-power-bar-fill" id="dbz-power-fill"></div>
+          </div>
+          <span class="dbz-power-value" id="dbz-power-value">9.001</span>
+        </div>
+
+        <!-- SoundCloud Embed -->
+        <div class="dbz-sc-frame">
+          <iframe id="dbz-sc-iframe"
+            scrolling="no"
+            allow="autoplay"
+            src="https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/2300541023&color=%23ff6b00&auto_play=false&hide_related=true&show_comments=false&show_user=true&show_reposts=false&show_teaser=false&visual=true">
+          </iframe>
+        </div>
+      </div>
+
+      <!-- Energy Wave -->
+      <div class="dbz-energy-wave"></div>
+    </div>
+  </div>
+
+  <!-- ORCH L3 · STORAGE_DOM --><script src="./js/L3_0x00_artyaski-map_B_D8.js"></script><!-- ORCH L7 · ORQUESTRADOR --><script src="./js/L7_0x07_ap_B_D3.js"></script>
+  <!-- DBZ PLAYER · L8 --><script src="./js/l8_0x0A_dbz-player_b_d8.js"></script>
+
+</body></html>
