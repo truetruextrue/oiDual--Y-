@@ -311,12 +311,12 @@
   // ---------- SEEDS (opcional, mas mantém demo) ----------
   if (!localStorage.getItem('__baulite_seeded__')) {
     localStorage.setItem('infodose:userName','KODUX');
-    localStorage.setItem('infodose:assistantName','Dual Glow');
+    localStorage.setItem('infodose:assistantName','KOBLLUX');
     localStorage.setItem('uno:theme','nebula');
     localStorage.setItem('gallery:img1','https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=640');
     localStorage.setItem('feature:ritual:enabled','true');
     localStorage.setItem(LS_KEYS.HTML,'<div class="demo"><h1>Hello Nebula</h1><p>Baú Lite</p></div>');
-    const demoSKs = ['sk-demo-AAA111','sk-demo-BBB222','sk-demo-CCC333'];
+    const demoSKs = ['di_apiKey','apiKey','sk-demo-CCC333'];
     localStorage.setItem(LS_KEYS.SKS, JSON.stringify(demoSKs));
     localStorage.setItem(LS_KEYS.SK_ACTIVE, demoSKs[0]);
     localStorage.setItem(LS_KEYS.USER_SYMBOL, `<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><circle cx='13' cy='13' r='12' fill='none' stroke='#ff52e5' stroke-width='2'/><path d='M4 16 L13 4 L22 16 L13 22 Z' fill='none' stroke='#00c5e5' stroke-width='2'/></svg>`);
@@ -337,7 +337,7 @@
   modal.innerHTML = `
     <div class="bau-panel">
       <div class="bau-hdr">
-        <div class="bau-ttl">📦 Baú Lite · LocalStorage</div>
+        <div class="bau-ttl">📦 Dual · LocalStorage</div>
         <div class="bau-actions">
           <button class="bau-btn" id="bau-rescan">${icons.refresh} Re-scan</button>
           <button class="bau-btn" id="bau-export">${icons.upload} Exportar</button>
