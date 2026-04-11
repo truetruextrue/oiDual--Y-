@@ -17,1055 +17,717 @@
 <link rel="manifest" href="./manifest.json">
 
 
-  <script src="https://cdn.tailwindcss.com"></script>
+
   <script src="https://unpkg.com/lucide@latest"></script>
-  <script src="https://w.soundcloud.com/player/api.js"></script>
 
-  <style>
-    :root {
-      --primary: #ff5500;
-      --secondary: #0b0f14;
-      --cob: #111827;
-      --voice: #ffffff;
-      --voice-muted: #9ca3af;
-      --dbz-gold: #ffaa00;
-    }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
-    }
 
-    html, body {
-      min-height: 100%;
-    }
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- SoundCloud API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: radial-gradient(circle at 20% 30%, #1a1f2a, #0b0f14);
-      color: var(--voice);
-      padding-bottom: 100px;
-    }
+    <style>
+        :root {
+            --kob-voice-primary: #ff5500; /* Tema ajustado para o Oráculo (Laranja/Dourado) */
+            --kob-voice-bg-soft: rgba(10, 12, 20, 0.9);
+            --bg: #050505;
+            --ink: #ffffff;
+            --text: #f0f3f9;
+            --muted: rgba(255, 255, 255, 0.4);
+            --border: rgba(255, 85, 0, 0.2);
+            --panel-blur: blur(24px) saturate(180%);
+            --primary: var(--kob-voice-primary);
+        }
 
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #0b0f14; }
-    ::-webkit-scrollbar-thumb { background: #2a2f3a; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-    .glass-header {
-      background: rgba(8, 12, 18, 0.75);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(255, 85, 0, 0.2);
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            background-image: radial-gradient(circle at 50% 0%, rgba(255, 85, 0, 0.1), var(--bg) 70%);
+        }
 
-    .glass-panel {
-      background: rgba(17, 24, 39, 0.7);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 85, 0, 0.15);
-    }
+        #kodux-widget {
+            position: fixed;
+            z-index: 9999;
+            background: var(--kob-voice-bg-soft);
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255, 85, 0, 0.15);
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        border-radius 0.4s ease,
+                        left 0.4s ease, top 0.4s ease, transform 0.4s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
 
-    .hero-glow {
-      box-shadow: 0 0 60px var(--primary);
-      opacity: 0.2;
-      transition: opacity 0.2s;
-    }
+        /* ESTADOS DO WIDGET */
+        /* Bolinha exata de 39x39px */
+        .state-ball { width: 39px !important; height: 39px !important; border-radius: 50% !important; cursor: pointer; }
+        .state-preview { width: 250px !important; height: 70px !important; border-radius: 35px !important; cursor: pointer; }
+        .state-full { width: 90vw !important; max-width: 420px !important; height: 85vh !important; max-height: 750px !important; border-radius: 28px !important; }
+        .state-footer { width: 100vw !important; height: 90px !important; border-radius: 24px 24px 0 0 !important; left: 0 !important; top: auto !important; bottom: 0 !important; transform: none !important; }
+        
+        /* Acordeão do Full State */
+        .state-full.accordion-closed { height: 65px !important; min-height: 65px !important; overflow: hidden; }
 
-    .btn-primary {
-      background: var(--primary);
-      box-shadow: 0 4px 20px rgba(0,0,0,0.5), 0 0 20px var(--primary);
-      transition: all 0.15s;
-    }
+        .hidden-content { display: none !important; }
+        .glow-text { text-shadow: 0 0 12px var(--primary); }
+        .drag-header { touch-action: none; cursor: grab; }
+        .drag-header:active { cursor: grabbing; }
 
-    .btn-primary:active {
-      transform: scale(0.94);
-      filter: brightness(1.3);
-    }
-
-    .track-item {
-      transition: background 0.2s, transform 0.15s;
-      border-bottom: 1px solid rgba(255,255,255,0.03);
-    }
-
-    .track-item:active {
-      transform: scale(0.99);
-    }
-
-    .track-item.playing {
-      background: rgba(255, 85, 0, 0.08);
-      border-left: 3px solid var(--primary);
-    }
-
-    .track-item.playing .track-title {
-      color: var(--primary);
-    }
-
-    @keyframes spin-slow {
-      100% { transform: rotate(360deg); }
-    }
-
-    .spin-anim {
-      animation: spin-slow 12s linear infinite;
-    }
-
-    .spin-paused {
-      animation-play-state: paused;
-    }
-
-    .ki-bar-container {
-      background: #1a1e2a;
-      border-radius: 20px;
-      padding: 2px;
-      border: 1px solid #3a3f55;
-    }
-
-    .ki-bar-fill {
-      height: 6px;
-      border-radius: 20px;
-      background: linear-gradient(90deg, #ffbb00, #ff5500);
-      box-shadow: 0 0 12px #ff7700;
-      width: 0%;
-    }
-
-    .ki-value {
-      font-family: 'Courier New', monospace;
-      text-shadow: 0 0 8px var(--primary);
-    }
-
-    .link-modal {
-      background: rgba(10, 14, 23, 0.95);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--primary);
-      box-shadow: 0 0 40px rgba(255,85,0,0.3);
-    }
-  </style>
+        input[type=range] { -webkit-appearance: none; background: transparent; width: 100%; height: 4px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: var(--primary); margin-top: -5px; box-shadow: 0 0 10px var(--primary); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; }
+        
+        .preview-clickable:hover { opacity: 0.8; transform: scale(1.02); }
+        
+        /* SCROLLBAR CUSTOMIZADA PARA PLAYLIST */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,85,0,0.3); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--primary); }
+    </style>
 </head>
-<body class="antialiased flex flex-col">
+<body class="flex items-center justify-center">
 
-  <header class="glass-header sticky top-0 z-50 px-5 py-3 flex justify-between items-center w-full">
-    <div class="flex items-center gap-2">
-      <i data-lucide="zap" class="w-6 h-6" style="color: var(--primary)"></i>
-      <span class="font-bold text-xl tracking-widest bg-gradient-to-r from-orange-400 to-amber-300 bg-clip-text text-transparent">KODUX·ORÁCULO</span>
+    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none flex-col">
+        <h1 class="text-6xl md:text-8xl font-black tracking-[0.5em] text-white glow-text">KODUX</h1>
+        <p class="text-xl tracking-widest text-[var(--primary)] mt-4">ORÁCULO DUAL</p>
     </div>
 
-    <div class="flex items-center gap-3">
-      <label for="upload" class="cursor-pointer bg-[#1e2532] p-2 rounded-full hover:bg-[#2a3345] transition border border-white/10">
-        <i data-lucide="upload-cloud" class="w-5 h-5"></i>
-        <input type="file" id="upload" accept="audio/*" multiple class="hidden" />
-      </label>
+    <!-- Motores de Áudio Invisíveis -->
+    <div id="yt-container" class="absolute -left-[9999px]"></div>
+    <div id="sc-container" class="absolute -left-[9999px]"></div>
+    <audio id="local-audio" crossorigin="anonymous"></audio>
 
-      <button id="pasteLinkBtn" type="button" class="bg-[#1e2532] p-2 rounded-full hover:bg-[#2a3345] transition border border-white/10">
-        <i data-lucide="link" class="w-5 h-5"></i>
-      </button>
-    </div>
-  </header>
-
-  <div id="linkModal" class="fixed inset-0 z-[100] flex items-center justify-center p-4 hidden bg-black/60 backdrop-blur-sm">
-    <div class="link-modal w-full max-w-md p-6 rounded-2xl">
-      <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-bold flex items-center gap-2">
-          <i data-lucide="radio" class="w-5 h-5 text-orange-500"></i>
-          SINTONIZAR LINK
-        </h3>
-        <button id="closeModal" type="button" class="p-1">
-          <i data-lucide="x" class="w-5 h-5"></i>
-        </button>
-      </div>
-
-      <input
-        type="text"
-        id="linkInput"
-        placeholder="Cole URL do SoundCloud ou YouTube..."
-        class="w-full bg-black/40 border border-white/20 rounded-xl px-4 py-3 text-white placeholder-gray-400 focus:border-orange-500 outline-none mb-4"
-      />
-
-      <div class="flex gap-3">
-        <button id="addLinkBtn" type="button" class="btn-primary flex-1 py-3 rounded-xl font-bold flex items-center justify-center gap-2">
-          <i data-lucide="plus-circle" class="w-5 h-5"></i> ADICIONAR
-        </button>
-      </div>
-
-      <p class="text-[10px] text-gray-400 mt-3 text-center">Suporte: track/playlist do SoundCloud • vídeo do YouTube</p>
-    </div>
-  </div>
-
-  <main class="flex-1 w-full max-w-2xl mx-auto px-4 relative">
-    <section class="pt-6 pb-2 flex flex-col items-center relative">
-      <div class="absolute inset-0 hero-glow rounded-full blur-3xl -z-10 w-80 h-80 mx-auto mt-6" id="heroGlow"></div>
-
-      <div class="relative w-64 h-64 sm:w-72 sm:h-72 rounded-2xl overflow-hidden shadow-2xl mb-4 border border-orange-500/30" id="coverContainer">
-        <img
-          id="mainCover"
-          src="https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=500&auto=format&fit=crop"
-          alt="Cover"
-          class="w-full h-full object-cover transition-transform duration-700"
-        />
-        <button id="heroPlayBtn" type="button" onclick="togglePlay()" class="absolute inset-0 flex items-center justify-center bg-black/50 opacity-0 hover:opacity-100 transition">
-          <div class="btn-primary p-5 rounded-full">
-            <i data-lucide="play" class="w-8 h-8 ml-1"></i>
-          </div>
-        </button>
-      </div>
-
-      <div class="text-center w-full">
-        <h1 id="mainTitle" class="text-2xl font-bold truncate">CÉREBRO SILENCIOSO</h1>
-        <p id="mainArtist" class="text-gray-400 text-sm">Aguardando transmissão</p>
-      </div>
-
-      <div class="w-full mt-5">
-        <canvas id="visualizer" class="w-full h-14 rounded-lg"></canvas>
-
-        <div class="flex items-center gap-3 mt-2 px-2">
-          <span class="text-[10px] font-bold tracking-widest text-orange-300/70">RADAR KI</span>
-          <div class="ki-bar-container flex-1">
-            <div id="kiBarFill" class="ki-bar-fill" style="width:0%"></div>
-          </div>
-          <span id="kiValueDisplay" class="ki-value text-sm font-mono text-orange-400">0000</span>
+    <!-- O WIDGET PRINCIPAL -->
+    <div id="kodux-widget" class="state-ball" style="right: 10px; top: 50%;">
+        
+        <!-- ================= MODO BOLA ================= -->
+        <div id="content-ball" class="w-full h-full flex items-center justify-center bg-[var(--primary)] text-black shadow-[0_0_15px_var(--primary)] rounded-full transition-transform hover:scale-105">
+            <i class="ph-fill ph-lightning animate-pulse" style="font-size: 20px;"></i>
         </div>
-      </div>
 
-      <div class="flex items-center justify-center gap-8 mt-5 w-full">
-        <button type="button" onclick="prevTrack()" class="p-3 text-gray-400 hover:text-white transition">
-          <i data-lucide="skip-back" class="w-7 h-7"></i>
-        </button>
-
-        <button id="mainPlayBtn" type="button" onclick="togglePlay()" class="btn-primary p-5 rounded-full text-white">
-          <i data-lucide="play" id="playIconMain" class="w-8 h-8 ml-1"></i>
-        </button>
-
-        <button type="button" onclick="nextTrack()" class="p-3 text-gray-400 hover:text-white transition">
-          <i data-lucide="skip-forward" class="w-7 h-7"></i>
-        </button>
-      </div>
-    </section>
-
-    <section class="mt-8 pb-8">
-      <div class="flex justify-between items-end mb-3 px-2">
-        <h2 class="text-base font-bold uppercase tracking-wider text-orange-200/80">PLAYLISTS DO ORÁCULO</h2>
-        <span class="text-[10px] text-gray-500">KODUX.DUAL</span>
-      </div>
-
-      <div id="trackList" class="flex flex-col gap-0.5">
-        <div class="text-center text-gray-500 text-sm py-12">Nenhuma frequência sintonizada. Use upload ou cole link.</div>
-      </div>
-    </section>
-  </main>
-
-  <div id="bottomPlayer" class="glass-panel fixed bottom-0 left-0 w-full px-4 py-3 flex items-center z-50 transform translate-y-full transition-transform duration-300 border-t border-orange-500/30">
-    <div class="absolute top-0 left-0 w-full h-1.5 bg-gray-800 cursor-pointer" id="progressContainer" onclick="seek(event)">
-      <div id="progressBar" class="h-full bg-gradient-to-r from-amber-400 to-orange-600 w-0 shadow-[0_0_10px_orange]"></div>
-    </div>
-
-    <div class="flex items-center gap-3 flex-1 overflow-hidden cursor-pointer" onclick="scrollToTop()">
-      <img id="miniCover" src="" class="w-12 h-12 rounded-md object-cover border border-orange-500/40 spin-anim spin-paused" />
-      <div class="flex flex-col truncate">
-        <span id="miniTitle" class="text-sm font-semibold truncate">—</span>
-        <div class="flex items-center gap-2">
-          <span id="miniTime" class="text-xs text-orange-400 font-medium">0:00 / 0:00</span>
-          <span id="sourceBadge" class="text-[9px] bg-orange-900/40 px-1.5 rounded text-orange-300">LOCAL</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex items-center gap-3 ml-3">
-      <button type="button" onclick="togglePlay()" class="text-white p-2">
-        <i data-lucide="play" id="playIconMini" class="w-6 h-6"></i>
-      </button>
-    </div>
-  </div>
-
-  <audio id="audioElement" crossorigin="anonymous"></audio>
-  <div id="sc-widget-container" style="display:none;"></div>
-  <div id="yt-player-container" style="display:none;"></div>
-
-  <script>
-    (function () {
-      "use strict";
-
-      lucide.createIcons();
-
-      const audio = document.getElementById('audioElement');
-      const uploadInput = document.getElementById('upload');
-      const trackListEl = document.getElementById('trackList');
-      const bottomPlayer = document.getElementById('bottomPlayer');
-      const mainCover = document.getElementById('mainCover');
-      const miniCover = document.getElementById('miniCover');
-      const mainTitle = document.getElementById('mainTitle');
-      const miniTitle = document.getElementById('miniTitle');
-      const mainArtist = document.getElementById('mainArtist');
-      const heroGlow = document.getElementById('heroGlow');
-      const heroPlayBtn = document.getElementById('heroPlayBtn');
-      const playIconMain = document.getElementById('playIconMain');
-      const playIconMini = document.getElementById('playIconMini');
-      const progressBar = document.getElementById('progressBar');
-      const progressContainer = document.getElementById('progressContainer');
-      const miniTime = document.getElementById('miniTime');
-      const sourceBadge = document.getElementById('sourceBadge');
-      const canvas = document.getElementById('visualizer');
-      const canvasCtx = canvas.getContext('2d');
-      const kiBarFill = document.getElementById('kiBarFill');
-      const kiValueDisplay = document.getElementById('kiValueDisplay');
-
-      const linkModal = document.getElementById('linkModal');
-      const pasteLinkBtn = document.getElementById('pasteLinkBtn');
-      const closeModal = document.getElementById('closeModal');
-      const linkInput = document.getElementById('linkInput');
-      const addLinkBtn = document.getElementById('addLinkBtn');
-
-      let tracks = [];
-      let currentIndex = -1;
-      let isPlaying = false;
-      let currentSourceType = null;
-
-      let scWidget = null;
-      let scDuration = 0;
-
-      let ytPlayer = null;
-      let ytPlayerReady = false;
-      let ytApiLoaded = false;
-      let ytPending = null;
-
-      let audioCtx = null;
-      let analyser = null;
-      let sourceNode = null;
-      let dataArray = null;
-      let isAudioCtxInit = false;
-
-      function updateThemeColor() {
-        const hour = new Date().getHours();
-        let color = '#ff5500';
-        if (hour >= 5 && hour < 12) color = '#f59e0b';
-        else if (hour >= 12 && hour < 18) color = '#ff5500';
-        else if (hour >= 18 && hour < 23) color = '#a855f7';
-        else color = '#ef4444';
-
-        document.documentElement.style.setProperty('--primary', color);
-      }
-
-      function refreshIcons() {
-        lucide.createIcons();
-      }
-
-      function updatePlayIcons(icon) {
-        playIconMain.setAttribute('data-lucide', icon);
-        playIconMini.setAttribute('data-lucide', icon);
-        refreshIcons();
-      }
-
-      function setPlayingUI(playing) {
-        isPlaying = playing;
-        updatePlayIcons(playing ? 'pause' : 'play');
-        heroPlayBtn.classList.toggle('hidden', playing);
-        miniCover.classList.toggle('spin-paused', !playing);
-      }
-
-      function formatTime(sec) {
-        if (!isFinite(sec) || sec < 0) return '0:00';
-        const m = Math.floor(sec / 60);
-        const s = Math.floor(sec % 60);
-        return `${m}:${s < 10 ? '0' : ''}${s}`;
-      }
-
-      function extractYouTubeID(url) {
-        try {
-          const u = new URL(url);
-
-          if (u.hostname.includes('youtu.be')) {
-            return u.pathname.split('/').filter(Boolean)[0] || null;
-          }
-
-          const v = u.searchParams.get('v');
-          if (v) return v;
-
-          const shorts = u.pathname.match(/\/shorts\/([0-9A-Za-z_-]{11})/);
-          if (shorts) return shorts[1];
-
-          const embed = u.pathname.match(/\/embed\/([0-9A-Za-z_-]{11})/);
-          if (embed) return embed[1];
-
-          return null;
-        } catch {
-          const m = url.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([0-9A-Za-z_-]{11})/);
-          return m ? m[1] : null;
-        }
-      }
-
-      function getYouTubeThumb(url, quality = 'hqdefault') {
-        const id = extractYouTubeID(url);
-        return id ? `https://img.youtube.com/vi/${id}/${quality}.jpg` : '';
-      }
-
-      function updateMetaUI(track) {
-        mainTitle.innerText = track.title || 'Desconhecido';
-        mainArtist.innerText = track.artist || (
-          track.type === 'soundcloud' ? 'SoundCloud' :
-          track.type === 'youtube' ? 'YouTube' : 'Local'
-        );
-
-        const fallback =
-          track.type === 'youtube'
-            ? getYouTubeThumb(track.url)
-            : `https://picsum.photos/500/500?random=${Date.now()}`;
-
-        const cover = track.cover || fallback;
-
-        mainCover.src = cover;
-        miniCover.src = cover;
-        miniTitle.innerText = track.title || '—';
-
-        sourceBadge.innerText = track.type.toUpperCase();
-        sourceBadge.className = `text-[9px] px-1.5 rounded ${
-          track.type === 'local'
-            ? 'bg-blue-900/40 text-blue-300'
-            : track.type === 'soundcloud'
-              ? 'bg-orange-900/40 text-orange-300'
-              : 'bg-red-900/40 text-red-300'
-        }`;
-
-        renderTrackList();
-      }
-
-      function renderTrackList() {
-        if (!tracks.length) {
-          trackListEl.innerHTML = '<div class="text-center text-gray-500 py-10">PLAYLIST VAZIA</div>';
-          return;
-        }
-
-        trackListEl.innerHTML = '';
-        tracks.forEach((t, i) => {
-          const active = i === currentIndex;
-          const div = document.createElement('div');
-          div.className = `track-item flex items-center gap-3 px-4 py-2.5 cursor-pointer ${active ? 'playing' : ''}`;
-          div.onclick = () => {
-            if (currentIndex === i) {
-              togglePlay();
-              return;
-            }
-            loadTrack(i, { autoplay: true });
-          };
-
-          div.innerHTML = `
-            <img src="${t.cover || (t.type === 'youtube' ? getYouTubeThumb(t.url) : 'https://picsum.photos/500/500?random=' + i)}" class="w-11 h-11 rounded-md object-cover border ${active ? 'border-orange-500' : 'border-white/10'}" />
-            <div class="flex-1 min-w-0">
-              <div class="track-title text-sm font-semibold truncate ${active ? 'text-orange-400' : ''}">${t.title || 'Sem título'}</div>
-              <div class="text-[10px] text-gray-400 flex items-center gap-1">
-                <span>${t.artist || '—'}</span>
-                <span class="bg-white/10 px-1 rounded text-[8px]">${t.type}</span>
-              </div>
+        <!-- ================= MODO PREVIEW (Acesso Rápido) ================= -->
+        <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3 bg-black/40">
+            <div class="relative w-12 h-12 shrink-0 preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
+                <img id="prev-cover" src="https://picsum.photos/100" class="w-full h-full rounded-full object-cover border-2 border-[var(--primary)] shadow-lg transition-transform">
+                <div class="absolute inset-0 rounded-full flex items-center justify-center bg-black/40 opacity-0 hover:opacity-100 transition-opacity">
+                    <i class="ph-fill ph-arrows-out-simple text-white text-lg"></i>
+                </div>
             </div>
-            ${active && isPlaying ? '<i data-lucide="volume-2" class="w-4 h-4 text-orange-500"></i>' : ''}
-          `;
+            
+            <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
+                <h4 id="prev-title" class="text-[12px] font-bold text-white truncate glow-text">Aguardando...</h4>
+                <p id="prev-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema Kodux</p>
+            </div>
+            
+            <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10 shrink-0">
+                <i id="prev-play-icon" class="ph-fill ph-play-circle text-[40px]"></i>
+            </button>
+        </div>
 
-          trackListEl.appendChild(div);
-        });
+        <!-- ================= MODO FOOTER (Rodapé) ================= -->
+        <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative bg-black/60 backdrop-blur-xl">
+            <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer hover:h-2 transition-all" id="footer-progress-click" onclick="seekMain(event)">
+                <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
+            </div>
+            <div class="drag-header flex-1 flex items-center px-4 md:px-8 gap-4">
+                <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-[var(--primary)]/30">
+                <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
+                    <h4 id="foot-title" class="text-sm font-bold text-white truncate glow-text">Oráculo</h4>
+                    <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Kodux v3</p>
+                </div>
+                <div class="flex items-center gap-4 md:gap-6">
+                    <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl md:text-3xl"></i></button>
+                    <button onclick="togglePlay(event)" class="text-[var(--primary)] hover:scale-110 transition drop-shadow-[0_0_10px_var(--primary)]"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl md:text-6xl"></i></button>
+                    <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl md:text-3xl"></i></button>
+                    <div class="w-px h-8 bg-white/10 mx-2"></div>
+                    <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white"><i class="ph ph-arrows-in-simple text-2xl"></i></button>
+                </div>
+            </div>
+        </div>
 
-        refreshIcons();
-      }
+        <!-- ================= MODO FULL APP (Acordeão) ================= -->
+        <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
+            
+            <!-- HEADER (Sanfona e Drag) -->
+            <div class="drag-header w-full h-[65px] px-5 flex justify-between items-center bg-black/80 border-b border-[var(--primary)]/30 shrink-0 z-20">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-[var(--primary)]/20 flex items-center justify-center">
+                        <i class="ph-fill ph-lightning text-[var(--primary)] text-lg"></i>
+                    </div>
+                    <span class="text-sm font-black tracking-widest text-white glow-text">ORÁCULO</span>
+                </div>
+                <div class="flex items-center gap-2">
+                    <!-- Botão Acordeão -->
+                    <button onclick="toggleAccordion(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg transition">
+                        <i id="accordion-icon" class="ph-bold ph-caret-up"></i>
+                    </button>
+                    <!-- Fechar para Bolinha -->
+                    <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-red-400 p-2 bg-white/5 rounded-lg transition">
+                        <i class="ph-bold ph-x"></i>
+                    </button>
+                </div>
+            </div>
 
-      function initVisualizerForLocal() {
-        if (isAudioCtxInit) return;
+            <!-- CORPO DO APP -->
+            <div id="full-body" class="flex-1 flex flex-col overflow-hidden bg-black/40 transition-opacity duration-300">
+                <div class="flex-1 overflow-y-auto p-5 pb-32">
+                    
+                    <!-- Controles de Adição (Link e Arquivo) -->
+                    <div class="flex gap-2 mb-6">
+                        <div class="flex-1 relative">
+                            <i class="ph-bold ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+                            <input type="text" id="link-input" placeholder="Cole YouTube ou SoundCloud..." class="w-full bg-black/60 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:border-[var(--primary)] outline-none transition">
+                        </div>
+                        <button onclick="addLink()" class="bg-[var(--primary)] text-black w-12 rounded-xl font-bold shadow-[0_0_15px_var(--primary)] hover:brightness-110 flex items-center justify-center shrink-0">
+                            <i class="ph-bold ph-plus text-lg"></i>
+                        </button>
+                        <!-- Upload MP3/WAV/M4A -->
+                        <label class="bg-white/10 text-white w-12 rounded-xl font-bold border border-white/10 hover:bg-white/20 flex items-center justify-center shrink-0 cursor-pointer transition">
+                            <i class="ph-bold ph-upload-simple text-lg"></i>
+                            <input type="file" id="local-upload" accept=".mp3, .wav, .m4a, audio/*" multiple class="hidden">
+                        </label>
+                    </div>
 
-        try {
-          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-          analyser = audioCtx.createAnalyser();
-          sourceNode = audioCtx.createMediaElementSource(audio);
-          sourceNode.connect(analyser);
-          analyser.connect(audioCtx.destination);
-          analyser.fftSize = 128;
-          dataArray = new Uint8Array(analyser.frequencyBinCount);
-          isAudioCtxInit = true;
-        } catch (e) {
-          console.warn('AudioContext error:', e);
+                    <!-- Lista da Playlist -->
+                    <div class="flex justify-between items-center mb-3 px-1">
+                        <span class="text-xs font-bold text-[var(--muted)] tracking-widest uppercase">Frequências</span>
+                        <span class="text-[10px] bg-[var(--primary)]/20 text-[var(--primary)] px-2 py-0.5 rounded border border-[var(--primary)]/30" id="track-count">0 tracks</span>
+                    </div>
+                    <div id="playlist-container" class="flex flex-col gap-2"></div>
+                </div>
+
+                <!-- PLAYER PRINCIPAL (Fixo em baixo no modo Full) -->
+                <div class="absolute bottom-0 left-0 w-full bg-black/90 backdrop-blur-xl border-t border-[var(--primary)]/50 p-5 rounded-b-2xl">
+                    <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-3 cursor-pointer" oninput="seekMainSlider(event)">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3 overflow-hidden flex-1 mr-2">
+                            <img id="main-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-lg border border-[var(--primary)]/40 object-cover">
+                            <div class="overflow-hidden">
+                                <h4 id="main-title" class="text-sm font-bold text-white truncate glow-text">Oráculo</h4>
+                                <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate flex items-center gap-1">
+                                    <span id="main-source-badge" class="px-1 bg-white/10 rounded text-[8px] uppercase">Sys</span>
+                                    <span id="main-artist-name">Kodux</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4 shrink-0">
+                            <button onclick="playPrev()" class="text-white text-xl hover:text-[var(--primary)] transition"><i class="ph-fill ph-skip-back"></i></button>
+                            <button onclick="togglePlay()" class="w-12 h-12 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_15px_var(--primary)] hover:scale-105 transition">
+                                <i id="main-play-icon" class="ph-fill ph-play text-2xl ml-1"></i>
+                            </button>
+                            <button onclick="playNext()" class="text-white text-xl hover:text-[var(--primary)] transition"><i class="ph-fill ph-skip-forward"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    (function(){
+        "use strict";
+
+        // ================= CONFIGURAÇÕES & ESTADO =================
+        const DB_NAME = 'kodux-oraculo-db';
+        let tracks = [];
+        let currentIdx = -1;
+        let isPlaying = false;
+        let activeEngine = null;
+
+        const widget = document.getElementById('kodux-widget');
+        const contents = {
+            ball: document.getElementById('content-ball'),
+            preview: document.getElementById('content-preview'),
+            footer: document.getElementById('content-footer'),
+            full: document.getElementById('content-full')
+        };
+        const audioEl = document.getElementById('local-audio');
+        let ytPlayer = null;
+        let scWidget = null;
+        let ytReady = false;
+
+        // TRACKS DE LORE PRÉ-CARREGADAS
+        const PRELOADED = [
+            { type: 'soundcloud', url: 'https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas', name: 'RELÍQUIAS DO PRÍNCIPE', artist: 'KODUX', cover: 'https://i1.sndcdn.com/artworks-H3pW6hS0cW7V19R3-7k3w0w-t500x500.jpg' },
+            { type: 'soundcloud', url: 'https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso', name: 'MAPEAMENTO PULSO', artist: 'DUAL X', cover: 'https://i1.sndcdn.com/artworks-000418386453-y1w0f1-t500x500.jpg' },
+            { type: 'youtube', id: 'Bt_rLbMjJDk', url: 'https://youtu.be/Bt_rLbMjJDk', name: 'Trilhas Potencializadoras dos Aromas', artist: 'Dual.NextLevel', cover: 'https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg' },
+            { type: 'youtube', id: '_0wVkryxanE', url: 'https://youtu.be/_0wVkryxanE', name: 'Desperte a magia dos 12 arquétipos', artist: 'Dual.NextLevel', cover: 'https://img.youtube.com/vi/_0wVkryxanE/hqdefault.jpg' }
+        ];
+
+        // UI STATE & DRAG
+        let widgetState = 'ball';
+        let isAccordionOpen = true;
+        let isDragging = false;
+        let currentX = window.innerWidth - 60; // Posição inicial (Snap na direita)
+        let currentY = window.innerHeight / 2;
+
+        // ================= CONTROLE DE INTERFACE =================
+        function updateWidgetState(newState) {
+            widgetState = newState;
+            widget.className = `state-${newState}`;
+            if(newState === 'full' && !isAccordionOpen) widget.classList.add('accordion-closed');
+
+            Object.values(contents).forEach(el => el.classList.add('hidden-content'));
+            contents[newState].classList.remove('hidden-content');
+
+            widget.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+
+            if(newState === 'ball') {
+                widget.style.left = `${currentX}px`;
+                widget.style.top = `${currentY}px`;
+                widget.style.transform = 'none';
+            } else if(newState === 'preview') {
+                // Abre o preview para o lado que tiver mais espaço
+                widget.style.left = (currentX < window.innerWidth/2) ? '10px' : (window.innerWidth - 260) + 'px';
+                widget.style.top = `${currentY - 15}px`;
+                widget.style.transform = 'none';
+            } else if(newState === 'full') {
+                widget.style.left = '50%';
+                widget.style.top = '50%';
+                widget.style.transform = 'translate(-50%, -50%)';
+            } else if(newState === 'footer') {
+                widget.style.transform = 'none';
+                widget.style.left = '0';
+                widget.style.top = 'auto';
+                widget.style.bottom = '0';
+            }
         }
-      }
 
-      function drawVisualizer() {
-        requestAnimationFrame(drawVisualizer);
-
-        canvas.width = canvas.clientWidth || 300;
-        canvas.height = canvas.clientHeight || 56;
-
-        if (currentSourceType === 'local' && analyser && dataArray && isPlaying) {
-          analyser.getByteFrequencyData(dataArray);
-          canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-          const barWidth = (canvas.width / dataArray.length) * 1.6;
-          let x = 0;
-          const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-
-          for (let i = 0; i < dataArray.length; i++) {
-            const h = (dataArray[i] / 255) * canvas.height;
-            canvasCtx.fillStyle = primary;
-            canvasCtx.shadowBlur = 10;
-            canvasCtx.shadowColor = primary;
-            canvasCtx.fillRect(x, canvas.height - h, barWidth - 2, h);
-            x += barWidth;
-          }
-
-          const bass = dataArray[0] || 0;
-          heroGlow.style.opacity = 0.1 + (bass / 255) * 0.4;
-          return;
-        }
-
-        canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
-
-        if (isPlaying) {
-          const primary = getComputedStyle(document.documentElement).getPropertyValue('--primary').trim();
-          canvasCtx.fillStyle = primary;
-          canvasCtx.shadowBlur = 10;
-          canvasCtx.shadowColor = primary;
-
-          for (let i = 0; i < 20; i++) {
-            const h = 8 + Math.random() * 20;
-            canvasCtx.fillRect(i * 15, canvas.height - h, 8, h);
-          }
-        }
-      }
-
-      function pauseAllNonLocal() {
-        if (scWidget) {
-          try { scWidget.pause(); } catch (_) {}
-        }
-        if (ytPlayer && ytPlayer.pauseVideo) {
-          try { ytPlayer.pauseVideo(); } catch (_) {}
-        }
-      }
-
-      function stopCurrentPlayback() {
-        audio.pause();
-        pauseAllNonLocal();
-        setPlayingUI(false);
-      }
-
-      function loadSoundCloudTrack(track, autoplay) {
-        const container = document.getElementById('sc-widget-container');
-
-        const createWidget = () => {
-          if (!scWidget) {
-            const iframe = document.createElement('iframe');
-            iframe.id = 'sc-iframe';
-            iframe.allow = 'autoplay';
-            iframe.style.display = 'none';
-            container.innerHTML = '';
-            container.appendChild(iframe);
-
-            scWidget = SC.Widget(iframe);
-
-            scWidget.bind(SC.Widget.Events.PLAY, () => {
-              setPlayingUI(true);
-            });
-
-            scWidget.bind(SC.Widget.Events.PAUSE, () => {
-              setPlayingUI(false);
-            });
-
-            scWidget.bind(SC.Widget.Events.FINISH, () => {
-              nextTrack();
-            });
-
-            scWidget.bind(SC.Widget.Events.READY, () => {
-              scWidget.load(track.url, {
-                auto_play: autoplay,
-                visual: false
-              });
-
-              setTimeout(() => {
-                scWidget.getDuration((d) => {
-                  scDuration = (d || 0) / 1000;
-                });
-              }, 900);
-            });
-
-            scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, (e) => {
-              const pct = e.relativePosition || 0;
-              progressBar.style.width = (pct * 100) + '%';
-              kiBarFill.style.width = (pct * 100) + '%';
-              kiValueDisplay.innerText = Math.floor(pct * 9001).toString().padStart(4, '0');
-              miniTime.innerText = `${formatTime((e.currentPosition || 0) / 1000)} / ${formatTime(scDuration)}`;
-            });
-          } else {
-            scWidget.load(track.url, {
-              auto_play: autoplay,
-              visual: false
-            });
-
-            setTimeout(() => {
-              scWidget.getDuration((d) => {
-                scDuration = (d || 0) / 1000;
-              });
-            }, 900);
-          }
+        window.toggleAccordion = (e) => {
+            e.stopPropagation();
+            isAccordionOpen = !isAccordionOpen;
+            const icon = document.getElementById('accordion-icon');
+            if(isAccordionOpen) {
+                widget.classList.remove('accordion-closed');
+                icon.className = 'ph-bold ph-caret-up';
+                document.getElementById('full-body').style.opacity = '1';
+            } else {
+                widget.classList.add('accordion-closed');
+                icon.className = 'ph-bold ph-caret-down';
+                document.getElementById('full-body').style.opacity = '0';
+            }
         };
 
-        createWidget();
-      }
+        // ================= DRAG & DROP MAGNÉTICO (SNAP) =================
+        function initDrag() {
+            let initialX, initialY;
 
-      function ensureYTPlayer(track, autoplay) {
-        ytPending = { track, autoplay };
+            const onStart = (e) => {
+                if(widgetState === 'full' || e.target.closest('button, input, .preview-clickable')) return;
+                isDragging = false;
+                const touch = e.type === 'touchstart' ? e.touches[0] : e;
+                initialX = touch.clientX - currentX;
+                initialY = touch.clientY - currentY;
+                widget.style.transition = 'none'; // Desliga animação pra arrastar liso
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onEnd);
+                document.addEventListener('touchmove', onMove, {passive: false});
+                document.addEventListener('touchend', onEnd);
+            };
 
-        const start = () => {
-          if (!window.YT || !YT.Player) {
-            setTimeout(start, 100);
-            return;
-          }
+            const onMove = (e) => {
+                isDragging = true;
+                e.preventDefault();
+                const touch = e.type === 'touchmove' ? e.touches[0] : e;
+                currentX = touch.clientX - initialX;
+                currentY = touch.clientY - initialY;
+                
+                // Limita Y pra não sumir da tela
+                currentY = Math.max(0, Math.min(currentY, window.innerHeight - 50));
+                
+                widget.style.left = `${currentX}px`;
+                widget.style.top = `${currentY}px`;
+            };
 
-          if (!ytPlayer) {
-            ytPlayer = new YT.Player('yt-player-container', {
-              height: '0',
-              width: '0',
-              videoId: track.id,
-              playerVars: {
-                playsinline: 1,
-                modestbranding: 1,
-                rel: 0,
-                iv_load_policy: 3
-              },
-              events: {
-                onReady: () => {
-                  ytPlayerReady = true;
-                  if (ytPending) {
-                    const pending = ytPending;
-                    ytPending = null;
-                    if (pending.autoplay) {
-                      ytPlayer.loadVideoById(pending.track.id);
-                    } else {
-                      ytPlayer.cueVideoById(pending.track.id);
-                    }
-                  }
-                },
-                onStateChange: (e) => {
-                  if (e.data === YT.PlayerState.PLAYING) {
-                    setPlayingUI(true);
-                  } else if (e.data === YT.PlayerState.PAUSED) {
-                    setPlayingUI(false);
-                  } else if (e.data === YT.PlayerState.ENDED) {
-                    nextTrack();
-                  }
+            const onEnd = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+                
+                // Lógica de SNAP e Transformação
+                if (currentY > window.innerHeight - 120) {
+                    // Arrastou pro fundo -> Vira Footer
+                    updateWidgetState('footer');
+                } else if (currentX < window.innerWidth * 0.3) {
+                    // Arrastou pra esquerda -> Snap na esquerda + Bola
+                    currentX = 10;
+                    updateWidgetState('ball');
+                } else if (currentX > window.innerWidth * 0.7) {
+                    // Arrastou pra direita -> Snap na direita + Bola
+                    currentX = window.innerWidth - 49; // 10px padding + 39px ball
+                    updateWidgetState('ball');
+                } else if (isDragging) {
+                    // Soltou no meio -> Vira Full ou Preview dependendo do estado anterior
+                    updateWidgetState(widgetState === 'ball' ? 'preview' : 'full');
                 }
-              }
+            };
+
+            contents.ball.addEventListener('mousedown', onStart);
+            contents.ball.addEventListener('touchstart', onStart);
+            document.querySelectorAll('.drag-header').forEach(h => {
+                h.addEventListener('mousedown', onStart);
+                h.addEventListener('touchstart', onStart);
             });
-          } else if (ytPlayerReady) {
-            if (autoplay) ytPlayer.loadVideoById(track.id);
-            else ytPlayer.cueVideoById(track.id);
-          } else {
-            ytPlayer.cueVideoById(track.id);
-          }
+        }
+
+        // ================= AUDIO ENGINES (Sincronização Absoluta) =================
+        function stopAllEngines() {
+            audioEl.pause();
+            if(ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+            if(scWidget) {
+                try { scWidget.pause(); } catch(e){}
+            }
+        }
+
+        function playYT(id) {
+            if(!ytReady) return setTimeout(() => playYT(id), 300);
+            if(!ytPlayer) {
+                ytPlayer = new YT.Player('yt-container', {
+                    height: '0', width: '0', videoId: id,
+                    playerVars: { autoplay: 1, playsinline: 1 },
+                    events: {
+                        onReady: (e) => { e.target.playVideo(); isPlaying = true; syncIcons(); },
+                        onStateChange: (e) => {
+                            if(e.data === YT.PlayerState.ENDED) playNext();
+                            isPlaying = (e.data === YT.PlayerState.PLAYING);
+                            syncIcons();
+                        }
+                    }
+                });
+            } else {
+                ytPlayer.loadVideoById(id);
+            }
+        }
+
+        function playSC(url) {
+            // Limpa o iframe antigo para evitar duplicação de áudio no fundo
+            const container = document.getElementById('sc-container');
+            container.innerHTML = `<iframe id="sc-frame" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false"></iframe>`;
+            scWidget = SC.Widget('sc-frame');
+            
+            scWidget.bind(SC.Widget.Events.READY, () => {
+                scWidget.play();
+                isPlaying = true;
+                syncIcons();
+            });
+            scWidget.bind(SC.Widget.Events.FINISH, () => playNext());
+            scWidget.bind(SC.Widget.Events.PLAY, () => { isPlaying = true; syncIcons(); });
+            scWidget.bind(SC.Widget.Events.PAUSE, () => { isPlaying = false; syncIcons(); });
+        }
+
+        function loadAndPlay(idx) {
+            if(idx < 0 || idx >= tracks.length) return;
+            currentIdx = idx;
+            const track = tracks[idx];
+            activeEngine = track.type;
+
+            stopAllEngines(); // Sincronização garantida
+            
+            // Atualiza UI
+            [ 'prev', 'foot', 'main' ].forEach(pre => {
+                document.getElementById(`${pre}-title`).innerText = track.name;
+                document.getElementById(`${pre}-artist${pre === 'main' ? '-name' : ''}`).innerText = track.artist;
+                document.getElementById(`${pre}-cover`).src = track.cover;
+            });
+            document.getElementById('main-source-badge').innerText = track.type;
+
+            // Dispara Motor
+            if(track.type === 'youtube') playYT(track.id);
+            else if(track.type === 'soundcloud') playSC(track.url);
+            else if(track.type === 'local') {
+                audioEl.src = track.url;
+                audioEl.play().then(() => {
+                    isPlaying = true; syncIcons();
+                }).catch(() => {
+                    alert("O navegador bloqueou o Autoplay. Clique no Play para iniciar.");
+                    isPlaying = false; syncIcons();
+                });
+            }
+            renderPlaylist();
+        }
+
+        function togglePlay(e) {
+            if(e) e.stopPropagation();
+            if(currentIdx === -1) {
+                if(tracks.length > 0) return loadAndPlay(0);
+                return;
+            }
+            
+            if(isPlaying) {
+                if(activeEngine === 'youtube') ytPlayer.pauseVideo();
+                else if(activeEngine === 'soundcloud') scWidget.pause();
+                else audioEl.pause();
+                isPlaying = false;
+            } else {
+                if(activeEngine === 'youtube') ytPlayer.playVideo();
+                else if(activeEngine === 'soundcloud') scWidget.play();
+                else audioEl.play();
+                isPlaying = true;
+            }
+            syncIcons();
+        }
+
+        function syncIcons() {
+            const icon = isPlaying ? 'ph-pause-circle' : 'ph-play-circle';
+            const iconSimple = isPlaying ? 'ph-pause' : 'ph-play';
+            document.getElementById('prev-play-icon').className = `ph-fill ${icon} text-[40px]`;
+            document.getElementById('foot-play-icon').className = `ph-fill ${icon} text-5xl md:text-6xl`;
+            document.getElementById('main-play-icon').className = `ph-fill ${iconSimple} text-2xl ${isPlaying ? '' : 'ml-1'}`;
+        }
+
+        function playNext(e) { if(e) e.stopPropagation(); loadAndPlay((currentIdx + 1) % tracks.length); }
+        function playPrev(e) { if(e) e.stopPropagation(); loadAndPlay((currentIdx - 1 + tracks.length) % tracks.length); }
+
+        // PROGRESS & SEEK
+        setInterval(() => {
+            if(!isPlaying) return;
+            let pct = 0;
+            if(activeEngine === 'youtube' && ytPlayer && ytPlayer.getCurrentTime) {
+                pct = (ytPlayer.getCurrentTime() / ytPlayer.getDuration()) * 100;
+            } else if(activeEngine === 'local' && audioEl.duration) {
+                pct = (audioEl.currentTime / audioEl.duration) * 100;
+            } else if(activeEngine === 'soundcloud' && scWidget) {
+                scWidget.getPosition(p => scWidget.getDuration(d => {
+                    const scPct = d > 0 ? (p/d) * 100 : 0;
+                    document.getElementById('main-progress').value = scPct;
+                    document.getElementById('footer-progress-bar').style.width = scPct + '%';
+                }));
+                return; // SC gerencia assíncrono
+            }
+            
+            if(!isNaN(pct)) {
+                document.getElementById('main-progress').value = pct;
+                document.getElementById('footer-progress-bar').style.width = pct + '%';
+            }
+        }, 500);
+
+        window.seekMainSlider = (e) => {
+            const pct = e.target.value / 100;
+            performSeek(pct);
         };
 
-        start();
-      }
+        window.seekMain = (e) => {
+            const rect = document.getElementById('footer-progress-click').getBoundingClientRect();
+            const pct = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
+            performSeek(pct);
+        };
 
-      function loadTrack(index, options = {}) {
-        const autoplay = !!options.autoplay;
-
-        if (index < 0 || index >= tracks.length) return;
-
-        currentIndex = index;
-        const track = tracks[index];
-        currentSourceType = track.type;
-
-        updateMetaUI(track);
-        progressBar.style.width = '0%';
-        kiBarFill.style.width = '0%';
-        kiValueDisplay.innerText = '0000';
-        miniTime.innerText = '0:00 / 0:00';
-
-        audio.pause();
-        pauseAllNonLocal();
-
-        if (track.type === 'local') {
-          audio.src = track.url;
-          audio.load();
-
-          if (!isAudioCtxInit) initVisualizerForLocal();
-
-          if (autoplay) {
-            audio.play().then(() => {
-              if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-              setPlayingUI(true);
-            }).catch(() => {
-              setPlayingUI(false);
-            });
-          } else {
-            setPlayingUI(false);
-          }
+        function performSeek(pct) {
+            if(activeEngine === 'local' && audioEl.duration) audioEl.currentTime = pct * audioEl.duration;
+            else if(activeEngine === 'youtube' && ytPlayer && ytPlayer.getDuration) ytPlayer.seekTo(pct * ytPlayer.getDuration(), true);
+            else if(activeEngine === 'soundcloud' && scWidget) scWidget.getDuration(d => scWidget.seekTo(pct * d));
         }
 
-        if (track.type === 'soundcloud') {
-          loadSoundCloudTrack(track, autoplay);
-          setPlayingUI(autoplay);
+        // ================= GESTÃO DA PLAYLIST =================
+        function saveDB() {
+            // Não salvamos 'local' blobs no localStorage, apenas metadados (para não bugar)
+            const toSave = tracks.filter(t => t.type !== 'local');
+            localStorage.setItem(DB_NAME, JSON.stringify(toSave));
+            document.getElementById('track-count').innerText = `${tracks.length} tracks`;
         }
 
-        if (track.type === 'youtube') {
-          ensureYTPlayer(track, autoplay);
-          setPlayingUI(autoplay);
-        }
-
-        bottomPlayer.classList.remove('translate-y-full');
-        renderTrackList();
-      }
-
-      function playCurrentTrack() {
-        if (currentIndex === -1) {
-          if (tracks.length) loadTrack(0, { autoplay: true });
-          return;
-        }
-
-        const track = tracks[currentIndex];
-        if (track.type === 'local') {
-          audio.play().then(() => {
-            if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
-            setPlayingUI(true);
-          }).catch(() => {
-            setPlayingUI(false);
-          });
-          return;
-        }
-
-        if (track.type === 'soundcloud' && scWidget) {
-          try { scWidget.play(); } catch (_) {}
-          return;
-        }
-
-        if (track.type === 'youtube' && ytPlayer) {
-          try {
-            const state = ytPlayer.getPlayerState ? ytPlayer.getPlayerState() : null;
-            if (state !== 1) ytPlayer.playVideo();
-          } catch (_) {}
-        }
-      }
-
-      function pauseCurrentTrack() {
-        if (currentIndex === -1) return;
-
-        const track = tracks[currentIndex];
-
-        if (track.type === 'local') {
-          audio.pause();
-          setPlayingUI(false);
-          return;
-        }
-
-        if (track.type === 'soundcloud' && scWidget) {
-          try { scWidget.pause(); } catch (_) {}
-          return;
-        }
-
-        if (track.type === 'youtube' && ytPlayer) {
-          try { ytPlayer.pauseVideo(); } catch (_) {}
-        }
-      }
-
-      function togglePlay() {
-        if (!tracks.length) return;
-
-        if (currentIndex === -1) {
-          loadTrack(0, { autoplay: true });
-          return;
-        }
-
-        if (isPlaying) pauseCurrentTrack();
-        else playCurrentTrack();
-
-        refreshIcons();
-      }
-
-      function nextTrack() {
-        if (!tracks.length) return;
-        const shouldAutoplay = isPlaying;
-        let n = currentIndex + 1;
-        if (n >= tracks.length) n = 0;
-        loadTrack(n, { autoplay: shouldAutoplay });
-      }
-
-      function prevTrack() {
-        if (!tracks.length) return;
-
-        const shouldAutoplay = isPlaying;
-        const track = tracks[currentIndex];
-
-        if (track && track.type === 'local' && audio.currentTime > 3) {
-          audio.currentTime = 0;
-          return;
-        }
-
-        if (track && track.type === 'soundcloud' && scWidget) {
-          try {
-            scWidget.getPosition((pos) => {
-              if ((pos || 0) > 3000) {
-                scWidget.seekTo(0);
-              } else {
-                let p = currentIndex - 1;
-                if (p < 0) p = tracks.length - 1;
-                loadTrack(p, { autoplay: shouldAutoplay });
-              }
-            });
-            return;
-          } catch (_) {}
-        }
-
-        if (track && track.type === 'youtube' && ytPlayer) {
-          try {
-            const cur = ytPlayer.getCurrentTime ? ytPlayer.getCurrentTime() : 0;
-            if (cur > 3) {
-              ytPlayer.seekTo(0);
-              return;
+        function renderPlaylist() {
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+            
+            if(tracks.length === 0) {
+                container.innerHTML = '<p class="text-[11px] text-center text-gray-500 py-4">Sem frequências. Adicione um link ou arquivo.</p>';
+                document.getElementById('track-count').innerText = '0 tracks';
+                return;
             }
-          } catch (_) {}
+
+            tracks.forEach((t, i) => {
+                const active = i === currentIdx;
+                const item = document.createElement('div');
+                item.className = `flex items-center gap-3 p-2 rounded-xl cursor-pointer transition group ${active ? 'bg-[var(--primary)]/10 border border-[var(--primary)]/30' : 'bg-white/5 hover:bg-white/10 border border-transparent'}`;
+                
+                item.innerHTML = `
+                    <div class="relative w-10 h-10 shrink-0" onclick="window.forcePlay(${i})">
+                        <img src="${t.cover}" class="w-full h-full rounded-lg object-cover">
+                        ${active && isPlaying ? '<div class="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg"><i class="ph-fill ph-waveform text-[var(--primary)] animate-pulse"></i></div>' : ''}
+                        ${!active ? '<div class="absolute inset-0 bg-black/50 flex items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 transition"><i class="ph-fill ph-play text-white"></i></div>' : ''}
+                    </div>
+                    <div class="flex-1 overflow-hidden" onclick="window.forcePlay(${i})">
+                        <h5 class="text-xs font-bold text-white truncate ${active ? 'text-[var(--primary)]' : ''}">${t.name}</h5>
+                        <div class="flex items-center gap-2 mt-0.5">
+                            <p class="text-[9px] text-[var(--muted)] truncate">${t.artist}</p>
+                            <span class="text-[8px] bg-white/10 px-1 rounded uppercase">${t.type}</span>
+                        </div>
+                    </div>
+                    <button onclick="window.deleteTrack(event, ${i})" class="w-8 h-8 flex items-center justify-center text-gray-500 hover:text-red-400 hover:bg-red-400/10 rounded-lg transition shrink-0 opacity-0 group-hover:opacity-100">
+                        <i class="ph-bold ph-trash"></i>
+                    </button>
+                `;
+                container.appendChild(item);
+            });
+            saveDB();
         }
 
-        let p = currentIndex - 1;
-        if (p < 0) p = tracks.length - 1;
-        loadTrack(p, { autoplay: shouldAutoplay });
-      }
+        window.forcePlay = (i) => loadAndPlay(i);
 
-      function seek(e) {
-        const rect = progressContainer.getBoundingClientRect();
-        const pct = Math.min(1, Math.max(0, (e.clientX - rect.left) / rect.width));
+        window.deleteTrack = (e, i) => {
+            e.stopPropagation();
+            if(confirm("Remover esta frequência?")) {
+                if(i === currentIdx) {
+                    stopAllEngines();
+                    currentIdx = -1;
+                    isPlaying = false;
+                    syncIcons();
+                } else if (i < currentIdx) {
+                    currentIdx--; // Ajusta indice se apagou um anterior
+                }
+                tracks.splice(i, 1);
+                renderPlaylist();
+            }
+        };
 
-        if (currentSourceType === 'local' && audio.duration) {
-          audio.currentTime = pct * audio.duration;
-        } else if (currentSourceType === 'soundcloud' && scWidget && scDuration) {
-          scWidget.seekTo(pct * scDuration * 1000);
-        } else if (currentSourceType === 'youtube' && ytPlayer && ytPlayer.getDuration) {
-          ytPlayer.seekTo(pct * ytPlayer.getDuration(), true);
+        // ================= INPUTS (LINK E LOCAL) =================
+        function extractYouTubeID(url) {
+            const m = url.match(/(?:v=|youtu\.be\/|shorts\/)([0-9A-Za-z_-]{11})/);
+            return m ? m[1] : null;
         }
-      }
 
-      function addLocalFiles(files) {
-        Array.from(files).forEach((file, index) => {
-          const url = URL.createObjectURL(file);
-          tracks.push({
-            type: 'local',
-            url,
-            title: file.name.replace(/\.[^/.]+$/, ''),
-            artist: 'Upload Local',
-            cover: `https://picsum.photos/seed/${encodeURIComponent(file.name + index)}/500/500`
-          });
+        window.addLink = async () => {
+            const input = document.getElementById('link-input');
+            const url = input.value.trim();
+            if(!url) return;
+            
+            let newTrack = { name: 'Sincronizando...', artist: 'Web', cover: 'https://picsum.photos/100', url };
+            
+            if(url.includes('youtube.com') || url.includes('youtu.be')) {
+                const id = extractYouTubeID(url);
+                if(!id) return alert("Link YouTube Inválido");
+                newTrack.type = 'youtube';
+                newTrack.id = id;
+                newTrack.cover = `https://img.youtube.com/vi/${id}/hqdefault.jpg`; // Thumb real
+                try {
+                    const res = await fetch(`https://noembed.com/embed?url=${url}`);
+                    const data = await res.json();
+                    newTrack.name = data.title || "YouTube Track";
+                    newTrack.artist = data.author_name || "YouTube";
+                } catch(e) { newTrack.name = "YouTube Track"; }
+            } else if(url.includes('soundcloud.com')) {
+                newTrack.type = 'soundcloud';
+                try {
+                    const res = await fetch(`https://soundcloud.com/oembed?url=${url}&format=json`);
+                    const data = await res.json();
+                    newTrack.name = data.title;
+                    newTrack.artist = data.author_name;
+                    newTrack.cover = data.thumbnail_url; // Thumb real artwork
+                } catch(e) { newTrack.name = "SoundCloud Track"; }
+            } else {
+                return alert("Insira um link do YouTube ou SoundCloud.");
+            }
+
+            tracks.unshift(newTrack);
+            if(currentIdx !== -1) currentIdx++; // Mantem a musica atual tocando correta
+            input.value = '';
+            renderPlaylist();
+        };
+
+        // Upload de Arquivos Múltiplos Formatos (MP3, WAV, M4A)
+        document.getElementById('local-upload').addEventListener('change', (e) => {
+            const files = e.target.files;
+            if(!files || files.length === 0) return;
+            
+            Array.from(files).forEach((file, index) => {
+                const url = URL.createObjectURL(file);
+                tracks.unshift({
+                    type: 'local',
+                    url: url,
+                    name: file.name.replace(/\.[^/.]+$/, ""), // Tira extensão do nome
+                    artist: 'Arquivo Local',
+                    cover: `https://picsum.photos/seed/${encodeURIComponent(file.name)}/100` // Cover placeholder criativo
+                });
+                if(currentIdx !== -1) currentIdx++;
+            });
+            
+            e.target.value = ''; // Reseta input
+            renderPlaylist();
         });
 
-        renderTrackList();
+        // ================= GLOBAL CLICKS & INITS =================
+        window.openFullFromPreview = (e) => {
+            e.stopPropagation();
+            updateWidgetState('full');
+        };
 
-        if (currentIndex === -1 && tracks.length) {
-          loadTrack(0, { autoplay: false });
-          bottomPlayer.classList.remove('translate-y-full');
-        }
-      }
+        // Clique fora recolhe para bolinha se for preview
+        const handleClickOutside = (e) => {
+            if (widgetState === 'preview' && !widget.contains(e.target)) {
+                // Snap de volta
+                currentX = currentX < window.innerWidth/2 ? 10 : window.innerWidth - 49;
+                updateWidgetState('ball');
+            }
+        };
 
-      async function addLink(url) {
-        let type = null;
-        let resolvedUrl = url;
-        let id = null;
-        let title = '';
-        let artist = '';
-        let cover = '';
+        document.addEventListener('mousedown', handleClickOutside);
+        document.addEventListener('touchstart', handleClickOutside);
 
-        const clean = url.trim();
+        // Click na bolinha vira preview
+        document.getElementById('content-ball').onclick = (e) => {
+            if(isDragging) return;
+            if(widgetState === 'ball') updateWidgetState('preview');
+        };
 
-        if (clean.includes('soundcloud.com')) {
-          type = 'soundcloud';
+        window.collapseToBall = (e) => {
+            e.stopPropagation(); 
+            // Garante que a bolinha nasça nas laterais dependendo de onde o painel está
+            const rect = widget.getBoundingClientRect();
+            currentX = rect.left < window.innerWidth / 2 ? 10 : window.innerWidth - 49;
+            currentY = rect.top + (rect.height / 2);
+            updateWidgetState('ball'); 
+        };
 
-          try {
-            const res = await fetch(`https://soundcloud.com/oembed?url=${encodeURIComponent(clean)}&format=json`);
-            const data = await res.json();
-            title = data.title || 'SoundCloud Track';
-            cover = data.thumbnail_url || '';
-            artist = data.author_name || 'SoundCloud';
-          } catch {
-            title = 'SoundCloud Track';
-            artist = 'SoundCloud';
-            cover = 'https://picsum.photos/500/500?sc';
-          }
-        } else if (clean.includes('youtube.com') || clean.includes('youtu.be') || clean.includes('youtube.com/shorts')) {
-          type = 'youtube';
-          id = extractYouTubeID(clean);
-
-          if (!id) {
-            alert('ID inválido');
-            return;
-          }
-
-          resolvedUrl = `https://youtu.be/${id}`;
-
-          try {
-            const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(resolvedUrl)}&format=json`);
-            const data = await res.json();
-            title = data.title || 'YouTube Video';
-            cover = data.thumbnail_url || getYouTubeThumb(resolvedUrl);
-            artist = data.author_name || 'YouTube';
-          } catch {
-            title = 'YouTube Video';
-            artist = 'YouTube';
-            cover = getYouTubeThumb(resolvedUrl);
-          }
+        // INIT
+        window.onYouTubeIframeAPIReady = () => { ytReady = true; };
+        
+        // Carrega DB
+        const saved = localStorage.getItem(DB_NAME);
+        if(saved) {
+            tracks = JSON.parse(saved);
         } else {
-          alert('URL não suportada');
-          return;
+            tracks = [...PRELOADED];
         }
-
-        tracks.push({
-          type,
-          url: type === 'soundcloud' ? clean : resolvedUrl,
-          id,
-          title,
-          artist,
-          cover
-        });
-
-        renderTrackList();
-        linkModal.classList.add('hidden');
-        linkInput.value = '';
-
-        if (currentIndex === -1) {
-          loadTrack(0, { autoplay: false });
-          bottomPlayer.classList.remove('translate-y-full');
-        }
-      }
-
-      uploadInput.addEventListener('change', (e) => {
-        if (!e.target.files || !e.target.files.length) return;
-        addLocalFiles(e.target.files);
-        e.target.value = '';
-      });
-
-      pasteLinkBtn.addEventListener('click', () => {
-        linkModal.classList.remove('hidden');
-        setTimeout(() => linkInput.focus(), 50);
-      });
-
-      closeModal.addEventListener('click', () => {
-        linkModal.classList.add('hidden');
-      });
-
-      linkModal.addEventListener('click', (e) => {
-        if (e.target === linkModal) linkModal.classList.add('hidden');
-      });
-
-      addLinkBtn.addEventListener('click', () => {
-        if (linkInput.value.trim()) addLink(linkInput.value.trim());
-      });
-
-      linkInput.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && linkInput.value.trim()) {
-          addLink(linkInput.value.trim());
-        }
-      });
-
-      audio.addEventListener('timeupdate', () => {
-        if (currentSourceType !== 'local') return;
-
-        const pct = audio.duration ? (audio.currentTime / audio.duration) : 0;
-        progressBar.style.width = (pct * 100) + '%';
-        kiBarFill.style.width = (pct * 100) + '%';
-        kiValueDisplay.innerText = Math.floor(pct * 9001).toString().padStart(4, '0');
-        miniTime.innerText = `${formatTime(audio.currentTime)} / ${formatTime(audio.duration)}`;
-      });
-
-      audio.addEventListener('ended', () => {
-        nextTrack();
-      });
-
-      function syncYouTubeProgress() {
-        if (currentSourceType === 'youtube' && ytPlayer && isPlaying && ytPlayer.getDuration) {
-          try {
-            const dur = ytPlayer.getDuration();
-            const cur = ytPlayer.getCurrentTime();
-            if (dur) {
-              const pct = cur / dur;
-              progressBar.style.width = (pct * 100) + '%';
-              kiBarFill.style.width = (pct * 100) + '%';
-              kiValueDisplay.innerText = Math.floor(pct * 9001).toString().padStart(4, '0');
-              miniTime.innerText = `${formatTime(cur)} / ${formatTime(dur)}`;
-            }
-          } catch (_) {}
-        }
-      }
-
-      setInterval(syncYouTubeProgress, 500);
-
-      function scrollToTop() {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-
-      window.togglePlay = togglePlay;
-      window.nextTrack = nextTrack;
-      window.prevTrack = prevTrack;
-      window.seek = seek;
-      window.scrollToTop = scrollToTop;
-
-      function injectYouTubeAPI() {
-        if (window.YT && window.YT.Player) {
-          ytApiLoaded = true;
-          return;
-        }
-
-        if (document.querySelector('script[src="https://www.youtube.com/iframe_api"]')) return;
 
         const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
+        tag.src = "https://www.youtube.com/iframe_api";
         document.head.appendChild(tag);
-      }
-
-      window.onYouTubeIframeAPIReady = () => {
-        ytApiLoaded = true;
-        if (ytPending && !ytPlayerReady) {
-          ensureYTPlayer(ytPending.track, ytPending.autoplay);
+        
+        initDrag();
+        renderPlaylist();
+        updateWidgetState('ball'); // Inicia escondido como bolinha
+        
+        // Se houver tracks carrega meta da primeira mas sem tocar
+        if(tracks.length > 0) {
+            const t = tracks[0];
+            [ 'prev', 'foot', 'main' ].forEach(pre => {
+                document.getElementById(`${pre}-title`).innerText = t.name;
+                document.getElementById(`${pre}-artist${pre === 'main' ? '-name' : ''}`).innerText = t.artist;
+                document.getElementById(`${pre}-cover`).src = t.cover;
+            });
         }
-      };
 
-      updateThemeColor();
-      setInterval(updateThemeColor, 60000);
-
-      injectYouTubeAPI();
-
-      (function presetLinks() {
-        const yt1 = 'https://youtu.be/Bt_rLbMjJDk?si=zyeH5r5dwSXUalRQ';
-        const yt2 = 'https://youtu.be/_0wVkryxanE?si=mxUNmCAkvAeArkNh';
-
-        tracks.push(
-          {
-            type: 'soundcloud',
-            url: 'https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas',
-            title: 'RELÍQUIAS DO PRÍNCIPE',
-            artist: 'KODUX',
-            cover: 'https://picsum.photos/500/500?reliquias'
-          },
-          {
-            type: 'soundcloud',
-            url: 'https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso',
-            title: 'MAPEAMENTO PULSO',
-            artist: 'DUAL X',
-            cover: 'https://picsum.photos/500/500?pulso'
-          },
-          {
-            type: 'youtube',
-            url: yt1,
-            id: extractYouTubeID(yt1),
-            title: 'Trilhas Potencializadoras dos Aromas',
-            artist: 'Dual.NextLevel Soundtracks',
-            cover: getYouTubeThumb(yt1)
-          },
-          {
-            type: 'youtube',
-            url: yt2,
-            id: extractYouTubeID(yt2),
-            title: 'Desperte a magia dos 12 arquétipos',
-            artist: 'Dual.NextLevel Soundtracks',
-            cover: getYouTubeThumb(yt2)
-          }
-        );
-
-        renderTrackList();
-        loadTrack(0, { autoplay: false });
-      })();
-
-      drawVisualizer();
-      refreshIcons();
     })();
-  </script>
+</script>
 </body>
 </html>
+
