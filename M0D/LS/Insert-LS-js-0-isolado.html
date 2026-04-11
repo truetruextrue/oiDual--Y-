@@ -1,0 +1,1226 @@
+<script>
+
+(function () {
+  'use strict';
+
+  if (window.__bauLiteLoaded) return;
+  window.__bauLiteLoaded = true;
+
+  const BTN_SIZE = 54;
+  const TOP = 12;
+  const RIGHT = -12;
+  const Z = 2147483647;
+
+  const LS = {
+    HTML: 'lastHTML',
+    USER_SYMBOL: 'userSymbol',
+    SKS: 'openrouter_keys',
+    SK_ACTIVE: 'openrouter_active'
+  };
+
+  const DISABLED_KEY = 'infodose:presets.disabled';
+
+  const PRESETS = [
+    { key: 'infodose:userName', label: 'Usuário' },
+    { key: 'infodose:assistantName', label: 'Assistente' },
+    { key: 'dual.keys.openrouter', label: 'Chave OpenRouter (legacy)' },
+    { key: 'dual.openrouter.model', label: 'Modelo OpenRouter' },
+    { key: 'uno:theme', label: 'Tema' },
+    { key: 'uno:bg', label: 'Fundo Custom' },
+    { key: 'infodose:cssCustom', label: 'CSS Custom' },
+    { key: 'infodose:voices', label: 'Vozes Arquetípicas' }
+  ];
+
+  const $ = (s, r = document) => r.querySelector(s);
+
+  function saveFile(name, str) {
+    const blob = new Blob([str], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = name;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 800);
+  }
+
+  function prettyBytes(n) {
+    if (!Number.isFinite(n) || n <= 0) return '0 B';
+    const u = ['B', 'KB', 'MB', 'GB'];
+    let i = 0;
+    while (n >= 1024 && i < u.length - 1) {
+      n /= 1024;
+      i++;
+    }
+    return n.toFixed(2) + ' ' + u[i];
+  }
+
+  function isJson(v) {
+    try { JSON.parse(v); return true; } catch { return false; }
+  }
+
+  function inferType(v) {
+    if (v == null || v === '') return 'empty';
+    if (isJson(v)) {
+      const p = JSON.parse(v);
+      if (Array.isArray(p)) return 'json[array]';
+      if (p && typeof p === 'object') return 'json[object]';
+      return 'json[' + (typeof p) + ']';
+    }
+    if (/^data:image\//i.test(v) || /\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(v)) return 'image';
+    if (/^(true|false|1|0)$/i.test(v)) return 'boolean-like';
+    if (/^https?:\/\//i.test(v)) return 'url';
+    if (/^data:/i.test(v)) return 'data-url';
+    return 'string';
+  }
+
+  function disabledSet() {
+    try { return new Set(JSON.parse(localStorage.getItem(DISABLED_KEY) || '[]')); }
+    catch { return new Set(); }
+  }
+
+  function saveDisabled(set) {
+    localStorage.setItem(DISABLED_KEY, JSON.stringify(Array.from(set)));
+  }
+
+  function getSKs() {
+    try { return JSON.parse(localStorage.getItem(LS.SKS) || '[]'); }
+    catch { return []; }
+  }
+
+  function setSKs(arr) {
+    localStorage.setItem(LS.SKS, JSON.stringify(arr));
+  }
+
+  function getActiveSK() {
+    return localStorage.getItem(LS.SK_ACTIVE) || '';
+  }
+
+  function setActiveSK(v) {
+    localStorage.setItem(LS.SK_ACTIVE, v || '');
+  }
+
+  function maskKey(k) {
+    return (k && k.length > 10) ? k.slice(0, 6) + '...' + k.slice(-4) : (k || '');
+  }
+
+  function lsEntries() {
+    const out = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      const v = localStorage.getItem(k) || '';
+      out.push({ key: k, val: v });
+    }
+    return out.sort((a, b) => a.key.localeCompare(b.key));
+  }
+
+  function lsSizeBytes() {
+    let sum = 0;
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      const v = localStorage.getItem(k) || '';
+      sum += k.length + v.length;
+    }
+    return sum;
+  }
+
+  function toggleDisabled(k) {
+    const s = disabledSet();
+    s.has(k) ? s.delete(k) : s.add(k);
+    saveDisabled(s);
+    renderAll();
+    window.dispatchEvent(new CustomEvent('ls:disabled-changed', { detail: { key: k, disabled: s.has(k) } }));
+  }
+
+  function addImagePreview(key, src) {
+    const g = $('#bau-img-grid');
+    if (!g) return;
+    const card = document.createElement('div');
+    card.className = 'bau-img-card';
+    const cap = document.createElement('div');
+    cap.className = 'bau-small';
+    cap.textContent = key;
+    const im = new Image();
+    im.src = src;
+    im.loading = 'lazy';
+    card.append(cap, im);
+    g.append(card);
+  }
+
+  function digitalRoot(n) {
+    const s = String(n).replace(/[^0-9]/g, '');
+    if (!s) return 0;
+    let sum = [...s].reduce((a, b) => a + Number(b), 0);
+    while (sum > 9) sum = [...String(sum)].reduce((a, b) => a + Number(b), 0);
+    return sum;
+  }
+
+  function polygon(cx, cy, r, sides, rot = 0) {
+    const pts = [];
+    for (let i = 0; i < sides; i++) {
+      const a = (Math.PI * 2 * i / sides) + rot;
+      pts.push([cx + r * Math.cos(a), cy + r * Math.sin(a)]);
+    }
+    return pts.map(p => p.join(',')).join(' ');
+  }
+
+  function buildSymbolSVG(lat, lon) {
+    const lr = digitalRoot(lat), rr = digitalRoot(lon);
+    const s1 = Math.max(3, lr + 2), s2 = Math.max(3, rr + 2);
+    const rot = ((lr * rr) % 360) * Math.PI / 180;
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="260" height="180" viewBox="0 0 260 180">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1" y1="0" y2="1">
+          <stop offset="0%" stop-color="#ff52e5"/>
+          <stop offset="100%" stop-color="#00c5e5"/>
+        </linearGradient>
+      </defs>
+      <rect width="100%" height="100%" rx="14" fill="rgba(255,255,255,0.05)"/>
+      <g transform="translate(130,95)">
+        <polygon points="${polygon(0,0,52,s1,0)}" fill="none" stroke="url(#g1)" stroke-width="2"/>
+        <polygon points="${polygon(0,0,36,s2,rot)}" fill="none" stroke="#39FFB6" stroke-width="1.6"/>
+        <circle cx="0" cy="0" r="4" fill="#fff"/>
+      </g>
+      <text x="12" y="20" fill="#fff" font-size="12" font-family="monospace">LAT ${Number(lat).toFixed(5)} → Σ ${lr}</text>
+      <text x="12" y="36" fill="#fff" font-size="12" font-family="monospace">LON ${Number(lon).toFixed(5)} → Σ ${rr}</text>
+    </svg>`;
+  }
+
+  function sigilFromCoords(lat, lon) {
+    const seed = (String(lat) + String(lon)).replace(/[^0-9]/g, '');
+    const W = 260, H = 180;
+    let x = 20, y = 30;
+    let d = `M${x} ${y}`;
+    [...seed].forEach(ch => {
+      x += ((ch % 3) - 1) * 20;
+      y += ((ch % 3) - 1) * 16;
+      x = Math.max(10, Math.min(W - 10, x));
+      y = Math.max(10, Math.min(H - 10, y));
+      d += ` L${x} ${y}`;
+    });
+    return `<svg xmlns="http://www.w3.org/2000/svg" width="260" height="180" viewBox="0 0 260 180">
+      <rect width="100%" height="100%" rx="14" fill="rgba(255,255,255,0.05)"/>
+      <path d="${d}" stroke="#ff52e5" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>`;
+  }
+
+  function symParse() {
+    const el = $('#bau-sym-in');
+    if (!el) return null;
+    const v = el.value.split(',');
+    if (v.length < 2) return null;
+    const lat = parseFloat(v[0]), lon = parseFloat(v[1]);
+    if (isNaN(lat) || isNaN(lon)) return null;
+    return { lat, lon };
+  }
+
+  function mountStyles() {
+    if ($('#bau-style')) return;
+    const style = document.createElement('style');
+    style.id = 'bau-style';
+    style.textContent = `
+      :root{
+        --bau-grad-a:#ff52e5;
+        --bau-grad-b:#00c5e5;
+        --bau-panel: rgba(14, 17, 30, .82);
+        --bau-panel-2: rgba(255,255,255,.04);
+        --bau-border: 1px solid rgba(255,255,255,.12);
+        --bau-border-strong: 1px solid rgba(255,255,255,.18);
+        --bau-text: #f7fbff;
+        --bau-muted: rgba(215, 224, 233, .78);
+        --bau-shadow: 0 18px 50px rgba(0,0,0,.42);
+        --bau-shadow-strong: 0 24px 70px rgba(0,0,0,.55);
+        --bau-radius: 22px;
+        --bau-radius-sm: 14px;
+      }
+
+      #bau-fab{
+        position:fixed;
+        top:${TOP}px;
+        right:${RIGHT}px;
+        width:${BTN_SIZE}px;
+        height:${BTN_SIZE}px;
+        border-radius:50%;
+        border:0;
+        z-index:${Z};
+        cursor:pointer;
+        display:grid;
+        place-items:center;
+        color:#fff;
+        background:
+          radial-gradient(circle at 30% 30%, rgba(255,255,255,.26), transparent 38%),
+          linear-gradient(135deg, var(--bau-grad-a), var(--bau-grad-b));
+        box-shadow:
+          0 14px 30px rgba(0,0,0,.34),
+          0 0 0 1px rgba(255,255,255,.18) inset,
+          0 0 0 6px rgba(255,255,255,.04);
+        transition:transform .18s ease, box-shadow .18s ease, filter .18s ease;
+        isolation:isolate;
+      }
+      #bau-fab::before{
+        content:'';
+        position:absolute;
+        inset:-2px;
+        border-radius:inherit;
+        background:linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,0));
+        opacity:.8;
+        z-index:-1;
+        filter:blur(10px);
+      }
+      #bau-fab:hover{
+        transform:translateY(-2px) scale(1.06);
+        filter:saturate(1.08);
+        box-shadow:
+          0 20px 36px rgba(0,0,0,.44),
+          0 0 0 1px rgba(255,255,255,.2) inset,
+          0 0 0 8px rgba(255,255,255,.05);
+      }
+      #bau-fab:active{ transform:translateY(0) scale(.98); }
+      #bau-fab svg{ width:22px; height:22px; }
+
+      .bau-modal{
+        position:fixed;
+        inset:0;
+        display:none;
+        align-items:center;
+        justify-content:center;
+        background:rgba(0,0,0,.58);
+        backdrop-filter:blur(12px);
+        z-index:${Z - 1};
+        padding:14px;
+      }
+      .bau-modal.open{ display:flex; animation:bauFade .18s ease; }
+      @keyframes bauFade{ from{opacity:0} to{opacity:1} }
+
+      .bau-panel{
+        width:min(1080px, 96vw);
+        max-height:88vh;
+        overflow:auto;
+        background:
+          radial-gradient(circle at top left, rgba(255,82,229,.12), transparent 26%),
+          radial-gradient(circle at top right, rgba(0,197,229,.10), transparent 24%),
+          var(--bau-panel);
+        color:var(--bau-text);
+        border:var(--bau-border-strong);
+        border-radius:24px;
+        box-shadow:var(--bau-shadow-strong);
+        overflow-x:hidden;
+        animation:bauPop .2s ease;
+      }
+      @keyframes bauPop{ from{transform:translateY(10px) scale(.98); opacity:.7} to{transform:translateY(0) scale(1); opacity:1} }
+
+      .bau-panel-shell{ padding:14px; }
+
+      .bau-topbar{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding:4px 2px 14px;
+        border-bottom:var(--bau-border);
+        margin-bottom:14px;
+        position:sticky;
+        top:0;
+        background:linear-gradient(to bottom, rgba(14,17,30,.96), rgba(14,17,30,.72));
+        backdrop-filter:blur(10px);
+        z-index:3;
+      }
+      .bau-brand{
+        display:flex;
+        gap:12px;
+        align-items:center;
+        min-width:0;
+      }
+      .bau-brand-icon{
+        width:42px;height:42px;border-radius:14px;
+        display:grid;place-items:center;
+        background:linear-gradient(135deg, rgba(255,82,229,.18), rgba(0,197,229,.16));
+        border:var(--bau-border);
+        box-shadow:0 10px 22px rgba(0,0,0,.22);
+        flex:0 0 auto;
+      }
+      .bau-brand-icon i{ font-size:18px; }
+      .bau-title{
+        font-weight:900;
+        letter-spacing:.02em;
+        font-size:1rem;
+      }
+      .bau-subtitle{
+        font-size:12px;
+        color:var(--bau-muted);
+        margin-top:2px;
+      }
+      .bau-top-actions{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex:0 0 auto;
+      }
+
+      .bau-body{ display:grid; gap:14px; }
+
+      .bau-section{
+        background:rgba(255,255,255,.03);
+        border:var(--bau-border);
+        border-radius:20px;
+        padding:14px;
+        box-shadow:0 10px 26px rgba(0,0,0,.14);
+      }
+
+      .bau-section-head{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        margin-bottom:12px;
+      }
+      .bau-section-head h4{
+        margin:0;
+        font-size:14px;
+        letter-spacing:.03em;
+      }
+      .bau-section-head span{
+        font-size:12px;
+        color:var(--bau-muted);
+      }
+
+      .bau-hero{
+        display:grid;
+        grid-template-columns:repeat(3, minmax(0, 1fr));
+        gap:12px;
+      }
+      .bau-hero-card{
+        border-radius:20px;
+        padding:14px;
+        background:linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+        border:var(--bau-border);
+        min-height:110px;
+        box-shadow:0 12px 24px rgba(0,0,0,.16);
+      }
+      .bau-hero-label{
+        font-size:12px;
+        color:var(--bau-muted);
+        margin-bottom:8px;
+      }
+      .bau-hero-value{
+        font-size:1.5rem;
+        font-weight:900;
+        line-height:1.1;
+      }
+      .bau-hero-muted{
+        margin-top:6px;
+        font-size:12px;
+        color:var(--bau-muted);
+      }
+
+      .bau-seal-card{ display:flex; flex-direction:column; }
+      .bau-seal{
+        width:100%;
+        min-height:72px;
+        display:grid;
+        place-items:center;
+        overflow:hidden;
+        border-radius:14px;
+        background:rgba(255,255,255,.03);
+      }
+      .bau-seal svg{ width:100%; height:auto; max-height:92px; }
+
+      .bau-presets-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(240px, 1fr));
+        gap:10px;
+      }
+      .bau-preset{
+        background:rgba(255,255,255,.04);
+        border:var(--bau-border);
+        border-radius:18px;
+        padding:12px;
+        display:grid;
+        gap:8px;
+      }
+      .bau-preset-head{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap:10px;
+      }
+      .bau-preset-title{
+        font-weight:800;
+        font-size:13px;
+        line-height:1.2;
+      }
+      .bau-type{
+        font-size:11px;
+        color:var(--bau-muted);
+        margin-top:2px;
+        word-break:break-word;
+      }
+
+      .bau-list{ display:grid; gap:10px; }
+      .bau-item{
+        background:rgba(255,255,255,.045);
+        border:var(--bau-border);
+        border-radius:18px;
+        padding:12px;
+        display:grid;
+        gap:10px;
+      }
+      .bau-item-head{
+        display:flex;
+        align-items:flex-start;
+        justify-content:space-between;
+        gap:10px;
+        flex-wrap:wrap;
+      }
+      .bau-key{
+        font-weight:800;
+        line-height:1.2;
+        word-break:break-word;
+      }
+      .bau-flag{
+        color:#89f3c3;
+        font-size:11px;
+        font-weight:700;
+      }
+
+      .bau-val{
+        font:12px/1.45 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        background:rgba(9, 13, 24, .92);
+        border:var(--bau-border);
+        border-radius:14px;
+        padding:10px;
+        white-space:pre-wrap;
+        word-break:break-word;
+        overflow:auto;
+      }
+      .bau-val-box{ max-height:160px; }
+
+      .bau-actions-inline{
+        display:flex;
+        align-items:center;
+        gap:8px;
+        flex-wrap:wrap;
+      }
+
+      .bau-btn, .bau-switch{
+        border:0;
+        color:#fff;
+        cursor:pointer;
+        transition:.18s ease;
+        font-size:12px;
+        line-height:1;
+      }
+      .bau-btn{
+        padding:9px 12px;
+        border-radius:12px;
+        background:rgba(255,255,255,.10);
+        border:1px solid rgba(255,255,255,.12);
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        box-shadow:0 8px 16px rgba(0,0,0,.10);
+      }
+      .bau-btn:hover{ background:rgba(255,255,255,.16); transform:translateY(-1px); }
+      .bau-btn:active{ transform:translateY(0); }
+
+      .bau-btn.ghost{
+        background:transparent;
+        border:1px dashed rgba(255,255,255,.22);
+      }
+      .bau-btn.danger{
+        background:rgba(255,92,138,.14);
+        border-color:rgba(255,92,138,.18);
+      }
+      .bau-btn.danger:hover{ background:rgba(255,92,138,.22); }
+
+      .bau-switch{
+        width:46px;
+        height:28px;
+        border-radius:999px;
+        position:relative;
+        background:rgba(255,255,255,.15);
+        flex:0 0 auto;
+        box-shadow:inset 0 0 0 1px rgba(255,255,255,.1);
+      }
+      .bau-switch::after{
+        content:'';
+        position:absolute;
+        inset:4px auto 4px 4px;
+        width:20px;
+        border-radius:999px;
+        background:#fff;
+        transition:all .18s ease;
+        box-shadow:0 4px 10px rgba(0,0,0,.18);
+      }
+      .bau-switch.on{ background:rgba(25,226,123,.28); }
+      .bau-switch.on::after{ left:22px; }
+
+      .bau-pill{
+        display:inline-flex;
+        align-items:center;
+        gap:6px;
+        padding:6px 10px;
+        border-radius:999px;
+        background:rgba(255,255,255,.10);
+        border:1px solid rgba(255,255,255,.10);
+        font-size:12px;
+      }
+
+      .bau-row{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        padding:8px 0;
+        border-bottom:var(--bau-border);
+      }
+      .bau-row:last-child{ border-bottom:none; }
+
+      .bau-grid-2{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+      }
+
+      .bau-input, .bau-textarea{
+        width:100%;
+        margin:0;
+        border-radius:14px;
+        border:1px solid rgba(255,255,255,.12);
+        background:rgba(7, 10, 18, .9);
+        color:#fff;
+        padding:10px 12px;
+        outline:none;
+        font:inherit;
+      }
+      .bau-input:focus, .bau-textarea:focus{
+        border-color:rgba(0,197,229,.38);
+        box-shadow:0 0 0 4px rgba(0,197,229,.08);
+      }
+      .bau-textarea{ resize:vertical; min-height:120px; }
+
+      .bau-small{
+        font-size:12px;
+        color:var(--bau-muted);
+        margin-top:8px;
+      }
+
+      .bau-sym-out{
+        margin-top:10px;
+        min-height:180px;
+        border-radius:16px;
+        background:rgba(255,255,255,.03);
+        border:var(--bau-border);
+        display:grid;
+        place-items:center;
+        overflow:hidden;
+      }
+      .bau-sym-out svg{ width:100%; height:auto; display:block; }
+
+      .bau-img-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+        gap:10px;
+      }
+      .bau-img-card{
+        border:var(--bau-border);
+        border-radius:16px;
+        background:rgba(255,255,255,.04);
+        padding:10px;
+        overflow:hidden;
+      }
+      .bau-img-card img{
+        width:100%;
+        display:block;
+        border-radius:12px;
+        margin-top:8px;
+      }
+
+      .bau-mono{
+        font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      }
+
+      .bau-file-wrap{ display:inline-flex; }
+
+      @media (max-width: 860px){
+        .bau-hero, .bau-grid-2{ grid-template-columns:1fr; }
+        .bau-topbar{ align-items:flex-start; flex-direction:column; }
+        .bau-top-actions{ width:100%; justify-content:flex-end; }
+      }
+
+      @media (max-width: 560px){
+        #bau-fab{
+          top:10px;
+          right:-10px;
+          width:50px;
+          height:50px;
+        }
+        .bau-panel-shell{ padding:12px; }
+        .bau-section{ padding:12px; }
+        .bau-topbar{ position:relative; top:auto; }
+      }
+
+      @media (prefers-reduced-motion: reduce){
+        #bau-fab, .bau-modal.open, .bau-panel{ animation:none !important; transition:none !important; }
+      }
+
+      .bau-modal::-webkit-scrollbar,
+      .bau-panel::-webkit-scrollbar,
+      .bau-val::-webkit-scrollbar{
+        width:10px;
+        height:10px;
+      }
+      .bau-modal::-webkit-scrollbar-thumb,
+      .bau-panel::-webkit-scrollbar-thumb,
+      .bau-val::-webkit-scrollbar-thumb{
+        background:rgba(255,255,255,.16);
+        border-radius:999px;
+      }
+      .bau-modal::-webkit-scrollbar-track,
+      .bau-panel::-webkit-scrollbar-track,
+      .bau-val::-webkit-scrollbar-track{
+        background:transparent;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  function renderModalOnce() {
+    if ($('#bau-modal')) return;
+
+    const modal = document.createElement('div');
+    modal.id = 'bau-modal';
+    modal.className = 'bau-modal';
+    modal.setAttribute('aria-hidden', 'true');
+
+    modal.innerHTML = `
+      <div class="bau-panel" role="dialog" aria-modal="true" aria-label="Baú LocalStorage">
+        <div class="bau-panel-shell">
+          <div class="bau-topbar">
+            <div class="bau-brand">
+              <div class="bau-brand-icon"><i class="lucide-box"></i></div>
+              <div>
+                <div class="bau-title">Baú • LocalStorage</div>
+                <div class="bau-subtitle">CRUD + presets + export/import + preview</div>
+              </div>
+            </div>
+            <div class="bau-top-actions">
+              <button id="bau-refresh" class="bau-btn" title="Atualizar"><i class="lucide-refresh-cw"></i></button>
+              <button id="bau-close" class="bau-btn danger" title="Fechar"><i class="lucide-x"></i></button>
+            </div>
+          </div>
+
+          <div class="bau-body">
+            <section class="bau-hero">
+              <div class="bau-hero-card">
+                <div class="bau-hero-label">LocalStorage total</div>
+                <div class="bau-hero-value" id="bau-count">—</div>
+                <div class="bau-hero-muted" id="bau-size">—</div>
+              </div>
+
+              <div class="bau-hero-card">
+                <div class="bau-hero-label">SK ativa</div>
+                <div class="bau-hero-value bau-mono" id="bau-sk-active">—</div>
+                <div class="bau-hero-muted" id="bau-sk-count">—</div>
+              </div>
+
+              <div class="bau-hero-card bau-seal-card">
+                <div class="bau-hero-label">Selo</div>
+                <div id="bau-seal" class="bau-seal"></div>
+              </div>
+            </section>
+
+            <section class="bau-section">
+              <div class="bau-section-head">
+                <h4>Presets</h4>
+                <span>ON/OFF global</span>
+              </div>
+              <div class="bau-presets-grid" id="bau-presets-grid"></div>
+            </section>
+
+            <section class="bau-section">
+              <div class="bau-section-head">
+                <h4>Baú geral</h4>
+                <div class="bau-inline-actions">
+                  <button id="bau-rescan" class="bau-btn"><i class="lucide-search"></i> Re-scan</button>
+                  <button id="bau-export" class="bau-btn"><i class="lucide-upload"></i> Exportar</button>
+                  <label for="bau-import-file" class="bau-file-wrap">
+                    <button type="button" class="bau-btn"><i class="lucide-download"></i> Importar</button>
+                  </label>
+                  <input id="bau-import-file" type="file" accept="application/json" hidden>
+                  <button id="bau-clear-disabled" class="bau-btn ghost"><i class="lucide-eraser"></i> Limpar desativados</button>
+                </div>
+              </div>
+              <div class="bau-list" id="bau-list"></div>
+            </section>
+
+            <section class="bau-section">
+              <div class="bau-section-head">
+                <h4>Pré-visualização de imagens</h4>
+                <span>clica em “Ver imagem”</span>
+              </div>
+              <div class="bau-img-grid" id="bau-img-grid"></div>
+            </section>
+
+            <section class="bau-section">
+              <div class="bau-section-head">
+                <h4>HTML</h4>
+                <span>editar / analisar</span>
+              </div>
+              <textarea id="bau-html-editor" class="bau-textarea" rows="8" placeholder="Cole seu HTML aqui..."></textarea>
+              <div class="bau-inline-actions" style="margin-top:10px">
+                <button id="bau-html-save" class="bau-btn"><i class="lucide-save"></i> Salvar</button>
+                <button id="bau-html-analyze" class="bau-btn"><i class="lucide-search"></i> Analisar</button>
+              </div>
+              <div id="bau-html-info" class="bau-small"></div>
+            </section>
+
+            <section class="bau-section bau-grid-2">
+              <div>
+                <div class="bau-section-head">
+                  <h4>Bússola</h4>
+                  <span>coords / heading</span>
+                </div>
+                <div class="bau-row"><span>Coords</span><span id="bau-coords">—</span></div>
+                <div class="bau-row"><span>Heading</span><span id="bau-heading">—</span></div>
+                <div class="bau-inline-actions" style="margin-top:10px">
+                  <button id="bau-locate" class="bau-btn"><i class="lucide-crosshair"></i> Capturar</button>
+                  <button id="bau-compass" class="bau-btn ghost"><i class="lucide-compass"></i> Ativar</button>
+                </div>
+              </div>
+
+              <div>
+                <div class="bau-section-head">
+                  <h4>Símbolos</h4>
+                  <span>lat,lon</span>
+                </div>
+                <input id="bau-sym-in" class="bau-input" placeholder="-23.5505, -46.6333" />
+                <div class="bau-inline-actions" style="margin-top:10px">
+                  <button id="bau-sym-gen" class="bau-btn"><i class="lucide-wand-2"></i> Gerar</button>
+                  <button id="bau-sigil-gen" class="bau-btn"><i class="lucide-zap"></i> Sigilo</button>
+                  <button id="bau-sym-avatar" class="bau-btn"><i class="lucide-user-circle-2"></i> Avatar</button>
+                  <button id="bau-sym-export" class="bau-btn ghost"><i class="lucide-download"></i> SVG</button>
+                </div>
+                <div id="bau-sym-out" class="bau-sym-out">—</div>
+              </div>
+            </section>
+
+            <section class="bau-section">
+              <div class="bau-section-head">
+                <h4>SKs</h4>
+                <span>OpenRouter</span>
+              </div>
+              <div class="bau-row">
+                <span>Chaves salvas</span>
+                <span class="bau-pill" id="bau-sks-count">—</span>
+              </div>
+              <div class="bau-row">
+                <span>Ativa</span>
+                <span class="bau-pill bau-mono" id="bau-active-sk">—</span>
+              </div>
+              <div class="bau-inline-actions" style="margin-top:10px">
+                <button id="bau-sk-new" class="bau-btn"><i class="lucide-plus"></i> Nova</button>
+                <button id="bau-sk-export" class="bau-btn"><i class="lucide-upload"></i> Exportar</button>
+                <button id="bau-sk-import" class="bau-btn ghost"><i class="lucide-download"></i> Importar</button>
+                <button id="bau-sk-copy" class="bau-btn ghost"><i class="lucide-copy"></i> Copiar ativa</button>
+                <button id="bau-sk-remove" class="bau-btn ghost"><i class="lucide-trash-2"></i> Remover ativa</button>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+  }
+
+  function renderHTMLPanel() {
+    const editor = $('#bau-html-editor');
+    if (editor) editor.value = localStorage.getItem(LS.HTML) || '';
+  }
+
+  function renderHeadBadge() {
+    const sks = getSKs();
+    const active = getActiveSK();
+    const seal = localStorage.getItem(LS.USER_SYMBOL) ||
+      `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26" width="26" height="26"><circle cx="13" cy="13" r="12" fill="none" stroke="currentColor" stroke-width="2"/></svg>`;
+
+    $('#bau-sk-count').textContent = sks.length ? sks.length + ' SK(s)' : 'sem SK';
+    $('#bau-sk-active').textContent = active ? maskKey(active) : '(nenhuma)';
+    $('#bau-seal').innerHTML = seal;
+  }
+
+  function renderPresets() {
+    const grid = $('#bau-presets-grid');
+    if (!grid) return;
+    grid.innerHTML = '';
+
+    const dis = disabledSet();
+
+    PRESETS.forEach(p => {
+      const val = localStorage.getItem(p.key);
+      const on = !dis.has(p.key);
+
+      const wrap = document.createElement('div');
+      wrap.className = 'bau-preset';
+
+      const head = document.createElement('div');
+      head.className = 'bau-preset-head';
+
+      const name = document.createElement('div');
+      name.innerHTML = `<div class="bau-preset-title">${p.label}</div><div class="bau-type">${p.key}</div>`;
+
+      const sw = document.createElement('div');
+      sw.className = 'bau-switch' + (on ? ' on' : '');
+      sw.title = on ? 'Desativar (não apaga)' : 'Ativar';
+      sw.onclick = () => toggleDisabled(p.key);
+
+      head.append(name, sw);
+
+      const meta = document.createElement('div');
+      meta.className = 'bau-val';
+      meta.textContent = val
+        ? (inferType(val).startsWith('json') ? JSON.stringify(JSON.parse(val), null, 2) : val)
+        : '—';
+
+      wrap.append(head, meta);
+      grid.append(wrap);
+    });
+  }
+
+  function renderLS() {
+    const list = $('#bau-list');
+    if (!list) return;
+
+    list.innerHTML = '';
+    $('#bau-img-grid').innerHTML = '';
+
+    const entries = lsEntries();
+    $('#bau-count').textContent = entries.length + ' chave(s)';
+    $('#bau-size').textContent = prettyBytes(lsSizeBytes());
+
+    const dis = disabledSet();
+
+    entries.forEach(({ key, val }) => {
+      if (key === DISABLED_KEY) return;
+
+      const it = document.createElement('div');
+      it.className = 'bau-item';
+
+      const head = document.createElement('div');
+      head.className = 'bau-item-head';
+
+      const left = document.createElement('div');
+      left.innerHTML = `
+        <div class="bau-key">${key}${dis.has(key) ? ' <span class="bau-flag">(desativado)</span>' : ''}</div>
+        <div class="bau-type">${inferType(val)} • ${prettyBytes((val || '').length)}</div>
+      `;
+
+      const ctr = document.createElement('div');
+      ctr.className = 'bau-actions-inline';
+
+      const sw = document.createElement('div');
+      sw.className = 'bau-switch' + (!dis.has(key) ? ' on' : '');
+      sw.title = !dis.has(key) ? 'Desativar' : 'Ativar';
+      sw.onclick = () => toggleDisabled(key);
+
+      const bEdit = document.createElement('button');
+      bEdit.className = 'bau-btn';
+      bEdit.innerHTML = '<i class="lucide-edit"></i> Editar';
+      bEdit.onclick = () => {
+        const next = prompt(`Editar valor de\n${key}`, val ?? '');
+        if (next == null) return;
+        localStorage.setItem(key, String(next));
+        renderAll();
+      };
+
+      const bDel = document.createElement('button');
+      bDel.className = 'bau-btn danger';
+      bDel.innerHTML = '<i class="lucide-trash-2"></i> Apagar';
+      bDel.onclick = () => {
+        if (confirm('Apagar ' + key + '?')) {
+          localStorage.removeItem(key);
+          renderAll();
+        }
+      };
+
+      ctr.append(sw, bEdit, bDel);
+
+      if (inferType(val) === 'image') {
+        const bImg = document.createElement('button');
+        bImg.className = 'bau-btn';
+        bImg.innerHTML = '<i class="lucide-image"></i> Ver imagem';
+        bImg.onclick = () => addImagePreview(key, val);
+        ctr.appendChild(bImg);
+      }
+
+      head.append(left, ctr);
+
+      const v = document.createElement('div');
+      v.className = 'bau-val bau-val-box';
+      v.textContent = inferType(val).startsWith('json')
+        ? JSON.stringify(JSON.parse(val), null, 2)
+        : (val ?? '—');
+
+      it.append(head, v);
+      list.appendChild(it);
+    });
+  }
+
+  function renderAll() {
+    renderPresets();
+    renderLS();
+    renderHTMLPanel();
+    renderHeadBadge();
+  }
+
+  function openLS() {
+    const m = $('#bau-modal');
+    m.classList.add('open');
+    m.setAttribute('aria-hidden', 'false');
+    renderAll();
+  }
+
+  function closeLS() {
+    const m = $('#bau-modal');
+    m.classList.remove('open');
+    m.setAttribute('aria-hidden', 'true');
+  }
+
+  function renderModal() {
+    if ($('#bau-modal')) return;
+    renderModalOnce();
+  }
+
+  function exportLS() {
+    const dump = {};
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k === DISABLED_KEY) continue;
+      dump[k] = localStorage.getItem(k);
+    }
+    saveFile('localstorage_export.json', JSON.stringify(dump, null, 2));
+  }
+
+  function importLS(file) {
+    const r = new FileReader();
+    r.onload = () => {
+      try {
+        const data = JSON.parse(r.result || '{}');
+        Object.entries(data).forEach(([k, v]) => localStorage.setItem(k, String(v)));
+        alert('Importado com sucesso.');
+        renderAll();
+      } catch {
+        alert('JSON inválido.');
+      }
+    };
+    r.readAsText(file);
+  }
+
+  function clearDisabled() {
+    localStorage.setItem(DISABLED_KEY, '[]');
+    renderAll();
+  }
+
+  function saveHTML() {
+    const editor = $('#bau-html-editor');
+    if (editor) localStorage.setItem(LS.HTML, editor.value);
+  }
+
+  function analyzeHTML() {
+    const editor = $('#bau-html-editor');
+    const info = $('#bau-html-info');
+    if (!editor || !info) return;
+    const html = editor.value;
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const tags = doc.getElementsByTagName('*').length;
+    const divs = doc.querySelectorAll('div').length;
+    const size = (new Blob([html]).size / 1024).toFixed(2) + ' KB';
+    info.textContent = `Tags: ${tags}, <div>: ${divs}, ${size}`;
+  }
+
+  function uiAddSK() {
+    const v = prompt('Cole sua SK (OpenRouter):');
+    if (!v) return;
+    const arr = getSKs();
+    arr.push(v);
+    setSKs(arr);
+    if (!getActiveSK()) setActiveSK(v);
+    renderAll();
+  }
+
+  function exportSKs() {
+    saveFile('keys.json', JSON.stringify(getSKs(), null, 2));
+  }
+
+  function importSKs() {
+    const s = prompt('Cole JSON de chaves (array de strings)');
+    if (!s) return;
+    try {
+      const arr = JSON.parse(s);
+      if (Array.isArray(arr)) {
+        setSKs(arr);
+        if (arr.length && !getActiveSK()) setActiveSK(arr[0]);
+        renderAll();
+      } else {
+        alert('JSON inválido');
+      }
+    } catch {
+      alert('JSON inválido');
+    }
+  }
+
+  function copyActiveSK() {
+    const k = getActiveSK();
+    if (!k) return alert('Sem SK ativa');
+    navigator.clipboard?.writeText(k);
+  }
+
+  function removeActiveSK() {
+    const k = getActiveSK();
+    if (!k) return alert('Sem SK ativa');
+    const arr = getSKs().filter(x => x !== k);
+    setSKs(arr);
+    setActiveSK(arr[0] || '');
+    renderAll();
+  }
+
+  function symGen() {
+    const c = symParse();
+    if (!c) return alert('Digite lat, lon');
+    const svg = buildSymbolSVG(c.lat, c.lon);
+    $('#bau-sym-out').innerHTML = svg;
+    $('#bau-sym-out').dataset.svg = svg;
+  }
+
+  function sigilGen() {
+    const c = symParse();
+    if (!c) return alert('Sem coordenadas');
+    const svg = sigilFromCoords(c.lat, c.lon);
+    $('#bau-sym-out').innerHTML = svg;
+    $('#bau-sym-out').dataset.svg = svg;
+  }
+
+  function symSetAvatar() {
+    const svg = $('#bau-sym-out').dataset.svg || $('#bau-sym-out').innerHTML;
+    if (!svg) return;
+    localStorage.setItem(LS.USER_SYMBOL, svg);
+    renderAll();
+  }
+
+  function symExportSVG() {
+    const svg = $('#bau-sym-out').dataset.svg;
+    if (!svg) return alert('Gere um símbolo/sigilo');
+    saveFile('symbol.svg', svg);
+  }
+
+  function locate() {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        p => {
+          $('#bau-coords').textContent = `${p.coords.latitude.toFixed(5)}, ${p.coords.longitude.toFixed(5)}`;
+        },
+        () => {
+          $('#bau-coords').textContent = '(negado)';
+        }
+      );
+    }
+  }
+
+  function requestCompass() {
+    if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
+      DeviceOrientationEvent.requestPermission().then(s => {
+        if (s === 'granted') bindCompass();
+      }).catch(() => {});
+    } else {
+      bindCompass();
+    }
+  }
+
+  let compassBound = false;
+  function bindCompass() {
+    if (compassBound) return;
+    compassBound = true;
+    window.addEventListener('deviceorientation', e => {
+      const heading = e.alpha ? Math.round(e.alpha) : null;
+      $('#bau-heading').textContent = heading != null ? (heading + '°') : '—';
+    });
+  }
+
+  function bootButton() {
+    if ($('#bau-fab')) return;
+    const btn = document.createElement('button');
+    btn.id = 'bau-fab';
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Abrir baú');
+    btn.innerHTML = `
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 7l9-4 9 4v10l-9 4-9-4V7z"></path>
+        <path d="M3 7l9 4 9-4"></path>
+      </svg>
+    `;
+    btn.addEventListener('click', openLS);
+    document.body.appendChild(btn);
+  }
+
+  function bindEvents() {
+    $('#bau-fab')?.addEventListener('click', openLS);
+    $('#bau-close')?.addEventListener('click', closeLS);
+    $('#bau-refresh')?.addEventListener('click', renderAll);
+
+    $('#bau-modal')?.addEventListener('click', e => {
+      if (e.target.id === 'bau-modal') closeLS();
+    });
+
+    $('#bau-rescan')?.addEventListener('click', renderAll);
+    $('#bau-export')?.addEventListener('click', exportLS);
+    $('#bau-clear-disabled')?.addEventListener('click', clearDisabled);
+
+    $('#bau-import-file')?.addEventListener('change', ev => {
+      const f = ev.target.files?.[0];
+      if (f) importLS(f);
+      ev.target.value = '';
+    });
+
+    $('#bau-html-save')?.addEventListener('click', saveHTML);
+    $('#bau-html-analyze')?.addEventListener('click', analyzeHTML);
+
+    $('#bau-locate')?.addEventListener('click', locate);
+    $('#bau-compass')?.addEventListener('click', requestCompass);
+
+    $('#bau-sym-gen')?.addEventListener('click', symGen);
+    $('#bau-sigil-gen')?.addEventListener('click', sigilGen);
+    $('#bau-sym-avatar')?.addEventListener('click', symSetAvatar);
+    $('#bau-sym-export')?.addEventListener('click', symExportSVG);
+
+    $('#bau-sk-new')?.addEventListener('click', uiAddSK);
+    $('#bau-sk-export')?.addEventListener('click', exportSKs);
+    $('#bau-sk-import')?.addEventListener('click', importSKs);
+    $('#bau-sk-copy')?.addEventListener('click', copyActiveSK);
+    $('#bau-sk-remove')?.addEventListener('click', removeActiveSK);
+
+    window.addEventListener('storage', renderAll);
+    window.addEventListener('ls:disabled-changed', renderAll);
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeLS();
+    });
+  }
+
+  function boot() {
+    mountStyles();
+    renderModalOnce();
+    bootButton();
+    renderAll();
+    bindEvents();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot, { once: true });
+  } else {
+    boot();
+  }
+})();
+
+</script>

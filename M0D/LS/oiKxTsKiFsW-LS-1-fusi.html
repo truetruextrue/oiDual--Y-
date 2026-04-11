@@ -1,0 +1,1434 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fusion Card // Core Controller</title>
+
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#05070a">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <!-- CSS base / unified -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+  <!-- estilos ajustados (apenas um bloco consolidado) -->
+  <style>
+    :root {
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+    }
+
+    .symbol-bar.floating {
+      z-index: 99999 !important;
+      position: fixed;
+    }
+
+    /* dock tts (dinâmico) */
+    .kob-tts-dock {
+      transition: transform .35s ease, opacity .65s ease;
+      box-shadow: none !important;
+    }
+
+    .kob-tts-dock.idle {
+      opacity: .18;
+      transform: scale(.92);
+    }
+
+    .kob-tts-dock:hover {
+      opacity: 1;
+      transform: scale(1);
+    }
+  </style>
+
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js" defer=""></script>
+  <script src="https://unpkg.com/lucide@latest" defer=""></script>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lucide-static@latest/font/lucide.css"><style>
+    :root{
+      --grad-a:#ff52e5;
+      --grad-b:#00c5e5;
+      --bg: linear-gradient(135deg,var(--grad-a),var(--grad-b));
+      --fg:#fff;
+      --mut:#cfd8dc;
+      --glass:rgba(0,0,0,.45);
+      --r:22px;
+      --shadow:0 12px 34px rgba(0,0,0,.4);
+      --bd:1px solid rgba(255,255,255,.15);
+      --ok:#39FFB6;
+    }
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Montserrat',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--fg);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  padding:22px;
+}
+
+.app{
+  width:100%;
+  max-width:860px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
+
+/* card adaptado para botão flutuante */
+.card{
+  background:var(--glass);
+  backdrop-filter:blur(18px);
+  border-radius:var(--r);
+  box-shadow:var(--shadow);
+  padding:14px 16px;
+  position:relative;
+  overflow:visible;        /* permite que o botão saia do card */
+}
+
+.open-ls-btn{
+  position:absolute;
+  top:12px;
+  right:-12px;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:0;
+  z-index:10;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 10px 24px rgba(0,0,0,.35);
+  transition: background 0.2s;
+  cursor:pointer;
+}
+
+.open-ls-btn:hover{
+  background:rgba(255,255,255,.22);
+}
+
+h3{
+  font-size:1.08rem;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  user-select:none;
+  margin-bottom:8px;
+}
+
+.title-wrap{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+}
+
+.tools{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.controls{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:10px;
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:var(--bd);
+}
+
+.row:last-child{border-bottom:none}
+
+button{
+  background:rgba(255,255,255,.1);
+  border:0;
+  color:#fff;
+  padding:8px 12px;
+  border-radius:12px;
+  font-size:.9rem;
+  cursor:pointer;
+  transition:.2s;
+  display:inline-flex;
+  gap:6px;
+  align-items:center;
+}
+
+button:hover{background:rgba(255,255,255,.2)}
+.btn-ghost{background:transparent;border:1px dashed rgba(255,255,255,.25)}
+.small{font-size:.8rem;color:var(--mut);margin-top:8px}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:4px 8px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  font-size:.8rem;
+}
+
+textarea,input,select{
+  width:100%;
+  margin:6px 0;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  font-family:inherit;
+  outline:none;
+}
+
+.loader{
+  width:22px;
+  height:22px;
+  border:3px solid rgba(255,255,255,.2);
+  border-top:3px solid #fff;
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+  margin:8px auto;
+}
+
+@keyframes spin{100%{transform:rotate(360deg)}}
+
+.modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:1000;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(8px);
+  padding:14px;
+}
+
+.modal.open{display:flex}
+
+.panel{
+  width:min(980px,95vw);
+  max-height:86vh;
+  overflow:auto;
+  background:rgba(15,17,32,.92);
+  border:var(--bd);
+  border-radius:18px;
+  box-shadow:var(--shadow);
+  padding:14px;
+}
+
+.hdr{
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  border-bottom:var(--bd);
+  padding-bottom:10px;
+  margin-bottom:10px;
+  flex-wrap:wrap;
+}
+
+.hdr .ttl{
+  font-weight:900;
+  letter-spacing:.06em;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.meta{
+  color:var(--mut);
+  font-size:12px;
+  margin:6px 0 10px;
+}
+
+.list{
+  display:grid;
+  gap:10px;
+}
+
+.item{
+  background:rgba(255,255,255,.05);
+  border:var(--bd);
+  border-radius:14px;
+  padding:10px;
+  display:grid;
+  gap:8px;
+}
+
+.item .head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.key{
+  font-weight:800;
+  max-width:56vw;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.type{
+  font-size:11px;
+  color:var(--mut);
+}
+
+.val{
+  font:12px/1.4 ui-monospace,monospace;
+  background:#0b0f1a;
+  border:var(--bd);
+  border-radius:10px;
+  padding:8px;
+  max-height:140px;
+  overflow:auto;
+  word-break:break-word;
+  white-space:pre-wrap;
+}
+
+.switch{
+  inline-size:46px;
+  block-size:28px;
+  border-radius:999px;
+  border:var(--bd);
+  background:rgba(255,255,255,.15);
+  position:relative;
+  cursor:pointer;
+  flex:0 0 auto;
+}
+
+.switch::after{
+  content:"";
+  position:absolute;
+  inset:4px auto 4px 4px;
+  width:20px;
+  border-radius:999px;
+  background:#fff;
+  transition:all .18s;
+}
+
+.switch.on{
+  background:rgba(25,226,123,.28);
+}
+
+.switch.on::after{
+  left:22px;
+}
+
+details.presets{
+  border:var(--bd);
+  border-radius:14px;
+  padding:8px;
+  background:rgba(255,255,255,.04);
+  margin-bottom:10px;
+}
+
+.presets-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:10px;
+  margin-top:8px;
+}
+
+.preset{
+  border:var(--bd);
+  border-radius:12px;
+  background:rgba(255,255,255,.04);
+  padding:10px;
+  display:grid;
+  gap:6px;
+}
+
+.img-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+  gap:10px;
+}
+
+.img-card{
+  border:var(--bd);
+  background:rgba(255,255,255,.04);
+  border-radius:10px;
+  padding:8px;
+}
+
+.img-card img{
+  width:100%;
+  height:auto;
+  display:block;
+  border-radius:8px;
+}
+
+@media (max-width:560px){
+  .key{max-width:46vw}
+}
+
+  </style>
+  <div class="app" id="app"></div>
+  <a id="dl" style="display:none"></a>
+
+  <!-- Modal (painel completo) permanece igual -->
+  <div id="lsModal" class="modal" aria-hidden="true">
+    <div class="panel">
+      <div class="hdr">
+        <div class="ttl">LocalStorage • Baú Lite</div>
+        <div class="actions">
+          <button id="lsRescan"><i class="lucide-refresh-cw"></i> Re-scan</button>
+          <button id="lsExport"><i class="lucide-upload"></i> Exportar</button>
+          <label for="lsImportFile" style="display:inline-block">
+            <button type="button"><i class="lucide-download"></i> Importar</button>
+          </label>
+          <input id="lsImportFile" type="file" accept="application/json" hidden="">
+          <button id="lsClearDisabled" class="btn-ghost"><i class="lucide-eraser"></i> Limpar desativados</button>
+          <button id="lsClose"><i class="lucide-x"></i> Fechar</button>
+        </div>
+      </div>
+
+      <details class="presets" open="">
+        <summary><strong>Presets (ON/OFF global)</strong></summary>
+        <div class="presets-grid" id="presetsGrid"></div>
+      </details>
+
+      <div class="meta"><span id="lsCount">—</span> • <span id="lsSize">—</span></div>
+      <div class="list" id="lsList"></div>
+
+      <details class="presets" style="margin-top:10px" open="">
+        <summary><strong>Pré-visualização de Imagens</strong></summary>
+        <div class="img-grid" id="imgGrid"></div>
+      </details>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    const LS = {
+      HTML:'lastHTML',
+      COLL:'nebula_collapsed',
+      USER_SYMBOL:'userSymbol',
+      SKS:'openrouter_keys',
+      SK_ACTIVE:'openrouter_active'
+    };
+
+    const $ = (s, r=document) => r.querySelector(s);
+
+    function saveFile(name, str){
+      const blob = new Blob([str], { type:'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = $('#dl');
+      a.href = url;
+      a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 800);
+    }
+
+    function prettyBytes(n){
+      if(!Number.isFinite(n) || n <= 0) return '0 B';
+      const u = ['B','KB','MB','GB'];
+      let i = 0;
+      while(n >= 1024 && i < u.length - 1){
+        n /= 1024;
+        i++;
+      }
+      return n.toFixed(2) + ' ' + u[i];
+    }
+
+    function isJson(v){
+      try{ JSON.parse(v); return true; }catch{ return false; }
+    }
+
+    function inferType(v){
+      if(v == null || v === '') return 'empty';
+      if(isJson(v)){
+        const p = JSON.parse(v);
+        if(Array.isArray(p)) return 'json[array]';
+        if(p && typeof p === 'object') return 'json[object]';
+        return 'json[' + (typeof p) + ']';
+      }
+      if(/^data:image\//i.test(v) || /\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(v)) return 'image';
+      if(/^(true|false|1|0)$/i.test(v)) return 'boolean-like';
+      if(/^https?:\/\//i.test(v)) return 'url';
+      if(/^data:/i.test(v)) return 'data-url';
+      return 'string';
+    }
+
+    /* seeds de demonstração */
+    (function seeds(){
+      if(localStorage.getItem('__baulite_seeded__')) return;
+
+      localStorage.setItem('infodose:userName','KODUX');
+      localStorage.setItem('infodose:assistantName','Dual Glow');
+      localStorage.setItem('uno:theme','nebula');
+      localStorage.setItem('gallery:img1','https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=640');
+      localStorage.setItem('feature:ritual:enabled','true');
+      localStorage.setItem(LS.HTML,'<div class="demo"><h1>Hello Nebula</h1><p>Baú Lite</p></div>');
+
+      const demoSKs = ['sk-demo-AAA111','sk-demo-BBB222','sk-demo-CCC333'];
+      localStorage.setItem(LS.SKS, JSON.stringify(demoSKs));
+      localStorage.setItem(LS.SK_ACTIVE, demoSKs[0]);
+
+      const demoSig = `<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><circle cx='13' cy='13' r='12' fill='none' stroke='#ff52e5' stroke-width='2'/><path d='M4 16 L13 4 L22 16 L13 22 Z' fill='none' stroke='#00c5e5' stroke-width='2'/></svg>`;
+      localStorage.setItem(LS.USER_SYMBOL, demoSig);
+
+      localStorage.setItem('__baulite_seeded__','1');
+    })();
+
+    /* Renderização principal – card com botão flutuante */
+    function renderApp(){
+      const app = $('#app');
+      app.innerHTML = '';
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      // NOVA ESTRUTURA: botão flutuante + área de conteúdo
+      card.innerHTML = `
+        <button id="btnOpenLS" class="open-ls-btn" title="Abrir painel">
+          <i class="lucide-box"></i>
+        </button>
+
+        <div class="content" id="mainContent">
+          <div class="loader"></div>
+        </div>
+      `;
+
+      app.appendChild(card);
+
+      // renderiza o conteúdo principal (mensagem)
+      setTimeout(() => renderMain(card.querySelector('#mainContent')), 180);
+
+      // já aproveita para bindar o botão flutuante (abre o modal)
+      const btn = $('#btnOpenLS');
+      if(btn) btn.onclick = openLS;
+    }
+
+    function renderMain(el){
+      // Apenas a mensagem, sem loader
+      el.innerHTML = `
+        <div class="small">
+          Baú pronto. Clique no botão flutuante no canto para abrir o painel.
+        </div>
+      `;
+      // Garante que o botão continue vinculado (caso recriado, já está ok)
+      const btn = $('#btnOpenLS');
+      if(btn) btn.onclick = openLS;
+    }
+
+    /* LÓGICA DO MODAL (presets + lista + export/import) */
+
+    const DISABLED_KEY = 'infodose:presets.disabled';
+    const PRESETS = [
+      { key:'infodose:userName', label:'Usuário' },
+      { key:'infodose:assistantName', label:'Assistente' },
+      { key:'dual.keys.openrouter', label:'Chave OpenRouter (legacy)' },
+      { key:'dual.openrouter.model', label:'Modelo OpenRouter' },
+      { key:'uno:theme', label:'Tema' },
+      { key:'uno:bg', label:'Fundo Custom' },
+      { key:'infodose:cssCustom', label:'CSS Custom' },
+      { key:'infodose:voices', label:'Vozes Arquetípicas' }
+    ];
+
+    function disabledSet(){
+      try{ return new Set(JSON.parse(localStorage.getItem(DISABLED_KEY) || '[]')); }
+      catch{ return new Set(); }
+    }
+
+    function saveDisabled(set){
+      localStorage.setItem(DISABLED_KEY, JSON.stringify(Array.from(set)));
+    }
+
+    function toggleDisabled(k){
+      const s = disabledSet();
+      s.has(k) ? s.delete(k) : s.add(k);
+      saveDisabled(s);
+      renderPresets();
+      renderLS();
+    }
+
+    function lsEntries(){
+      const out = [];
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        const v = localStorage.getItem(k) || '';
+        out.push({ key:k, val:v });
+      }
+      return out.sort((a,b) => a.key.localeCompare(b.key));
+    }
+
+    function lsSizeBytes(){
+      let sum = 0;
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        const v = localStorage.getItem(k) || '';
+        sum += k.length + v.length;
+      }
+      return sum;
+    }
+
+    function renderPresets(){
+      const grid = $('#presetsGrid');
+      if(!grid) return;
+      grid.innerHTML = '';
+
+      const dis = disabledSet();
+
+      PRESETS.forEach(p => {
+        const val = localStorage.getItem(p.key);
+        const on = !dis.has(p.key);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'preset';
+
+        const head = document.createElement('div');
+        head.className = 'row';
+        head.style.padding = '0';
+        head.style.border = '0';
+
+        const name = document.createElement('div');
+        name.innerHTML = `<strong>${p.label}</strong><div class="type">${p.key}</div>`;
+
+        const sw = document.createElement('div');
+        sw.className = 'switch' + (on ? ' on' : '');
+        sw.title = on ? 'Desativar (não apaga)' : 'Ativar';
+        sw.onclick = () => toggleDisabled(p.key);
+
+        head.append(name, sw);
+
+        const meta = document.createElement('div');
+        meta.className = 'val';
+        meta.textContent = val
+          ? (inferType(val).startsWith('json') ? JSON.stringify(JSON.parse(val), null, 2) : val)
+          : '—';
+
+        wrap.append(head, meta);
+        grid.append(wrap);
+      });
+    }
+
+    function addImagePreview(key, src){
+      const g = $('#imgGrid');
+      const card = document.createElement('div');
+      card.className = 'img-card';
+
+      const cap = document.createElement('div');
+      cap.className = 'small';
+      cap.textContent = key;
+
+      const im = new Image();
+      im.src = src;
+      im.loading = 'lazy';
+
+      card.append(cap, im);
+      g.append(card);
+    }
+
+    function renderLS(){
+      const list = $('#lsList');
+      if(!list) return;
+
+      list.innerHTML = '';
+      $('#imgGrid').innerHTML = '';
+
+      const entries = lsEntries();
+      $('#lsCount').textContent = entries.length + ' chave(s)';
+      $('#lsSize').textContent = prettyBytes(lsSizeBytes());
+
+      const dis = disabledSet();
+
+      entries.forEach(({key, val}) => {
+        if(key === DISABLED_KEY) return;
+
+        const it = document.createElement('div');
+        it.className = 'item';
+
+        const head = document.createElement('div');
+        head.className = 'head';
+
+        const left = document.createElement('div');
+        left.innerHTML = `
+          <div class="key">${key}${dis.has(key) ? ' <span class="type">(desativado)</span>' : ''}</div>
+          <div class="type">${inferType(val)} • ${prettyBytes((val || '').length)}</div>
+        `;
+
+        const ctr = document.createElement('div');
+        ctr.style.display = 'flex';
+        ctr.style.gap = '8px';
+        ctr.style.flexWrap = 'wrap';
+        ctr.style.alignItems = 'center';
+
+        const sw = document.createElement('div');
+        sw.className = 'switch' + (!dis.has(key) ? ' on' : '');
+        sw.title = !dis.has(key) ? 'Desativar' : 'Ativar';
+        sw.onclick = () => toggleDisabled(key);
+
+        const bEdit = document.createElement('button');
+        bEdit.innerHTML = '<i class="lucide-edit"></i> Editar';
+        bEdit.onclick = () => {
+          const next = prompt(`Editar valor de\n${key}`, val ?? '');
+          if(next == null) return;
+          localStorage.setItem(key, String(next));
+          renderAll();
+        };
+
+        const bDel = document.createElement('button');
+        bDel.innerHTML = '<i class="lucide-trash-2"></i> Apagar';
+        bDel.onclick = () => {
+          if(confirm('Apagar ' + key + '?')){
+            localStorage.removeItem(key);
+            renderAll();
+          }
+        };
+
+        ctr.append(sw, bEdit, bDel);
+
+        if(inferType(val) === 'image'){
+          const bImg = document.createElement('button');
+          bImg.innerHTML = '<i class="lucide-image"></i> Ver imagem';
+          bImg.onclick = () => addImagePreview(key, val);
+          ctr.append(bImg);
+        }
+
+        head.append(left, ctr);
+
+        const v = document.createElement('div');
+        v.className = 'val';
+        v.textContent = inferType(val).startsWith('json')
+          ? JSON.stringify(JSON.parse(val), null, 2)
+          : (val ?? '—');
+
+        it.append(head, v);
+        list.append(it);
+      });
+    }
+
+    function exportLS(){
+      const dump = {};
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k === DISABLED_KEY) continue;
+        dump[k] = localStorage.getItem(k);
+      }
+      saveFile('localstorage_export.json', JSON.stringify(dump, null, 2));
+    }
+
+    function importLS(file){
+      const r = new FileReader();
+      r.onload = () => {
+        try{
+          const data = JSON.parse(r.result || '{}');
+          Object.entries(data).forEach(([k,v]) => localStorage.setItem(k, String(v)));
+          alert('Importado com sucesso.');
+          renderAll();
+        }catch(e){
+          alert('JSON inválido.');
+        }
+      };
+      r.readAsText(file);
+    }
+
+    function clearDisabled(){
+      localStorage.setItem(DISABLED_KEY, '[]');
+      renderAll();
+    }
+
+    function openLS(){
+      const m = $('#lsModal');
+      m.classList.add('open');
+      m.setAttribute('aria-hidden', 'false');
+      renderAll();
+    }
+
+    function closeLS(){
+      const m = $('#lsModal');
+      m.classList.remove('open');
+      m.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderAll(){
+      renderPresets();
+      renderLS();
+    }
+
+    /* Eventos do modal e inicialização */
+    document.addEventListener('click', (ev) => {
+      if(ev.target.id === 'lsClose') closeLS();
+    });
+
+    window.addEventListener('click', e => {
+      if(e.target.id === 'lsModal') closeLS();
+    });
+
+    window.addEventListener('storage', renderAll);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // bindings dos controles do modal
+      $('#lsRescan')?.addEventListener('click', renderAll);
+      $('#lsExport')?.addEventListener('click', exportLS);
+      $('#lsImportFile')?.addEventListener('change', ev => {
+        const f = ev.target.files?.[0];
+        if(f) importLS(f);
+        ev.target.value = '';
+      });
+      $('#lsClearDisabled')?.addEventListener('click', clearDisabled);
+
+      renderApp();
+    });
+  </script>
+
+</head>
+
+<body class="field-closed mode-night ui-safe-vertical">
+
+  <!-- ========== ROOT CONTAINER ========== -->
+  <div id="root">
+
+    <!-- === SHELL PRINCIPAL (topbar + iframe) === -->
+    <div id="kxtsk-shell">
+      <div class="os-topbar">
+        <div class="os-brand">
+          KxTsK
+          <small>Unified Patch Loader</small>
+        </div>
+        <div class="top-actions">
+          <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
+          <button class="soft-btn" id="openLogsBtn">Logs</button>
+        </div>
+      </div>
+
+      <!-- dock container (usado pelo KOB dinâmico) -->
+      <div id="dock"></div>
+
+      <div id="stackWrap">
+        <div class="session-window" id="session-iframe">
+          <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
+            <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
+            <div class="win-controls" onclick="event.stopPropagation()">
+              <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
+              <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
+              <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
+              <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
+            </div>
+          </div>
+
+          <iframe class="win-frame" style="z-index:1;" src="https://kodux78k.github.io/oiDual-H0/DH0-10.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
+          </iframe>
+        </div>
+      </div>
+    </div>
+
+    <!-- === AMBIENTE VISUAL (fundos, luzes) === -->
+    <div class="ambient-light">
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+    </div>
+
+    <div id="snap-zone"></div>
+    <div class="toaster-wrap" id="toasterWrap"></div>
+
+    <!-- === SVG SYMBOLS (ícones reutilizáveis) === -->
+    <svg style="display:none">
+      <filter id="distort">
+        <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"></feTurbulence>
+        <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"></feDisplacementMap>
+      </filter>
+
+      <symbol id="icon-orb" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="7"></circle>
+        <circle cx="12" cy="12" r="8"></circle>
+      </symbol>
+      <symbol id="icon-cards" viewBox="0 0 24 24">
+        <rect x="2" y="2" width="16" height="16" rx="2"></rect>
+        <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
+      </symbol>
+      <symbol id="icon-gem" viewBox="0 0 24 24">
+        <path d="M6 3h12l4 6-10 12L2 9z"></path>
+      </symbol>
+      <symbol id="icon-settings" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="3"></circle>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+      </symbol>
+      <symbol id="icon-send" viewBox="0 0 24 24">
+        <line x1="22" y1="2" x2="11" y2="13"></line>
+        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+      </symbol>
+      <symbol id="icon-voice" viewBox="0 0 24 24">
+        <rect x="9" y="1" width="6" height="12" rx="3"></rect>
+        <path d="M5 10a7 7 0 0 0 14 0"></path>
+        <line x1="12" y1="19" x2="12" y2="23"></line>
+        <line x1="8" y1="23" x2="16" y2="23"></line>
+      </symbol>
+      <symbol id="icon-upload" viewBox="0 0 24 24">
+        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+        <polyline points="7 10 12 3 7 8"></polyline>
+        <line x1="12" y1="3" x2="12" y2="15"></line>
+      </symbol>
+    </svg>
+
+    <!-- === SKY / BACKGROUND LAYER === -->
+    <div class="sky-layer"><div class="sun-background"></div></div>
+    <div id="bg-fake-custom"></div>
+    <div id="nv-toast"></div>
+    <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+
+    <!-- === LOGO & HEADER ELEMENTS === -->
+    
+
+    <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
+      <svg><use href="#icon-orb"></use></svg>
+    </div>
+    <div id="usernameDisplay"></div>
+
+    <!-- === DRAWER (painel cockpit) === -->
+    <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+    <div id="drawerProfile" class="drawer" aria-hidden="true">
+      <div class="drawer-content">
+        <div class="drawer-header">
+          <h3>
+            <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
+            Cockpit Solar
+          </h3>
+          <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
+        </div>
+
+        <div class="drawer-body">
+          <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
+            <div class="cockpit-label">Ciclo Solar</div>
+            <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
+            <div class="control-row">
+              <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
+              <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
+            </div>
+          </div>
+
+          <div class="cockpit-grid">
+            <div class="cockpit-item">
+              <div class="cockpit-label">Identificação</div>
+              <input type="text" id="inputUserId" class="cockpit-input" placeholder="Viajante">
+            </div>
+            <div class="cockpit-item">
+              <div class="cockpit-label">Modelo IA</div>
+              <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
+            </div>
+            <div class="cockpit-item">
+              <div class="cockpit-label">Background</div>
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span id="bgStatusText" style="font-size:0.8rem;color:var(--text-muted)">Nenhum</span>
+                <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
+                  <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+                  <svg><use href="#icon-cards"></use></svg>
+                </label>
+              </div>
+            </div>
+            <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === KOBLLUX EDITOR PANEL (overlay de edição) === -->
+    <div id="kblx-back">
+      <div id="kblx-panel">
+        <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+        <div class="p-title" id="kblx-ttl">Botão</div>
+        <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+        <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+        <div class="kblx-row">
+          <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+          <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- === ÁREA PRINCIPAL (iframe + barra de símbolos) === -->
+    <div class="wrap">
+      <div class="content">
+        <iframe id="frame" src="about:blank"></iframe>
+        <div id="kob-tts-outline"></div>
+      </div>
+
+      <div class="symbol-bar floating" id="symbolBar">
+        <div class="toggle-wrap">
+          <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+        </div>
+
+        <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+          <div class="orb-microphone-container">
+            <div class="tts-orb-mini">
+              <div class="orb" id="main-orb">
+                <div class="orb-core"></div>
+              </div>
+            </div>
+          </div>
+        </button>
+
+        <div class="symbol-wrap">
+          <button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+        </div>
+        <div class="symbol-wrap">
+          <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+        </div>
+
+        <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+      </div>
+    </div>
+
+    <!-- === OVERLAY DE ARQUÉTIPOS (áudio/tts) === -->
+    <div id="arch-overlay"></div>
+
+    <audio id="transitionSound" src="https://kodux78k.github.io/oiDual-oiio/suave_portal.mp3" preload="auto"></audio>
+
+    <!-- ========== SCRIPTS (mantidos intactos) ========== -->
+    <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr-0.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+    <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-sw.js"></script>
+
+    <script>
+      (function() {
+        const dock = document.querySelector('.kob-tts-dock');
+        if (dock) {
+          let idleTimer = null;
+          function resetIdle() {
+            dock.classList.remove('idle');
+            clearTimeout(idleTimer);
+            idleTimer = setTimeout(() => dock.classList.add('idle'), 1870);
+          }
+          ['pointerdown', 'pointermove', 'touchstart', 'mousemove'].forEach(ev => {
+            document.addEventListener(ev, resetIdle, { passive: true });
+          });
+          resetIdle();
+        }
+      })();
+    </script>
+
+  </div><!-- #root -->
+
+<script>
+    'use strict';
+
+    const LS = {
+      HTML:'lastHTML',
+      COLL:'nebula_collapsed',
+      USER_SYMBOL:'userSymbol',
+      SKS:'openrouter_keys',
+      SK_ACTIVE:'openrouter_active'
+    };
+
+    const $ = (s, r=document) => r.querySelector(s);
+
+    function saveFile(name, str){
+      const blob = new Blob([str], { type:'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = $('#dl');
+      a.href = url;
+      a.download = name;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 800);
+    }
+
+    function prettyBytes(n){
+      if(!Number.isFinite(n) || n <= 0) return '0 B';
+      const u = ['B','KB','MB','GB'];
+      let i = 0;
+      while(n >= 1024 && i < u.length - 1){
+        n /= 1024;
+        i++;
+      }
+      return n.toFixed(2) + ' ' + u[i];
+    }
+
+    function isJson(v){
+      try{ JSON.parse(v); return true; }catch{ return false; }
+    }
+
+    function inferType(v){
+      if(v == null || v === '') return 'empty';
+      if(isJson(v)){
+        const p = JSON.parse(v);
+        if(Array.isArray(p)) return 'json[array]';
+        if(p && typeof p === 'object') return 'json[object]';
+        return 'json[' + (typeof p) + ']';
+      }
+      if(/^data:image\//i.test(v) || /\.(png|jpe?g|gif|webp|svg)(\?|$)/i.test(v)) return 'image';
+      if(/^(true|false|1|0)$/i.test(v)) return 'boolean-like';
+      if(/^https?:\/\//i.test(v)) return 'url';
+      if(/^data:/i.test(v)) return 'data-url';
+      return 'string';
+    }
+
+    /* seeds de demonstração */
+    (function seeds(){
+      if(localStorage.getItem('__baulite_seeded__')) return;
+
+      localStorage.setItem('infodose:userName','KODUX');
+      localStorage.setItem('infodose:assistantName','Dual Glow');
+      localStorage.setItem('uno:theme','nebula');
+      localStorage.setItem('gallery:img1','https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=640');
+      localStorage.setItem('feature:ritual:enabled','true');
+      localStorage.setItem(LS.HTML,'<div class="demo"><h1>Hello Nebula</h1><p>Baú Lite</p></div>');
+
+      const demoSKs = ['sk-demo-AAA111','sk-demo-BBB222','sk-demo-CCC333'];
+      localStorage.setItem(LS.SKS, JSON.stringify(demoSKs));
+      localStorage.setItem(LS.SK_ACTIVE, demoSKs[0]);
+
+      const demoSig = `<svg xmlns='http://www.w3.org/2000/svg' width='26' height='26' viewBox='0 0 26 26'><circle cx='13' cy='13' r='12' fill='none' stroke='#ff52e5' stroke-width='2'/><path d='M4 16 L13 4 L22 16 L13 22 Z' fill='none' stroke='#00c5e5' stroke-width='2'/></svg>`;
+      localStorage.setItem(LS.USER_SYMBOL, demoSig);
+
+      localStorage.setItem('__baulite_seeded__','1');
+    })();
+
+    /* Renderização principal – card com botão flutuante */
+    function renderApp(){
+      const app = $('#app');
+      app.innerHTML = '';
+
+      const card = document.createElement('div');
+      card.className = 'card';
+      // NOVA ESTRUTURA: botão flutuante + área de conteúdo
+      card.innerHTML = `
+        <button id="btnOpenLS" class="open-ls-btn" title="Abrir painel">
+          <i class="lucide-box"></i>
+        </button>
+
+        <div class="content" id="mainContent">
+          <div class="loader"></div>
+        </div>
+      `;
+
+      app.appendChild(card);
+
+      // renderiza o conteúdo principal (mensagem)
+      setTimeout(() => renderMain(card.querySelector('#mainContent')), 180);
+
+      // já aproveita para bindar o botão flutuante (abre o modal)
+      const btn = $('#btnOpenLS');
+      if(btn) btn.onclick = openLS;
+    }
+
+    function renderMain(el){
+      // Apenas a mensagem, sem loader
+      el.innerHTML = `
+        <div class="small">
+          Baú pronto. Clique no botão flutuante no canto para abrir o painel.
+        </div>
+      `;
+      // Garante que o botão continue vinculado (caso recriado, já está ok)
+      const btn = $('#btnOpenLS');
+      if(btn) btn.onclick = openLS;
+    }
+
+    /* LÓGICA DO MODAL (presets + lista + export/import) */
+
+    const DISABLED_KEY = 'infodose:presets.disabled';
+    const PRESETS = [
+      { key:'infodose:userName', label:'Usuário' },
+      { key:'infodose:assistantName', label:'Assistente' },
+      { key:'dual.keys.openrouter', label:'Chave OpenRouter (legacy)' },
+      { key:'dual.openrouter.model', label:'Modelo OpenRouter' },
+      { key:'uno:theme', label:'Tema' },
+      { key:'uno:bg', label:'Fundo Custom' },
+      { key:'infodose:cssCustom', label:'CSS Custom' },
+      { key:'infodose:voices', label:'Vozes Arquetípicas' }
+    ];
+
+    function disabledSet(){
+      try{ return new Set(JSON.parse(localStorage.getItem(DISABLED_KEY) || '[]')); }
+      catch{ return new Set(); }
+    }
+
+    function saveDisabled(set){
+      localStorage.setItem(DISABLED_KEY, JSON.stringify(Array.from(set)));
+    }
+
+    function toggleDisabled(k){
+      const s = disabledSet();
+      s.has(k) ? s.delete(k) : s.add(k);
+      saveDisabled(s);
+      renderPresets();
+      renderLS();
+    }
+
+    function lsEntries(){
+      const out = [];
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        const v = localStorage.getItem(k) || '';
+        out.push({ key:k, val:v });
+      }
+      return out.sort((a,b) => a.key.localeCompare(b.key));
+    }
+
+    function lsSizeBytes(){
+      let sum = 0;
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        const v = localStorage.getItem(k) || '';
+        sum += k.length + v.length;
+      }
+      return sum;
+    }
+
+    function renderPresets(){
+      const grid = $('#presetsGrid');
+      if(!grid) return;
+      grid.innerHTML = '';
+
+      const dis = disabledSet();
+
+      PRESETS.forEach(p => {
+        const val = localStorage.getItem(p.key);
+        const on = !dis.has(p.key);
+
+        const wrap = document.createElement('div');
+        wrap.className = 'preset';
+
+        const head = document.createElement('div');
+        head.className = 'row';
+        head.style.padding = '0';
+        head.style.border = '0';
+
+        const name = document.createElement('div');
+        name.innerHTML = `<strong>${p.label}</strong><div class="type">${p.key}</div>`;
+
+        const sw = document.createElement('div');
+        sw.className = 'switch' + (on ? ' on' : '');
+        sw.title = on ? 'Desativar (não apaga)' : 'Ativar';
+        sw.onclick = () => toggleDisabled(p.key);
+
+        head.append(name, sw);
+
+        const meta = document.createElement('div');
+        meta.className = 'val';
+        meta.textContent = val
+          ? (inferType(val).startsWith('json') ? JSON.stringify(JSON.parse(val), null, 2) : val)
+          : '—';
+
+        wrap.append(head, meta);
+        grid.append(wrap);
+      });
+    }
+
+    function addImagePreview(key, src){
+      const g = $('#imgGrid');
+      const card = document.createElement('div');
+      card.className = 'img-card';
+
+      const cap = document.createElement('div');
+      cap.className = 'small';
+      cap.textContent = key;
+
+      const im = new Image();
+      im.src = src;
+      im.loading = 'lazy';
+
+      card.append(cap, im);
+      g.append(card);
+    }
+
+    function renderLS(){
+      const list = $('#lsList');
+      if(!list) return;
+
+      list.innerHTML = '';
+      $('#imgGrid').innerHTML = '';
+
+      const entries = lsEntries();
+      $('#lsCount').textContent = entries.length + ' chave(s)';
+      $('#lsSize').textContent = prettyBytes(lsSizeBytes());
+
+      const dis = disabledSet();
+
+      entries.forEach(({key, val}) => {
+        if(key === DISABLED_KEY) return;
+
+        const it = document.createElement('div');
+        it.className = 'item';
+
+        const head = document.createElement('div');
+        head.className = 'head';
+
+        const left = document.createElement('div');
+        left.innerHTML = `
+          <div class="key">${key}${dis.has(key) ? ' <span class="type">(desativado)</span>' : ''}</div>
+          <div class="type">${inferType(val)} • ${prettyBytes((val || '').length)}</div>
+        `;
+
+        const ctr = document.createElement('div');
+        ctr.style.display = 'flex';
+        ctr.style.gap = '8px';
+        ctr.style.flexWrap = 'wrap';
+        ctr.style.alignItems = 'center';
+
+        const sw = document.createElement('div');
+        sw.className = 'switch' + (!dis.has(key) ? ' on' : '');
+        sw.title = !dis.has(key) ? 'Desativar' : 'Ativar';
+        sw.onclick = () => toggleDisabled(key);
+
+        const bEdit = document.createElement('button');
+        bEdit.innerHTML = '<i class="lucide-edit"></i> Editar';
+        bEdit.onclick = () => {
+          const next = prompt(`Editar valor de\n${key}`, val ?? '');
+          if(next == null) return;
+          localStorage.setItem(key, String(next));
+          renderAll();
+        };
+
+        const bDel = document.createElement('button');
+        bDel.innerHTML = '<i class="lucide-trash-2"></i> Apagar';
+        bDel.onclick = () => {
+          if(confirm('Apagar ' + key + '?')){
+            localStorage.removeItem(key);
+            renderAll();
+          }
+        };
+
+        ctr.append(sw, bEdit, bDel);
+
+        if(inferType(val) === 'image'){
+          const bImg = document.createElement('button');
+          bImg.innerHTML = '<i class="lucide-image"></i> Ver imagem';
+          bImg.onclick = () => addImagePreview(key, val);
+          ctr.append(bImg);
+        }
+
+        head.append(left, ctr);
+
+        const v = document.createElement('div');
+        v.className = 'val';
+        v.textContent = inferType(val).startsWith('json')
+          ? JSON.stringify(JSON.parse(val), null, 2)
+          : (val ?? '—');
+
+        it.append(head, v);
+        list.append(it);
+      });
+    }
+
+    function exportLS(){
+      const dump = {};
+      for(let i = 0; i < localStorage.length; i++){
+        const k = localStorage.key(i);
+        if(k === DISABLED_KEY) continue;
+        dump[k] = localStorage.getItem(k);
+      }
+      saveFile('localstorage_export.json', JSON.stringify(dump, null, 2));
+    }
+
+    function importLS(file){
+      const r = new FileReader();
+      r.onload = () => {
+        try{
+          const data = JSON.parse(r.result || '{}');
+          Object.entries(data).forEach(([k,v]) => localStorage.setItem(k, String(v)));
+          alert('Importado com sucesso.');
+          renderAll();
+        }catch(e){
+          alert('JSON inválido.');
+        }
+      };
+      r.readAsText(file);
+    }
+
+    function clearDisabled(){
+      localStorage.setItem(DISABLED_KEY, '[]');
+      renderAll();
+    }
+
+    function openLS(){
+      const m = $('#lsModal');
+      m.classList.add('open');
+      m.setAttribute('aria-hidden', 'false');
+      renderAll();
+    }
+
+    function closeLS(){
+      const m = $('#lsModal');
+      m.classList.remove('open');
+      m.setAttribute('aria-hidden', 'true');
+    }
+
+    function renderAll(){
+      renderPresets();
+      renderLS();
+    }
+
+    /* Eventos do modal e inicialização */
+    document.addEventListener('click', (ev) => {
+      if(ev.target.id === 'lsClose') closeLS();
+    });
+
+    window.addEventListener('click', e => {
+      if(e.target.id === 'lsModal') closeLS();
+    });
+
+    window.addEventListener('storage', renderAll);
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // bindings dos controles do modal
+      $('#lsRescan')?.addEventListener('click', renderAll);
+      $('#lsExport')?.addEventListener('click', exportLS);
+      $('#lsImportFile')?.addEventListener('change', ev => {
+        const f = ev.target.files?.[0];
+        if(f) importLS(f);
+        ev.target.value = '';
+      });
+      $('#lsClearDisabled')?.addEventListener('click', clearDisabled);
+
+      renderApp();
+    });
+  </script></body></html>
