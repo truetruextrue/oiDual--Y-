@@ -1,0 +1,244 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Minimalista</title>
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons para ícones minimalistas -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- API do Widget do SoundCloud -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <style>
+        /* Animações e transições customizadas */
+        .player-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Estado de inatividade (idle) */
+        .idle-state {
+            opacity: 0.25 !important;
+            filter: grayscale(50%);
+        }
+
+        /* Classes para expandir e colapsar */
+        .player-collapsed {
+            width: 58px;
+        }
+        .player-expanded {
+            width: 220px;
+            /* Move levemente para a direita quando expande para sair da borda */
+            transform: translateX(12px); 
+        }
+
+        /* Oculta scrollbar se o texto for longo */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<!-- Fundo escuro apenas para visualização de exemplo. Pode ignorar/remover ao integrar no seu app -->
+<body class="bg-[#1a0b2e] h-screen overflow-hidden text-white font-sans selection:bg-purple-500/30">
+
+    <!-- Fundo de exemplo simulando a arte do app (remova na sua implementação) -->
+    <div class="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-purple-900/40 pointer-events-none"></div>
+
+    <!-- 
+        =========================================================
+        CÓDIGO DO PLAYER (Copie a partir daqui para o seu projeto)
+        ========================================================= 
+    -->
+
+    <!-- Iframe invisível do SoundCloud carregando a primeira playlist -->
+    <iframe id="sc-widget" 
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" 
+            width="0" height="0" class="hidden" frameborder="0" allow="autoplay">
+    </iframe>
+
+    <!-- Container do Player Flutuante -->
+    <!-- Posicionado exatamente onde solicitado: top 39px, left -12px -->
+    <div id="floating-player" 
+         class="fixed top-[39px] -left-[12px] z-[9999] player-transition opacity-100 flex items-center drop-shadow-[0_0_15px_rgba(168,85,247,0.3)]">
+        
+        <!-- Fundo Glassmorphism -->
+        <div id="player-bg" 
+             class="player-collapsed player-transition flex items-center bg-black/40 backdrop-blur-md border border-white/10 rounded-r-full rounded-l-none pl-[18px] pr-2 py-2 overflow-hidden cursor-pointer hover:bg-black/60 hover:border-purple-500/30">
+            
+            <!-- Botão Play/Pause -->
+            <button id="play-btn" class="text-purple-400 hover:text-purple-300 transition-colors flex-shrink-0 outline-none" title="Tocar/Pausar">
+                <i id="play-icon" class="ph-fill ph-play-circle text-4xl drop-shadow-md"></i>
+            </button>
+
+            <!-- Conteúdo Expandido (Título e Controles Extras) -->
+            <div id="expanded-content" class="flex items-center ml-3 opacity-0 transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                <div class="flex flex-col mr-2 w-[100px]">
+                    <span class="text-[9px] text-purple-300 font-bold uppercase tracking-widest">Dual.Audio</span>
+                    <!-- Texto com scroll horizontal (marquee effect pode ser feito via CSS se desejar) -->
+                    <span id="track-name" class="text-xs text-white/90 truncate font-light tracking-wide">Iniciando sistema...</span>
+                </div>
+                
+                <!-- Botão Próxima Faixa -->
+                <button id="next-btn" class="text-white/50 hover:text-white transition-colors p-1 flex-shrink-0 outline-none z-10" title="Próxima Faixa">
+                    <i class="ph-fill ph-skip-forward-circle text-[22px]"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 
+        =========================================================
+        LÓGICA DO PLAYER (Copie a partir daqui para o seu projeto)
+        ========================================================= 
+    -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos da UI
+            const playerContainer = document.getElementById('floating-player');
+            const playerBg = document.getElementById('player-bg');
+            const playBtn = document.getElementById('play-btn');
+            const playIcon = document.getElementById('play-icon');
+            const nextBtn = document.getElementById('next-btn');
+            const expandedContent = document.getElementById('expanded-content');
+            const trackNameDisplay = document.getElementById('track-name');
+
+            // API do SoundCloud
+            const iframeElement = document.getElementById('sc-widget');
+            const scWidget = SC.Widget(iframeElement);
+
+            // Estado do Player
+            let isPlaying = false;
+            let isExpanded = false;
+            let idleTimer;
+            const IDLE_TIMEOUT = 4000; // 4 segundos para ficar transparente
+
+            // ==========================================
+            // LÓGICA DE INATIVIDADE (IDLE / TRANSPARENTE)
+            // ==========================================
+            const resetIdleTimer = () => {
+                // Remove o estado transparente
+                playerContainer.classList.remove('idle-state');
+                
+                // Limpa o timer anterior
+                clearTimeout(idleTimer);
+                
+                // Inicia um novo timer
+                idleTimer = setTimeout(() => {
+                    // Se não estiver expandido (ou se quiser que fique idle mesmo expandido), aplica a classe
+                    // Mantive para aplicar independente de estar tocando ou não, conforme o design minimalista
+                    playerContainer.classList.add('idle-state');
+                    
+                    // Opcional: auto-colapsar por inatividade
+                    if (isExpanded && !isPlaying) {
+                        toggleExpand(false);
+                    }
+                }, IDLE_TIMEOUT);
+            };
+
+            // Escuta interações em toda a tela para "acordar" o player
+            ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
+                document.addEventListener(evt, resetIdleTimer, { passive: true });
+            });
+            // Inicia o timer na primeira carga
+            resetIdleTimer();
+
+            // ==========================================
+            // LÓGICA DE INTERAÇÃO (EXPANDIR / COLAPSAR)
+            // ==========================================
+            const toggleExpand = (forceState) => {
+                isExpanded = typeof forceState === 'boolean' ? forceState : !isExpanded;
+                
+                if (isExpanded) {
+                    playerBg.classList.remove('player-collapsed');
+                    playerBg.classList.add('player-expanded');
+                    // Pequeno delay para mostrar o texto após o box crescer
+                    setTimeout(() => {
+                        if(isExpanded) expandedContent.classList.replace('opacity-0', 'opacity-100');
+                    }, 150);
+                } else {
+                    expandedContent.classList.replace('opacity-100', 'opacity-0');
+                    setTimeout(() => {
+                        if(!isExpanded) {
+                            playerBg.classList.remove('player-expanded');
+                            playerBg.classList.add('player-collapsed');
+                        }
+                    }, 200); // Aguarda o texto sumir antes de encolher
+                }
+            };
+
+            // Clicar em qualquer lugar do fundo expande/colapsa
+            playerBg.addEventListener('click', (e) => {
+                // Evita que o clique no play ou next dispare o collapse
+                if (!e.target.closest('#play-btn') && !e.target.closest('#next-btn')) {
+                    toggleExpand();
+                }
+            });
+
+            // ==========================================
+            // CONTROLES DE ÁUDIO (SOUNDCLOUD WIDGET API)
+            // ==========================================
+            
+            // Quando a widget estiver pronta
+            scWidget.bind(SC.Widget.Events.READY, () => {
+                scWidget.getCurrentSound((sound) => {
+                    if (sound) trackNameDisplay.innerText = sound.title;
+                });
+            });
+
+            // Atualiza UI ao tocar
+            scWidget.bind(SC.Widget.Events.PLAY, () => {
+                isPlaying = true;
+                playIcon.classList.replace('ph-play-circle', 'ph-pause-circle');
+                playIcon.classList.add('text-purple-300'); // Brilho extra ativo
+                // Expande automaticamente ao dar play se estiver colapsado
+                if(!isExpanded) toggleExpand(true);
+            });
+
+            // Atualiza UI ao pausar
+            scWidget.bind(SC.Widget.Events.PAUSE, () => {
+                isPlaying = false;
+                playIcon.classList.replace('ph-pause-circle', 'ph-play-circle');
+                playIcon.classList.remove('text-purple-300');
+            });
+
+            // Atualiza o nome da música quando ela muda
+            scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
+                scWidget.getCurrentSound((sound) => {
+                    // Verifica se o título mudou para não ficar reescrevendo o DOM à toa
+                    if (sound && trackNameDisplay.innerText !== sound.title) {
+                        trackNameDisplay.innerText = sound.title;
+                    }
+                });
+            });
+
+            // Ações dos Botões
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); // Evita expandir/colapsar ao dar play
+                scWidget.toggle();
+                resetIdleTimer();
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                scWidget.next();
+                resetIdleTimer();
+                trackNameDisplay.innerText = "Carregando...";
+            });
+
+            // Lista extra de links que você forneceu
+            // Para adicionar a funcionalidade de trocar de Playlist, 
+            // basta chamar a função abaixo em algum botão seu:
+            window.loadNewSoundCloudLink = (url) => {
+                scWidget.load(url, { auto_play: true });
+            };
+            
+            // Exemplo das suas URLs:
+            // window.loadNewSoundCloudLink("https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso");
+        });
+    </script>
+</body>
+</html>
+
+

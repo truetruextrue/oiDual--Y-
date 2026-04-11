@@ -1,0 +1,270 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Player Minimalista</title>
+    <!-- Tailwind CSS para estilização rápida e responsiva -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons para ícones minimalistas -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- API do Widget do SoundCloud -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <style>
+        /* Animações e transições customizadas */
+        .player-transition {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        /* Estado de inatividade (idle) */
+        .idle-state {
+            opacity: 0.25 !important;
+            filter: grayscale(50%);
+        }
+
+        /* Classes para expandir e colapsar */
+        .player-collapsed {
+            width: 58px;
+        }
+        .player-expanded {
+            width: 250px; /* Levemente mais largo para caber o novo botão */
+            transform: translateX(12px); 
+        }
+
+        /* Oculta scrollbar se o texto for longo */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-[#1a0b2e] h-screen overflow-hidden text-white font-sans selection:bg-purple-500/30">
+
+    <!-- Fundo simulando a arte do app -->
+    <div class="absolute inset-0 bg-gradient-to-b from-orange-500/20 to-purple-900/40 pointer-events-none"></div>
+
+    <!-- Iframe invisível do SoundCloud carregando a primeira playlist -->
+    <iframe id="sc-widget" 
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false" 
+            width="0" height="0" class="hidden" frameborder="0" allow="autoplay">
+    </iframe>
+
+    <!-- Container do Player Flutuante -->
+    <div id="floating-player" class="fixed top-[39px] -left-[12px] z-[9999] player-transition opacity-100 flex flex-col drop-shadow-[0_0_15px_rgba(168,85,247,0.3)] relative">
+        
+        <!-- Fundo Glassmorphism (Barra Principal) -->
+        <div id="player-bg" 
+             class="player-collapsed player-transition flex items-center bg-black/40 backdrop-blur-md border border-white/10 rounded-r-full rounded-l-none pl-[18px] pr-2 py-2 overflow-hidden cursor-pointer hover:bg-black/60 hover:border-purple-500/30 z-20">
+            
+            <!-- Botão Play/Pause -->
+            <button id="play-btn" class="text-purple-400 hover:text-purple-300 transition-colors flex-shrink-0 outline-none" title="Tocar/Pausar">
+                <i id="play-icon" class="ph-fill ph-play-circle text-4xl drop-shadow-md"></i>
+            </button>
+
+            <!-- Conteúdo Expandido -->
+            <div id="expanded-content" class="flex items-center ml-3 opacity-0 transition-opacity duration-300 ease-in-out whitespace-nowrap overflow-hidden">
+                <div class="flex flex-col mr-2 w-[110px]">
+                    <span class="text-[9px] text-purple-300 font-bold uppercase tracking-widest">Dual.Audio</span>
+                    <span id="track-name" class="text-xs text-white/90 truncate font-light tracking-wide">Iniciando sistema...</span>
+                </div>
+                
+                <!-- Botão Próxima Faixa -->
+                <button id="next-btn" class="text-white/50 hover:text-white transition-colors p-1 flex-shrink-0 outline-none z-10" title="Próxima Faixa">
+                    <i class="ph-fill ph-skip-forward-circle text-[22px]"></i>
+                </button>
+
+                <!-- Divisor -->
+                <div class="w-[1px] h-4 bg-white/20 mx-1"></div>
+
+                <!-- Botão Menu de Playlists -->
+                <button id="menu-btn" class="text-white/50 hover:text-purple-400 transition-colors p-1 flex-shrink-0 outline-none z-10" title="Escolher Playlist">
+                    <i class="ph-fill ph-list text-[20px]"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Dropdown de Playlists -->
+        <div id="playlist-menu" class="absolute left-[30px] top-[110%] w-[210px] bg-black/60 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden flex flex-col opacity-0 pointer-events-none transition-all duration-300 transform -translate-y-2 z-10">
+            <div class="px-3 py-2 text-[9px] font-bold text-purple-400/80 uppercase tracking-widest border-b border-white/10 bg-black/40">
+                Selecione a Fonte
+            </div>
+            <!-- Lista de Trilhas/Playlists -->
+            <button class="playlist-item text-left px-3 py-2.5 text-xs text-white/80 hover:bg-white/10 hover:text-white transition-colors truncate border-b border-white/5" 
+                    data-url="https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas">
+                <i class="ph-fill ph-music-notes text-purple-400 mr-1 align-middle"></i> Relíquias do Príncipe
+            </button>
+            
+            <button class="playlist-item text-left px-3 py-2.5 text-xs text-white/80 hover:bg-white/10 hover:text-white transition-colors truncate" 
+                    data-url="https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso">
+                <i class="ph-fill ph-music-notes text-orange-400 mr-1 align-middle"></i> Mapeamento Pulso
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementos da UI
+            const playerContainer = document.getElementById('floating-player');
+            const playerBg = document.getElementById('player-bg');
+            const playBtn = document.getElementById('play-btn');
+            const playIcon = document.getElementById('play-icon');
+            const nextBtn = document.getElementById('next-btn');
+            const menuBtn = document.getElementById('menu-btn');
+            const playlistMenu = document.getElementById('playlist-menu');
+            const expandedContent = document.getElementById('expanded-content');
+            const trackNameDisplay = document.getElementById('track-name');
+            const playlistItems = document.querySelectorAll('.playlist-item');
+
+            // API do SoundCloud
+            const iframeElement = document.getElementById('sc-widget');
+            const scWidget = SC.Widget(iframeElement);
+
+            // Estado do Player
+            let isPlaying = false;
+            let isExpanded = false;
+            let isMenuOpen = false;
+            let idleTimer;
+            const IDLE_TIMEOUT = 4000;
+
+            // ==========================================
+            // LÓGICA DE INATIVIDADE (IDLE / TRANSPARENTE)
+            // ==========================================
+            const resetIdleTimer = () => {
+                playerContainer.classList.remove('idle-state');
+                clearTimeout(idleTimer);
+                idleTimer = setTimeout(() => {
+                    playerContainer.classList.add('idle-state');
+                    // Fecha menu e retrai por inatividade se quiser
+                    if (isMenuOpen) toggleMenu(false);
+                    if (isExpanded && !isPlaying) toggleExpand(false);
+                }, IDLE_TIMEOUT);
+            };
+
+            ['mousemove', 'touchstart', 'click', 'scroll'].forEach(evt => {
+                document.addEventListener(evt, resetIdleTimer, { passive: true });
+            });
+            resetIdleTimer();
+
+            // ==========================================
+            // LÓGICA DE INTERAÇÃO (EXPANDIR / MENU)
+            // ==========================================
+            const toggleExpand = (forceState) => {
+                isExpanded = typeof forceState === 'boolean' ? forceState : !isExpanded;
+                
+                if (isExpanded) {
+                    playerBg.classList.remove('player-collapsed');
+                    playerBg.classList.add('player-expanded');
+                    setTimeout(() => {
+                        if(isExpanded) expandedContent.classList.replace('opacity-0', 'opacity-100');
+                    }, 150);
+                } else {
+                    expandedContent.classList.replace('opacity-100', 'opacity-0');
+                    toggleMenu(false); // Fecha o menu se retrair
+                    setTimeout(() => {
+                        if(!isExpanded) {
+                            playerBg.classList.remove('player-expanded');
+                            playerBg.classList.add('player-collapsed');
+                        }
+                    }, 200);
+                }
+            };
+
+            const toggleMenu = (forceState) => {
+                isMenuOpen = typeof forceState === 'boolean' ? forceState : !isMenuOpen;
+                if (isMenuOpen) {
+                    playlistMenu.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-2');
+                    playlistMenu.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                    menuBtn.classList.add('text-purple-400');
+                } else {
+                    playlistMenu.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+                    playlistMenu.classList.add('opacity-0', 'pointer-events-none', '-translate-y-2');
+                    menuBtn.classList.remove('text-purple-400');
+                }
+            };
+
+            // Eventos de clique
+            playerBg.addEventListener('click', (e) => {
+                // Se clicou em algum botão interno, ignora a expansão
+                if (!e.target.closest('#play-btn') && !e.target.closest('#next-btn') && !e.target.closest('#menu-btn')) {
+                    toggleExpand();
+                }
+            });
+
+            menuBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMenu();
+                resetIdleTimer();
+            });
+
+            // Fechar menu clicando fora
+            document.addEventListener('click', (e) => {
+                if (isMenuOpen && !playerContainer.contains(e.target)) {
+                    toggleMenu(false);
+                }
+            });
+
+            // ==========================================
+            // LÓGICA DE PLAYLISTS E SOUNDCLOUD
+            // ==========================================
+            playlistItems.forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const url = item.getAttribute('data-url');
+                    trackNameDisplay.innerText = "Carregando trilha...";
+                    
+                    // Carrega nova URL e toca
+                    scWidget.load(url, { auto_play: true, hide_related: true, show_comments: false, show_user: false, show_reposts: false, visual: false });
+                    
+                    toggleMenu(false); // Fecha menu
+                    resetIdleTimer();
+                });
+            });
+
+            // Callbacks do SoundCloud
+            scWidget.bind(SC.Widget.Events.READY, () => {
+                scWidget.getCurrentSound((sound) => {
+                    if (sound) trackNameDisplay.innerText = sound.title;
+                });
+            });
+
+            scWidget.bind(SC.Widget.Events.PLAY, () => {
+                isPlaying = true;
+                playIcon.classList.replace('ph-play-circle', 'ph-pause-circle');
+                playIcon.classList.add('text-purple-300');
+                if(!isExpanded) toggleExpand(true);
+            });
+
+            scWidget.bind(SC.Widget.Events.PAUSE, () => {
+                isPlaying = false;
+                playIcon.classList.replace('ph-pause-circle', 'ph-play-circle');
+                playIcon.classList.remove('text-purple-300');
+            });
+
+            scWidget.bind(SC.Widget.Events.PLAY_PROGRESS, () => {
+                scWidget.getCurrentSound((sound) => {
+                    if (sound && trackNameDisplay.innerText !== sound.title) {
+                        trackNameDisplay.innerText = sound.title;
+                    }
+                });
+            });
+
+            // Botões de Áudio
+            playBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                scWidget.toggle();
+                resetIdleTimer();
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                scWidget.next();
+                resetIdleTimer();
+                trackNameDisplay.innerText = "Carregando...";
+            });
+        });
+    </script>
+</body>
+</html>
+
+

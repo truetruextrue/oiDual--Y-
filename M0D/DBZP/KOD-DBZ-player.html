@@ -1,0 +1,260 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KODUX • DBZ FUSION PLAYER</title>
+    
+    <!-- CDNs Externas -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+    
+    <!-- Suas CDNs Customizadas -->
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/dbzp.css">
+
+    <style>
+        /* Estrutura de Transição do Container */
+        #dbz-player {
+            position: fixed;
+            top: 39px;
+            left: -12px; 
+            z-index: 9999;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Classes de Largura (O Segredo do Botãozinho) */
+        .player-collapsed {
+            width: 65px !important;
+        }
+        
+        .player-expanded-horiz {
+            width: 280px !important;
+            transform: translateX(12px);
+        }
+
+        /* Esconder conteúdo quando pequeno */
+        .content-fade {
+            transition: opacity 0.3s ease;
+        }
+
+        .idle-state {
+            opacity: 0.2 !important;
+            filter: grayscale(100%) blur(1px);
+        }
+
+        /* Menu Dropdown Estilo DBZ */
+        #dbz-menu {
+            position: absolute;
+            left: 50px;
+            top: 60px;
+            width: 220px;
+            background: rgba(10, 5, 20, 0.95);
+            border: 1px solid #ff6b00;
+            backdrop-filter: blur(12px);
+            border-radius: 8px;
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(255, 107, 0, 0.4);
+        }
+
+        .dbz-menu-active { display: flex !important; }
+
+        .dbz-menu-item {
+            padding: 12px 15px;
+            font-size: 10px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(255, 107, 0, 0.1);
+            cursor: pointer;
+        }
+
+        .dbz-menu-item:hover {
+            background: rgba(255, 107, 0, 0.15);
+            color: #ff6b00;
+        }
+
+        /* Ajuste do Wrapper para suportar o colapso */
+        .dbz-wrapper {
+            width: 100% !important;
+            overflow: hidden !important;
+            border-radius: 0 50px 50px 0 !important;
+        }
+    </style>
+</head>
+<body class="bg-[#0b0514] h-screen overflow-hidden text-white font-sans">
+
+    <div class="absolute inset-0 bg-gradient-to-b from-orange-500/10 to-purple-900/20 pointer-events-none"></div>
+
+    <!-- Container do Player com classe inicial colapsada -->
+    <div id="dbz-player" class="player-collapsed">
+        <div class="dbz-wrapper">
+            <div class="dbz-scouter-lines"></div>
+
+            <!-- Top Bar Principal -->
+            <div class="dbz-topbar flex items-center pr-4">
+                
+                <!-- Botão de Play (Sempre Visível) -->
+                <div id="main-action-btn" class="ml-4 mr-2 flex-shrink-0 cursor-pointer">
+                    <i id="play-icon" class="ph-fill ph-play-circle text-[42px] text-orange-500 drop-shadow-[0_0_8px_rgba(255,107,0,0.5)]"></i>
+                </div>
+
+                <!-- Conteúdo que some ao colapsar -->
+                <div id="dynamic-content" class="content-fade opacity-0 flex items-center flex-grow overflow-hidden">
+                    <!-- Info da Faixa -->
+                    <div class="dbz-track-info cursor-pointer flex-grow overflow-hidden mr-2" id="expand-trigger">
+                        <div class="dbz-track-title truncate text-xs" id="dbz-track-title">Sintonizando...</div>
+                        <div class="dbz-track-artist text-[8px] opacity-60 uppercase">Dual Audio • Scouter</div>
+                    </div>
+
+                    <!-- Controles Rápidos -->
+                    <div class="dbz-controls flex items-center gap-2 flex-shrink-0">
+                        <button class="dbz-btn !bg-transparent p-1" id="next-track-btn">
+                            <i class="ph-fill ph-skip-forward-circle text-xl opacity-70 hover:opacity-100"></i>
+                        </button>
+                        <button class="dbz-btn !bg-transparent p-1" id="menu-toggle-btn">
+                            <i class="ph-fill ph-list text-xl opacity-70 hover:opacity-100"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Body Colapsável (Scouter Completo) -->
+            <div class="dbz-body" id="dbz-body" style="display: none; margin-top: 10px;">
+                <div class="dbz-power-level">
+                    <span class="dbz-power-label">RADAR KI</span>
+                    <div class="dbz-power-bar-bg">
+                        <div class="dbz-power-bar-fill" id="dbz-power-fill" style="width: 0%"></div>
+                    </div>
+                    <span class="dbz-power-value" id="dbz-power-value">0000</span>
+                </div>
+
+                <div class="dbz-sc-frame">
+                    <iframe id="dbz-sc-iframe"
+                        scrolling="no" frameborder="no" allow="autoplay"
+                        src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas&color=%23ff6b00&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=true">
+                    </iframe>
+                </div>
+            </div>
+
+            <!-- Menu de Playlists -->
+            <div id="dbz-menu">
+                <div class="px-4 py-2 text-[8px] border-b border-orange-500/20 text-orange-400 font-bold tracking-[2px]">PLAYLISTS</div>
+                <div class="dbz-menu-item" data-url="https://soundcloud.com/prod-next-level/sets/kodux-as-reliquias-do-principe-trilhas">RELÍQUIAS DO PRÍNCIPE</div>
+                <div class="dbz-menu-item" data-url="https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso">MAPEAMENTO PULSO</div>
+            </div>
+
+            <div class="dbz-energy-wave"></div>
+        </div>
+    </div>
+
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/dbzp.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const widget = SC.Widget(document.getElementById('dbz-sc-iframe'));
+            const player = document.getElementById('dbz-player');
+            const body = document.getElementById('dbz-body');
+            const menu = document.getElementById('dbz-menu');
+            const dynamicContent = document.getElementById('dynamic-content');
+            const playIcon = document.getElementById('play-icon');
+            const trackTitle = document.getElementById('dbz-track-title');
+            const powerFill = document.getElementById('dbz-power-fill');
+            const powerValue = document.getElementById('dbz-power-value');
+
+            let isExpandedHoriz = false;
+            let isExpandedVert = false;
+            let idleTimer;
+
+            // Função para alternar expansão horizontal (O "Botãozinho")
+            const toggleHorizontal = (force) => {
+                isExpandedHoriz = typeof force === 'boolean' ? force : !isExpandedHoriz;
+                
+                if (isExpandedHoriz) {
+                    player.classList.replace('player-collapsed', 'player-expanded-horiz');
+                    setTimeout(() => dynamicContent.classList.replace('opacity-0', 'opacity-100'), 200);
+                } else {
+                    dynamicContent.classList.replace('opacity-100', 'opacity-0');
+                    isExpandedVert = false;
+                    body.style.display = 'none';
+                    menu.classList.remove('dbz-menu-active');
+                    setTimeout(() => player.classList.replace('player-expanded-horiz', 'player-collapsed'), 200);
+                }
+            };
+
+            // Play/Pause
+            document.getElementById('main-action-btn').onclick = (e) => {
+                e.stopPropagation();
+                widget.toggle();
+                if (!isExpandedHoriz) toggleHorizontal(true);
+                resetIdle();
+            };
+
+            // Expandir Scouter (Vertical)
+            document.getElementById('expand-trigger').onclick = (e) => {
+                e.stopPropagation();
+                isExpandedVert = !isExpandedVert;
+                body.style.display = isExpandedVert ? 'block' : 'none';
+            };
+
+            // Próxima faixa
+            document.getElementById('next-track-btn').onclick = (e) => {
+                e.stopPropagation();
+                widget.next();
+                resetIdle();
+            };
+
+            // Menu
+            document.getElementById('menu-toggle-btn').onclick = (e) => {
+                e.stopPropagation();
+                menu.classList.toggle('dbz-menu-active');
+            };
+
+            // Itens do Menu
+            document.querySelectorAll('.dbz-menu-item').forEach(item => {
+                item.onclick = function() {
+                    widget.load(this.getAttribute('data-url'), { auto_play: true, visual: true });
+                    menu.classList.remove('dbz-menu-active');
+                };
+            });
+
+            // Listeners SoundCloud
+            widget.bind(SC.Widget.Events.PLAY, () => {
+                playIcon.classList.replace('ph-play-circle', 'ph-pause-circle');
+                player.classList.remove('idle-state');
+                widget.getCurrentSound(s => { if(s) trackTitle.innerText = s.title; });
+            });
+
+            widget.bind(SC.Widget.Events.PAUSE, () => {
+                playIcon.classList.replace('ph-pause-circle', 'ph-play-circle');
+            });
+
+            widget.bind(SC.Widget.Events.PLAY_PROGRESS, (data) => {
+                const ki = Math.floor(data.relativePosition * 9001);
+                powerValue.innerText = ki.toString().padStart(4, '0');
+                powerFill.style.width = (data.relativePosition * 100) + "%";
+            });
+
+            // Idle e Fechamento
+            function resetIdle() {
+                player.classList.remove('idle-state');
+                clearTimeout(idleTimer);
+                idleTimer = setTimeout(() => {
+                    widget.isPaused(p => { if(p) player.classList.add('idle-state'); });
+                }, 5000);
+            }
+
+            document.addEventListener('mousemove', resetIdle);
+            document.addEventListener('click', (e) => {
+                if(!player.contains(e.target)) {
+                    toggleHorizontal(false);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
+
