@@ -1,0 +1,476 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0c14">
+    <title>KODUX | Super Saiyan Player</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <!-- SoundCloud API -->
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <style>
+        :root {
+            --kob-voice-primary: #32d7cb;
+            --kob-voice-bg-soft: rgba(10, 12, 20, 0.9);
+            --bg: #050505;
+            --ink: #ffffff;
+            --text: #f0f3f9;
+            --muted: rgba(255, 255, 255, 0.4);
+            --border: rgba(255, 255, 255, 0.1);
+            --panel-blur: blur(24px) saturate(180%);
+            --primary: var(--kob-voice-primary);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            overflow: hidden;
+            height: 100vh;
+            background-image: radial-gradient(circle at 50% 0%, rgba(50, 215, 203, 0.1), var(--bg) 70%);
+        }
+
+        #kodux-widget {
+            position: fixed;
+            z-index: 9999;
+            background: var(--kob-voice-bg-soft);
+            backdrop-filter: var(--panel-blur);
+            -webkit-backdrop-filter: var(--panel-blur);
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8), 0 0 20px rgba(50, 215, 203, 0.2);
+            transition: width 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        height 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275),
+                        border-radius 0.4s ease,
+                        left 0.3s ease, top 0.3s ease;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .state-ball { width: 45px !important; height: 45px !important; border-radius: 50% !important; cursor: pointer; }
+        .state-preview { width: 240px !important; height: 65px !important; border-radius: 35px !important; cursor: pointer; }
+        .state-full { width: 90vw !important; max-width: 400px !important; height: 80vh !important; max-height: 700px !important; border-radius: 28px !important; }
+        .state-footer { width: 100vw !important; height: 90px !important; border-radius: 24px 24px 0 0 !important; left: 0 !important; top: auto !important; bottom: 0 !important; }
+
+        .hidden-content { display: none !important; }
+        .glow-text { text-shadow: 0 0 12px var(--primary); }
+        .drag-header { touch-action: none; cursor: grab; }
+
+        input[type=range] { -webkit-appearance: none; background: transparent; width: 100%; height: 4px; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 14px; width: 14px; border-radius: 50%; background: var(--primary); margin-top: -5px; box-shadow: 0 0 10px var(--primary); }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 4px; background: rgba(255,255,255,0.15); border-radius: 2px; }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+
+    <div class="absolute inset-0 z-0 opacity-10 pointer-events-none flex items-center justify-center select-none">
+        <h1 class="text-6xl font-black tracking-[0.5em] text-white">KODUX</h1>
+    </div>
+
+    <!-- Motores de Áudio Invisíveis -->
+    <div id="yt-container" class="absolute -left-[9999px]"></div>
+    <div id="sc-container" class="absolute -left-[9999px]"></div>
+    <audio id="local-audio" crossorigin="anonymous"></audio>
+
+    <div id="kodux-widget" class="state-ball" style="right: 20px; bottom: 100px;">
+        
+        <!-- MODO BOLA -->
+        <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
+            <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration: 4s; font-size: 28px;"></i>
+        </div>
+
+        <!-- MODO PREVIEW -->
+        <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
+            <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg">
+            <div class="flex-1 overflow-hidden">
+                <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
+                <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
+            </div>
+            <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition">
+                <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+            </button>
+        </div>
+
+        <!-- MODO FOOTER -->
+        <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
+            <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-click">
+                <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
+            </div>
+            <div class="drag-header flex-1 flex items-center px-6 gap-4">
+                <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
+                <div class="flex-1 overflow-hidden" onclick="updateWidgetState('full')">
+                    <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
+                    <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
+                </div>
+                <div class="flex items-center gap-5">
+                    <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
+                    <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
+                    <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
+                    <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MODO FULL APP -->
+        <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
+            <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
+                <div class="flex items-center gap-3">
+                    <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
+                    <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
+                </div>
+                <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
+                    <i class="ph ph-caret-down-bold"></i>
+                </button>
+            </div>
+
+            <div class="flex-1 overflow-y-auto p-5 pb-32">
+                <div class="flex gap-2 mb-8">
+                    <div class="flex-1 relative">
+                        <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+                        <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="w-full bg-black/60 border border-white/10 rounded-xl pl-10 pr-4 py-3 text-xs text-white focus:border-[var(--primary)] outline-none">
+                    </div>
+                    <button onclick="addLink()" class="bg-[var(--primary)] text-black px-4 rounded-xl font-bold shadow-lg"><i class="ph ph-plus-bold"></i></button>
+                </div>
+
+                <div id="playlist-container" class="flex flex-col gap-3"></div>
+            </div>
+
+            <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6">
+                <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4 overflow-hidden">
+                        <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20">
+                        <div class="overflow-hidden">
+                            <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
+                            <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-5">
+                        <button onclick="playPrev()" class="text-white text-2xl"><i class="ph-fill ph-skip-back"></i></button>
+                        <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
+                            <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
+                        </button>
+                        <button onclick="playNext()" class="text-white text-2xl"><i class="ph-fill ph-skip-forward"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    (function(){
+        "use strict";
+
+        // CONFIGURAÇÕES
+        const DB_NAME = 'kodux-ss-db-v2';
+        let tracks = [];
+        let currentIdx = -1;
+        let isPlaying = false;
+        let activeEngine = null;
+
+        const widget = document.getElementById('kodux-widget');
+        const contents = {
+            ball: document.getElementById('content-ball'),
+            preview: document.getElementById('content-preview'),
+            footer: document.getElementById('content-footer'),
+            full: document.getElementById('content-full')
+        };
+        const audioEl = document.getElementById('local-audio');
+        let ytPlayer = null;
+        let scWidget = null;
+        let ytReady = false;
+
+        // TRACKS PADRÃO (Dual Next Level)
+        const PRELOADED = [
+            { type: 'youtube', id: 'Bt_rLbMjJDk', url: 'https://youtu.be/Bt_rLbMjJDk', name: 'Trilhas Aromas', artist: 'Dual.NextLevel', cover: 'https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg' },
+            { type: 'youtube', id: '_0wVkryxanE', url: 'https://youtu.be/_0wVkryxanE', name: '12 Arquétipos', artist: 'Dual.NextLevel', cover: 'https://img.youtube.com/vi/_0wVkryxanE/hqdefault.jpg' },
+            { type: 'soundcloud', url: 'https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso', name: 'MAPEAMENTO PULSO', artist: 'DUAL X', cover: 'https://i1.sndcdn.com/artworks-000418386453-y1w0f1-t500x500.jpg' }
+        ];
+
+        // UI STATE & DRAG
+        let widgetState = 'ball';
+        let isDragging = false;
+        let currentX = window.innerWidth - 60;
+        let currentY = window.innerHeight - 150;
+
+        function updateWidgetState(newState) {
+            widgetState = newState;
+            widget.className = `state-${newState}`;
+            Object.values(contents).forEach(el => el.classList.add('hidden-content'));
+            contents[newState].classList.remove('hidden-content');
+
+            if(newState === 'ball') {
+                widget.style.left = `${currentX}px`;
+                widget.style.top = `${currentY}px`;
+            } else if(newState === 'preview') {
+                widget.style.left = (currentX < window.innerWidth/2) ? '10px' : (window.innerWidth - 250) + 'px';
+            } else if(newState === 'full') {
+                widget.style.left = '50%';
+                widget.style.top = '50%';
+                widget.style.transform = 'translate(-50%, -50%)';
+            } else if(newState === 'footer') {
+                widget.style.transform = 'none';
+                widget.style.left = '0';
+                widget.style.top = 'auto';
+                widget.style.bottom = '0';
+            }
+        }
+
+        // DRAG LOGIC
+        function initDrag() {
+            const handle = document.querySelector('.drag-header') || contents.ball;
+            let startX, startY, initialX, initialY;
+
+            const onStart = (e) => {
+                if(widgetState === 'full' || e.target.closest('button, input')) return;
+                isDragging = false;
+                const touch = e.type === 'touchstart' ? e.touches[0] : e;
+                initialX = touch.clientX - currentX;
+                initialY = touch.clientY - currentY;
+                widget.style.transition = 'none';
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onEnd);
+                document.addEventListener('touchmove', onMove, {passive: false});
+                document.addEventListener('touchend', onEnd);
+            };
+
+            const onMove = (e) => {
+                isDragging = true;
+                e.preventDefault();
+                const touch = e.type === 'touchmove' ? e.touches[0] : e;
+                currentX = touch.clientX - initialX;
+                currentY = touch.clientY - initialY;
+                widget.style.left = `${currentX}px`;
+                widget.style.top = `${currentY}px`;
+            };
+
+            const onEnd = () => {
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+                widget.style.transition = 'all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                
+                if(currentY > window.innerHeight - 120) updateWidgetState('footer');
+                else if(isDragging) updateWidgetState('ball');
+            };
+
+            contents.ball.addEventListener('mousedown', onStart);
+            contents.ball.addEventListener('touchstart', onStart);
+            document.querySelectorAll('.drag-header').forEach(h => {
+                h.addEventListener('mousedown', onStart);
+                h.addEventListener('touchstart', onStart);
+            });
+        }
+
+        // AUDIO ENGINE
+        function playYT(id) {
+            if(!ytReady) return setTimeout(() => playYT(id), 300);
+            if(!ytPlayer) {
+                ytPlayer = new YT.Player('yt-container', {
+                    height: '0', width: '0', videoId: id,
+                    playerVars: { autoplay: 1, playsinline: 1 },
+                    events: {
+                        onReady: (e) => { e.target.playVideo(); isPlaying = true; syncIcons(); },
+                        onStateChange: (e) => {
+                            if(e.data === YT.PlayerState.ENDED) playNext();
+                            isPlaying = (e.data === YT.PlayerState.PLAYING);
+                            syncIcons();
+                        }
+                    }
+                });
+            } else {
+                ytPlayer.loadVideoById(id);
+            }
+        }
+
+        function playSC(url) {
+            const container = document.getElementById('sc-container');
+            container.innerHTML = `<iframe id="sc-frame" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false"></iframe>`;
+            scWidget = SC.Widget('sc-frame');
+            scWidget.bind(SC.Widget.Events.READY, () => {
+                scWidget.play();
+                isPlaying = true;
+                syncIcons();
+            });
+            scWidget.bind(SC.Widget.Events.FINISH, () => playNext());
+            scWidget.bind(SC.Widget.Events.PLAY, () => { isPlaying = true; syncIcons(); });
+            scWidget.bind(SC.Widget.Events.PAUSE, () => { isPlaying = false; syncIcons(); });
+        }
+
+        function loadAndPlay(idx) {
+            if(idx < 0 || idx >= tracks.length) return;
+            currentIdx = idx;
+            const track = tracks[idx];
+            activeEngine = track.type;
+
+            // Reset outros
+            audioEl.pause();
+            if(ytPlayer) ytPlayer.stopVideo();
+            
+            // UI Updates
+            [ 'prev', 'foot', 'main' ].forEach(pre => {
+                document.getElementById(`${pre}-title`).innerText = track.name;
+                document.getElementById(`${pre}-artist`).innerText = track.artist;
+                document.getElementById(`${pre}-cover`).src = track.cover;
+            });
+
+            if(track.type === 'youtube') playYT(track.id);
+            else if(track.type === 'soundcloud') playSC(track.url);
+            else if(track.type === 'local') {
+                audioEl.src = URL.createObjectURL(track.blob);
+                audioEl.play().catch(() => alert("Clique em Play para iniciar o áudio local (bloqueio do navegador)."));
+                isPlaying = true;
+                syncIcons();
+            }
+            renderPlaylist();
+        }
+
+        function togglePlay(e) {
+            if(e) e.stopPropagation();
+            if(currentIdx === -1) return loadAndPlay(0);
+            
+            if(isPlaying) {
+                if(activeEngine === 'youtube') ytPlayer.pauseVideo();
+                else if(activeEngine === 'soundcloud') scWidget.pause();
+                else audioEl.pause();
+                isPlaying = false;
+            } else {
+                if(activeEngine === 'youtube') ytPlayer.playVideo();
+                else if(activeEngine === 'soundcloud') scWidget.play();
+                else audioEl.play();
+                isPlaying = true;
+            }
+            syncIcons();
+        }
+
+        function syncIcons() {
+            const icon = isPlaying ? 'ph-pause-circle' : 'ph-play-circle';
+            const iconSimple = isPlaying ? 'ph-pause' : 'ph-play';
+            document.getElementById('prev-play-icon').className = `ph-fill ${icon} text-4xl`;
+            document.getElementById('foot-play-icon').className = `ph-fill ${icon} text-5xl`;
+            document.getElementById('main-play-icon').className = `ph-fill ${iconSimple} text-3xl ${isPlaying ? '' : 'ml-1'}`;
+        }
+
+        function playNext() { loadAndPlay((currentIdx + 1) % tracks.length); }
+        function playPrev() { loadAndPlay((currentIdx - 1 + tracks.length) % tracks.length); }
+
+        // PROGRESS
+        setInterval(() => {
+            if(!isPlaying) return;
+            let pct = 0;
+            if(activeEngine === 'youtube' && ytPlayer.getCurrentTime) pct = (ytPlayer.getCurrentTime() / ytPlayer.getDuration()) * 100;
+            else if(activeEngine === 'local') pct = (audioEl.currentTime / audioEl.duration) * 100;
+            else if(activeEngine === 'soundcloud' && scWidget) {
+                scWidget.getPosition(p => scWidget.getDuration(d => {
+                    const scPct = (p/d) * 100;
+                    document.getElementById('main-progress').value = scPct;
+                    document.getElementById('footer-progress-bar').style.width = scPct + '%';
+                }));
+                return;
+            }
+            document.getElementById('main-progress').value = pct || 0;
+            document.getElementById('footer-progress-bar').style.width = (pct || 0) + '%';
+        }, 1000);
+
+        // DATABASE & LIST
+        function renderPlaylist() {
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+            tracks.forEach((t, i) => {
+                const active = i === currentIdx;
+                const item = document.createElement('div');
+                item.className = `flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition ${active ? 'bg-[var(--primary)]/20 border border-[var(--primary)]/30' : 'bg-white/5 hover:bg-white/10'}`;
+                item.innerHTML = `
+                    <img src="${t.cover}" class="w-10 h-10 rounded-lg object-cover">
+                    <div class="flex-1 overflow-hidden">
+                        <h5 class="text-xs font-bold text-white truncate">${t.name}</h5>
+                        <p class="text-[10px] text-[var(--muted)]">${t.artist}</p>
+                    </div>
+                    ${active && isPlaying ? '<i class="ph-fill ph-waveform text-[var(--primary)] animate-pulse"></i>' : ''}
+                `;
+                item.onclick = () => loadAndPlay(i);
+                container.appendChild(item);
+            });
+        }
+
+        async function addLink() {
+            const input = document.getElementById('link-input');
+            const url = input.value.trim();
+            if(!url) return;
+            
+            let newTrack = { name: 'Carregando...', artist: 'Web', cover: 'https://picsum.photos/100', url };
+            
+            if(url.includes('youtube.com') || url.includes('youtu.be')) {
+                const id = url.match(/(?:v=|youtu\.be\/|shorts\/)([0-9A-Za-z_-]{11})/)?.[1];
+                if(!id) return alert("Link YouTube Inválido");
+                newTrack.type = 'youtube';
+                newTrack.id = id;
+                newTrack.cover = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+                // Tentar pegar titulo via oEmbed
+                try {
+                    const res = await fetch(`https://noembed.com/embed?url=${url}`);
+                    const data = await res.json();
+                    newTrack.name = data.title || "YouTube Track";
+                } catch(e) { newTrack.name = "YouTube Track"; }
+            } else if(url.includes('soundcloud.com')) {
+                newTrack.type = 'soundcloud';
+                try {
+                    const res = await fetch(`https://soundcloud.com/oembed?url=${url}&format=json`);
+                    const data = await res.json();
+                    newTrack.name = data.title;
+                    newTrack.artist = data.author_name;
+                    newTrack.cover = data.thumbnail_url;
+                } catch(e) { newTrack.name = "SoundCloud Track"; }
+            }
+
+            tracks.unshift(newTrack);
+            input.value = '';
+            localStorage.setItem(DB_NAME, JSON.stringify(tracks.map(t => ({...t, blob: null}))));
+            renderPlaylist();
+        }
+
+        // INIT
+        window.onYouTubeIframeAPIReady = () => { ytReady = true; };
+        const saved = localStorage.getItem(DB_NAME);
+        tracks = saved ? JSON.parse(saved) : [...PRELOADED];
+
+        document.getElementById('kodux-widget').onclick = (e) => {
+            if(isDragging) return;
+            if(widgetState === 'ball') updateWidgetState('preview');
+        };
+
+        // Expor globais
+        window.updateWidgetState = updateWidgetState;
+        window.togglePlay = togglePlay;
+        window.playNext = playNext;
+        window.playPrev = playPrev;
+        window.addLink = addLink;
+        window.collapseToBall = (e) => { e.stopPropagation(); updateWidgetState('ball'); };
+
+        const tag = document.createElement('script');
+        tag.src = "https://www.youtube.com/iframe_api";
+        document.head.appendChild(tag);
+        
+        initDrag();
+        renderPlaylist();
+        updateWidgetState('ball');
+
+    })();
+</script>
+
+</body>
+</html>
+
+

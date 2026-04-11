@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0a0c14">
+    <title>KODUX | Player Híbrido</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://w.soundcloud.com/player/api.js"></script>
+
+    <style>
+        :root {
+            --primary: #32d7cb;
+            --bg: #0a0c14;
+        }
+        body {
+            background: var(--bg);
+            color: #f0f3f9;
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+        #kodux-widget {
+            position: fixed;
+            z-index: 9999;
+            background: rgba(10, 12, 20, 0.9);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(50,215,203,0.2);
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+            overflow: hidden;
+        }
+        .state-ball { width: 48px !important; height: 48px !important; border-radius: 48px !important; }
+        .state-preview { width: 260px !important; height: 70px !important; border-radius: 40px !important; }
+        .state-full { width: 90vw !important; max-width: 420px !important; height: 85vh !important; max-height: 750px !important; border-radius: 32px !important; }
+        .state-footer { width: 100vw !important; height: 100px !important; border-radius: 28px 28px 0 0 !important; left: 0 !important; top: auto !important; bottom: 0 !important; }
+        .hidden-content { display: none !important; }
+        .drag-handle { cursor: grab; touch-action: none; }
+        input[type=range] { -webkit-appearance: none; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; background: var(--primary); border-radius: 14px; margin-top: -5px; box-shadow: 0 0 10px var(--primary); }
+        input[type=range]::-webkit-slider-runnable-track { height: 4px; background: rgba(255,255,255,0.1); border-radius: 2px; }
+    </style>
+</head>
+<body class="flex items-center justify-center h-screen overflow-hidden">
+
+    <div id="yt-container" class="absolute opacity-0 pointer-events-none" style="left:-9999px"></div>
+    <div id="sc-container" class="absolute opacity-0 pointer-events-none" style="left:-9999px"></div>
+    <audio id="local-audio" class="hidden"></audio>
+
+    <div id="kodux-widget" class="state-ball" style="right: 24px; bottom: 120px;">
+        
+        <!-- BOLA -->
+        <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
+            <i class="ph-fill ph-spotify-logo text-3xl"></i>
+        </div>
+
+        <!-- PREVIEW -->
+        <div id="content-preview" class="hidden-content w-full h-full flex items-center px-4 gap-3">
+            <img id="prev-cover" class="w-12 h-12 rounded-full object-cover border-2 border-[var(--primary)] shadow-lg">
+            <div class="flex-1 overflow-hidden">
+                <h4 id="prev-title" class="text-sm font-bold text-white truncate glow-text">KODUX</h4>
+                <p id="prev-artist" class="text-[10px] text-white/40 truncate">...</p>
+            </div>
+            <button onclick="togglePlay(event)" class="text-white">
+                <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+            </button>
+        </div>
+
+        <!-- FOOTER -->
+        <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
+            <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-bg">
+                <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-glow"></div>
+            </div>
+            <div class="drag-handle flex-1 flex items-center px-6 gap-4">
+                <img id="foot-cover" class="w-14 h-14 rounded-xl object-cover border border-white/10">
+                <div class="flex-1 overflow-hidden" onclick="setState('full')">
+                    <h4 id="foot-title" class="text-sm font-bold truncate">KODUX</h4>
+                    <p id="foot-artist" class="text-xs text-white/40 truncate">Sistema</p>
+                </div>
+                <div class="flex items-center gap-5">
+                    <button onclick="playPrev(event)"><i class="ph-fill ph-skip-back text-xl"></i></button>
+                    <button onclick="togglePlay(event)"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
+                    <button onclick="playNext(event)"><i class="ph-fill ph-skip-forward text-xl"></i></button>
+                    <button onclick="setState('ball')" class="ml-2"><i class="ph ph-minus-circle text-xl"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- FULL -->
+        <div id="content-full" class="hidden-content flex flex-col w-full h-full">
+            <div class="drag-handle p-5 flex justify-between border-b border-white/5">
+                <div class="flex items-center gap-3">
+                    <i class="ph-fill ph-crown text-[var(--primary)] text-xl"></i>
+                    <span class="font-bold tracking-wider text-sm">PLAYER DUAL</span>
+                </div>
+                <button onclick="setState('ball')"><i class="ph ph-arrow-down text-xl"></i></button>
+            </div>
+            <div class="flex-1 overflow-auto p-5 pb-36">
+                <div class="flex gap-2 mb-6">
+                    <input type="text" id="link-input" placeholder="Link do YouTube ou SoundCloud" class="flex-1 bg-black/40 border border-white/10 rounded-xl px-4 py-3 text-sm text-white placeholder:text-white/30 focus:border-[var(--primary)] outline-none">
+                    <button onclick="addLink()" class="bg-[var(--primary)] text-black px-4 rounded-xl font-bold">+</button>
+                </div>
+                <div id="playlist-container" class="space-y-2"></div>
+            </div>
+            <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-5">
+                <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-3">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4 overflow-hidden">
+                        <img id="main-cover" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
+                        <div class="overflow-hidden">
+                            <h4 id="main-title" class="text-sm font-bold truncate">KODUX</h4>
+                            <p id="main-artist" class="text-xs text-white/40 truncate">Oráculo</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-5">
+                        <button onclick="playPrev()"><i class="ph-fill ph-skip-back text-2xl"></i></button>
+                        <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
+                            <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
+                        </button>
+                        <button onclick="playNext()"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    (function(){
+        "use strict";
+
+        // ---------- ESTADO GLOBAL ----------
+        const DB_KEY = 'kodux_dual_v3';
+        let tracks = [];
+        let currentIdx = -1;
+        let isPlaying = false;
+        let activeEngine = null; // 'youtube', 'soundcloud', 'local'
+        let isLoading = false;
+
+        // Players
+        let ytPlayer = null;
+        let scWidget = null;
+        const audioEl = document.getElementById('local-audio');
+        let ytApiReady = false;
+
+        // UI Elements
+        const widget = document.getElementById('kodux-widget');
+        const contents = {
+            ball: document.getElementById('content-ball'),
+            preview: document.getElementById('content-preview'),
+            footer: document.getElementById('content-footer'),
+            full: document.getElementById('content-full')
+        };
+
+        // Playlist padrão
+        const DEFAULT_TRACKS = [
+            { type: 'youtube', id: 'Bt_rLbMjJDk', name: 'Trilhas Aromas', artist: 'Dual.NextLevel', cover: 'https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg' },
+            { type: 'youtube', id: '_0wVkryxanE', name: '12 Arquétipos', artist: 'Dual.NextLevel', cover: 'https://img.youtube.com/vi/_0wVkryxanE/hqdefault.jpg' },
+            { type: 'soundcloud', url: 'https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso', name: 'MAPEAMENTO PULSO', artist: 'DUAL X', cover: 'https://i1.sndcdn.com/artworks-000418386453-y1w0f1-t500x500.jpg' }
+        ];
+
+        // ---------- INICIALIZAÇÃO ----------
+        function init() {
+            const saved = localStorage.getItem(DB_KEY);
+            tracks = saved ? JSON.parse(saved) : [...DEFAULT_TRACKS];
+            renderPlaylist();
+
+            // Configurar YouTube API
+            if (!window.YT) {
+                const tag = document.createElement('script');
+                tag.src = "https://www.youtube.com/iframe_api";
+                document.head.appendChild(tag);
+            }
+            window.onYouTubeIframeAPIReady = () => {
+                ytApiReady = true;
+                // Cria player oculto com vídeo vazio
+                ytPlayer = new YT.Player('yt-container', {
+                    height: '0',
+                    width: '0',
+                    videoId: '',
+                    playerVars: { playsinline: 1, autoplay: 0, controls: 0 },
+                    events: {
+                        onReady: (e) => { /* pronto para carregar vídeos */ },
+                        onStateChange: onYTStateChange,
+                        onError: (e) => { console.warn('Erro YT:', e); playNext(); }
+                    }
+                });
+            };
+
+            // Configurar arraste
+            initDrag();
+            setState('ball');
+            updateUIForNoTrack();
+        }
+
+        function onYTStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                playNext();
+            } else if (event.data === YT.PlayerState.PLAYING) {
+                isPlaying = true;
+                syncIcons();
+            } else if (event.data === YT.PlayerState.PAUSED) {
+                isPlaying = false;
+                syncIcons();
+            }
+        }
+
+        // ---------- CONTROLE DE UI ----------
+        let widgetState = 'ball';
+        function setState(newState) {
+            widgetState = newState;
+            widget.className = `state-${newState}`;
+            Object.values(contents).forEach(el => el.classList.add('hidden-content'));
+            contents[newState].classList.remove('hidden-content');
+
+            if (newState === 'ball') {
+                widget.style.left = (window.innerWidth - 70) + 'px';
+                widget.style.top = (window.innerHeight - 150) + 'px';
+                widget.style.transform = 'none';
+            } else if (newState === 'preview') {
+                widget.style.left = (window.innerWidth - 280) + 'px';
+                widget.style.top = '20px';
+                widget.style.transform = 'none';
+            } else if (newState === 'full') {
+                widget.style.left = '50%';
+                widget.style.top = '50%';
+                widget.style.transform = 'translate(-50%, -50%)';
+            } else if (newState === 'footer') {
+                widget.style.left = '0';
+                widget.style.top = 'auto';
+                widget.style.bottom = '0';
+                widget.style.transform = 'none';
+            }
+        }
+
+        // Drag simplificado
+        function initDrag() {
+            let isDragging = false, startX, startY, offsetX, offsetY;
+            const handle = document.querySelector('.drag-handle') || contents.ball;
+            
+            const onStart = (e) => {
+                if (widgetState === 'full') return;
+                const touch = e.touches ? e.touches[0] : e;
+                startX = touch.clientX; startY = touch.clientY;
+                const rect = widget.getBoundingClientRect();
+                offsetX = startX - rect.left;
+                offsetY = startY - rect.top;
+                isDragging = true;
+                widget.style.transition = 'none';
+                document.addEventListener('mousemove', onMove);
+                document.addEventListener('mouseup', onEnd);
+                document.addEventListener('touchmove', onMove, {passive: false});
+                document.addEventListener('touchend', onEnd);
+            };
+
+            const onMove = (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                const touch = e.touches ? e.touches[0] : e;
+                let x = touch.clientX - offsetX;
+                let y = touch.clientY - offsetY;
+                x = Math.max(0, Math.min(x, window.innerWidth - widget.offsetWidth));
+                y = Math.max(0, Math.min(y, window.innerHeight - widget.offsetHeight));
+                widget.style.left = x + 'px';
+                widget.style.top = y + 'px';
+            };
+
+            const onEnd = () => {
+                isDragging = false;
+                widget.style.transition = '';
+                document.removeEventListener('mousemove', onMove);
+                document.removeEventListener('mouseup', onEnd);
+                document.removeEventListener('touchmove', onMove);
+                document.removeEventListener('touchend', onEnd);
+                const rect = widget.getBoundingClientRect();
+                if (rect.bottom > window.innerHeight - 50) setState('footer');
+            };
+
+            contents.ball.addEventListener('mousedown', onStart);
+            contents.ball.addEventListener('touchstart', onStart);
+            document.querySelectorAll('.drag-handle').forEach(el => {
+                el.addEventListener('mousedown', onStart);
+                el.addEventListener('touchstart', onStart);
+            });
+        }
+
+        // ---------- MOTOR DE ÁUDIO UNIFICADO ----------
+        function stopAllPlayers() {
+            if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+            if (scWidget) {
+                try { scWidget.pause(); } catch(e) {}
+                // recriar iframe para evitar travamentos
+                document.getElementById('sc-container').innerHTML = '';
+                scWidget = null;
+            }
+            audioEl.pause();
+            audioEl.currentTime = 0;
+            isPlaying = false;
+        }
+
+        function loadTrack(index) {
+            if (index < 0 || index >= tracks.length) return;
+            if (isLoading) return;
+            isLoading = true;
+            
+            stopAllPlayers();
+            currentIdx = index;
+            const track = tracks[index];
+            activeEngine = track.type;
+            
+            updatePlayerUI(track);
+            syncIcons();
+
+            if (track.type === 'youtube') {
+                if (!ytApiReady || !ytPlayer) {
+                    setTimeout(() => loadTrack(index), 300);
+                    isLoading = false;
+                    return;
+                }
+                ytPlayer.loadVideoById({ videoId: track.id, startSeconds: 0 });
+                // O play será acionado no onStateChange PLAYING
+                // Forçar play após carregamento
+                setTimeout(() => {
+                    ytPlayer.playVideo();
+                    isLoading = false;
+                }, 500);
+            } 
+            else if (track.type === 'soundcloud') {
+                const container = document.getElementById('sc-container');
+                container.innerHTML = `<iframe id="sc-frame" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(track.url)}&auto_play=true&buying=false&sharing=false&download=false&show_artwork=false&visual=false"></iframe>`;
+                scWidget = SC.Widget('sc-frame');
+                scWidget.bind(SC.Widget.Events.READY, () => {
+                    scWidget.play();
+                    isPlaying = true;
+                    syncIcons();
+                    isLoading = false;
+                });
+                scWidget.bind(SC.Widget.Events.FINISH, () => playNext());
+                scWidget.bind(SC.Widget.Events.PLAY, () => { isPlaying = true; syncIcons(); });
+                scWidget.bind(SC.Widget.Events.PAUSE, () => { isPlaying = false; syncIcons(); });
+                scWidget.bind(SC.Widget.Events.ERROR, () => { alert('Erro no SoundCloud'); playNext(); });
+            }
+            else if (track.type === 'local') {
+                if (track.blob) {
+                    audioEl.src = URL.createObjectURL(track.blob);
+                    audioEl.play().then(() => { isPlaying = true; syncIcons(); }).catch(() => alert('Clique para permitir áudio'));
+                }
+                isLoading = false;
+            }
+            renderPlaylist();
+        }
+
+        function togglePlay(e) {
+            if(e) e.stopPropagation();
+            if (currentIdx === -1) return loadTrack(0);
+            
+            if (isPlaying) {
+                if (activeEngine === 'youtube') ytPlayer.pauseVideo();
+                else if (activeEngine === 'soundcloud') scWidget.pause();
+                else audioEl.pause();
+                isPlaying = false;
+            } else {
+                if (activeEngine === 'youtube') ytPlayer.playVideo();
+                else if (activeEngine === 'soundcloud') scWidget.play();
+                else audioEl.play();
+                isPlaying = true;
+            }
+            syncIcons();
+        }
+
+        function playNext() { loadTrack((currentIdx + 1) % tracks.length); }
+        function playPrev() { loadTrack((currentIdx - 1 + tracks.length) % tracks.length); }
+
+        function updatePlayerUI(track) {
+            ['prev', 'foot', 'main'].forEach(prefix => {
+                document.getElementById(`${prefix}-title`).innerText = track.name;
+                document.getElementById(`${prefix}-artist`).innerText = track.artist;
+                document.getElementById(`${prefix}-cover`).src = track.cover;
+            });
+            document.getElementById('main-progress').value = 0;
+            document.getElementById('footer-progress-bar').style.width = '0%';
+        }
+
+        function updateUIForNoTrack() {
+            ['prev', 'foot', 'main'].forEach(prefix => {
+                document.getElementById(`${prefix}-title`).innerText = 'KODUX';
+                document.getElementById(`${prefix}-artist`).innerText = 'Adicione uma faixa';
+            });
+        }
+
+        function syncIcons() {
+            const icon = isPlaying ? 'ph-pause-circle' : 'ph-play-circle';
+            document.getElementById('prev-play-icon').className = `ph-fill ${icon} text-4xl`;
+            document.getElementById('foot-play-icon').className = `ph-fill ${icon} text-5xl`;
+            const mainIcon = document.getElementById('main-play-icon');
+            mainIcon.className = `ph-fill ${isPlaying ? 'ph-pause' : 'ph-play'} text-3xl ${isPlaying ? '' : 'ml-1'}`;
+        }
+
+        // Progresso
+        setInterval(() => {
+            if (!isPlaying) return;
+            let pct = 0;
+            if (activeEngine === 'youtube' && ytPlayer && ytPlayer.getCurrentTime) {
+                const dur = ytPlayer.getDuration();
+                if (dur) pct = (ytPlayer.getCurrentTime() / dur) * 100;
+            } else if (activeEngine === 'local' && audioEl.duration) {
+                pct = (audioEl.currentTime / audioEl.duration) * 100;
+            } else if (activeEngine === 'soundcloud' && scWidget) {
+                scWidget.getPosition(pos => {
+                    scWidget.getDuration(dur => {
+                        const val = (pos / dur) * 100;
+                        document.getElementById('main-progress').value = val;
+                        document.getElementById('footer-progress-bar').style.width = val + '%';
+                    });
+                });
+                return;
+            }
+            document.getElementById('main-progress').value = pct;
+            document.getElementById('footer-progress-bar').style.width = pct + '%';
+        }, 800);
+
+        // Seek
+        document.getElementById('main-progress').addEventListener('input', (e) => {
+            const val = e.target.value / 100;
+            if (activeEngine === 'youtube') ytPlayer.seekTo(val * ytPlayer.getDuration(), true);
+            else if (activeEngine === 'local') audioEl.currentTime = val * audioEl.duration;
+            else if (activeEngine === 'soundcloud') scWidget.getDuration(d => scWidget.seekTo(val * d));
+        });
+
+        document.getElementById('footer-progress-bg').addEventListener('click', (e) => {
+            const rect = e.target.getBoundingClientRect();
+            const val = (e.clientX - rect.left) / rect.width;
+            document.getElementById('main-progress').value = val * 100;
+            document.getElementById('main-progress').dispatchEvent(new Event('input'));
+        });
+
+        // Playlist & Links
+        function renderPlaylist() {
+            const container = document.getElementById('playlist-container');
+            container.innerHTML = '';
+            tracks.forEach((t, i) => {
+                const active = i === currentIdx;
+                const div = document.createElement('div');
+                div.className = `flex items-center gap-3 p-3 rounded-xl cursor-pointer ${active ? 'bg-[var(--primary)]/20 border border-[var(--primary)]/30' : 'bg-white/5 hover:bg-white/10'}`;
+                div.innerHTML = `
+                    <img src="${t.cover}" class="w-10 h-10 rounded-lg object-cover">
+                    <div class="flex-1 overflow-hidden">
+                        <h5 class="text-xs font-bold truncate">${t.name}</h5>
+                        <p class="text-[10px] text-white/40">${t.artist}</p>
+                    </div>
+                    ${active && isPlaying ? '<i class="ph-fill ph-equalizer text-[var(--primary)]"></i>' : ''}
+                `;
+                div.onclick = () => loadTrack(i);
+                container.appendChild(div);
+            });
+        }
+
+        async function addLink() {
+            const input = document.getElementById('link-input');
+            const url = input.value.trim();
+            if (!url) return;
+            
+            let track = { name: 'Nova Faixa', artist: 'Web', cover: 'https://picsum.photos/100' };
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                const id = url.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([0-9A-Za-z_-]{11})/)?.[1];
+                if (!id) return alert('Link inválido');
+                track.type = 'youtube';
+                track.id = id;
+                track.cover = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+                try {
+                    const res = await fetch(`https://noembed.com/embed?url=${url}`);
+                    const data = await res.json();
+                    track.name = data.title || 'YouTube';
+                } catch(e) {}
+            } else if (url.includes('soundcloud.com')) {
+                track.type = 'soundcloud';
+                track.url = url;
+                try {
+                    const res = await fetch(`https://soundcloud.com/oembed?url=${url}&format=json`);
+                    const data = await res.json();
+                    track.name = data.title;
+                    track.artist = data.author_name;
+                    track.cover = data.thumbnail_url;
+                } catch(e) {}
+            } else {
+                return alert('Apenas YouTube ou SoundCloud');
+            }
+            tracks.unshift(track);
+            input.value = '';
+            localStorage.setItem(DB_KEY, JSON.stringify(tracks));
+            renderPlaylist();
+        }
+
+        audioEl.addEventListener('ended', playNext);
+        
+        // Expor globais
+        window.togglePlay = togglePlay;
+        window.playNext = playNext;
+        window.playPrev = playPrev;
+        window.setState = setState;
+        window.addLink = addLink;
+        window.loadTrack = loadTrack;
+
+        // Iniciar
+        init();
+    })();
+</script>
+</body>
+</html>
