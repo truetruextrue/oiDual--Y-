@@ -140,3 +140,49 @@
       background: rgba(50, 215, 203, 0.16);
       color: var(--primary);
     }
+
+
+
+
+ /* Estilização customizada para a barra de progresso principal */
+    .kodux-range-override {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+    }
+    
+    .kodux-range-override::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary, #00ffcc); /* Usa a cor primária ou um fallback cyan */
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary, rgba(0,255,204,0.6));
+      cursor: grab;
+      transition: transform 0.1s ease;
+    }
+
+    .kodux-range-override::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.2);
+    }
+
+    .kodux-range-override::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: var(--primary, #00ffcc);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary, rgba(0,255,204,0.6));
+      cursor: grab;
+      border: none;
+    }
+
+    /* Brilho dinâmico para os tempos */
+    .time-display {
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
