@@ -720,3 +720,133 @@
       renderEverything();
       updateWidgetState("ball");
     })();
+
+
+
+
+
+
+
+
+
+(function() {
+      // Aguarda o DOM e o script original carregarem
+      window.addEventListener('load', () => {
+        setTimeout(() => {
+          const mainProgress = document.getElementById('main-progress');
+          const timeCurrent = document.getElementById('kodux-time-current');
+          const timeTotal = document.getElementById('kodux-time-total');
+          const localAudio = document.getElementById('local-audio');
+          const footerClick = document.getElementById('footer-progress-click');
+
+          let isDragging = false;
+          let activeDuration = 0;
+
+          // Utilitário para formatar segundos em MM:SS
+          const formatTime = (seconds) => {
+            if (!seconds || isNaN(seconds)) return "00:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          };
+
+          // Função para buscar o tempo de onde estiver tocando
+          const syncTimers = () => {
+            if (isDragging) return; // Não atualiza se o usuário estiver segurando a barra
+
+            let cTime = 0;
+            let dur = 0;
+            
+            // Procura a mídia nativa tocando (Áudio HTML5 ou Vídeo em background)
+            const mediaEl = (localAudio && localAudio.src) ? localAudio : document.querySelector('video, audio:not(#local-audio)');
+            
+            if (mediaEl && !mediaEl.paused && mediaEl.duration) {
+                cTime = mediaEl.currentTime;
+                dur = mediaEl.duration;
+            } else if (window.ytPlayer && typeof window.ytPlayer.getCurrentTime === 'function' && window.ytPlayer.getPlayerState() === 1) {
+                // Se a API global do YouTube existir e estiver tocando
+                cTime = window.ytPlayer.getCurrentTime();
+                dur = window.ytPlayer.getDuration();
+            }
+
+            if (dur > 0) {
+                activeDuration = dur;
+                timeTotal.innerText = formatTime(dur);
+                timeCurrent.innerText = formatTime(cTime);
+                
+                // Se o script original não atualizar a barra sozinho, a gente atualiza
+                if (mainProgress && document.activeElement !== mainProgress) {
+                   // mainProgress.value = (cTime / dur) * 100; // Descomente se a barra original parar de andar
+                }
+            } else {
+                // Fallback: Se não conseguir pegar a duração da API, mas o ss5.js atualiza o mainProgress (0-100)
+                let pct = parseFloat(mainProgress.value);
+                if (activeDuration > 0 && pct >= 0) {
+                   timeCurrent.innerText = formatTime((pct / 100) * activeDuration);
+                }
+            }
+          };
+
+          // Loop de sincronização de tempo rodando a cada 500ms
+          setInterval(syncTimers, 500);
+
+          // Lógica de "SEEK" (Avançar/Mudar a parte da música)
+          const performSeek = (percent) => {
+             const mediaEl = (localAudio && localAudio.src) ? localAudio : document.querySelector('video, audio:not(#local-audio)');
+             
+             // 1. Tenta injetar direto no elemento de Media
+             if (mediaEl && mediaEl.duration) {
+                 mediaEl.currentTime = (percent / 100) * mediaEl.duration;
+             } 
+             // 2. Tenta injetar na API do YouTube
+             else if (window.ytPlayer && typeof window.ytPlayer.seekTo === 'function') {
+                 window.ytPlayer.seekTo((percent / 100) * window.ytPlayer.getDuration(), true);
+             }
+             
+             // 3. Força um evento nativo 'change' para o ss5.js original capturar (se ele tiver essa função programada)
+             if (mainProgress) {
+                 mainProgress.value = percent;
+                 mainProgress.dispatchEvent(new Event('change', { bubbles: true }));
+             }
+          };
+
+          // Eventos para arrastar a barra principal (main-progress)
+          if (mainProgress) {
+            mainProgress.addEventListener('mousedown', () => isDragging = true);
+            mainProgress.addEventListener('touchstart', () => isDragging = true);
+
+            // Atualiza o texto do tempo dinamicamente enquanto arrasta
+            mainProgress.addEventListener('input', (e) => {
+               if (activeDuration > 0) {
+                   timeCurrent.innerText = formatTime((e.target.value / 100) * activeDuration);
+               }
+            });
+
+            // Aplica o "Pulo" quando soltar a barra
+            mainProgress.addEventListener('change', (e) => {
+              isDragging = false;
+              performSeek(e.target.value);
+            });
+
+            mainProgress.addEventListener('mouseup', () => isDragging = false);
+            mainProgress.addEventListener('touchend', () => isDragging = false);
+          }
+
+          // Permitir clicar na barra pequena que fica rodapé do widget para avançar
+          if (footerClick) {
+              footerClick.addEventListener('click', (e) => {
+                  const rect = footerClick.getBoundingClientRect();
+                  const x = e.clientX - rect.left;
+                  const percent = (x / rect.width) * 100;
+                  
+                  // Atualiza visualmente a barra menor
+                  const fBar = document.getElementById('footer-progress-bar');
+                  if (fBar) fBar.style.width = `${percent}%`;
+                  
+                  performSeek(percent);
+              });
+          }
+
+        }, 1000); // delay de 1 segundo pra garantir que o ss5.js carregou tudo
+      });
+    })();
