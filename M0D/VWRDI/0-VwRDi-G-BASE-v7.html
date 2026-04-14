@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Ecossistema Integrado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Estilos Externos -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/css/mainK.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+
+  <style>
+    /* --- AETHER: FÍSICA CINEMATOGRÁFICA E AJUSTES PERSONALIZADOS --- */
+    body {
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 0;
+      background: #050816;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .card-origem {
+      transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+      overflow: hidden;
+      will-change: transform, padding, height;
+      background: rgba(10, 12, 25, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px;
+      margin: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    /* Hero quase grudado nas laterais */
+    .hero-top {
+      cursor: pointer;
+      padding: 15px 6px 5px 6px;   /* ← reduzido lateralmente */
+    }
+
+    /* Elementos que colapsam */
+    .hero-slider, .input-row, .btn-row, .time-sub {
+      transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      transform-origin: top;
+      opacity: 1;
+      max-height: 500px;
+    }
+
+    /* Estado Colapsado */
+    .card-origem.is-collapsed {
+      padding-bottom: 5px;
+      background: rgba(10, 12, 25, 0.6);
+    }
+
+    .card-origem.is-collapsed .hero-slider,
+    .card-origem.is-collapsed .input-row,
+    .card-origem.is-collapsed .btn-row,
+    .card-origem.is-collapsed .time-sub {
+      opacity: 0;
+      max-height: 0;
+      margin: 0 !important;
+      padding: 0 !important;
+      pointer-events: none;
+      transform: translateY(-10px) scale(0.98);
+    }
+
+    /* Orbes de fundo */
+    .orb-bg {
+      position: fixed;
+      width: 70vw;
+      height: 70vw;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    #orb-top { top: -25%; right: -15%; background: radial-gradient(circle, #4facfe 0%, #00f2fe 100%); }
+    #orb-bottom { bottom: -25%; left: -15%; background: radial-gradient(circle, #667eea 0%, #764ba2 100%); }
+
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    /* Header: mais espaçado e com identidade */
+    .app-header {
+      padding: 16px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;               /* ← mais espaço entre os grupos */
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 12px;               /* ← separação entre botões */
+      align-items: center;
+    }
+
+    .user-badge {
+      background: rgba(79, 172, 254, 0.15);
+      padding: 6px 12px;
+      border-radius: 40px;
+      border: 1px solid rgba(79, 172, 254, 0.25);
+      font-size: 0.85rem;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+      color: #e0f0ff;
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+    }
+
+    /* Hero Meta (hora e mood) */
+    .hero-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 6px 15px 6px;  /* alinhado com o padding lateral reduzido */
+    }
+
+    .time-chip {
+      background: rgba(79, 172, 254, 0.15);
+      color: #4facfe;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: 1px solid rgba(79, 172, 254, 0.2);
+    }
+
+    .label-mood {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Saudação personalizada (frase extra) */
+    .hero-slogan {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 4px;
+      font-style: italic;
+      letter-spacing: 0.3px;
+    }
+
+    /* Console ativo (caso os estilos externos não definam) */
+    .console-panel.active {
+      display: block !important;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="orb-top" class="orb-bg"></div>
+  <div id="orb-bottom" class="orb-bg"></div>
+  <div id="particles-js"></div>
+
+  <div class="app">
+    <!-- HEADER COM IDENTIFICAÇÃO -->
+    <header class="app-header">
+      <div class="brand-pill">Dual · Infodose</div>
+      <div class="header-actions">
+        <!-- Exibe o nome do usuário e Infodose -->
+        <div class="user-badge" id="userBadge">Dual • Infodose</div>
+        <button class="console-toggle" id="consoleToggle">◎</button>
+        <button class="mode-pill" type="button">
+          <span class="dot"></span>
+          <span>Modo 3·6·9</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CARD ORIGEM UNIFICADO -->
+    <section class="card-origem" id="cardOrigem">
+
+      <!-- HERO INTEGRADO -->
+      <div class="hero-card hero-embedded" id="heroTouchArea">
+        <div class="hero-top">
+          <div class="hero-main">
+            <div class="hero-greeting" id="heroGreeting">Oi, Dual!</div>
+            <div class="hero-subtitle" id="heroSubtitle">Sua Infodose está pronta.</div>
+            <div class="hero-slogan" id="heroSlogan">Do seu jeito. Sempre único. Sempre seu.</div>
+          </div>
+        </div>
+
+        <div class="hero-meta-row">
+          <span class="time-chip" id="timeNow">--:--</span>
+          <span id="moodLabel" class="label-mood">Equilíbrio Ativo</span>
+        </div>
+      </div>
+
+      <!-- ÁREA DE TEMPO E INTERAÇÃO -->
+      <div id="timeSub" class="time-sub"></div>
+
+      <div class="input-row">
+        <label for="intentInput">Intenção / vibração</label>
+        <input id="intentInput" placeholder="O que pretendes ativar?" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="btnDocs">
+          <span class="emoji">📂</span>
+          <span>Docs & Apps</span>
+        </button>
+        <button class="btn" id="btnAddApp">
+          <span class="emoji">＋</span>
+          <span>Novo app</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- LISTA DE APPS -->
+    <section class="apps-wrapper">
+      <div class="apps-header-row">
+        <div class="apps-title">Meus apps / stacks</div>
+        <div class="apps-count" id="appsCount">0 apps</div>
+      </div>
+      <div id="appsList"></div>
+    </section>
+
+    <section class="iframe-deck" id="iframeDeck"></section>
+    <div id="logBox" style="display:none"></div>
+  </div>
+
+  <!-- PAINEL CONSOLE -->
+  <div class="console-panel" id="consolePanel" aria-hidden="true" style="display: none;">
+    <div class="console-panel-inner">
+      <div class="console-header">
+        <div class="console-title">Dual Console · Sistema</div>
+        <button class="console-close" id="consoleClose">✕</button>
+      </div>
+      <div class="console-body">
+        <div class="console-section">
+          <h3>Gestão de Visualização</h3>
+          <div class="console-actions-row">
+            <button class="console-btn" id="toggleOrigemBtn">Colapsar Card</button>
+            <button class="console-btn" id="openGroupBtn">Abrir Grupo</button>
+          </div>
+        </div>
+        <div class="console-section">
+          <h3>Memória Local</h3>
+          <pre class="console-ls-dump" id="consoleLsDump"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULOS DE SISTEMA -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-VwR-di/js/modules/inline-di.js"></script>
+
+  <script>
+    (function() {
+      // Identidade e saudação personalizada
+      const userNameKey = 'di_userName';
+      const infodoseKey = 'di_infodoseName';
+
+      const card = document.getElementById('cardOrigem');
+      const heroArea = document.getElementById('heroTouchArea');
+      const greeting = document.getElementById('heroGreeting');
+      const subtitle = document.getElementById('heroSubtitle');
+      const slogan = document.getElementById('heroSlogan');
+      const timeNowEl = document.getElementById('timeNow');
+      const userBadge = document.getElementById('userBadge');
+      const toggleOrigemBtn = document.getElementById('toggleOrigemBtn');
+
+      // Atualiza identidade em todo o layout
+      function syncIdentity() {
+        const userName = localStorage.getItem(userNameKey) || 'Dual';
+        const infodose = localStorage.getItem(infodoseKey) || 'Infodose';
+
+        // Header badge
+        if (userBadge) userBadge.textContent = `${userName} • ${infodose}`;
+
+        // Hero principal
+        if (greeting) greeting.textContent = `Oi, ${userName}!`;
+        if (subtitle) subtitle.textContent = `Sua ${infodose} está pronta.`;
+        if (slogan) slogan.textContent = 'Do seu jeito. Sempre único. Sempre seu.';
+
+        // Hora atual no chip
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        if (timeNowEl) timeNowEl.textContent = `${hours}:${minutes}`;
+
+        // Atualiza mood básico
+        const moodLabel = document.getElementById('moodLabel');
+        if (moodLabel) {
+          const h = now.getHours();
+          if (h >= 5 && h < 12) moodLabel.textContent = 'Manhã focada';
+          else if (h >= 12 && h < 18) moodLabel.textContent = 'Tarde produtiva';
+          else moodLabel.textContent = 'Noite serena';
+        }
+      }
+
+      syncIdentity();
+      setInterval(syncIdentity, 30000);
+
+      // Colapso do card
+      const KEY_COLLAPSE = 'di_card_collapsed';
+      function toggleCollapse(forceState) {
+        const isNow = (forceState !== undefined) ? forceState : !card.classList.contains('is-collapsed');
+        card.classList.toggle('is-collapsed', isNow);
+        localStorage.setItem(KEY_COLLAPSE, isNow ? '1' : '0');
+        if (navigator.vibrate) navigator.vibrate(8);
+      }
+
+      // Estado inicial (colapsa automaticamente à noite se não houver preferência)
+      const savedState = localStorage.getItem(KEY_COLLAPSE);
+      if (savedState === '1') {
+        toggleCollapse(true);
+      } else if (savedState === null) {
+        const hour = new Date().getHours();
+        if (hour >= 21 || hour < 6) toggleCollapse(true);
+      }
+
+      heroArea.addEventListener('click', () => toggleCollapse());
+      if (toggleOrigemBtn) {
+        toggleOrigemBtn.addEventListener('click', () => toggleCollapse());
+      }
+
+      // Console toggle
+      const consoleToggle = document.getElementById('consoleToggle');
+      const consolePanel = document.getElementById('consolePanel');
+      const consoleClose = document.getElementById('consoleClose');
+
+      consoleToggle?.addEventListener('click', () => {
+        consolePanel.style.display = 'block';
+        consolePanel.setAttribute('aria-hidden', 'false');
+      });
+      consoleClose?.addEventListener('click', () => {
+        consolePanel.style.display = 'none';
+        consolePanel.setAttribute('aria-hidden', 'true');
+      });
+
+      // Atualiza dump do localStorage (se existir função no inline-di)
+      if (typeof window.updateConsoleDump === 'function') {
+        window.updateConsoleDump();
+      }
+
+      // Se os scripts externos precisarem de inicialização extra, eles cuidarão.
+    })();
+  </script>
+  <!-- Pequeno fallback para garantir que o console seja exibido corretamente -->
+  <style>
+    .console-panel { position: fixed; bottom: 0; left: 0; right: 0; z-index: 1000; }
+    .console-panel-inner { background: #0b0e1a; color: white; border-radius: 24px 24px 0 0; padding: 16px; }
+  </style>
+</body>
+</html>
