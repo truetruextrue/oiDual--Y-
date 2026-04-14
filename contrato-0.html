@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#0b0f14" />
+  <title>Fusion • KODUX x Feeling</title>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+
+    :root{
+      --bg:#070b10;
+      --panel:#0d1420;
+      --panel-2:#111a2a;
+      --line:rgba(255,255,255,.08);
+      --text:#e8eef8;
+      --muted:#94a3b8;
+      --accent:#7dd3fc;
+      --accent-2:#a78bfa;
+      --good:#34d399;
+      --warn:#fbbf24;
+      --danger:#fb7185;
+      --paper:#f8fafc;
+      --paper-text:#0f172a;
+      --paper-muted:#475569;
+      --shadow:0 18px 60px rgba(0,0,0,.35);
+      --radius:22px;
+      --radius-sm:14px;
+      --font: 'Inter', ui-sans-serif, system-ui, sans-serif;
+      --font-doc: 'Georgia', 'Times New Roman', serif;
+      --font-h: 'Playfair Display', serif;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family:var(--font);
+      background:
+        radial-gradient(circle at top left, rgba(125,211,252,.08), transparent 30%),
+        radial-gradient(circle at top right, rgba(167,139,250,.08), transparent 28%),
+        linear-gradient(180deg, #05070b, #0a1020 42%, #070b10);
+      background-attachment: fixed;
+      color:var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .app{
+      min-height:100vh;
+      display:grid;
+      grid-template-columns: 380px 1fr;
+      gap:18px;
+      padding:18px;
+    }
+
+    .sidebar,
+    .preview-wrap{
+      background:rgba(13,20,32,.8);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius:var(--radius);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+    }
+
+    .sidebar{ min-width:320px; }
+    .preview-wrap{ min-width:0; }
+
+    .sidebar-header{
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+
+    .brand{ display:flex; align-items:center; gap:12px; }
+
+    .logo,
+    .paper-logo{
+      width:48px;
+      height:48px;
+      border-radius:15px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, rgba(125,211,252,.18), rgba(167,139,250,.18));
+      border:1px solid rgba(255,255,255,.1);
+      color:white;
+      flex:0 0 auto;
+      overflow:hidden;
+      position:relative;
+      font-weight:800;
+      letter-spacing:.08em;
+    }
+
+    .logo-img,
+    .paper-logo-img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+    }
+
+    .logo-fallback{
+      font-size:12px;
+      line-height:1;
+      text-align:center;
+      padding:6px;
+      color:#fff;
+    }
+
+    .brand h1{ font-size:16px; margin:0; line-height:1.2; }
+    .brand p{ margin:3px 0 0; color:var(--muted); font-size:12px; }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      padding:12px 18px;
+      flex-wrap:nowrap;
+      overflow-x:auto;
+      scrollbar-width:none;
+      -webkit-overflow-scrolling: touch;
+      border-bottom: 1px solid transparent;
+    }
+    .tabs::-webkit-scrollbar { display: none; }
+
+    .tab{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius:999px;
+      font-size:13px;
+      font-weight:500;
+      cursor:pointer;
+      transition:.2s ease;
+      white-space:nowrap;
+      user-select:none;
+    }
+    .tab.active{
+      background:linear-gradient(135deg, rgba(125,211,252,.16), rgba(167,139,250,.16));
+      border-color:rgba(125,211,252,.35);
+      color:#fff;
+    }
+
+    .panel{ padding:0 18px 18px; overflow:auto; flex: 1; }
+    .section{ display:none; animation:fade .2s ease; }
+    .section.active{ display:block; }
+
+    @keyframes fade{
+      from{ opacity:.4; transform:translateY(4px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    .group{
+      margin-bottom:16px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(255,255,255,.02);
+    }
+    .group h2{
+      margin:0 0 14px;
+      font-size:13px;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      color:#cbd5e1;
+    }
+
+    .field{ display:flex; flex-direction:column; gap:6px; margin-bottom:14px; }
+    .field:last-child { margin-bottom: 0; }
+    .field label{ font-size:13px; color:var(--muted); font-weight:500; }
+
+    .field input,
+    .field textarea,
+    .field select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(8,12,20,.9);
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      outline:none;
+      font:inherit;
+      font-size:14px;
+      transition:.2s ease;
+    }
+    .field input:focus,
+    .field textarea:focus,
+    .field select:focus{
+      border-color:rgba(125,211,252,.5);
+      box-shadow:0 0 0 3px rgba(125,211,252,.12);
+      background:#05070a;
+    }
+    .field textarea{ min-height:100px; resize:vertical; }
+
+    .row, .row-3{ display:grid; gap:12px; }
+    .row{ grid-template-columns:1fr 1fr; }
+    .row-3{ grid-template-columns:1fr 1fr 1fr; }
+
+    .btnbar{
+      display:flex;
+      gap:10px;
+      padding:16px 18px;
+      border-top:1px solid var(--line);
+      background:linear-gradient(180deg, transparent, rgba(255,255,255,.02));
+      flex-wrap:wrap;
+    }
+
+    button{
+      border:none;
+      border-radius:14px;
+      padding:14px 18px;
+      cursor:pointer;
+      font:inherit;
+      font-weight:500;
+      font-size:14px;
+      color:white;
+      transition:.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .btn-primary{ background:linear-gradient(135deg, #2563eb, #8b5cf6); box-shadow: 0 4px 14px rgba(37,99,235,.25); }
+    .btn-secondary{ background:rgba(255,255,255,.06); border:1px solid var(--line); }
+    .btn-danger{ background:rgba(251,113,133,.12); border:1px solid rgba(251,113,133,.25); color:#fda4af; }
+
+    button:active{ transform:scale(0.98); }
+    @media(hover:hover){ button:hover{ filter:brightness(1.1); transform:translateY(-1px); } }
+
+    .preview-head{
+      padding:18px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+    .preview-head h2{ margin:0; font-size:16px; }
+    .preview-head .hint{ font-size:13px; color:var(--muted); margin-top:2px; }
+
+    .paper-shell{ padding:24px; overflow:auto; flex:1; display:flex; flex-direction:column; }
+
+    .paper{
+      background:var(--paper);
+      color:var(--paper-text);
+      font-family: var(--font-doc);
+      font-size: 10.5pt;
+      line-height: 1.7;
+      border-radius:26px;
+      padding:48px 60px;
+      width:100%;
+      max-width:920px;
+      margin:0 auto;
+      box-shadow:0 30px 80px rgba(0,0,0,.28);
+    }
+
+    .paper-top{
+      display:flex; justify-content:space-between; gap:18px; align-items:flex-start;
+      border-bottom:2px solid #e2e8f0; padding-bottom:24px; margin-bottom:24px;
+    }
+    .paper-brand{ display:flex; gap:16px; align-items:center; }
+    .paper-logo{
+      width:64px;
+      height:64px;
+      border-radius:18px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg, #e2e8f0, #cbd5e1);
+      font-weight:800;
+      color:#0f172a;
+      letter-spacing:.08em;
+      font-size:18px;
+      font-family: var(--font);
+      overflow:hidden;
+      flex:0 0 auto;
+    }
+    .paper-company h1{
+      margin:0;
+      font-family: var(--font-h);
+      font-size:24px;
+      line-height:1.15;
+      letter-spacing:0.5px;
+    }
+    .paper-company p{
+      margin:6px 0 0;
+      color:var(--paper-muted);
+      font-size:14px;
+      line-height:1.4;
+      font-family:var(--font);
+    }
+
+    .paper-meta{ text-align:right; font-size:14px; color:var(--paper-muted); line-height:1.5; font-family:var(--font); }
+
+    .title{ text-align:center; margin:12px 0 32px; }
+    .title h2{ margin:0; font-family: var(--font-h); font-size:20pt; letter-spacing:.02em; text-transform:uppercase; }
+    .title p{ margin:6px 0 0; color:var(--paper-muted); font-size:11pt; font-family:var(--font); }
+
+    .doc-section{ margin:24px 0; }
+    .doc-section h3{
+      margin:0 0 14px;
+      font-size:13pt;
+      border-left:4px solid #0f172a;
+      padding-left:12px;
+      font-family:var(--font-h);
+      letter-spacing:0.5px;
+    }
+
+    .info-grid{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .info-card{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      padding:16px 20px;
+    }
+    .info-card .k{
+      font-size:10pt;
+      color:var(--paper-muted);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      margin-bottom:6px;
+      font-weight:600;
+      font-family:var(--font);
+    }
+    .info-card .v{
+      font-size:11.5pt;
+      line-height:1.5;
+      word-break:break-word;
+    }
+
+    .clause-list{ counter-reset: c; margin:0; padding-left:0; list-style:none; }
+    .clause-list li{
+      counter-increment:c;
+      margin-bottom:12px;
+      padding:16px 20px;
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      line-height:1.6;
+      font-size:11.5pt;
+    }
+    .clause-list li::before{
+      content: counter(c) ". ";
+      font-weight:700;
+      color:#0f172a;
+    }
+
+    .table-responsive {
+      width: 100%;
+      overflow-x: auto;
+      border-radius:12px;
+      border:1px solid #e2e8f0;
+      background:#fff;
+    }
+    .item-table{
+      width:100%;
+      border-collapse:collapse;
+      min-width: 600px;
+      font-family:var(--font);
+    }
+    .item-table th, .item-table td{
+      padding:14px 16px;
+      border-bottom:1px solid #e2e8f0;
+      text-align:left;
+      font-size:13px;
+    }
+    .item-table th{
+      background:#f8fafc;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      font-size:11px;
+      color:#334155;
+      font-weight:600;
+    }
+    .item-table tr:last-child td{ border-bottom:none; }
+
+    .totals{
+      display:grid;
+      grid-template-columns:1fr 280px;
+      gap:16px;
+      margin-top:16px;
+      align-items:start;
+      font-family:var(--font);
+    }
+    .payment-box, .total-box{
+      background:#fff;
+      border:1px solid #e2e8f0;
+      border-radius:12px;
+      padding:18px 20px;
+    }
+    .total-box{ text-align:right; }
+    .total-box .big{
+      font-size:26px;
+      font-weight:800;
+      margin-top:4px;
+      color:#0f172a;
+    }
+
+    .signature{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:32px;
+      margin-top:48px;
+    }
+    .sig{
+      text-align:center;
+      padding-top:24px;
+      border-top:1.5px solid #0f172a;
+      font-size:11pt;
+      color:var(--paper-muted);
+      font-family:var(--font);
+    }
+
+    .page-break-indicator {
+      border-top: 2px dashed #cbd5e1;
+      margin: 40px 0;
+      position: relative;
+      text-align: center;
+    }
+    .page-break-indicator::after {
+      content: 'Folha 2 (Quebra de Página)';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--paper);
+      padding: 0 14px;
+      font-size: 12px;
+      font-family: var(--font);
+      font-weight: 600;
+      color: #94a3b8;
+      border-radius: 99px;
+    }
+
+    .mini{
+      font-size:12px;
+      color:var(--muted);
+      font-weight:500;
+      background:rgba(255,255,255,.05);
+      padding:4px 10px;
+      border-radius:99px;
+    }
+
+    .logo-upload-wrap{
+      display:grid;
+      gap:10px;
+      grid-template-columns:1fr auto;
+      align-items:end;
+    }
+
+    .logo-actions{
+      display:flex;
+      gap:10px;
+      margin-top:8px;
+      flex-wrap:wrap;
+    }
+
+    @media (max-width: 1100px){
+      .app{
+        display:flex;
+        flex-direction:column;
+        padding:0;
+        gap:0;
+        min-height:100dvh;
+      }
+      .sidebar, .preview-wrap {
+        border-radius:0;
+        border-left:none;
+        border-right:none;
+        box-shadow:none;
+        overflow:visible;
+        border-bottom:none;
+      }
+      .panel, .paper-shell { overflow:visible; }
+      .field input, .field textarea, .field select { font-size: 16px; }
+
+      .btnbar{
+        position: sticky;
+        bottom: 0;
+        z-index: 100;
+        background: rgba(13,20,32,0.85);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        padding: 14px 18px;
+        scrollbar-width: none;
+      }
+      .btnbar::-webkit-scrollbar { display: none; }
+      .btnbar button { flex: 1 0 auto; white-space: nowrap; }
+    }
+
+    @media (max-width: 720px){
+      .sidebar-header { padding: 18px; }
+      .tabs { padding: 8px 18px; }
+      .panel { padding: 18px; }
+      .paper-shell { padding: 18px; }
+      .paper{ padding:24px; border-radius:20px; }
+      .paper-top{ flex-direction:column; }
+      .paper-meta{ text-align:left; margin-top:8px; }
+      .info-grid, .row, .row-3, .totals, .signature{ grid-template-columns:1fr; }
+      .table-responsive { border-radius: 14px; }
+      .logo-upload-wrap{ grid-template-columns:1fr; }
+    }
+
+    @media print{
+      body{ background:#fff; }
+      .sidebar, .tabs, .preview-head, .btnbar{ display:none !important; }
+      .app{ display:block; padding:0; }
+      .preview-wrap{ border:none; box-shadow:none; background:none; display:block; }
+      .paper-shell{ padding:0; display:block; }
+      .paper{ box-shadow:none; border-radius:0; max-width:none; padding:0; }
+
+      .page-break-indicator {
+        border: none;
+        margin: 0;
+        break-before: page;
+        page-break-before: always;
+      }
+      .page-break-indicator::after { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="brand">
+          <div class="logo" id="logoPreview"></div>
+          <div>
+            <h1>FUSION • Contrato</h1>
+            <p>UI Kodux + Feeling Docs</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab active" data-tab="empresa">Empresa</div>
+        <div class="tab" data-tab="cliente">Cliente</div>
+        <div class="tab" data-tab="contrato">Contrato</div>
+        <div class="tab" data-tab="itens">Itens</div>
+      </div>
+
+      <div class="panel">
+        <section class="section active" id="tab-empresa">
+          <div class="group">
+            <h2>Dados da empresa</h2>
+            <div class="field">
+              <label>Nome da empresa</label>
+              <input id="empresaNome" value="Feeling Decorações" />
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Logo / sigla</label>
+                <input id="empresaSigla" value="💊" maxlength="20" />
+              </div>
+              <div class="field">
+                <label>CNPJ</label>
+                <input id="empresaCnpj" value="45.174.104/0001-50" />
+              </div>
+            </div>
+
+            <div class="field">
+              <label>Logo da empresa</label>
+              <input id="empresaLogo" type="file" accept="image/*" />
+            </div>
+
+            <div class="logo-actions">
+              <button class="btn-secondary" type="button" style="flex:1" onclick="restoreDefaultLogo()">Usar icon-feeling.png</button>
+              <button class="btn-secondary" type="button" style="flex:1" onclick="clearCustomLogo()">Remover custom</button>
+            </div>
+
+            <div class="field">
+              <label>Endereço</label>
+              <textarea id="empresaEndereco">Rua Francisco Dias Canizares, 188, Jd. Planalto – Sorocaba/SP</textarea>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Telefone</label>
+                <input id="empresaTelefone" value="(15) 99606-2915" />
+              </div>
+              <div class="field">
+                <label>E-mail</label>
+                <input id="empresaEmail" value="contato@feelingdecoracoes.com.br" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tab-cliente">
+          <div class="group">
+            <h2>Dados do cliente</h2>
+            <div class="field">
+              <label>Nome do cliente</label>
+              <input id="clienteNome" value="Nome Cliente" />
+            </div>
+            <div class="field">
+              <label>CPF / CNPJ</label>
+              <input id="clienteCpf" value="xxx.xxx.991-38" />
+            </div>
+            <div class="field">
+              <label>Endereço</label>
+              <textarea id="clienteEndereco">Alameda Roma, 145 – Jardim Villagio Milano – Sorocaba/SP</textarea>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Telefone</label>
+                <input id="clienteTelefone" value="(67) 9915-3045" />
+              </div>
+              <div class="field">
+                <label>CEP</label>
+                <input id="clienteCep" value="18057-124" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tab-contrato">
+          <div class="group">
+            <h2>Cláusulas base</h2>
+            <div class="field">
+              <label>Objeto do contrato</label>
+              <textarea id="objeto">Fabricação, fornecimento e instalação de móveis planejados conforme medidas, especificações, acabamentos e projeto aprovado pelas partes.</textarea>
+            </div>
+            <div class="row">
+              <div class="field">
+                <label>Prazo de entrega (dias)</label>
+                <input id="prazoEntrega" type="number" value="30" />
+              </div>
+              <div class="field">
+                <label>Valor total (R$)</label>
+                <input id="valorTotal" value="10580,00" />
+              </div>
+            </div>
+            <div class="field">
+              <label>Forma de pagamento</label>
+              <textarea id="pagamento">Entrada via PIX e saldo parcelado em boletos, conforme combinado e discriminado no orçamento aprovado.</textarea>
+            </div>
+            <div class="field">
+              <label>Garantia</label>
+              <textarea id="garantia">A garantia cobre: 90 (noventa) dias para defeitos de instalação e 12 (doze) meses para defeitos de fabricação devidamente comprovados.</textarea>
+            </div>
+            <div class="field">
+              <label>Foro</label>
+              <input id="foro" value="Comarca de Sorocaba/SP" />
+            </div>
+          </div>
+
+          <div class="group">
+            <h2>Opções Adicionais</h2>
+            <div class="row-3">
+              <label class="field">
+                <span style="font-size:12px;color:var(--muted);">Nota fiscal</span>
+                <select id="incluirNotaFiscal">
+                  <option value="sim" selected>Sim</option>
+                  <option value="nao">Não</option>
+                </select>
+              </label>
+              <label class="field">
+                <span style="font-size:12px;color:var(--muted);">Multa por atraso</span>
+                <select id="incluirMulta">
+                  <option value="sim" selected>Sim</option>
+                  <option value="nao">Não</option>
+                </select>
+              </label>
+              <label class="field">
+                <span style="font-size:12px;color:var(--muted);">Instalação</span>
+                <select id="incluirInstalacao">
+                  <option value="sim" selected>Sim</option>
+                  <option value="nao">Não</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="tab-itens">
+          <div class="group">
+            <h2>Itens do contrato</h2>
+            <div id="itemsWrap"></div>
+            <div style="display:flex; gap:10px; margin-top:16px;">
+              <button class="btn-secondary" type="button" style="flex:1" onclick="addItem()">+ Adicionar item</button>
+              <button class="btn-secondary" type="button" onclick="fillSampleItems()">Exemplo</button>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <div class="btnbar">
+        <button class="btn-primary" type="button" onclick="actionGerar()">Visualizar / Atualizar</button>
+        <button class="btn-secondary" type="button" onclick="saveDraft()">Salvar Rascunho</button>
+        <button class="btn-secondary" type="button" onclick="loadDraft()">Carregar</button>
+        <button class="btn-secondary" type="button" onclick="window.print()">Imprimir PDF</button>
+        <button class="btn-danger" type="button" onclick="resetAll()">Resetar</button>
+      </div>
+    </aside>
+
+    <main class="preview-wrap" id="previewAnchor">
+      <div class="preview-head">
+        <div>
+          <h2>Pré-visualização Fusion</h2>
+          <div class="hint">Página 1 (Dados) | Página 2 (Cláusulas)</div>
+        </div>
+        <div class="mini" id="statusText">Pronto</div>
+      </div>
+
+      <div class="paper-shell">
+        <article class="paper" id="contractPreview"></article>
+      </div>
+    </main>
+  </div>
+
+  <template id="itemTemplate">
+    <div class="group item-card" style="margin-top:12px; background: rgba(0,0,0,0.2);">
+      <div class="row">
+        <div class="field">
+          <label>Ambiente / Peça</label>
+          <input class="item-ambiente" placeholder="Ex.: Cozinha" value="Cozinha" />
+        </div>
+        <div class="field">
+          <label>Quantidade</label>
+          <input class="item-quantidade" type="number" value="1" min="1" />
+        </div>
+      </div>
+      <div class="field">
+        <label>Descrição</label>
+        <textarea class="item-descricao">Módulo em MDF BP com ferragens premium, conforme projeto.</textarea>
+      </div>
+      <div class="row">
+        <div class="field">
+          <label>Valor unitário (R$)</label>
+          <input class="item-valor" value="10580,00" />
+        </div>
+        <div class="field">
+          <label>Ação</label>
+          <button type="button" class="btn-danger" style="height:100%; margin-top:20px;" onclick="removeItem(this)">Remover</button>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const DI_STORAGE_KEY = 'di_koduxContratoDraft';
+    const DI_DEFAULT_LOGO = './icon-feeling.png';
+
+    let di_logoDataUrl = '';
+
+    function moneyBRL(value) {
+      const n = Number(String(value).replace(/\./g, '').replace(',', '.')) || 0;
+      return n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+    }
+
+    function parseMoney(value) {
+      return Number(String(value).replace(/\./g, '').replace(',', '.')) || 0;
+    }
+
+    function todayBR() {
+      return new Date().toLocaleDateString('pt-BR');
+    }
+
+    function setStatus(text) {
+      const st = $('statusText');
+      st.textContent = text;
+      st.style.background = 'rgba(52, 211, 153, 0.2)';
+      st.style.color = 'var(--good)';
+      setTimeout(() => {
+        st.style.background = 'rgba(255,255,255,.05)';
+        st.style.color = 'var(--muted)';
+      }, 2000);
+    }
+
+    function escapeHTML(str) {
+      return String(str)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function getLogoSrc() {
+      return di_logoDataUrl || DI_DEFAULT_LOGO;
+    }
+
+    function renderLogoHtml(src, label, cls) {
+      const safeSrc = escapeHTML(src || DI_DEFAULT_LOGO);
+      const safeLabel = JSON.stringify(String(label || 'KDX'));
+      return `
+        <img
+          src="${safeSrc}"
+          alt="Logo"
+          class="${cls}"
+          onerror="var p=this.parentElement;if(p){p.classList.add('logo-fallback');p.textContent=${safeLabel};}"
+        />
+      `;
+    }
+
+    function getItems() {
+      return [...document.querySelectorAll('.item-card')].map(card => ({
+        ambiente: card.querySelector('.item-ambiente').value.trim(),
+        quantidade: Number(card.querySelector('.item-quantidade').value || 1),
+        descricao: card.querySelector('.item-descricao').value.trim(),
+        valor: parseMoney(card.querySelector('.item-valor').value)
+      })).filter(item => item.ambiente || item.descricao);
+    }
+
+    function addItem(data = {}) {
+      const tpl = $('itemTemplate').content.cloneNode(true);
+      const card = tpl.querySelector('.item-card');
+      card.querySelector('.item-ambiente').value = data.ambiente ?? '';
+      card.querySelector('.item-quantidade').value = data.quantidade ?? 1;
+      card.querySelector('.item-descricao').value = data.descricao ?? '';
+      card.querySelector('.item-valor').value = data.valor ?? '';
+      $('itemsWrap').appendChild(tpl);
+      renderContract();
+    }
+
+    function removeItem(btn) {
+      btn.closest('.item-card').remove();
+      renderContract();
+    }
+
+    function fillSampleItems() {
+      $('itemsWrap').innerHTML = '';
+      addItem({
+        ambiente: 'Sala',
+        quantidade: 1,
+        descricao: 'Painel e rack planejados em MDF BP, acabamento conforme padrão aprovado.',
+        valor: '2890,00'
+      });
+      addItem({
+        ambiente: 'Cozinha',
+        quantidade: 1,
+        descricao: 'Conjunto de armários sob medida com puxadores e ferragens de qualidade.',
+        valor: '4690,00'
+      });
+      addItem({
+        ambiente: 'Lavanderia',
+        quantidade: 1,
+        descricao: 'Módulos funcionais planejados para otimização do espaço.',
+        valor: '3000,00'
+      });
+      renderContract();
+    }
+
+    function buildClauses() {
+      const clausulas = [];
+      clausulas.push(`O objeto deste contrato consiste na fabricação, fornecimento e instalação dos móveis planejados descritos neste documento, de acordo com medidas, materiais e acabamentos aprovados pelo cliente.`);
+      clausulas.push(`O prazo de entrega informado é de ${$('prazoEntrega').value || 30} dias corridos, contados a partir da confirmação do pagamento da entrada e da aprovação final das medidas e especificações.`);
+      clausulas.push(`O cliente se compromete a disponibilizar o local apto para instalação, com paredes, pisos e pontos de energia prontos, livres de obstruções que impeçam a execução do serviço.`);
+      clausulas.push(`Qualquer alteração de projeto, cor, material, ferragem, medida ou layout após a aprovação inicial poderá gerar custo adicional e reprogramação imediata do prazo.`);
+      clausulas.push(`A empresa não se responsabiliza por atrasos decorrentes de fatores externos, como indisponibilidade de materiais no mercado, alterações solicitadas pelo cliente, atraso de pagamento ou impedimentos no local de instalação.`);
+
+      if ($('incluirInstalacao').value === 'sim') clausulas.push(`A instalação está inclusa conforme descrito no orçamento, salvo situações imprevisíveis que exijam adaptação estrutural civil não prevista inicialmente.`);
+      if ($('incluirNotaFiscal').value === 'sim') clausulas.push(`A nota fiscal será emitida conforme os dados cadastrais informados pelo Contratante e de acordo com a legislação tributária vigente.`);
+      if ($('incluirMulta').value === 'sim') clausulas.push(`Em caso de atraso de pagamento imputável ao Contratante, poderão incidir multa de 2% (dois por cento), juros e correção monetária, conforme ajustado entre as partes e permitido em lei.`);
+
+      clausulas.push(`A garantia cobre defeitos de fabricação e de instalação, observadas rigorosamente as condições de uso correto, conservação e manutenção adequada dos móveis estipuladas no manual.`);
+      clausulas.push(`Fica eleito o foro da comarca de ${$('foro').value || 'Sorocaba/SP'} para dirimir eventuais controvérsias oriundas deste contrato, com renúncia expressa a qualquer outro.`);
+      return clausulas;
+    }
+
+    function buildContractHTML() {
+      const eNome = $('empresaNome').value.trim();
+      const eSigla = $('empresaSigla').value.trim() || 'KDX';
+      const eCnpj = $('empresaCnpj').value.trim();
+      const eEnd = $('empresaEndereco').value.trim();
+      const eTel = $('empresaTelefone').value.trim();
+      const eMail = $('empresaEmail').value.trim();
+
+      const cNome = $('clienteNome').value.trim();
+      const cCpf = $('clienteCpf').value.trim();
+      const cEnd = $('clienteEndereco').value.trim();
+      const cTel = $('clienteTelefone').value.trim();
+      const cCep = $('clienteCep').value.trim();
+
+      const obj = $('objeto').value.trim();
+      const pag = $('pagamento').value.trim();
+      const gar = $('garantia').value.trim();
+      const prz = $('prazoEntrega').value || 30;
+
+      const vTotal = parseMoney($('valorTotal').value);
+      const items = getItems();
+      const clausulas = buildClauses();
+      const logoSrc = getLogoSrc();
+
+      const iTotal = items.reduce((acc, it) => acc + (it.quantidade * it.valor), 0);
+      const tFinal = vTotal || iTotal;
+
+      const iRows = items.length ? items.map(it => `
+        <tr>
+          <td><strong>${escapeHTML(it.ambiente)}</strong></td>
+          <td>${it.quantidade}</td>
+          <td>${escapeHTML(it.descricao)}</td>
+          <td>${moneyBRL(it.valor)}</td>
+          <td><strong>${moneyBRL(it.quantidade * it.valor)}</strong></td>
+        </tr>
+      `).join('') : `<tr><td colspan="5">Nenhum item cadastrado.</td></tr>`;
+
+      return `
+        <div class="print-page">
+          <div class="paper-top">
+            <div class="paper-brand">
+              <div class="paper-logo">${renderLogoHtml(logoSrc, eSigla, 'paper-logo-img')}</div>
+              <div class="paper-company">
+                <h1>${escapeHTML(eNome)}</h1>
+                <p><strong>CNPJ:</strong> ${escapeHTML(eCnpj)}<br>
+                <strong>Endereço:</strong> ${escapeHTML(eEnd)}<br>
+                <strong>Contato:</strong> ${escapeHTML(eTel)} | ${escapeHTML(eMail)}</p>
+              </div>
+            </div>
+            <div class="paper-meta">
+              <strong>Contrato de Prestação de Serviços</strong><br>
+              Emissão: ${todayBR()}<br>
+              Prazo Estipulado: ${escapeHTML(String(prz))} dias
+            </div>
+          </div>
+
+          <div class="title">
+            <h2>CONTRATO DE MÓVEIS PLANEJADOS</h2>
+            <p>Fabricação, fornecimento e instalação, conforme projeto aprovado.</p>
+          </div>
+
+          <div class="doc-section">
+            <h3>1. Qualificação das Partes</h3>
+            <div class="info-grid">
+              <div class="info-card">
+                <div class="k">Contratada</div>
+                <div class="v"><strong>${escapeHTML(eNome)}</strong><br>CNPJ: ${escapeHTML(eCnpj)}<br>${escapeHTML(eEnd)}<br>${escapeHTML(eTel)}</div>
+              </div>
+              <div class="info-card">
+                <div class="k">Contratante</div>
+                <div class="v"><strong>${escapeHTML(cNome)}</strong><br>CPF/CNPJ: ${escapeHTML(cCpf)}<br>${escapeHTML(cEnd)}<br>${escapeHTML(cTel)}<br>CEP: ${escapeHTML(cCep)}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="doc-section">
+            <h3>2. Objeto Contratual</h3>
+            <div class="info-card"><div class="v">${escapeHTML(obj)}</div></div>
+          </div>
+
+          <div class="doc-section">
+            <h3>3. Produtos e Serviços Adquiridos</h3>
+            <div class="table-responsive">
+              <table class="item-table">
+                <thead>
+                  <tr>
+                    <th>Ambiente</th>
+                    <th>Qtd.</th>
+                    <th>Descrição Técnica</th>
+                    <th>Unitário</th>
+                    <th>Total</th>
+                  </tr>
+                </thead>
+                <tbody>${iRows}</tbody>
+              </table>
+            </div>
+
+            <div class="totals">
+              <div class="payment-box">
+                <strong>Condições de Pagamento</strong>
+                <div style="margin-top:8px; color:#334155; line-height:1.6;">${escapeHTML(pag)}</div>
+              </div>
+              <div class="total-box">
+                <div style="font-size:12px; color:#64748b; text-transform:uppercase; letter-spacing:.04em; font-family:var(--font);">Valor Total Contratado</div>
+                <div class="big">${moneyBRL(tFinal)}</div>
+                <div style="margin-top:8px; color:#64748b; font-size:12px; font-family:var(--font);">Refere-se ao projeto aprovado</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="page-break-indicator"></div>
+
+        <div class="print-page">
+          <div class="doc-section" style="margin-top:0;">
+            <h3>4. Cláusulas e Condições Gerais</h3>
+            <ol class="clause-list">${clausulas.map(c => `<li>${escapeHTML(c)}</li>`).join('')}</ol>
+          </div>
+
+          <div class="doc-section">
+            <h3>5. Termo de Garantia</h3>
+            <div class="info-card"><div class="v">${escapeHTML(gar)}</div></div>
+          </div>
+
+          <div class="doc-section">
+            <h3>6. Assinaturas</h3>
+            <p style="text-align:center; margin-bottom: 40px; color:var(--paper-muted);">E por estarem justas e contratadas, as partes assinam o presente instrumento em duas vias de igual teor.</p>
+            <div class="signature">
+              <div class="sig">___________________________________________<br><strong>${escapeHTML(eNome)}</strong><br>Contratada</div>
+              <div class="sig">___________________________________________<br><strong>${escapeHTML(cNome || 'Cliente')}</strong><br>Contratante</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderContract() {
+      $('contractPreview').innerHTML = buildContractHTML();
+
+      const logoPreview = $('logoPreview');
+      const logoSrc = getLogoSrc();
+      const sigla = ($('empresaSigla').value.trim() || 'KDX').slice(0, 20).toUpperCase();
+
+      logoPreview.classList.remove('logo-fallback');
+      logoPreview.innerHTML = renderLogoHtml(logoSrc, sigla, 'logo-img');
+    }
+
+    function actionGerar() {
+      renderContract();
+      setStatus('Renderizado');
+      if (window.innerWidth <= 1100) {
+        $('previewAnchor').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
+
+    function saveDraft() {
+      const data = {
+        empresaNome: $('empresaNome').value,
+        empresaSigla: $('empresaSigla').value,
+        empresaCnpj: $('empresaCnpj').value,
+        empresaEndereco: $('empresaEndereco').value,
+        empresaTelefone: $('empresaTelefone').value,
+        empresaEmail: $('empresaEmail').value,
+        clienteNome: $('clienteNome').value,
+        clienteCpf: $('clienteCpf').value,
+        clienteEndereco: $('clienteEndereco').value,
+        clienteTelefone: $('clienteTelefone').value,
+        clienteCep: $('clienteCep').value,
+        objeto: $('objeto').value,
+        prazoEntrega: $('prazoEntrega').value,
+        valorTotal: $('valorTotal').value,
+        pagamento: $('pagamento').value,
+        garantia: $('garantia').value,
+        foro: $('foro').value,
+        incluirNotaFiscal: $('incluirNotaFiscal').value,
+        incluirMulta: $('incluirMulta').value,
+        incluirInstalacao: $('incluirInstalacao').value,
+        logoDataUrl: di_logoDataUrl || '',
+        items: getItems()
+      };
+
+      localStorage.setItem(DI_STORAGE_KEY, JSON.stringify(data));
+      setStatus('Salvo via di_');
+    }
+
+    function loadDraft() {
+      const raw = localStorage.getItem(DI_STORAGE_KEY) || localStorage.getItem('koduxContratoDraft');
+      if (!raw) {
+        setStatus('Vazio');
+        renderContract();
+        return;
+      }
+
+      const data = JSON.parse(raw);
+
+      $('empresaNome').value = data.empresaNome ?? $('empresaNome').value;
+      $('empresaSigla').value = data.empresaSigla ?? $('empresaSigla').value;
+      $('empresaCnpj').value = data.empresaCnpj ?? $('empresaCnpj').value;
+      $('empresaEndereco').value = data.empresaEndereco ?? $('empresaEndereco').value;
+      $('empresaTelefone').value = data.empresaTelefone ?? $('empresaTelefone').value;
+      $('empresaEmail').value = data.empresaEmail ?? $('empresaEmail').value;
+      $('clienteNome').value = data.clienteNome ?? $('clienteNome').value;
+      $('clienteCpf').value = data.clienteCpf ?? $('clienteCpf').value;
+      $('clienteEndereco').value = data.clienteEndereco ?? $('clienteEndereco').value;
+      $('clienteTelefone').value = data.clienteTelefone ?? $('clienteTelefone').value;
+      $('clienteCep').value = data.clienteCep ?? $('clienteCep').value;
+      $('objeto').value = data.objeto ?? $('objeto').value;
+      $('prazoEntrega').value = data.prazoEntrega ?? $('prazoEntrega').value;
+      $('valorTotal').value = data.valorTotal ?? $('valorTotal').value;
+      $('pagamento').value = data.pagamento ?? $('pagamento').value;
+      $('garantia').value = data.garantia ?? $('garantia').value;
+      $('foro').value = data.foro ?? $('foro').value;
+      $('incluirNotaFiscal').value = data.incluirNotaFiscal ?? 'sim';
+      $('incluirMulta').value = data.incluirMulta ?? 'sim';
+      $('incluirInstalacao').value = data.incluirInstalacao ?? 'sim';
+
+      di_logoDataUrl = data.logoDataUrl ?? '';
+
+      $('itemsWrap').innerHTML = '';
+      (data.items || []).forEach(addItem);
+
+      if (!data.items || !data.items.length) fillSampleItems();
+
+      renderContract();
+      setStatus('Di_ Carregado');
+    }
+
+    function resetAll() {
+      localStorage.removeItem(DI_STORAGE_KEY);
+      localStorage.removeItem('koduxContratoDraft');
+      di_logoDataUrl = '';
+      location.reload();
+    }
+
+    function initTabs() {
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', () => {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+          tab.classList.add('active');
+          document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+          tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        });
+      });
+    }
+
+    function initAutoRender() {
+      document.addEventListener('input', (e) => {
+        if (e.target.closest('.sidebar')) renderContract();
+      });
+      document.addEventListener('change', (e) => {
+        if (e.target.closest('.sidebar')) renderContract();
+      });
+    }
+
+    function fileToDataUrl(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(String(reader.result || ''));
+        reader.onerror = () => reject(reader.error || new Error('Falha ao ler arquivo.'));
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function handleLogoFile(input) {
+      const file = input.files && input.files[0];
+      if (!file) return;
+
+      try {
+        const dataUrl = await fileToDataUrl(file);
+        di_logoDataUrl = dataUrl;
+        renderContract();
+        saveDraft();
+        setStatus('Logo atualizado');
+      } catch (err) {
+        console.error(err);
+        setStatus('Erro no logo');
+      }
+    }
+
+    function restoreDefaultLogo() {
+      di_logoDataUrl = '';
+      const input = $('empresaLogo');
+      if (input) input.value = '';
+      renderContract();
+      saveDraft();
+      setStatus('Logo padrão');
+    }
+
+    function clearCustomLogo() {
+      di_logoDataUrl = '';
+      const input = $('empresaLogo');
+      if (input) input.value = '';
+      renderContract();
+      saveDraft();
+      setStatus('Custom removido');
+    }
+
+    initTabs();
+    initAutoRender();
+
+    $('empresaLogo').addEventListener('change', (e) => handleLogoFile(e.target));
+
+    const hasDraft = localStorage.getItem(DI_STORAGE_KEY) || localStorage.getItem('koduxContratoDraft');
+    if (hasDraft) {
+      loadDraft();
+    } else {
+      fillSampleItems();
+      renderContract();
+    }
+
+    let saveTimer = null;
+    document.addEventListener('input', () => {
+      clearTimeout(saveTimer);
+      saveTimer = setTimeout(() => {
+        try { saveDraft(); } catch (e) {}
+      }, 1200);
+    });
+  </script>
+</body>
+</html>
