@@ -1,0 +1,623 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Fusion Nexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <meta name="theme-color" content="#050816">
+
+  <!-- Fontes Premium -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top, #1e1a3a 0%, #080b18 45%, #02030a 100%);
+      --card-bg: rgba(10, 14, 26, 0.94);
+      --card-border: rgba(185, 205, 255, 0.18);
+      --text-main: #f4f7ff;
+      --text-soft: rgba(244,247,255,.75);
+      --text-muted: rgba(244,247,255,.4);
+      --accent: #7ac6ff;
+      --accent-pink: #ff7ad9;
+      --accent-green: #32e38a;
+      --neon-cyan: #00f3ff;
+      --neon-purple: #bc13fe;
+      --radius-xl: 28px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-strong: 0 26px 80px rgba(0,0,0,.95);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Montserrat', sans-serif;
+      padding: 20px 16px calc(24px + var(--safe-bottom));
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    .app-container {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* --- HEADER --- */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      transition: opacity 0.3s;
+    }
+
+    .brand-pill {
+      font-size: 11px;
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(5,9,20,.8);
+      border: 1px solid rgba(142,164,255,.3);
+      color: var(--text-soft);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .console-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(7,15,32,.9);
+      color: var(--text-main);
+      border: 1px solid rgba(212,184,255,.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    /* --- HERO CARD --- */
+    .card-origem {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-strong);
+      padding: 22px 18px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .card-origem.is-collapsed {
+      padding: 15px;
+    }
+
+    .card-origem.is-collapsed .body-part {
+      display: none;
+    }
+
+    /* ORB VISUAL */
+    .orb-visual-wrap {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s;
+    }
+
+    .orb-core {
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--neon-cyan), var(--accent-green), #ffcf7a, var(--accent-pink), var(--neon-cyan));
+      filter: blur(12px);
+      opacity: 0.8;
+      animation: rotate 8s linear infinite;
+    }
+
+    .orb-inner {
+      position: relative;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: rgba(10, 15, 30, 0.9);
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow: inset 0 0 15px rgba(0,243,255,0.2);
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* TYPOGRAPHY */
+    .time-hero {
+      font-size: 42px;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .greeting-hero {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-soft);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* INPUTS */
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+      padding-left: 4px;
+    }
+
+    .cyber-input {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 12px 16px;
+      color: white;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .cyber-input:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    /* BUTTONS */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-fusion {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-fusion:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2b2750, #50306e);
+      border-color: rgba(212,184,255,0.4);
+    }
+
+    /* APPS LIST */
+    .apps-section {
+      margin-top: 30px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    .app-card {
+      background: rgba(15, 20, 35, 0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+      transition: transform 0.2s;
+    }
+
+    .app-card:active { transform: scale(0.98); }
+
+    .app-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1e1a3a, #080b18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      border: 1px solid rgba(122,198,255,0.2);
+    }
+
+    .app-info { flex: 1; }
+    .app-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .app-meta { font-size: 10px; color: var(--text-muted); }
+
+    .app-action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      cursor: pointer;
+    }
+
+    /* IFRAME DECK */
+    .iframe-deck {
+      margin-top: 20px;
+    }
+
+    .iframe-container {
+      background: #000;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--accent);
+      margin-bottom: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .iframe-header {
+      padding: 12px 16px;
+      background: #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222;
+    }
+
+    .iframe-title { font-size: 12px; font-weight: 600; color: var(--accent); }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+
+    /* CONSOLE */
+    .console-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      z-index: 5000;
+      display: none;
+      padding: 20px;
+    }
+
+    .console-overlay.active { display: block; }
+
+    .console-card {
+      background: #0a0e1a;
+      border: 1px solid var(--neon-purple);
+      border-radius: 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .console-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .console-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    .log-line { margin-bottom: 4px; color: #aaa; }
+    .log-line.info { color: var(--neon-cyan); }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <header class="app-header" id="appHeader">
+    <div class="brand-pill">Dual · Fusion Nexus</div>
+    <div class="header-actions">
+      <button class="console-toggle" id="consoleOpenBtn">◎</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ORIGIN CARD -->
+    <section class="card-origem" id="mainCard">
+      <div class="orb-visual-wrap" id="orbToggle">
+        <div class="orb-core"></div>
+        <div class="orb-inner">⚡</div>
+      </div>
+
+      <div class="time-hero" id="clock">00:00</div>
+      <div class="greeting-hero" id="greeting">Sincronizando...</div>
+
+      <div class="body-part">
+        <div class="input-group">
+          <label class="input-label">Intenção do Dia</label>
+          <input type="text" id="intentInput" class="cyber-input" placeholder="O que vamos ativar hoje?">
+        </div>
+
+        <div class="btn-grid">
+          <button class="btn-fusion btn-primary" id="addAppBtn">＋ Novo App</button>
+          <button class="btn-fusion" id="toggleViewBtn">📂 Stacks</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- APPS LIST -->
+    <section class="apps-section" id="appsSection">
+      <div class="section-header">
+        <h2 class="section-title">Meus Orbs Ativos</h2>
+        <span id="appCounter" style="font-size: 10px; color: var(--text-muted);">0 apps</span>
+      </div>
+      <div id="appsList">
+        <!-- Render dinâmico -->
+      </div>
+    </section>
+
+    <!-- IFRAME DECK -->
+    <section class="iframe-deck" id="iframeDeck">
+      <!-- Iframe cards -->
+    </section>
+  </main>
+
+</div>
+
+<!-- CONSOLE OVERLAY -->
+<div class="console-overlay" id="consoleOverlay">
+  <div class="console-card">
+    <div class="console-header">
+      <span style="font-size: 12px; font-weight: 700; color: var(--neon-purple);">SYSTEM CONSOLE</span>
+      <button id="consoleCloseBtn" style="background:none; border:none; color:white; cursor:pointer;">✕</button>
+    </div>
+    <div class="console-body" id="consoleLog">
+      <div class="log-line info">>> Fusion Nexus v1.0 initialized.</div>
+    </div>
+    <div style="padding: 16px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px;">
+      <button class="btn-fusion" style="flex:1" onclick="clearData()">Limpar Tudo</button>
+      <button class="btn-fusion" style="flex:1" onclick="exportData()">Exportar JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * INFODOSE FUSION ENGINE
+   */
+  const state = {
+    apps: JSON.parse(localStorage.getItem('di_nexus_apps') || '[]'),
+    intent: localStorage.getItem('di_nexus_intent') || '',
+    isCollapsed: localStorage.getItem('di_nexus_collapsed') === 'true'
+  };
+
+  // --- Elementos ---
+  const el = {
+    clock: document.getElementById('clock'),
+    greeting: document.getElementById('greeting'),
+    intentInput: document.getElementById('intentInput'),
+    appsList: document.getElementById('appsList'),
+    appCounter: document.getElementById('appCounter'),
+    iframeDeck: document.getElementById('iframeDeck'),
+    mainCard: document.getElementById('mainCard'),
+    consoleLog: document.getElementById('consoleLog'),
+    consoleOverlay: document.getElementById('consoleOverlay')
+  };
+
+  // --- Core Functions ---
+  function log(msg, type = '') {
+    const time = new Date().toLocaleTimeString();
+    const div = document.createElement('div');
+    div.className = `log-line ${type}`;
+    div.textContent = `[${time}] ${msg}`;
+    el.consoleLog.prepend(div);
+  }
+
+  function updateClock() {
+    const now = new Date();
+    el.clock.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    
+    const hr = now.getHours();
+    let greet = "Bom dia";
+    if(hr >= 12) greet = "Boa tarde";
+    if(hr >= 18) greet = "Boa noite";
+    el.greeting.textContent = `${greet}, Dual`;
+  }
+
+  function save() {
+    localStorage.setItem('di_nexus_apps', JSON.stringify(state.apps));
+    localStorage.setItem('di_nexus_intent', state.intent);
+    localStorage.setItem('di_nexus_collapsed', state.isCollapsed);
+  }
+
+  // --- Renderização ---
+  function renderApps() {
+    el.appsList.innerHTML = '';
+    el.appCounter.textContent = `${state.apps.length} apps`;
+
+    state.apps.forEach((app, idx) => {
+      const card = document.createElement('div');
+      card.className = 'app-card';
+      card.innerHTML = `
+        <div class="app-icon-circle">${app.icon || '🌐'}</div>
+        <div class="app-info">
+          <div class="app-name">${app.name}</div>
+          <div class="app-meta">${app.url.substring(0, 30)}...</div>
+        </div>
+        <button class="app-action-btn" onclick="openApp(${idx})">▣</button>
+        <button class="app-action-btn" onclick="removeApp(${idx})" style="color: #ff5f5f;">✕</button>
+      `;
+      el.appsList.appendChild(card);
+    });
+  }
+
+  function openApp(idx) {
+    const app = state.apps[idx];
+    const id = `frame-${idx}`;
+    
+    if(document.getElementById(id)) {
+      document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.className = 'iframe-container';
+    container.id = id;
+    container.innerHTML = `
+      <div class="iframe-header">
+        <span class="iframe-title">${app.name}</span>
+        <button onclick="this.closest('.iframe-container').remove()" style="background:none; border:none; color:white; cursor:pointer;">✕ Close</button>
+      </div>
+      <iframe src="${app.url}"></iframe>
+    `;
+    el.iframeDeck.prepend(container);
+    log(`Abrindo App: ${app.name}`, 'info');
+  }
+
+  function removeApp(idx) {
+    if(confirm('Remover este app?')) {
+      state.apps.splice(idx, 1);
+      save();
+      renderApps();
+      log('App removido.');
+    }
+  }
+
+  // --- Eventos ---
+  document.getElementById('addAppBtn').onclick = () => {
+    const name = prompt('Nome do App:');
+    if(!name) return;
+    const url = prompt('URL:', 'https://');
+    if(!url) return;
+    
+    state.apps.push({ name, url, icon: '⚡' });
+    save();
+    renderApps();
+    log(`App "${name}" adicionado.`);
+  };
+
+  document.getElementById('orbToggle').onclick = () => {
+    state.isCollapsed = !state.isCollapsed;
+    el.mainCard.classList.toggle('is-collapsed', state.isCollapsed);
+    save();
+  };
+
+  el.intentInput.oninput = (e) => {
+    state.intent = e.target.value;
+    save();
+  };
+
+  document.getElementById('consoleOpenBtn').onclick = () => el.consoleOverlay.classList.add('active');
+  document.getElementById('consoleCloseBtn').onclick = () => el.consoleOverlay.classList.remove('active');
+
+  // --- Init ---
+  function init() {
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    el.intentInput.value = state.intent;
+    if(state.isCollapsed) el.mainCard.classList.add('is-collapsed');
+    
+    renderApps();
+
+    // Idle Logic (opcional)
+    let idleTimer;
+    const resetIdle = () => {
+      document.getElementById('appHeader').style.opacity = 1;
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        document.getElementById('appHeader').style.opacity = 0.3;
+      }, 5000);
+    };
+    window.addEventListener('mousemove', resetIdle);
+    window.addEventListener('touchstart', resetIdle);
+
+    log('Fusion Nexus Ready.');
+  }
+
+  // Funções Globais para o Console
+  window.clearData = () => {
+    if(confirm('Limpar todos os dados locais?')) {
+      localStorage.clear();
+      location.reload();
+    }
+  };
+
+  window.exportData = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "infodose_nexus_backup.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  init();
+
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Super Base Nexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <meta name="theme-color" content="#050816">
+
+ 
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* --- FUNDIR ESTILOS: NANO-AI + HERO CARD --- */
+    :root {
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+      --neon-cyan: #00f3ff;
+      --neon-purple: #bc13fe;
+    }
+
+    #bodyPlayer {
+      position: relative;
+      width: 100%;
+      min-height: 100vh;
+      background: #050816;
+      color: white;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* --- AETHER: FÍSICA DO CARD SANFONÁVEL --- */
+    .card-origem {
+      transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+      overflow: hidden;
+      will-change: transform, padding, height;
+      z-index: var(--z-content);
+      position: relative;
+      margin-top: 10px;
+    }
+
+    .hero-top { cursor: pointer; }
+
+    .hero-slider, .input-row, .btn-row, .time-sub {
+      transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+      transform-origin: top;
+      opacity: 1;
+      max-height: 200px;
+    }
+
+    .card-origem.is-collapsed {
+      padding-bottom: 12px;
+      background: rgba(10, 12, 25, 0.6);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .card-origem.is-collapsed .hero-slider,
+    .card-origem.is-collapsed .input-row,
+    .card-origem.is-collapsed .btn-row,
+    .card-origem.is-collapsed .time-sub {
+      opacity: 0;
+      transform: translateY(-15px) scale(0.97);
+      pointer-events: none;
+      max-height: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    .card-origem.is-collapsed .orb-wrap {
+      transform: scale(0.65) translateY(-10px);
+    }
+
+    /* --- OVERLAY IDLE & HUD --- */
+    .kob-tts-dock, #kodux-widget, [data-idle-target] {
+      transition: transform .35s ease, opacity .65s ease;
+      will-change: transform, opacity;
+    }
+    .idle { opacity: .18; transform: scale(.87); }
+  </style>
+
+
+ <!-- Estilos Base & Bibliotecas Externas -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  
+
+</head>
+
+<body class="bg-[#0a0c14] text-white">
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <div id="bodyPlayer" data-mode="player">
+    
+    <!-- HEADER SUPREMO -->
+    <header class="app-header">
+      <div class="brand-pill">Dual · Nexus</div>
+      <div class="header-actions">
+        <button class="console-toggle" id="consoleToggle">◎</button>
+        <button class="mode-pill">
+          <span class="dot"></span>
+          <span>Modo 3·6·9</span>
+        </button>
+      </div>
+    </header>
+
+    <div class="wrap px-4 py-2">
+      
+      <!-- FUSION CARD: IDENTITY & VAULT -->
+      <div class="fusion-card closed mb-6" id="mainCard">
+        <div class="card-header" id="cardHeader">
+          <div class="avatar-slot" id="avatarTarget"></div>
+          <div class="text-block">
+            <div class="greeting-row">
+              <span class="txt-thin" id="lblHello">Oi,</span>
+              <span class="txt-heavy" id="lblName">Dual</span>
+            </div>
+            <div class="brand-dual">INFODOSE</div>
+          </div>
+          <div class="clock-widget">
+            <div class="time-display" id="clockTime">00:00</div>
+          </div>
+          <button class="hud-menu-btn" id="hudMenuBtn"><i data-lucide="menu"></i></button>
+        </div>
+        
+        <div class="card-body" id="cardBody">
+           <input type="text" class="cyber-input mb-4" id="inputUser" placeholder="Identifique-se...">
+           <!-- Sections do System & Neural (Cofre) omitidas aqui por brevidade, mas mantidas no runtime original -->
+        </div>
+      </div>
+
+      <!-- CARD ORIGEM: HERO & APPS DECK -->
+      <section class="card-origem" id="cardOrigem">
+        
+        <!-- Hero Fundido -->
+        <div class="hero-card hero-embedded">
+          <div class="hero-top">
+            <span class="hero-hour-label">06h</span>
+            <div class="hero-main">
+              <div class="hero-greeting" id="heroGreeting">Sincronizando...</div>
+              <div class="hero-subtitle" id="heroSubtitle">Preparando sua dose orbital</div>
+            </div>
+            <span class="hero-hour-label">23h</span>
+          </div>
+          <div class="hero-meta-row"><span class="time-chip" id="heroTimeNow">--:--</span></div>
+          <div class="hero-slider">
+            <div class="hero-slider-row">
+              <span>06h</span>
+              <span id="moodLabel" class="label-mood">Equilíbrio</span>
+              <span>23h</span>
+            </div>
+            <div class="range-wrap"><div id="rangeFill" class="range-fill"></div></div>
+            <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+          </div>
+        </div>
+
+        <!-- Orb Principal -->
+        <div class="orb-wrap">
+          <div class="orb-core"></div>
+          <div class="orb-ring"></div>
+        </div>
+
+        <div id="timeNow" class="time-main text-center">--:--</div>
+        <div id="timeSub" class="time-sub text-center opacity-60"></div>
+
+        <div class="input-row mt-4">
+          <input id="intentInput" placeholder="O que você quer ativar hoje?" />
+        </div>
+
+        <div class="btn-row">
+          <button class="btn" id="btnDocs"><span>📂 Docs</span></button>
+          <button class="btn" id="btnAddApp"><span>＋ Apps</span></button>
+        </div>
+      </section>
+
+      <!-- APPS & DECK -->
+      <section class="apps-wrapper mt-6">
+        <div class="apps-header-row">
+          <div class="apps-title">Stacks Ativos</div>
+          <div class="apps-count" id="appsCount">0</div>
+        </div>
+        <div id="appsList" class="grid grid-cols-2 gap-3"></div>
+      </section>
+
+      <section class="iframe-deck" id="iframeDeck"></section>
+    </div>
+
+    <!-- WIDGET PLAYER (KODUX) -->
+    <div id="kodux-widget" data-idle-target class="state-ball" style="right: 20px; bottom: 100px;">
+        <div id="content-ball" class="w-full h-full flex items-center justify-center">
+            <i class="ph-fill ph-vinyl-record animate-spin text-cyan-400" style="font-size: 28px;"></i>
+        </div>
+        <!-- Estrutura do Player Mini/Full original mantida via Scripts Externos -->
+    </div>
+
+  </div>
+
+  <!-- Scripts Unificados -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+
+      // --- 1. LÓGICA DE COLAPSO (CHRONOS) ---
+      const cardOrigem = document.getElementById('cardOrigem');
+      const hero = cardOrigem?.querySelector('.hero-top');
+      
+      hero?.addEventListener('click', () => {
+        const isCollapsed = cardOrigem.classList.toggle('is-collapsed');
+        localStorage.setItem('di_card_collapsed', isCollapsed ? '1' : '0');
+        if(navigator.vibrate) navigator.vibrate(10);
+      });
+
+      // --- 2. HUMOR & ORB (CHROMIA) ---
+      const range = document.getElementById('timeRange');
+      const orb = document.querySelector('.orb-core');
+      const moodLabel = document.getElementById('moodLabel');
+
+      function updateOrb(val) {
+        const h = parseInt(val);
+        let color = h < 12 ? 'linear-gradient(135deg, #FFB75E, #ED8F03)' : 'linear-gradient(135deg, #8A2387, #F27121)';
+        if(orb) {
+            orb.style.background = color;
+            orb.style.filter = `blur(${6 + (h/2)}px) brightness(1.2)`;
+        }
+        if(moodLabel) moodLabel.textContent = h < 12 ? 'Foco Matinal' : 'Fluxo Criativo';
+        document.getElementById('heroTimeNow').textContent = `${h.toString().padStart(2,'0')}:00`;
+      }
+      range?.addEventListener('input', (e) => updateOrb(e.target.value));
+      updateOrb(new Date().getHours());
+
+      // --- 3. IDLE SYSTEM ---
+      let idleTimer;
+      const resetIdle = () => {
+        document.querySelectorAll('.idle').forEach(el => el.classList.remove('idle'));
+        clearTimeout(idleTimer);
+        idleTimer = setTimeout(() => {
+          document.querySelectorAll('#kodux-widget, .app-header').forEach(el => el.classList.add('idle'));
+        }, 3000);
+      };
+      ['mousemove', 'touchstart', 'keydown'].forEach(ev => document.addEventListener(ev, resetIdle));
+    });
+  </script>
+
+  <!-- Módulos de Sistema -->
+  <script type="module" src="https://kodux78k.github.io/oiDual-VwR-di/js/main.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+</body>
+</html>
+
+

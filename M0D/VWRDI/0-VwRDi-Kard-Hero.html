@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Dual.Infodose · Hero Clean</title>
+  <meta name="theme-color" content="#050816">
+
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: radial-gradient(circle at top, #1c1738 0%, #070b18 48%, #02030a 100%);
+      --card-bg: rgba(10, 14, 26, 0.94);
+      --card-border: rgba(185, 205, 255, 0.20);
+      --text-main: #f4f7ff;
+      --text-soft: rgba(244,247,255,.72);
+      --text-muted: rgba(244,247,255,.46);
+      --accent: #7ac6ff;
+      --accent-pink: #ff7ad9;
+      --accent-green: #32e38a;
+      --radius-xl: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-strong: 0 26px 68px rgba(0,0,0,.92);
+      --shadow-soft: 0 14px 34px rgba(0,0,0,.78);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+
+    body{
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--text-main);
+      font-family:Montserrat,-apple-system,system-ui,BlinkMacSystemFont,"SF Pro Text",Inter,sans-serif;
+      padding:22px 14px calc(18px + var(--safe-bottom));
+      overflow-x:hidden;
+    }
+
+    .app{
+      max-width:440px;
+      margin:0 auto;
+    }
+
+    .brand-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      padding:7px 12px;
+      border-radius:var(--radius-pill);
+      background:rgba(5,9,20,.94);
+      border:1px solid rgba(142,164,255,.5);
+      color:var(--text-soft);
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+      white-space:nowrap;
+    }
+
+    .hero-card{
+      background:var(--card-bg);
+      border-radius:var(--radius-xl);
+      border:1px solid var(--card-border);
+      box-shadow:var(--shadow-strong);
+      padding:18px 14px 16px;
+      position:relative;
+      overflow:hidden;
+      backdrop-filter: blur(14px);
+      transition:all .42s cubic-bezier(.22,.9,.32,1);
+      user-select:none;
+    }
+
+    .hero-card.is-collapsed{
+      padding:12px 12px 10px;
+    }
+
+    .hero-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+    }
+
+    .hero-hour-label{
+      font-size:11px;
+      color:var(--text-muted);
+      letter-spacing:.08em;
+      padding-top:2px;
+      min-width:28px;
+      text-align:center;
+      flex-shrink:0;
+    }
+
+    .hero-main{
+      flex:1;
+      min-width:0;
+      text-align:center;
+    }
+
+    .hero-greeting{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:.03em;
+      margin-bottom:4px;
+      line-height:1.12;
+    }
+
+    .hero-subtitle{
+      font-size:12px;
+      color:var(--text-soft);
+      min-height:16px;
+      line-height:1.4;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .hero-meta-row{
+      display:flex;
+      justify-content:center;
+      margin-top:10px;
+      margin-bottom:12px;
+    }
+
+    .time-chip{
+      padding:6px 10px;
+      border-radius:var(--radius-pill);
+      background:rgba(122,198,255,.08);
+      border:1px solid rgba(122,198,255,.22);
+      color:var(--text-main);
+      font-size:12px;
+      font-family:"JetBrains Mono",monospace;
+      letter-spacing:.03em;
+    }
+
+    .hero-details{
+      display:grid;
+      gap:10px;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+      overflow:hidden;
+      max-height:600px;
+      opacity:1;
+    }
+
+    .hero-card.is-collapsed .hero-details{
+      max-height:0;
+      opacity:0;
+      pointer-events:none;
+      transform:translateY(-8px);
+      margin-top:0;
+    }
+
+    .hero-matrix{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:8px;
+    }
+
+    .info-chip{
+      padding:10px 11px;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      min-height:52px;
+    }
+
+    .info-chip .k{
+      display:block;
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+      margin-bottom:5px;
+    }
+
+    .info-chip .v{
+      display:block;
+      font-size:13px;
+      color:var(--text-main);
+      font-weight:700;
+      line-height:1.25;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .hero-slider{
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .hero-slider-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-size:11px;
+      color:var(--text-muted);
+      margin-bottom:8px;
+    }
+
+    .label-mood{
+      color:#d9efff;
+      font-weight:600;
+    }
+
+    .range-wrap{
+      width:100%;
+      height:8px;
+      background:rgba(255,255,255,.07);
+      border-radius:999px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .range-fill{
+      width:40%;
+      height:100%;
+      background:linear-gradient(90deg, var(--accent), var(--accent-pink));
+      box-shadow:0 0 14px rgba(122,198,255,.35);
+    }
+
+    .hero-range{
+      width:100%;
+      margin-top:-8px;
+      position:relative;
+      appearance:none;
+      background:transparent;
+      height:18px;
+      cursor:pointer;
+    }
+
+    .hero-range::-webkit-slider-thumb{
+      appearance:none;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:#fff;
+      border:2px solid var(--accent);
+      box-shadow:0 0 14px rgba(122,198,255,.5);
+    }
+
+    .mini-strip{
+      display:none;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      margin-top:2px;
+      padding:2px 1px 0;
+    }
+
+    .hero-card.is-collapsed .mini-strip{
+      display:flex;
+    }
+
+    .mini-title{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+
+    .mini-title strong{
+      font-size:13px;
+      letter-spacing:.03em;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .mini-title span{
+      font-size:10px;
+      color:var(--text-muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+
+    .mini-pill{
+      padding:5px 9px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:10px;
+      color:var(--text-soft);
+      font-family:"JetBrains Mono",monospace;
+      flex-shrink:0;
+    }
+
+    .hero-card.is-collapsed .hero-meta-row{
+      display:none;
+    }
+
+    .hero-card.is-collapsed .hero-subtitle{
+      min-height:0;
+      opacity:0;
+      height:0;
+      overflow:hidden;
+      margin:0;
+    }
+
+    .hero-card.is-collapsed .hero-greeting{
+      font-size:14px;
+      margin-bottom:0;
+    }
+
+    .hero-card.is-collapsed .hero-top{
+      align-items:center;
+    }
+
+    .hero-card.is-collapsed .hero-hour-label{
+      opacity:.85;
+    }
+
+    .hint{
+      margin-top:10px;
+      text-align:center;
+      font-size:10px;
+      color:var(--text-muted);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .hero-card.is-collapsed .hint{
+      display:none;
+    }
+
+    @media (max-width: 380px){
+      .hero-greeting{ font-size:16px; }
+      .hero-matrix{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <div class="brand-pill">Dual · Infodose</div>
+
+    <section class="hero-card" id="heroCard">
+      <div class="hero-top" id="heroToggle" title="Tocar para colapsar/expandir">
+        <span class="hero-hour-label">06h</span>
+
+        <div class="hero-main">
+          <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+          <div class="hero-subtitle" id="heroSubtitle">Sua dose de hoje já está organizada</div>
+        </div>
+
+        <span class="hero-hour-label">23h</span>
+      </div>
+
+      <div class="hero-meta-row">
+        <span class="time-chip" id="heroTimeNow">--:--</span>
+      </div>
+
+      <div class="mini-strip">
+        <div class="mini-title">
+          <strong id="miniTitle">Linartask</strong>
+          <span id="miniSub">Hero ativo</span>
+        </div>
+        <div class="mini-pill" id="miniClock">--:--</div>
+      </div>
+
+      <div class="hero-details" id="heroDetails">
+        <div class="hero-matrix">
+          <div class="info-chip">
+            <span class="k">Fusion SL</span>
+            <span class="v" id="fusionName">Linartask</span>
+          </div>
+          <div class="info-chip">
+            <span class="k">Estado</span>
+            <span class="v" id="heroMood">Manhã focada</span>
+          </div>
+          <div class="info-chip">
+            <span class="k">Infodose</span>
+            <span class="v" id="heroInfodose">Infodose</span>
+          </div>
+          <div class="info-chip">
+            <span class="k">Sistema</span>
+            <span class="v" id="heroMode">CARD</span>
+          </div>
+        </div>
+
+        <div class="hero-slider">
+          <div class="hero-slider-row">
+            <span>06h</span>
+            <span id="moodLabel" class="label-mood">Manhã focada</span>
+            <span>23h</span>
+          </div>
+          <div class="range-wrap"><div id="rangeFill" class="range-fill"></div></div>
+          <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+        </div>
+      </div>
+
+      <div class="hint">toque no hero para colapsar</div>
+    </section>
+  </div>
+
+  <script>
+    (() => {
+      const heroCard = document.getElementById('heroCard');
+      const heroToggle = document.getElementById('heroToggle');
+      const heroTimeNow = document.getElementById('heroTimeNow');
+      const miniClock = document.getElementById('miniClock');
+      const miniTitle = document.getElementById('miniTitle');
+      const miniSub = document.getElementById('miniSub');
+      const heroGreeting = document.getElementById('heroGreeting');
+      const heroSubtitle = document.getElementById('heroSubtitle');
+      const heroMood = document.getElementById('heroMood');
+      const heroInfodose = document.getElementById('heroInfodose');
+      const heroMode = document.getElementById('heroMode');
+      const fusionName = document.getElementById('fusionName');
+      const moodLabel = document.getElementById('moodLabel');
+      const rangeFill = document.getElementById('rangeFill');
+      const timeRange = document.getElementById('timeRange');
+
+      const KEY_COLLAPSED = 'di_hero_collapsed';
+      const KEY_USER = 'di_userName';
+      const KEY_INFO = 'di_infodoseName';
+
+      function load(key, fallback = '') {
+        try {
+          const v = localStorage.getItem(key);
+          return v === null ? fallback : v;
+        } catch {
+          return fallback;
+        }
+      }
+
+      function save(key, value) {
+        try {
+          localStorage.setItem(key, value);
+        } catch {}
+      }
+
+      function hourGreeting() {
+        const h = new Date().getHours();
+        if (h >= 5 && h < 12) return 'Bom dia';
+        if (h < 18) return 'Boa tarde';
+        return 'Boa noite';
+      }
+
+      function tick() {
+        const t = new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        if (heroTimeNow) heroTimeNow.textContent = t;
+        if (miniClock) miniClock.textContent = t;
+      }
+
+      const moods = {
+        morning: {
+          label: 'Manhã focada',
+          subtitle: 'Ajustando o foco e deixando tudo leve',
+        },
+        afternoon: {
+          label: 'Tarde produtiva',
+          subtitle: 'Energia estável para continuar o fluxo',
+        },
+        night: {
+          label: 'Noite silenciosa',
+          subtitle: 'Modo calmo, limpo e pronto para amanhã',
+        },
+      };
+
+      function setMoodByHour() {
+        const h = new Date().getHours();
+        let bucket = 'night';
+        if (h >= 5 && h < 12) bucket = 'morning';
+        else if (h >= 12 && h < 18) bucket = 'afternoon';
+
+        if (moodLabel) moodLabel.textContent = moods[bucket].label;
+        if (heroMood) heroMood.textContent = moods[bucket].label;
+        if (heroSubtitle) heroSubtitle.textContent = `${load(KEY_INFO, 'Infodose')} · ${moods[bucket].subtitle}`;
+      }
+
+      function syncIdentity() {
+        const user = load(KEY_USER, 'Dual');
+        const info = load(KEY_INFO, 'Infodose');
+        const greet = hourGreeting();
+
+        if (heroGreeting) heroGreeting.textContent = `${greet}, ${user}`;
+        if (heroInfodose) heroInfodose.textContent = info;
+        if (fusionName) fusionName.textContent = 'Linartask';
+        if (heroMode) heroMode.textContent = 'CARD';
+        if (miniTitle) miniTitle.textContent = info;
+        if (miniSub) miniSub.textContent = `${user} · hero ativo`;
+        if (heroSubtitle) heroSubtitle.textContent = `${info} sincronizada com seus orbs`;
+      }
+
+      function setRangeUI() {
+        if (!timeRange || !rangeFill) return;
+        const min = Number(timeRange.min || 6);
+        const max = Number(timeRange.max || 23);
+        const val = Number(timeRange.value || 9);
+        const pct = ((val - min) / (max - min)) * 100;
+        rangeFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+      }
+
+      function setCollapsed(collapsed) {
+        heroCard.classList.toggle('is-collapsed', collapsed);
+        save(KEY_COLLAPSED, collapsed ? '1' : '0');
+      }
+
+      function toggleCollapsed() {
+        setCollapsed(!heroCard.classList.contains('is-collapsed'));
+        if (navigator.vibrate) navigator.vibrate(8);
+      }
+
+      heroToggle.addEventListener('click', toggleCollapsed);
+
+      timeRange.addEventListener('input', () => {
+        setRangeUI();
+        const v = Number(timeRange.value);
+        const label =
+          v < 10 ? 'Amanhecer' :
+          v < 13 ? 'Manhã focada' :
+          v < 18 ? 'Tarde produtiva' : 'Noite ativa';
+        if (moodLabel) moodLabel.textContent = label;
+        if (heroMood) heroMood.textContent = label;
+      });
+
+      syncIdentity();
+      setMoodByHour();
+      tick();
+      setRangeUI();
+
+      const saved = load(KEY_COLLAPSED, '0') === '1';
+      setCollapsed(saved);
+
+      const h = new Date().getHours();
+      timeRange.value = h;
+      setRangeUI();
+      setMoodByHour();
+
+      setInterval(tick, 60000);
+      setInterval(setMoodByHour, 5000);
+
+      window.addEventListener('storage', () => {
+        syncIdentity();
+        setMoodByHour();
+      });
+    })();
+  </script>
+</body>
+</html>

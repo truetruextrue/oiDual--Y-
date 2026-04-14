@@ -1,0 +1,645 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Central de Stacks</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#050816">
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top, #1e1a3a 0%, #080b18 45%, #02030a 100%);
+      --card-bg: rgba(10, 14, 26, 0.96);
+      --card-border: rgba(185, 205, 255, 0.22);
+      --text-main: #f4f7ff;
+      --text-soft: rgba(244, 247, 255, .72);
+      --text-muted: rgba(244, 247, 255, .46);
+      --accent: #7ac6ff;
+      --accent-pink: #ff7ad9;
+      --accent-green: #32e38a;
+      --neon-cyan: #7df7ff;
+      --neon-purple: #bf8cff;
+      --radius-xl: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-strong: 0 26px 68px rgba(0, 0, 0, .92);
+      --shadow-soft: 0 14px 34px rgba(0, 0, 0, .78);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: -apple-system, system-ui, BlinkMacSystemFont, "SF Pro Text", Inter, sans-serif;
+      padding: 22px 14px calc(24px + var(--safe-bottom));
+      overflow-x: hidden;
+    }
+
+    .app-container {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* Header & Branding */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      gap: 10px;
+    }
+
+    .brand-pill {
+      font-size: 11px;
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(5, 9, 20, .94);
+      border: 1px solid rgba(142, 164, 255, .4);
+      color: var(--text-soft);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(7, 15, 32, .96);
+      border: 1px solid rgba(212, 184, 255, .4);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+
+    .mode-pill {
+      padding: 8px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(5, 9, 20, .94);
+      border: 1px solid rgba(101, 132, 230, .5);
+      color: var(--text-soft);
+      font-size: 10px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .dot-alive {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent-green);
+      box-shadow: 0 0 10px var(--accent-green);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Main Card */
+    .card-origem {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-strong);
+      padding: 18px;
+      position: relative;
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .card-origem.is-collapsed .collapsible-content {
+      display: none;
+    }
+
+    .hero-panel {
+      background: linear-gradient(180deg, rgba(18, 24, 46, 0.8), rgba(8, 10, 20, 0.9));
+      border: 1px solid rgba(170, 190, 255, .1);
+      border-radius: 20px;
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+
+    .hero-greeting {
+      font-size: 20px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 13px;
+      color: var(--text-soft);
+      margin-bottom: 12px;
+    }
+
+    .main-clock {
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin: 10px 0;
+    }
+
+    /* Info Matrix */
+    .info-matrix {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .info-chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: left;
+    }
+
+    .info-chip .label {
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .info-chip .value {
+      font-size: 13px;
+      font-weight: 600;
+      display: block;
+      margin-top: 4px;
+    }
+
+    /* Inputs & Buttons */
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-group label {
+      font-size: 11px;
+      color: var(--text-muted);
+      display: block;
+      margin-bottom: 6px;
+      padding-left: 4px;
+    }
+
+    .cyber-input {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      padding: 12px 16px;
+      color: white;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .cyber-input:focus {
+      border-color: var(--accent);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2a2552, #1a1635);
+      border: 1px solid rgba(180, 160, 255, 0.4);
+      color: white;
+      padding: 14px;
+      border-radius: 16px;
+      font-weight: 600;
+      width: 100%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    /* App Stacks */
+    .apps-section {
+      margin-top: 24px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    .app-card {
+      background: rgba(15, 20, 35, 0.8);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 18px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
+      transition: transform 0.2s;
+    }
+
+    .app-card:active {
+      transform: scale(0.98);
+    }
+
+    .app-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #7ac6ff22, #bf8cff22);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .app-info {
+      flex: 1;
+    }
+
+    .app-name {
+      font-weight: 600;
+      font-size: 14px;
+      display: block;
+    }
+
+    .app-group {
+      font-size: 10px;
+      color: var(--text-muted);
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Iframe Overlay */
+    .iframe-overlay {
+      position: fixed;
+      inset: 0;
+      background: #000;
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+    }
+
+    .iframe-overlay.active {
+      display: flex;
+    }
+
+    .iframe-header {
+      padding: 12px 16px;
+      background: #0a0a0f;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .iframe-content {
+      flex: 1;
+      border: none;
+      width: 100%;
+    }
+
+    /* Console Panel */
+    .console-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(5, 7, 15, 0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--accent);
+      padding: 20px;
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+      z-index: 90;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .console-panel.active {
+      transform: translateY(0);
+    }
+
+    .console-log {
+      font-family: 'SF Mono', monospace;
+      font-size: 11px;
+      color: var(--accent);
+      background: rgba(0,0,0,0.4);
+      padding: 10px;
+      border-radius: 8px;
+      margin-top: 10px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    /* Utility */
+    .hidden { display: none !important; }
+    
+    .status-badge {
+      font-size: 10px;
+      padding: 2px 8px;
+      border-radius: 10px;
+      background: rgba(50, 227, 138, 0.15);
+      color: var(--accent-green);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header class="app-header">
+      <div class="brand-pill">Dual · Infodose v3.2</div>
+      <div class="header-actions">
+        <button class="btn-icon" id="btnConsole" title="Console Sistema">◎</button>
+        <div class="mode-pill" id="modePill">
+          <div class="dot-alive"></div>
+          <span>Modo 3·6·9</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="card-origem" id="mainCard">
+      <div class="hero-panel" id="heroPanel" style="cursor: pointer;">
+        <div class="hero-greeting" id="txtGreeting">Bom dia, Dual</div>
+        <div class="hero-subtitle" id="txtSubtitle">Sincronizando seus orbs de dados...</div>
+        <div class="main-clock" id="txtClock">00:00</div>
+        <div class="status-badge" id="txtStatus">SISTEMA ONLINE</div>
+      </div>
+
+      <div class="collapsible-content">
+        <div class="info-matrix">
+          <div class="info-chip">
+            <span class="label">Conexão Neural</span>
+            <span class="value" id="valNeural">Ativa (SK-v1)</span>
+          </div>
+          <div class="info-chip">
+            <span class="label">Infodose Atual</span>
+            <span class="value" id="valInfodose">Linartask</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label>Intenção do Dia</label>
+          <input type="text" id="inputIntent" class="cyber-input" placeholder="O que vamos ativar hoje?">
+        </div>
+
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-primary" id="btnNewApp" style="flex: 1;">
+            <span>＋</span> Novo Orb
+          </button>
+          <button class="btn-primary" id="btnSync" style="width: 60px;">
+            <span>🔄</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <section class="apps-section">
+      <div class="section-header">
+        <h2 class="section-title">Meus Apps & Stacks</h2>
+        <span id="appCount" style="font-size: 10px; color: var(--text-muted);">0 ORBS</span>
+      </div>
+      <div id="appsList">
+        <!-- Render dinâmico -->
+      </div>
+    </section>
+  </div>
+
+  <!-- Overlay para Apps -->
+  <div class="iframe-overlay" id="appOverlay">
+    <div class="iframe-header">
+      <div id="overlayTitle" style="font-weight: 700;">App Name</div>
+      <button class="btn-icon" id="btnCloseOverlay" style="width: 30px; height: 30px;">✕</button>
+    </div>
+    <iframe id="overlayFrame" class="iframe-content" src=""></iframe>
+  </div>
+
+  <!-- Console Lateral -->
+  <div class="console-panel" id="consolePanel">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+      <h3 style="font-size: 14px; letter-spacing: 1px;">SISTEMA CONSOLE</h3>
+      <button id="btnCloseConsole" style="background: none; border: none; color: white; cursor: pointer;">FECHAR</button>
+    </div>
+    
+    <div class="input-group">
+      <label>Nome do Usuário</label>
+      <input type="text" id="cfgUser" class="cyber-input" placeholder="Dual">
+    </div>
+
+    <div style="display: flex; gap: 10px;">
+      <button class="btn-primary" id="btnClearStorage" style="background: #401020;">Limpar Tudo</button>
+      <button class="btn-primary" id="btnExport">Exportar Orbs</button>
+    </div>
+
+    <div class="console-log" id="consoleLog">
+      [SYSTEM] Inicializando núcleo...
+    </div>
+  </div>
+
+  <script>
+    /**
+     * DUAL INFODOSE - CORE LOGIC
+     * Desenvolvido para persistência local e interface fluida.
+     */
+    const STORAGE_KEYS = {
+      INTENT: 'di_intent',
+      USER: 'di_user',
+      APPS: 'di_apps_v3',
+      COLLAPSED: 'di_collapsed'
+    };
+
+    // State Management
+    let state = {
+      user: localStorage.getItem(STORAGE_KEYS.USER) || 'Dual',
+      intent: localStorage.getItem(STORAGE_KEYS.INTENT) || '',
+      apps: JSON.parse(localStorage.getItem(STORAGE_KEYS.APPS)) || [],
+      collapsed: localStorage.getItem(STORAGE_KEYS.COLLAPSED) === 'true'
+    };
+
+    // DOM Elements
+    const elements = {
+      clock: document.getElementById('txtClock'),
+      greeting: document.getElementById('txtGreeting'),
+      intent: document.getElementById('inputIntent'),
+      appsList: document.getElementById('appsList'),
+      appCount: document.getElementById('appCount'),
+      mainCard: document.getElementById('mainCard'),
+      console: document.getElementById('consolePanel'),
+      log: document.getElementById('consoleLog'),
+      overlay: document.getElementById('appOverlay'),
+      overlayFrame: document.getElementById('overlayFrame'),
+      overlayTitle: document.getElementById('overlayTitle')
+    };
+
+    // --- Core Functions ---
+
+    function log(msg) {
+      const time = new Date().toLocaleTimeString();
+      const entry = document.createElement('div');
+      entry.textContent = `[${time}] ${msg}`;
+      elements.log.prepend(entry);
+    }
+
+    function updateTime() {
+      const now = new Date();
+      elements.clock.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+      
+      const hour = now.getHours();
+      let greet = "Boa noite";
+      if (hour >= 5 && hour < 12) greet = "Bom dia";
+      else if (hour >= 12 && hour < 18) greet = "Boa tarde";
+      
+      elements.greeting.textContent = `${greet}, ${state.user}`;
+    }
+
+    function saveState() {
+      localStorage.setItem(STORAGE_KEYS.USER, state.user);
+      localStorage.setItem(STORAGE_KEYS.INTENT, state.intent);
+      localStorage.setItem(STORAGE_KEYS.APPS, JSON.stringify(state.apps));
+      localStorage.setItem(STORAGE_KEYS.COLLAPSED, state.collapsed);
+    }
+
+    function renderApps() {
+      elements.appsList.innerHTML = '';
+      elements.appCount.textContent = `${state.apps.length} ORBS ATIVOS`;
+
+      if (state.apps.length === 0) {
+        elements.appsList.innerHTML = `
+          <div style="text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 12px;">
+            Nenhum orb sincronizado. Adicione um novo stack para começar.
+          </div>
+        `;
+        return;
+      }
+
+      state.apps.forEach((app, index) => {
+        const card = document.createElement('div');
+        card.className = 'app-card';
+        card.innerHTML = `
+          <div class="app-icon">📦</div>
+          <div class="app-info">
+            <span class="app-name">${app.name}</span>
+            <span class="app-group">${app.group || 'Geral'}</span>
+          </div>
+          <button class="btn-icon" style="width:30px;height:30px;background:none;border-color:rgba(255,0,0,0.2)" onclick="event.stopPropagation(); deleteApp(${index})">✕</button>
+        `;
+        card.onclick = () => openApp(app);
+        elements.appsList.appendChild(card);
+      });
+    }
+
+    // --- Actions ---
+
+    function openApp(app) {
+      log(`Abrindo orb: ${app.name}`);
+      elements.overlayTitle.textContent = app.name;
+      elements.overlayFrame.src = app.url;
+      elements.overlay.classList.add('active');
+    }
+
+    window.deleteApp = (index) => {
+      if(confirm("Deseja remover este orb do seu sistema?")) {
+        const removed = state.apps.splice(index, 1);
+        log(`Orb removido: ${removed[0].name}`);
+        saveState();
+        renderApps();
+      }
+    };
+
+    // --- Event Listeners ---
+
+    document.getElementById('btnNewApp').onclick = () => {
+      const name = prompt("Nome do Orb/Stack:");
+      if (!name) return;
+      const url = prompt("URL do App:", "https://");
+      if (!url) return;
+      
+      state.apps.push({ name, url, group: 'Manual' });
+      log(`Novo orb criado: ${name}`);
+      saveState();
+      renderApps();
+    };
+
+    document.getElementById('inputIntent').onchange = (e) => {
+      state.intent = e.target.value;
+      saveState();
+      log(`Intenção atualizada: ${state.intent}`);
+    };
+
+    document.getElementById('heroPanel').onclick = () => {
+      state.collapsed = !state.collapsed;
+      elements.mainCard.classList.toggle('is-collapsed', state.collapsed);
+      saveState();
+    };
+
+    document.getElementById('btnConsole').onclick = () => elements.console.classList.add('active');
+    document.getElementById('btnCloseConsole').onclick = () => elements.console.classList.remove('active');
+    document.getElementById('btnCloseOverlay').onclick = () => {
+      elements.overlay.classList.remove('active');
+      elements.overlayFrame.src = '';
+    };
+
+    document.getElementById('cfgUser').oninput = (e) => {
+      state.user = e.target.value || 'Dual';
+      updateTime();
+      saveState();
+    };
+
+    document.getElementById('btnClearStorage').onclick = () => {
+      if(confirm("CUIDADO: Isso apagará todos os seus dados locais. Continuar?")) {
+        localStorage.clear();
+        location.reload();
+      }
+    };
+
+    // --- Initialization ---
+
+    function init() {
+      updateTime();
+      setInterval(updateTime, 10000);
+      
+      elements.intent.value = state.intent;
+      document.getElementById('cfgUser').value = state.user;
+      
+      if (state.collapsed) {
+        elements.mainCard.classList.add('is-collapsed');
+      }
+
+      renderApps();
+      log("Dual Infodose Core v3 pronto.");
+    }
+
+    init();
+
+  </script>
+</body>
+</html>
+

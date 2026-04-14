@@ -1,0 +1,257 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Dual.Infodose · Ecossistema Integrado</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    
+    <!-- Estilos Externos Originais -->
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+    <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/css/mainK.css"> 
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+
+    <style>
+        /* --- Ajustes de UI para o Card Unificado --- */
+        .card-origem {
+            transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+            overflow: hidden;
+            will-change: transform, padding, height;
+            background: rgba(10, 12, 25, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            margin: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .hero-top { cursor: pointer; }
+
+        .hero-slider, .input-row, .btn-row, .time-sub {
+            transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+            transform-origin: top;
+            opacity: 1;
+            max-height: 500px;
+        }
+
+        /* Estado Colapsado */
+        .card-origem.is-collapsed {
+            padding-bottom: 12px;
+            background: rgba(10, 12, 25, 0.6);
+        }
+
+        .card-origem.is-collapsed .hero-slider,
+        .card-origem.is-collapsed .input-row,
+        .card-origem.is-collapsed .btn-row,
+        .card-origem.is-collapsed .time-sub {
+            opacity: 0;
+            max-height: 0;
+            margin: 0;
+            padding: 0;
+            pointer-events: none;
+            transform: translateY(-10px) scale(0.98);
+        }
+
+        /* Brilhos de fundo e Partículas */
+        .orb-bg {
+            position: fixed;
+            width: 60vw;
+            height: 60vw;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            opacity: 0.3;
+            pointer-events: none;
+        }
+        #orb-top { top: -20%; right: -10%; background: radial-gradient(circle, #4facfe 0%, #00f2fe 100%); }
+        #orb-bottom { bottom: -20%; left: -10%; background: radial-gradient(circle, #667eea 0%, #764ba2 100%); }
+        
+        #particles-js {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+        }
+
+        .frase {
+            text-align: center;
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin: 15px 0;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Atmosfera Visual -->
+    <div id="orb-top" class="orb-bg"></div>
+    <div id="orb-bottom" class="orb-bg"></div>
+    <div id="particles-js"></div>
+
+    <div class="frase"><strong>Sempre</strong> único<strong>. Sempre</strong> seu<strong>.</strong></div>
+
+    <div class="app">
+        <!-- HEADER -->
+        <header class="app-header">
+            <div class="brand-pill">Dual · Infodose</div>
+            <div class="header-actions">
+                <button class="console-toggle" id="consoleToggle">◎</button>
+                <button class="mode-pill" type="button">
+                    <span class="dot"></span>
+                    <span>Modo 3·6·9</span>
+                </button>
+            </div>
+        </header>
+
+        <!-- CARD ORIGEM UNIFICADO -->
+        <section class="card-origem" id="cardOrigem">
+            
+            <!-- HERO INTEGRADO -->
+            <div class="hero-card hero-embedded">
+                <div class="hero-top">
+                    <span class="hero-hour-label">06h</span>
+                    <div class="hero-main">
+                        <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+                        <div class="hero-subtitle" id="heroSubtitle">Sincronizando orbs...</div>
+                    </div>
+                    <span class="hero-hour-label">23h</span>
+                </div>
+
+                <div class="hero-meta-row">
+                    <span class="time-chip" id="timeNow">--:--</span>
+                </div>
+
+                <div class="hero-slider">
+                    <div class="hero-slider-row">
+                        <span>06h</span>
+                        <span id="moodLabel" class="label-mood">Manhã focada</span>
+                        <span>23h</span>
+                    </div>
+                    <div class="range-wrap">
+                        <div id="rangeFill" class="range-fill"></div>
+                    </div>
+                    <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+                </div>
+            </div>
+
+            <!-- ÁREA DE TEMPO E INTERAÇÃO -->
+            <div id="timeSub" class="time-sub"></div>
+
+            <div class="input-row">
+                <label for="intentInput">Intenção / vibração</label>
+                <input id="intentInput" placeholder="O que pretendes ativar?" />
+            </div>
+
+            <div class="btn-row">
+                <button class="btn" id="btnDocs">
+                    <span class="emoji">📂</span>
+                    <span>Docs & Apps</span>
+                </button>
+                <button class="btn" id="btnAddApp">
+                    <span class="emoji">＋</span>
+                    <span>Novo app</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- LISTA DE APPS -->
+        <section class="apps-wrapper">
+            <div class="apps-header-row">
+                <div class="apps-title">Meus apps / stacks</div>
+                <div class="apps-count" id="appsCount">0 apps</div>
+            </div>
+            <div id="appsList"></div>
+        </section>
+
+        <!-- DECK DE IFRAMES -->
+        <section class="iframe-deck" id="iframeDeck"></section>
+    </div>
+
+    <!-- CONSOLE PANEL -->
+    <div class="console-panel" id="consolePanel" aria-hidden="true">
+        <div class="console-panel-inner">
+            <div class="console-header">
+                <div class="console-title">Dual Console</div>
+                <button class="console-close" id="consoleClose">✕</button>
+            </div>
+            <div class="console-body" id="consoleLogMirror"></div>
+        </div>
+    </div>
+
+    <!-- SCRIPTS EXTERNOS ORIGINAIS (Conforme solicitado) -->
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+    <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+    <script src="https://kodux78k.github.io/oiDual-VwR-di/js/modules/inline-di.js"></script>
+
+    <!-- LÓGICA DE INTEGRAÇÃO LOCAL -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const card = document.getElementById('cardOrigem');
+            const heroTop = document.querySelector('.hero-top');
+            const greeting = document.getElementById('heroGreeting');
+            const subtitle = document.getElementById('heroSubtitle');
+            
+            // 1. Sincronização de Identidade
+            const userName = localStorage.getItem('di_userName') || 'Dual';
+            const infodoseName = localStorage.getItem('di_infodoseName') || 'Infodose';
+            
+            const updateGreeting = () => {
+                const hour = new Date().getHours();
+                let greet = "Bom dia";
+                if (hour >= 12 && hour < 18) greet = "Boa tarde";
+                if (hour >= 18 || hour < 5) greet = "Boa noite";
+                if (greeting) greeting.textContent = `${greet}, ${userName}`;
+                if (subtitle) subtitle.textContent = `${infodoseName} ativa e organizada`;
+            };
+            updateGreeting();
+
+            // 2. Comportamento de Colapso (Chronos)
+            const COLLAPSE_KEY = 'di_card_collapsed';
+            
+            const setCollapsedState = (state) => {
+                if (state) card.classList.add('is-collapsed');
+                else card.classList.remove('is-collapsed');
+                localStorage.setItem(COLLAPSE_KEY, state ? '1' : '0');
+            };
+
+            // Inicialização inteligente do estado
+            const savedState = localStorage.getItem(COLLAPSE_KEY);
+            if (savedState === '1') {
+                setCollapsedState(true);
+            } else if (savedState === null) {
+                const h = new Date().getHours();
+                if (h >= 22 || h < 6) setCollapsedState(true);
+            }
+
+            // Clique no Hero para Alternar
+            heroTop.addEventListener('click', () => {
+                const isNowCollapsed = !card.classList.contains('is-collapsed');
+                setCollapsedState(isNowCollapsed);
+                if (navigator.vibrate) navigator.vibrate(5);
+            });
+
+            // 3. Integração com o Console
+            const consoleToggle = document.getElementById('consoleToggle');
+            const consolePanel = document.getElementById('consolePanel');
+            const consoleClose = document.getElementById('consoleClose');
+
+            consoleToggle?.addEventListener('click', () => {
+                consolePanel.setAttribute('aria-hidden', 'false');
+                consolePanel.style.display = 'block';
+            });
+
+            consoleClose?.addEventListener('click', () => {
+                consolePanel.setAttribute('aria-hidden', 'true');
+                consolePanel.style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

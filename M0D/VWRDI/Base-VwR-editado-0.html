@@ -1,0 +1,1408 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Fusion Nexus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <meta name="theme-color" content="#050816">
+
+  <!-- Fontes Premium -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+
+  <style>
+    :root {
+      --bg: radial-gradient(circle at top, #1e1a3a 0%, #080b18 45%, #02030a 100%);
+      --card-bg: rgba(10, 14, 26, 0.94);
+      --card-border: rgba(185, 205, 255, 0.18);
+      --text-main: #f4f7ff;
+      --text-soft: rgba(244,247,255,.75);
+      --text-muted: rgba(244,247,255,.4);
+      --accent: #7ac6ff;
+      --accent-pink: #ff7ad9;
+      --accent-green: #32e38a;
+      --neon-cyan: #00f3ff;
+      --neon-purple: #bc13fe;
+      --radius-xl: 28px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-strong: 0 26px 80px rgba(0,0,0,.95);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      min-height: 100vh;
+      background: var(--bg);
+      background-attachment: fixed;
+      color: var(--text-main);
+      font-family: 'Montserrat', sans-serif;
+      padding: 20px 16px calc(24px + var(--safe-bottom));
+      overflow-x: hidden;
+      line-height: 1.4;
+    }
+
+    .app-container {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+
+    /* --- HEADER --- */
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      transition: opacity 0.3s;
+    }
+
+    .brand-pill {
+      font-size: 11px;
+      padding: 7px 14px;
+      border-radius: var(--radius-pill);
+      background: rgba(5,9,20,.8);
+      border: 1px solid rgba(142,164,255,.3);
+      color: var(--text-soft);
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .console-toggle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(7,15,32,.9);
+      color: var(--text-main);
+      border: 1px solid rgba(212,184,255,.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 18px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    /* --- HERO CARD --- */
+    .card-origem {
+      background: var(--card-bg);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-strong);
+      padding: 22px 18px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .card-origem.is-collapsed {
+      padding: 15px;
+    }
+
+    .card-origem.is-collapsed .body-part {
+      display: none;
+    }
+
+    /* ORB VISUAL */
+    .orb-visual-wrap {
+      width: 110px;
+      height: 110px;
+      margin: 0 auto 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.4s;
+    }
+
+    .orb-core {
+      position: absolute;
+      width: 85px;
+      height: 85px;
+      border-radius: 50%;
+      background: conic-gradient(from 0deg, var(--neon-cyan), var(--accent-green), #ffcf7a, var(--accent-pink), var(--neon-cyan));
+      filter: blur(12px);
+      opacity: 0.8;
+      animation: rotate 8s linear infinite;
+    }
+
+    .orb-inner {
+      position: relative;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      background: rgba(10, 15, 30, 0.9);
+      border: 1px solid rgba(255,255,255,0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      box-shadow: inset 0 0 15px rgba(0,243,255,0.2);
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* TYPOGRAPHY */
+    .time-hero {
+      font-size: 42px;
+      font-weight: 900;
+      text-align: center;
+      letter-spacing: -1px;
+      margin-bottom: 4px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .greeting-hero {
+      text-align: center;
+      font-size: 14px;
+      color: var(--text-soft);
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    /* INPUTS */
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      display: block;
+      padding-left: 4px;
+    }
+
+    .cyber-input {
+      width: 100%;
+      background: rgba(0,0,0,0.3);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 14px;
+      padding: 12px 16px;
+      color: white;
+      font-family: inherit;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .cyber-input:focus {
+      border-color: var(--neon-cyan);
+    }
+
+    /* BUTTONS */
+    .btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .btn-fusion {
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s;
+    }
+
+    .btn-fusion:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #2b2750, #50306e);
+      border-color: rgba(212,184,255,0.4);
+    }
+
+    /* APPS LIST */
+    .apps-section {
+      margin-top: 30px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding: 0 4px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+    }
+
+    .app-card {
+      background: rgba(15, 20, 35, 0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 14px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 12px;
+      transition: transform 0.2s;
+    }
+
+    .app-card:active { transform: scale(0.98); }
+
+    .app-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #1e1a3a, #080b18);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      border: 1px solid rgba(122,198,255,0.2);
+    }
+
+    .app-info { flex: 1; }
+    .app-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .app-meta { font-size: 10px; color: var(--text-muted); }
+
+    .app-action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      cursor: pointer;
+    }
+
+    /* IFRAME DECK */
+    .iframe-deck {
+      margin-top: 20px;
+    }
+
+    .iframe-container {
+      background: #000;
+      border-radius: 24px;
+      overflow: hidden;
+      border: 1px solid var(--accent);
+      margin-bottom: 20px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+    }
+
+    .iframe-header {
+      padding: 12px 16px;
+      background: #111;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #222;
+    }
+
+    .iframe-title { font-size: 12px; font-weight: 600; color: var(--accent); }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+    }
+
+    /* CONSOLE */
+    .console-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      backdrop-filter: blur(10px);
+      z-index: 5000;
+      display: none;
+      padding: 20px;
+    }
+
+    .console-overlay.active { display: block; }
+
+    .console-card {
+      background: #0a0e1a;
+      border: 1px solid var(--neon-purple);
+      border-radius: 24px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .console-header {
+      padding: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .console-body {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+    }
+
+    .log-line { margin-bottom: 4px; color: #aaa; }
+    .log-line.info { color: var(--neon-cyan); }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="app-container">
+  
+  <header class="app-header" id="appHeader">
+    <div class="brand-pill">Dual · Fusion Nexus</div>
+    <div class="header-actions">
+      <button class="console-toggle" id="consoleOpenBtn">◎</button>
+    </div>
+  </header>
+
+  <main>
+    <!-- ORIGIN CARD -->
+   <section class="card-origem" id="cardOrigem">
+      <div class="hero-card hero-embedded">
+        <div class="hero-top" id="collapseToggle">
+          <span class="hero-hour-label">06h</span>
+
+          <div class="hero-main">
+            <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+            <div class="hero-subtitle" id="heroSubtitle">Sua dose de hoje já está organizada</div>
+          </div>
+
+          <span class="hero-hour-label">23h</span>
+        </div>
+
+        <div class="hero-meta-row">
+          <span class="time-chip" id="heroTimeNow">--:--</span>
+        </div>
+
+        <div class="hero-slider body-part">
+          <div class="hero-slider-row">
+            <span>06h</span>
+            <span id="moodLabel" class="label-mood">Manhã focada</span>
+            <span>23h</span>
+          </div>
+          <div class="range-wrap"><div id="rangeFill" class="range-fill"></div></div>
+          <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+        </div>
+      </div>
+
+      <div class="hero-orb-wrap">
+        <div class="hero-orb-core"></div>
+        <div class="hero-orb-ring"></div>
+      </div>
+
+      <div id="timeNow" class="time-main">--:--</div>
+      <div id="timeSub" class="time-sub"></div>
+
+      <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+        <div class="mini-avatar" id="smallMiniAvatar"></div>
+        <div class="small-text" id="smallText">Aguardando ativação...</div>
+        <div class="ident-badge" id="smallIdent">--</div>
+      </div>
+
+      <div class="input-wrapper body-part">
+        <label for="intentInput">Intenção / nome / vibração</label>
+        <input id="intentInput" class="cyber-input" placeholder="Escreve o que você quer ativar hoje..." autocomplete="off">
+      </div>
+
+      <div class="activation-wrap body-part">
+        <div class="activation-toggle" id="activationToggle">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+            <strong style="letter-spacing:1px;font-size:.9rem">Ativação ASCII</strong>
+          </div>
+          <div style="margin-left:auto;font-size:.82rem;color:rgba(255,255,255,.6)">BASE v1</div>
+        </div>
+        <div id="activationCard" class="activation-card activation-hidden">
+          <div style="display:flex;align-items:flex-start;gap:10px">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div class="mini-avatar" id="actMiniAvatar"></div>
+              <div>
+                <div style="font-weight:700">CÉREBRO</div>
+                <div style="font-size:.78rem;opacity:.6"><span id="actName">User</span></div>
+              </div>
+            </div>
+            <div id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:.8em">v:--</div>
+          </div>
+          <pre id="actPre" class="activation-pre">Carregando...</pre>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button class="trigger-btn" id="copyActBtn" type="button">COPIAR</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="activation-wrap body-part">
+        <div class="activation-toggle" id="systemToggle">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+            <strong style="letter-spacing:1px;font-size:.9rem">SYSTEM &amp; NEURAL</strong>
+          </div>
+          <div style="margin-left:auto;font-size:.82rem;color:rgba(255,255,255,.6)">CONFIG</div>
+        </div>
+        <div id="systemCard" class="activation-card activation-hidden">
+          <div class="col">
+            <div class="section-title">IDENTIDADE DA INFODOSE</div>
+            <input type="text" id="infodoseNameInput" placeholder="Nome da Infodose" class="cyber-input" style="margin-bottom:8px">
+
+            <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+            <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" class="cyber-input" style="margin-bottom:6px">
+
+            <div class="model-toggle">
+              <select id="modelSelect" class="btn" style="width:100%">
+                <option value="" disabled selected>Selecione Modelo</option>
+                <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                <option value="mistralai/devstral-2512:free">DevStral</option>
+                <option value="openai/gpt-oss-120b:free">OSS120b</option>
+              </select>
+            </div>
+
+            <div class="panel-divider" style="margin:10px 0;border-top:1px solid rgba(255,255,255,.05)"></div>
+            <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700" type="button">SALVAR CONFIGURAÇÃO</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="body-part" style="margin-top:10px">
+        <div style="margin-bottom:6px; font-size:.6rem; color:rgba(255,255,255,.4)">INTERFACE MODE</div>
+        <div style="display:flex; gap:8px;">
+          <button class="trigger-btn" id="btnModeCard" type="button" style="flex:1">CARD</button>
+          <button class="trigger-btn" id="btnModeOrb" type="button" style="flex:1">ORB</button>
+          <button class="trigger-btn" id="btnModeHud" type="button" style="flex:1">HUD</button>
+        </div>
+      </div>
+
+      <div class="btn-row body-part">
+        <button class="btn" id="btnDocs" type="button">
+          <span>📂</span><span>Docs & Apps</span>
+        </button>
+        <button class="btn" id="btnAddApp" type="button">
+          <span>＋</span><span>Novo app / stack</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- APPS LIST -->
+    <section class="apps-section" id="appsSection">
+      <div class="section-header">
+        <h2 class="section-title">Meus Orbs Ativos</h2>
+        <span id="appCounter" style="font-size: 10px; color: var(--text-muted);">0 apps</span>
+      </div>
+      <div id="appsList">
+        <!-- Render dinâmico -->
+      </div>
+    </section>
+
+    <!-- IFRAME DECK -->
+    <section class="iframe-deck" id="iframeDeck">
+      <!-- Iframe cards -->
+    </section>
+  </main>
+
+</div>
+
+<!-- CONSOLE OVERLAY -->
+<div class="console-overlay" id="consoleOverlay">
+  <div class="console-card">
+    <div class="console-header">
+      <span style="font-size: 12px; font-weight: 700; color: var(--neon-purple);">SYSTEM CONSOLE</span>
+      <button id="consoleCloseBtn" style="background:none; border:none; color:white; cursor:pointer;">✕</button>
+    </div>
+    <div class="console-body" id="consoleLog">
+      <div class="log-line info">>> Fusion Nexus v1.0 initialized.</div>
+    </div>
+    <div style="padding: 16px; border-top: 1px solid rgba(255,255,255,0.1); display: flex; gap: 8px;">
+      <button class="btn-fusion" style="flex:1" onclick="clearData()">Limpar Tudo</button>
+      <button class="btn-fusion" style="flex:1" onclick="exportData()">Exportar JSON</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /**
+   * INFODOSE FUSION ENGINE
+   */
+  const state = {
+    apps: JSON.parse(localStorage.getItem('di_nexus_apps') || '[]'),
+    intent: localStorage.getItem('di_nexus_intent') || '',
+    isCollapsed: localStorage.getItem('di_nexus_collapsed') === 'true'
+  };
+
+  // --- Elementos ---
+  const el = {
+    clock: document.getElementById('clock'),
+    greeting: document.getElementById('greeting'),
+    intentInput: document.getElementById('intentInput'),
+    appsList: document.getElementById('appsList'),
+    appCounter: document.getElementById('appCounter'),
+    iframeDeck: document.getElementById('iframeDeck'),
+    mainCard: document.getElementById('mainCard'),
+    consoleLog: document.getElementById('consoleLog'),
+    consoleOverlay: document.getElementById('consoleOverlay')
+  };
+
+  // --- Core Functions ---
+  function log(msg, type = '') {
+    const time = new Date().toLocaleTimeString();
+    const div = document.createElement('div');
+    div.className = `log-line ${type}`;
+    div.textContent = `[${time}] ${msg}`;
+    el.consoleLog.prepend(div);
+  }
+
+  function updateClock() {
+    const now = new Date();
+    el.clock.textContent = now.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    
+    const hr = now.getHours();
+    let greet = "Bom dia";
+    if(hr >= 12) greet = "Boa tarde";
+    if(hr >= 18) greet = "Boa noite";
+    el.greeting.textContent = `${greet}, Dual`;
+  }
+
+  function save() {
+    localStorage.setItem('di_nexus_apps', JSON.stringify(state.apps));
+    localStorage.setItem('di_nexus_intent', state.intent);
+    localStorage.setItem('di_nexus_collapsed', state.isCollapsed);
+  }
+
+  // --- Renderização ---
+  function renderApps() {
+    el.appsList.innerHTML = '';
+    el.appCounter.textContent = `${state.apps.length} apps`;
+
+    state.apps.forEach((app, idx) => {
+      const card = document.createElement('div');
+      card.className = 'app-card';
+      card.innerHTML = `
+        <div class="app-icon-circle">${app.icon || '🌐'}</div>
+        <div class="app-info">
+          <div class="app-name">${app.name}</div>
+          <div class="app-meta">${app.url.substring(0, 30)}...</div>
+        </div>
+        <button class="app-action-btn" onclick="openApp(${idx})">▣</button>
+        <button class="app-action-btn" onclick="removeApp(${idx})" style="color: #ff5f5f;">✕</button>
+      `;
+      el.appsList.appendChild(card);
+    });
+  }
+
+  function openApp(idx) {
+    const app = state.apps[idx];
+    const id = `frame-${idx}`;
+    
+    if(document.getElementById(id)) {
+      document.getElementById(id).scrollIntoView({behavior: 'smooth'});
+      return;
+    }
+
+    const container = document.createElement('div');
+    container.className = 'iframe-container';
+    container.id = id;
+    container.innerHTML = `
+      <div class="iframe-header">
+        <span class="iframe-title">${app.name}</span>
+        <button onclick="this.closest('.iframe-container').remove()" style="background:none; border:none; color:white; cursor:pointer;">✕ Close</button>
+      </div>
+      <iframe src="${app.url}"></iframe>
+    `;
+    el.iframeDeck.prepend(container);
+    log(`Abrindo App: ${app.name}`, 'info');
+  }
+
+  function removeApp(idx) {
+    if(confirm('Remover este app?')) {
+      state.apps.splice(idx, 1);
+      save();
+      renderApps();
+      log('App removido.');
+    }
+  }
+
+  // --- Eventos ---
+  document.getElementById('addAppBtn').onclick = () => {
+    const name = prompt('Nome do App:');
+    if(!name) return;
+    const url = prompt('URL:', 'https://');
+    if(!url) return;
+    
+    state.apps.push({ name, url, icon: '⚡' });
+    save();
+    renderApps();
+    log(`App "${name}" adicionado.`);
+  };
+
+  document.getElementById('orbToggle').onclick = () => {
+    state.isCollapsed = !state.isCollapsed;
+    el.mainCard.classList.toggle('is-collapsed', state.isCollapsed);
+    save();
+  };
+
+  el.intentInput.oninput = (e) => {
+    state.intent = e.target.value;
+    save();
+  };
+
+  document.getElementById('consoleOpenBtn').onclick = () => el.consoleOverlay.classList.add('active');
+  document.getElementById('consoleCloseBtn').onclick = () => el.consoleOverlay.classList.remove('active');
+
+  // --- Init ---
+  function init() {
+    updateClock();
+    setInterval(updateClock, 1000);
+    
+    el.intentInput.value = state.intent;
+    if(state.isCollapsed) el.mainCard.classList.add('is-collapsed');
+    
+    renderApps();
+
+    // Idle Logic (opcional)
+    let idleTimer;
+    const resetIdle = () => {
+      document.getElementById('appHeader').style.opacity = 1;
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        document.getElementById('appHeader').style.opacity = 0.3;
+      }, 5000);
+    };
+    window.addEventListener('mousemove', resetIdle);
+    window.addEventListener('touchstart', resetIdle);
+
+    log('Fusion Nexus Ready.');
+  }
+
+  // Funções Globais para o Console
+  window.clearData = () => {
+    if(confirm('Limpar todos os dados locais?')) {
+      localStorage.clear();
+      location.reload();
+    }
+  };
+
+  window.exportData = () => {
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state));
+    const downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", "infodose_nexus_backup.json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+  };
+
+  init();
+
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.468.0/umd/lucide.min.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-2.js"></script>
+
+  <script>
+    (() => {
+      const bodyPlayer = document.getElementById('bodyPlayer');
+      const card = document.getElementById('cardOrigem');
+      const heroTop = document.getElementById('collapseToggle');
+      const heroOrbCore = card?.querySelector('.hero-orb-core');
+      const heroOrbWrap = card?.querySelector('.hero-orb-wrap');
+
+      const consolePanel = document.getElementById('consolePanel');
+      const consoleToggle = document.getElementById('consoleToggle');
+      const consoleClose = document.getElementById('consoleClose');
+      const consoleLogMirror = document.getElementById('consoleLogMirror');
+      const consoleLsDump = document.getElementById('consoleLsDump');
+
+      const toggleOrigemBtn = document.getElementById('toggleOrigemBtn');
+      const openGroupBtn = document.getElementById('openGroupBtn');
+
+      const appsList = document.getElementById('appsList');
+      const appsCount = document.getElementById('appsCount');
+      const iframeDeck = document.getElementById('iframeDeck');
+
+      const intentInput = document.getElementById('intentInput');
+      const timeRange = document.getElementById('timeRange');
+      const rangeFill = document.getElementById('rangeFill');
+      const moodLabel = document.getElementById('moodLabel');
+      const timeNow = document.getElementById('timeNow');
+      const timeSub = document.getElementById('timeSub');
+      const heroTimeNow = document.getElementById('heroTimeNow');
+      const heroGreeting = document.getElementById('heroGreeting');
+      const heroSubtitle = document.getElementById('heroSubtitle');
+
+      const inputUser = document.getElementById('intentInput');
+      const infodoseInput = document.getElementById('infodoseNameInput');
+      const actName = document.getElementById('actName');
+      const actPre = document.getElementById('actPre');
+      const actBadge = document.getElementById('actBadge');
+      const smallText = document.getElementById('smallText');
+      const smallIdent = document.getElementById('smallIdent');
+      const lblName = document.getElementById('lblName');
+      const lblHello = document.getElementById('lblHello');
+
+      const activationToggle = document.getElementById('activationToggle');
+      const activationCard = document.getElementById('activationCard');
+      const systemToggle = document.getElementById('systemToggle');
+      const systemCard = document.getElementById('systemCard');
+      const saveSystemBtn = document.getElementById('saveSystemBtn');
+
+      const btnDocs = document.getElementById('btnDocs');
+      const btnAddApp = document.getElementById('btnAddApp');
+      const btnModeCard = document.getElementById('btnModeCard');
+      const btnModeOrb = document.getElementById('btnModeOrb');
+      const btnModeHud = document.getElementById('btnModeHud');
+      const modePill = document.getElementById('modePill');
+
+      const keyList = document.getElementById('keyList');
+      const keysModal = document.getElementById('keysModal');
+      const closeKeysBtn = document.getElementById('closeKeysBtn');
+      const lockVaultBtn = document.getElementById('lockVaultBtn');
+      const vaultModal = document.getElementById('vaultModal');
+      const vaultPassInput = document.getElementById('vaultPassInput');
+      const vaultUnlockBtn = document.getElementById('vaultUnlockBtn');
+      const vaultCancelBtn = document.getElementById('vaultCancelBtn');
+      const keyNameInput = document.getElementById('keyNameInput');
+      const keyTokenInput = document.getElementById('keyTokenInput');
+      const addKeyBtn = document.getElementById('addKeyBtn');
+      const vaultStatusText = document.getElementById('vaultStatusText');
+
+      const ORB_KEYS = {
+        INTENT: 'di_origin_intent',
+        LOCAL: 'di_origin_apps_v3',
+        FUSION_V4: 'DI_SYSTEM_DUAL_APPS',
+        FUSION_V3: 'fusion_os_state_v2_3',
+        USER: 'di_userName',
+        INFODOSE: 'di_infodoseName',
+        CARD: 'di_card_collapsed',
+        MODE: 'di_interface_mode',
+        KEYS: 'di_vault_keys',
+        VAULT_LOCKED: 'di_vault_locked',
+        VAULT_PASS: 'di_vault_pass'
+      };
+
+      let apps = [];
+      let idleTimer = null;
+
+      function save(k, v){
+        try{ localStorage.setItem(k, v); }catch(e){}
+      }
+
+      function load(k, fallback = ''){
+        try{
+          const v = localStorage.getItem(k);
+          return v === null ? fallback : v;
+        }catch(e){
+          return fallback;
+        }
+      }
+
+      function escapeHtml(s){
+        if(s === null || s === undefined) return '';
+        return String(s)
+          .replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;');
+      }
+
+      function log(msg){
+        const box = document.getElementById('logBox');
+        const time = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+        const txt = `${time} · ${msg}`;
+
+        if(box){
+          const line = document.createElement('div');
+          line.textContent = txt;
+          box.prepend(line);
+          while(box.childElementCount > 20) box.removeChild(box.lastElementChild);
+        }
+
+        if(consoleLogMirror){
+          const line = document.createElement('div');
+          line.textContent = txt;
+          consoleLogMirror.prepend(line);
+          while(consoleLogMirror.childElementCount > 10) consoleLogMirror.removeChild(consoleLogMirror.lastElementChild);
+        }
+      }
+
+      function getGreetingByHour(){
+        const h = new Date().getHours();
+        if(h >= 5 && h < 12) return 'Bom dia';
+        if(h >= 12 && h < 18) return 'Boa tarde';
+        return 'Boa noite';
+      }
+
+      function syncIdentity(){
+        const user = load(ORB_KEYS.USER, load('userName', load('infodose:username', 'Dual')));
+        const infodose = load(ORB_KEYS.INFODOSE, 'Infodose');
+
+        if(heroGreeting) heroGreeting.textContent = `${getGreetingByHour()}, ${user}`;
+        if(heroSubtitle) heroSubtitle.textContent = `${infodose} sincronizada com seus orbs`;
+        if(lblHello) lblHello.textContent = `${getGreetingByHour()},`;
+        if(lblName) lblName.textContent = user;
+        if(actName) actName.textContent = user;
+        if(smallIdent) smallIdent.textContent = user.slice(0,2).toUpperCase();
+        if(smallText) smallText.textContent = `${infodose} pronta para abrir`;
+        if(actBadge) actBadge.textContent = `v:${infodose.slice(0,8) || '--'}`;
+        if(actPre){
+          actPre.textContent = [
+            `USER=${user}`,
+            `INFODOSE=${infodose}`,
+            `HOUR=${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`,
+            `MODE=${bodyPlayer?.dataset.mode || 'player'}`
+          ].join('\n');
+        }
+      }
+
+      function tick(){
+        const now = new Date();
+        const t = now.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+        if(timeNow) timeNow.textContent = t;
+        if(heroTimeNow) heroTimeNow.textContent = t;
+      }
+
+      const phrases = {
+        morning: ['Bom dia · Sincronizando orbs de dados.','Amanheceu · O sistema aguarda comando.','Pulso da manhã · A intenção define a realidade.'],
+        afternoon: ['Boa tarde · Convergência de dados estável.','Metade do dia · Foco no essencial.','Tarde viva · Seus stacks estão prontos.'],
+        night: ['Boa noite · Modo noturno e economia de recursos.','Noite acesa · Dados persistidos com segurança.','Pulso noturno · Prepare o grid para amanhã.']
+      };
+
+      function setDynamicPhrase(){
+        const h = new Date().getHours();
+        let bucket = 'night';
+        if(h >= 5 && h < 12) bucket = 'morning';
+        else if(h >= 12 && h < 18) bucket = 'afternoon';
+        const set = phrases[bucket];
+        const pick = set[Math.floor(Math.random() * set.length)];
+        if(timeSub) timeSub.textContent = pick;
+
+        if(moodLabel){
+          moodLabel.textContent =
+            bucket === 'morning' ? 'Manhã focada' :
+            bucket === 'afternoon' ? 'Tarde produtiva' : 'Noite silenciosa';
+        }
+      }
+
+      function setRangeUI(){
+        if(!timeRange || !rangeFill) return;
+        const min = Number(timeRange.min || 6);
+        const max = Number(timeRange.max || 23);
+        const val = Number(timeRange.value || 9);
+        const pct = ((val - min) / (max - min)) * 100;
+        rangeFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+        if(heroOrbCore){
+          const blur = 4 + (val / 4);
+          heroOrbCore.style.filter = `blur(${blur}px) brightness(${val < 10 ? 1.15 : val < 18 ? 1.3 : 0.9})`;
+        }
+      }
+
+      function setMode(mode){
+        if(!bodyPlayer) return;
+        bodyPlayer.dataset.mode = mode;
+        save(ORB_KEYS.MODE, mode);
+        btnModeCard?.classList.toggle('active-mode', mode === 'card');
+        btnModeOrb?.classList.toggle('active-mode', mode === 'orb');
+        btnModeHud?.classList.toggle('active-mode', mode === 'hud');
+      }
+
+      function setConsoleOpen(open){
+        if(!consolePanel) return;
+        consolePanel.classList.toggle('open', open);
+        consolePanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+        if(open) dumpLocalStorage();
+      }
+
+      function setCardCollapsed(collapsed){
+        if(!card) return;
+        card.classList.toggle('is-collapsed', collapsed);
+        save(ORB_KEYS.CARD, collapsed ? '1' : '0');
+      }
+
+      function toggleSection(el){
+        if(!el) return;
+        el.classList.toggle('activation-hidden');
+      }
+
+      window.toggleSection = (id) => toggleSection(document.getElementById(id));
+
+      function normalizeUrl(u){
+        try{ return new URL(u, location.href).href.replace(/\/+$/, ''); }
+        catch(e){ return (u || '').trim(); }
+      }
+
+      function loadLocalApps(){
+        try{
+          const raw = load(ORB_KEYS.LOCAL, '[]');
+          return JSON.parse(raw) || [];
+        }catch(e){
+          return [];
+        }
+      }
+
+      function getSystemOrbData(){
+        const systemApps = [];
+
+        const extract = (key, sourceName) => {
+          try{
+            const raw = load(key, '');
+            if(!raw) return;
+            const parsed = JSON.parse(raw);
+            const list = Array.isArray(parsed) ? parsed : (parsed.installed || []);
+            list.forEach(item => {
+              systemApps.push({
+                id: item.id || item.code || `sys_${Math.random().toString(36).slice(2)}`,
+                name: item.name || 'Módulo Fusion',
+                url: item.url || '',
+                group: item.group || sourceName,
+                isSystem: true
+              });
+            });
+            if(list.length) log(`Orb ${sourceName}: ${list.length} módulos detectados.`);
+          }catch(e){}
+        };
+
+        extract(ORB_KEYS.FUSION_V4, 'Fusion v2.4');
+        extract(ORB_KEYS.FUSION_V3, 'Fusion Legacy');
+        return systemApps;
+      }
+
+      function persistLocalApps(){
+        try{
+          const toSave = apps.filter(a => !a.isSystem);
+          localStorage.setItem(ORB_KEYS.LOCAL, JSON.stringify(toSave));
+        }catch(e){}
+      }
+
+      function convergeOrbs(){
+        const local = loadLocalApps();
+        const system = getSystemOrbData();
+        apps = [...local];
+
+        const existingUrls = new Set(apps.filter(a => a.url).map(a => normalizeUrl(a.url)));
+
+        system.forEach(sysApp => {
+          if(sysApp.url && existingUrls.has(normalizeUrl(sysApp.url))) return;
+          apps.push(sysApp);
+          if(sysApp.url) existingUrls.add(normalizeUrl(sysApp.url));
+        });
+
+        renderApps();
+        log(`Convergência completa: ${apps.length} cards ativos.`);
+      }
+
+      function renderApps(){
+        if(!appsList) return;
+        appsList.innerHTML = '';
+        if(appsCount) appsCount.textContent = apps.length + (apps.length === 1 ? ' app' : ' apps');
+
+        apps.forEach(app => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'app-card';
+          if(app.isSystem) cardEl.classList.add('is-system');
+          cardEl.innerHTML = `
+            <div class="app-main">
+              <div class="app-title">${app.isSystem ? '🔹 ' : ''}${escapeHtml(app.name || 'Sem nome')}</div>
+              <div class="app-meta">
+                <span class="app-group">${escapeHtml(app.group || 'Geral')}</span>
+                <span class="app-url">${escapeHtml(app.url || '').substring(0, 40)}</span>
+              </div>
+            </div>
+            <div class="app-actions">
+              <button class="app-btn open" data-action="open" title="Abrir Card" type="button">▣</button>
+              <button class="app-btn remove" data-action="remove" title="${app.isSystem ? 'Ocultar (Sistema)' : 'Remover'}" type="button">✕</button>
+            </div>
+          `;
+
+          cardEl.querySelectorAll('.app-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const action = btn.dataset.action;
+              if(action === 'open') openAppCard(app);
+              if(action === 'remove') removeApp(app.id, app.isSystem);
+            });
+          });
+
+          appsList.appendChild(cardEl);
+        });
+      }
+
+      function removeApp(id, isSystem){
+        const idx = apps.findIndex(a => a.id === id);
+        if(idx === -1) return;
+        const msg = isSystem
+          ? 'Este é um módulo do Fusion OS. Remover aqui apenas o oculta nesta sessão.'
+          : 'Remover este app da lista local?';
+        if(!confirm(msg)) return;
+        apps.splice(idx,1);
+        if(!isSystem) persistLocalApps();
+        log('Orb removido/ocultado.');
+        renderApps();
+      }
+
+      function openAppCard(app){
+        if(!app.url){
+          alert('URL inválida no Orb.');
+          return;
+        }
+
+        const existing = iframeDeck.querySelector(`[data-id="${CSS.escape(app.id)}"]`);
+        if(existing){
+          existing.scrollIntoView({behavior:'smooth', block:'start'});
+          return;
+        }
+
+        const section = document.createElement('section');
+        section.className = 'iframe-card';
+        section.dataset.id = app.id;
+        section.innerHTML = `
+          <div class="iframe-card-header">
+            <div class="iframe-card-title">${escapeHtml(app.name || 'App sem nome')}</div>
+            <div class="iframe-card-actions">
+              <span class="iframe-card-group">${escapeHtml(app.group || 'Sem grupo')}</span>
+              <button type="button" data-action="open-new" title="Nova Aba">⧉</button>
+              <button type="button" data-action="close" title="Fechar">✕</button>
+            </div>
+          </div>
+          <iframe src="${escapeHtml(app.url)}" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        `;
+
+        section.querySelectorAll('.iframe-card-actions button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if(btn.dataset.action === 'close'){
+              if(iframeDeck.contains(section)) iframeDeck.removeChild(section);
+              log('Card de app fechado.');
+            }else if(btn.dataset.action === 'open-new'){
+              window.open(app.url, '_blank');
+              log('App aberto em nova aba.');
+            }
+          });
+        });
+
+        iframeDeck.appendChild(section);
+        log(`Card expandido: ${app.name || 'sem nome'}`);
+      }
+
+      function dumpLocalStorage(){
+        if(!consoleLsDump) return;
+        try{
+          const lines = [];
+          for(let i=0;i<localStorage.length;i++){
+            const key = localStorage.key(i);
+            if(!key) continue;
+            const val = localStorage.getItem(key) || '';
+            const displayVal = val.length > 80 ? val.substring(0,80) + '...' : val;
+            lines.push(`${key}: ${displayVal}`);
+          }
+          consoleLsDump.textContent = lines.join('\n') || '(sem chaves no localStorage)';
+        }catch(e){
+          consoleLsDump.textContent = 'Erro de leitura de armazenamento.';
+        }
+      }
+
+      function renderKeys(){
+        if(!keyList) return;
+        let list = [];
+        try{
+          list = JSON.parse(load(ORB_KEYS.KEYS, '[]')) || [];
+        }catch(e){
+          list = [];
+        }
+
+        keyList.innerHTML = '';
+        if(!list.length){
+          keyList.innerHTML = '<div class="key-item"><div>Sem chaves salvas.</div><div>—</div></div>';
+          return;
+        }
+
+        list.forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = 'key-item';
+          row.innerHTML = `
+            <div>
+              <div style="font-weight:700">${escapeHtml(item.name || 'Sem nome')}</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.55)">${item.token ? 'Token salvo' : 'Sem token'}</div>
+            </div>
+            <button class="small-btn danger" type="button">Excluir</button>
+          `;
+          row.querySelector('button').addEventListener('click', () => {
+            if(!confirm('Excluir esta chave?')) return;
+            list.splice(index,1);
+            save(ORB_KEYS.KEYS, JSON.stringify(list));
+            renderKeys();
+            log('Chave removida.');
+          });
+          keyList.appendChild(row);
+        });
+      }
+
+      function openKeysModal(){
+        renderKeys();
+        keysModal?.classList.add('open');
+      }
+
+      function closeKeysModal(){
+        keysModal?.classList.remove('open');
+      }
+
+      function openVaultModal(){
+        vaultModal?.classList.add('open');
+      }
+
+      function closeVaultModal(){
+        vaultModal?.classList.remove('open');
+      }
+
+      function saveIdentityFromInputs(){
+        const user = (intentInput?.value || '').trim() || 'Dual';
+        const infodose = (infodoseInput?.value || '').trim() || 'Infodose';
+        save(ORB_KEYS.USER, user);
+        save(ORB_KEYS.INFODOSE, infodose);
+        syncIdentity();
+        log('Identidade salva.');
+      }
+
+      function saveSystemConfig(){
+        saveIdentityFromInputs();
+        const apiKey = document.getElementById('apiKeyInput')?.value || '';
+        const model = document.getElementById('modelSelect')?.value || '';
+        if(apiKey) save('di_apiKey', apiKey);
+        if(model) save('di_modelName', model);
+        log('Configuração do sistema salva.');
+        alert('Configuração salva localmente.');
+      }
+
+      function openGroup(){
+        if(!apps.length){
+          alert('Você ainda não tem apps salvos.');
+          return;
+        }
+        const g = prompt('Nome do grupo que você quer abrir (ex: Chat, Solar, Índia):');
+        if(!g) return;
+        const groupName = g.trim();
+        const subset = apps.filter(a => (a.group || '').trim().toLowerCase() === groupName.toLowerCase());
+        if(!subset.length){
+          alert('Nenhum app encontrado com esse grupo.');
+          return;
+        }
+        subset.forEach(openAppCard);
+        log('Grupo aberto: ' + groupName + ' (' + subset.length + ' apps).');
+      }
+
+      function init(){
+        try{
+          setMode(load(ORB_KEYS.MODE, 'card'));
+        }catch(e){}
+
+        const savedCollapsed = load(ORB_KEYS.CARD, '0') === '1';
+        setCardCollapsed(savedCollapsed);
+
+        if(intentInput) intentInput.value = load(ORB_KEYS.USER, load('userName', load('infodose:username', '')));
+        if(infodoseInput) infodoseInput.value = load(ORB_KEYS.INFODOSE, 'Infodose');
+
+        if(intentInput){
+          intentInput.addEventListener('input', () => {
+            save(ORB_KEYS.USER, intentInput.value.trim() || 'Dual');
+            syncIdentity();
+            clearTimeout(window.__di_name_timer);
+            window.__di_name_timer = setTimeout(() => log('Nome atualizado.'), 600);
+          });
+        }
+
+        if(infodoseInput){
+          infodoseInput.addEventListener('input', () => {
+            save(ORB_KEYS.INFODOSE, infodoseInput.value.trim() || 'Infodose');
+            syncIdentity();
+          });
+        }
+
+        if(timeRange){
+          timeRange.addEventListener('input', () => {
+            setRangeUI();
+            const v = Number(timeRange.value);
+            const label =
+              v < 10 ? 'Amanhecer' :
+              v < 13 ? 'Manhã focada' :
+              v < 18 ? 'Tarde produtiva' : 'Noite ativa';
+            if(moodLabel) moodLabel.textContent = label;
+          });
+          const h = new Date().getHours();
+          timeRange.value = h;
+          setRangeUI();
+        }
+
+        btnModeCard?.addEventListener('click', () => setMode('card'));
+        btnModeOrb?.addEventListener('click', () => setMode('orb'));
+        btnModeHud?.addEventListener('click', () => setMode('hud'));
+        modePill?.addEventListener('click', () => setMode(bodyPlayer.dataset.mode === 'card' ? 'orb' : 'card'));
+
+        const toggleCard = () => setCardCollapsed(!card.classList.contains('is-collapsed'));
+
+        heroTop?.addEventListener('click', toggleCard);
+        toggleOrigemBtn?.addEventListener('click', toggleCard);
+
+        activationToggle?.addEventListener('click', () => toggleSection(activationCard));
+        systemToggle?.addEventListener('click', () => toggleSection(systemCard));
+
+        consoleToggle?.addEventListener('click', () => setConsoleOpen(!consolePanel.classList.contains('open')));
+        consoleClose?.addEventListener('click', () => setConsoleOpen(false));
+        openGroupBtn?.addEventListener('click', openGroup);
+
+        btnAddApp?.addEventListener('click', () => {
+          const name = prompt('Nome do app / stack:');
+          if(!name) return;
+          const url = prompt('URL do app (http://, https:// ou arquivo local):', 'https://');
+          if(url === null) return;
+          const group = prompt('Nome do grupo (ex: Chat, Solar, Docs):') || '';
+          const id = 'di_app_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+          apps.push({ id, name, url, group, isSystem:false });
+          persistLocalApps();
+          renderApps();
+          log('Novo app local criado.');
+        });
+
+        btnDocs?.addEventListener('click', () => {
+          log('Docs / Apps acionado.');
+          const docApp = apps.find(a => (a.name || '').toLowerCase().includes('docs') || (a.name || '').toLowerCase().includes('livro'));
+          if(docApp) openAppCard(docApp);
+          else alert('Nenhum módulo de documentação encontrado nos Orbs.');
+        });
+
+        saveSystemBtn?.addEventListener('click', saveSystemConfig);
+
+        closeKeysBtn?.addEventListener('click', closeKeysModal);
+        lockVaultBtn?.addEventListener('click', () => {
+          save(ORB_KEYS.VAULT_LOCKED, '1');
+          if(vaultStatusText) vaultStatusText.textContent = 'Cofre Bloqueado';
+          closeKeysModal();
+          openVaultModal();
+        });
+
+        vaultCancelBtn?.addEventListener('click', closeVaultModal);
+        vaultUnlockBtn?.addEventListener('click', () => {
+          const pass = vaultPassInput?.value || '';
+          if(!pass){
+            alert('Digite a senha.');
+            return;
+          }
+          save(ORB_KEYS.VAULT_PASS, pass);
+          save(ORB_KEYS.VAULT_LOCKED, '0');
+          if(vaultStatusText) vaultStatusText.textContent = 'Cofre Aberto';
+          closeVaultModal();
+          alert('Cofre desbloqueado.');
+          log('Cofre desbloqueado.');
+        });
+
+        addKeyBtn?.addEventListener('click', () => {
+          const name = (keyNameInput?.value || '').trim();
+          const token = (keyTokenInput?.value || '').trim();
+          if(!name){
+            alert('Digite o nome da chave.');
+            return;
+          }
+          let list = [];
+          try{ list = JSON.parse(load(ORB_KEYS.KEYS, '[]')) || []; }catch(e){ list = []; }
+          list.push({ name, token });
+          save(ORB_KEYS.KEYS, JSON.stringify(list));
+          if(keyNameInput) keyNameInput.value = '';
+          if(keyTokenInput) keyTokenInput.value = '';
+          renderKeys();
+          log('Chave adicionada.');
+        });
+
+        document.querySelectorAll('[data-ls-action]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const action = btn.getAttribute('data-ls-action');
+            if(action === 'dump') dumpLocalStorage();
+            if(action === 'clear-intent') {
+              localStorage.removeItem(ORB_KEYS.INTENT);
+              if(intentInput) intentInput.value = '';
+              save(ORB_KEYS.USER, 'Dual');
+              save(ORB_KEYS.INFODOSE, 'Infodose');
+              syncIdentity();
+              log('Intenção limpa.');
+              dumpLocalStorage();
+            }
+            if(action === 'clear-apps') {
+              if(confirm('Isso apaga seus apps LOCAIS. Confirmar?')){
+                localStorage.removeItem(ORB_KEYS.LOCAL);
+                apps = [];
+                renderApps();
+                log('Apps limpos.');
+                dumpLocalStorage();
+              }
+            }
+          });
+        });
+
+        if(!load(ORB_KEYS.USER)) save(ORB_KEYS.USER, 'Dual');
+        if(!load(ORB_KEYS.INFODOSE)) save(ORB_KEYS.INFODOSE, 'Infodose');
+        if(vaultStatusText) vaultStatusText.textContent = load(ORB_KEYS.VAULT_LOCKED, '0') === '1' ? 'Cofre Bloqueado' : 'Cofre Aberto';
+
+        syncIdentity();
+        tick();
+        setDynamicPhrase();
+        convergeOrbs();
+        renderKeys();
+        dumpLocalStorage();
+
+        setInterval(tick, 60000);
+        setInterval(setDynamicPhrase, 5000);
+
+        document.addEventListener('pointerdown', () => {
+          clearTimeout(idleTimer);
+          idleTimer = setTimeout(() => {}, 0);
+        }, { passive:true });
+
+        if(window.lucide?.createIcons) window.lucide.createIcons();
+      }
+
+      init();
+
+      window.setMode = setMode;
+      window.toggleSection = window.toggleSection;
+      window.openKeysModal = openKeysModal;
+      window.openVaultModal = openVaultModal;
+    })();
+  </script>
+
+</body>
+</html>
+

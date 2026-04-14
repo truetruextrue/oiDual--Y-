@@ -1,0 +1,94 @@
+<!-- CSS HERO -->
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+
+<div class="frase">
+  <strong>Sempre</strong> único<strong>. Sempre</strong> seu<strong>.</strong>
+</div>
+
+<div class="app">
+
+  <!-- HEADER -->
+  <header class="app-header">
+    <div class="brand-pill">Dual · Infodose</div>
+    <div class="header-actions">
+      <button class="console-toggle" id="consoleToggle" title="Abrir Console">◎</button>
+      <button class="mode-pill" type="button">
+        <span class="dot"></span>
+        <span>Modo 3·6·9</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CARD ÚNICO UNIFICADO -->
+  <section class="card-origem" id="cardOrigem">
+
+    <!-- HERO FUNDIDO -->
+    <div class="hero-card hero-embedded">
+      <div class="hero-top">
+        <span class="hero-hour-label">06h</span>
+
+        <div class="hero-main">
+          <div class="hero-greeting" id="heroGreeting">
+            Bom dia, Dual
+          </div>
+          <div class="hero-subtitle" id="heroSubtitle">
+            Sua dose de hoje já está organizada
+          </div>
+        </div>
+
+        <span class="hero-hour-label">23h</span>
+      </div>
+
+      <div class="hero-meta-row">
+        <span class="time-chip" id="heroTimeNow">--:--</span>
+      </div>
+
+      <div class="hero-slider">
+        <div class="hero-slider-row">
+          <span>06h</span>
+          <span id="moodLabel" class="label-mood">Manhã focada</span>
+          <span>23h</span>
+        </div>
+
+        <div class="range-wrap">
+          <div id="rangeFill" class="range-fill"></div>
+        </div>
+
+        <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+      </div>
+    </div>
+
+    <!-- ORB CORE -->
+    <div class="orb-wrap">
+      <div class="orb-core"></div>
+      <div class="orb-ring"></div>
+    </div>
+
+    <!-- TEMPO PRINCIPAL -->
+    <div id="timeNow" class="time-main">--:--</div>
+    <div id="timeSub" class="time-sub"></div>
+
+    <!-- INPUT -->
+    <div class="input-row">
+      <label for="intentInput">Intenção / nome / vibração</label>
+      <input id="intentInput" placeholder="Escreve o que você quer ativar hoje..." />
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="btn-row">
+      <button class="btn" id="btnDocs" type="button">
+        <span class="emoji">📂</span>
+        <span>Docs & Apps</span>
+      </button>
+
+      <button class="btn" id="btnAddApp" type="button">
+        <span class="emoji">＋</span>
+        <span>Novo app / stack</span>
+      </button>
+    </div>
+
+  </section>
+</div>
+
+<!-- SCRIPT HERO -->
+<script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>

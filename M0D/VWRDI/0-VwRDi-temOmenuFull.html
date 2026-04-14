@@ -1,0 +1,1636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Ecossistema Integrado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <meta name="theme-color" content="#050816">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/css/mainK.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg: radial-gradient(circle at top, #1c1738 0%, #070b18 48%, #02030a 100%);
+      --card-bg: rgba(10, 14, 26, 0.94);
+      --card-bg-soft: rgba(10, 12, 25, 0.42);
+      --card-border: rgba(185, 205, 255, 0.20);
+      --text-main: #f4f7ff;
+      --text-soft: rgba(244,247,255,.72);
+      --text-muted: rgba(244,247,255,.46);
+      --accent: #7ac6ff;
+      --accent-pink: #ff7ad9;
+      --accent-green: #32e38a;
+      --radius-xl: 26px;
+      --radius-md: 18px;
+      --radius-pill: 999px;
+      --shadow-strong: 0 26px 68px rgba(0,0,0,.92);
+      --shadow-soft: 0 14px 34px rgba(0,0,0,.78);
+      --safe-bottom: env(safe-area-inset-bottom, 0);
+      --collapse-speed: .42s;
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+
+    body{
+      min-height:100vh;
+      background:var(--bg);
+      color:var(--text-main);
+      font-family:Montserrat,-apple-system,system-ui,BlinkMacSystemFont,"SF Pro Text",Inter,sans-serif;
+      padding:22px 14px calc(18px + var(--safe-bottom));
+      overflow-x:hidden;
+    }
+
+    .orb-bg{
+      position:fixed;
+      width:60vw;
+      height:60vw;
+      border-radius:50%;
+      filter:blur(80px);
+      z-index:-1;
+      opacity:.28;
+      pointer-events:none;
+    }
+    #orb-top{ top:-20%; right:-10%; background:radial-gradient(circle, #4facfe 0%, #00f2fe 100%); }
+    #orb-bottom{ bottom:-20%; left:-10%; background:radial-gradient(circle, #667eea 0%, #764ba2 100%); }
+
+    #particles-js{
+      position:fixed;
+      inset:0;
+      z-index:-1;
+      pointer-events:none;
+    }
+
+    .frase{
+      text-align:center;
+      font-size:.8rem;
+      opacity:.5;
+      margin:15px 0;
+      letter-spacing:1px;
+      text-transform:uppercase;
+    }
+
+    .app{
+      max-width:440px;
+      margin:0 auto;
+    }
+
+    .app-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:14px;
+      gap:10px;
+    }
+
+    .brand-pill{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      padding:7px 12px;
+      border-radius:var(--radius-pill);
+      background:rgba(5,9,20,.94);
+      border:1px solid rgba(142,164,255,.5);
+      color:var(--text-soft);
+      letter-spacing:.13em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .header-actions{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .console-toggle,
+    .mode-pill{
+      border:none;
+      outline:none;
+      cursor:pointer;
+    }
+
+    .console-toggle{
+      width:32px;
+      height:32px;
+      border-radius:var(--radius-pill);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,.5), transparent 55%),
+        radial-gradient(circle at 80% 120%, rgba(255,122,217,.4), transparent 55%),
+        rgba(7,15,32,.96);
+      color:var(--text-main);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.9);
+      border:1px solid rgba(212,184,255,.7);
+    }
+
+    .mode-pill{
+      padding:7px 12px;
+      border-radius:var(--radius-pill);
+      background:rgba(5,9,20,.94);
+      border:1px solid rgba(101,132,230,.65);
+      color:var(--text-soft);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .mode-pill .dot{
+      width:8px;
+      height:8px;
+      border-radius:var(--radius-pill);
+      background:var(--accent-green);
+      box-shadow:0 0 12px rgba(50,227,138,.9);
+    }
+
+    .card-origem{
+      background:var(--card-bg-soft);
+      border-radius:24px;
+      margin:10px 0;
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(10px);
+      box-shadow:var(--shadow-strong);
+      overflow:hidden;
+      transition:all var(--collapse-speed) cubic-bezier(.32,.72,0,1);
+      will-change:transform, padding, height;
+      padding:14px;
+    }
+
+    .card-origem.is-collapsed{
+      padding:10px 12px 12px;
+      background:rgba(10,12,25,.60);
+    }
+
+    .hero-card{
+      background:linear-gradient(180deg, rgba(18,24,46,.96), rgba(8,10,20,.98));
+      border:1px solid rgba(170,190,255,.18);
+      border-radius:22px;
+      padding:14px 14px 12px;
+      margin-bottom:12px;
+      box-shadow:0 18px 40px rgba(0,0,0,.35);
+      transition:all var(--collapse-speed) cubic-bezier(.22,.9,.32,1);
+      user-select:none;
+    }
+
+    .hero-top{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:10px;
+      cursor:pointer;
+    }
+
+    .hero-hour-label{
+      font-size:11px;
+      color:var(--text-muted);
+      letter-spacing:.08em;
+      padding-top:2px;
+      min-width:28px;
+      text-align:center;
+      flex-shrink:0;
+    }
+
+    .hero-main{
+      flex:1;
+      min-width:0;
+      text-align:center;
+    }
+
+    .hero-greeting{
+      font-size:18px;
+      font-weight:900;
+      letter-spacing:.03em;
+      margin-bottom:4px;
+      line-height:1.12;
+    }
+
+    .hero-subtitle{
+      font-size:12px;
+      color:var(--text-soft);
+      min-height:16px;
+      line-height:1.4;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .hero-meta-row{
+      display:flex;
+      justify-content:center;
+      margin-top:10px;
+      margin-bottom:12px;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .time-chip{
+      padding:6px 10px;
+      border-radius:var(--radius-pill);
+      background:rgba(122,198,255,.08);
+      border:1px solid rgba(122,198,255,.22);
+      color:var(--text-main);
+      font-size:12px;
+      font-family:"JetBrains Mono",monospace;
+      letter-spacing:.03em;
+    }
+
+    .hero-details{
+      display:grid;
+      gap:10px;
+      overflow:hidden;
+      max-height:600px;
+      opacity:1;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .hero-matrix{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0, 1fr));
+      gap:8px;
+    }
+
+    .info-chip{
+      padding:10px 11px;
+      border-radius:14px;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.08);
+      min-height:52px;
+    }
+
+    .info-chip .k{
+      display:block;
+      font-size:10px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--text-muted);
+      margin-bottom:5px;
+    }
+
+    .info-chip .v{
+      display:block;
+      font-size:13px;
+      color:var(--text-main);
+      font-weight:700;
+      line-height:1.25;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .hero-slider-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      font-size:11px;
+      color:var(--text-muted);
+      margin-bottom:8px;
+    }
+
+    .label-mood{
+      color:#d9efff;
+      font-weight:600;
+    }
+
+    .range-wrap{
+      width:100%;
+      height:8px;
+      background:rgba(255,255,255,.07);
+      border-radius:999px;
+      overflow:hidden;
+      position:relative;
+    }
+
+    .range-fill{
+      width:40%;
+      height:100%;
+      background:linear-gradient(90deg, var(--accent), var(--accent-pink));
+      box-shadow:0 0 14px rgba(122,198,255,.35);
+    }
+
+    .hero-range{
+      width:100%;
+      margin-top:-8px;
+      position:relative;
+      appearance:none;
+      background:transparent;
+      height:18px;
+      cursor:pointer;
+    }
+
+    .hero-range::-webkit-slider-thumb{
+      appearance:none;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:#fff;
+      border:2px solid var(--accent);
+      box-shadow:0 0 14px rgba(122,198,255,.5);
+    }
+
+    .time-main{
+      font-size:38px;
+      font-weight:600;
+      text-align:center;
+      margin-bottom:4px;
+    }
+
+    .time-sub{
+      text-align:center;
+      font-size:13px;
+      color:var(--text-soft);
+      margin-bottom:16px;
+      min-height:18px;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .input-row,
+    .btn-row{
+      transition:all .4s cubic-bezier(.32,.72,0,1);
+      transform-origin:top;
+      opacity:1;
+      max-height:500px;
+    }
+
+    .input-row{
+      margin-bottom:14px;
+    }
+
+    .input-row label{
+      font-size:12px;
+      color:var(--text-soft);
+      opacity:.85;
+      display:block;
+      margin-bottom:4px;
+    }
+
+    .input-row input{
+      width:100%;
+      border-radius:14px;
+      padding:10px 13px;
+      border:1px solid rgba(181,200,255,.6);
+      background:rgba(4,7,16,.92);
+      color:var(--text-main);
+      font-size:14px;
+      outline:none;
+      font-family:inherit;
+    }
+
+    .input-row input::placeholder{
+      color:var(--text-muted);
+    }
+
+    .btn-row{
+      display:flex;
+      gap:8px;
+      margin-top:4px;
+    }
+
+    .btn{
+      flex:1;
+      border-radius:16px;
+      border:1px solid rgba(200,170,255,.8);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,.25), transparent 60%),
+        linear-gradient(135deg, #211c40, #322c66);
+      color:var(--text-main);
+      font-size:13px;
+      padding:11px 0;
+      text-align:center;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:6px;
+      box-shadow:var(--shadow-soft);
+    }
+
+    .apps-wrapper{
+      margin-top:18px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .apps-header-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      margin-bottom:6px;
+    }
+
+    .apps-title{
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--text-soft);
+    }
+
+    .apps-count{
+      font-size:11px;
+      color:var(--text-muted);
+    }
+
+    .app-card{
+      border-radius:var(--radius-md);
+      border:1px solid rgba(194,176,255,.8);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,122,217,.28), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(122,198,255,.22), transparent 60%),
+        rgba(9,12,28,.98);
+      padding:10px 11px;
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:8px;
+      font-size:13px;
+      box-shadow:0 18px 40px rgba(0,0,0,.95);
+    }
+
+    .app-main{
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      flex:1;
+      min-width:0;
+    }
+
+    .app-title{
+      font-weight:500;
+      color:var(--text-main);
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .app-meta{
+      font-size:11px;
+      color:var(--text-soft);
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+    }
+
+    .app-group{
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+      padding:3px 7px;
+      border-radius:var(--radius-pill);
+      background:rgba(255,122,217,.12);
+      color:#ffe5f7;
+      border:1px solid rgba(255,122,217,.9);
+      font-size:10px;
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .app-url{
+      font-size:10px;
+      color:var(--text-muted);
+      max-width:100%;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .app-actions{
+      display:flex;
+      flex-direction:column;
+      gap:5px;
+    }
+
+    .app-btn{
+      border:none;
+      outline:none;
+      width:28px;
+      height:28px;
+      border-radius:var(--radius-pill);
+      background:rgba(5,8,22,.9);
+      color:#ffe9ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      cursor:pointer;
+      border:1px solid rgba(220,188,255,.85);
+      box-shadow:0 9px 24px rgba(0,0,0,.9);
+    }
+
+    .app-btn.open{ background:linear-gradient(135deg, #2b2750, #50306e); }
+    .app-btn.remove{
+      background:rgba(40,12,36,.95);
+      border-color:rgba(255,122,217,.9);
+    }
+
+    .iframe-deck{
+      margin-top:18px;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      transition:all .35s cubic-bezier(.22,.9,.32,1);
+    }
+
+    .iframe-card{
+      border-radius:22px;
+      border:1px solid rgba(192,178,255,.85);
+      background:rgba(6,8,22,.98);
+      box-shadow:0 26px 60px rgba(0,0,0,.98);
+      overflow:hidden;
+    }
+
+    .iframe-card-header{
+      padding:8px 11px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      background:linear-gradient(135deg, #241f4a, #39265c);
+      color:var(--text-main);
+      font-size:12px;
+    }
+
+    .iframe-card-title{
+      flex:1;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      white-space:nowrap;
+    }
+
+    .iframe-card-group{
+      font-size:10px;
+      padding:3px 7px;
+      border-radius:var(--radius-pill);
+      background:rgba(255,122,217,.12);
+      border:1px solid rgba(255,122,217,.8);
+      color:#ffe8ff;
+    }
+
+    .iframe-card-actions{
+      display:flex;
+      align-items:center;
+      gap:6px;
+    }
+
+    .iframe-card-actions button{
+      border:none;
+      outline:none;
+      width:26px;
+      height:26px;
+      border-radius:var(--radius-pill);
+      background:rgba(3,5,16,.96);
+      color:var(--text-main);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+      font-size:13px;
+      border:1px solid rgba(180,178,255,.8);
+    }
+
+    .iframe-card iframe{
+      width:100%;
+      border:none;
+      display:block;
+      height:660px;
+      background:#02030a;
+    }
+
+    #logBox{ display:none; }
+
+    .console-panel{
+      position:fixed;
+      inset:auto 0 0 0;
+      z-index:60;
+      padding:0 10px 10px;
+      pointer-events:none;
+    }
+
+    .console-panel.open{ pointer-events:auto; }
+
+    .console-panel-inner{
+      max-width:440px;
+      margin:0 auto;
+      background:radial-gradient(circle at top, #211a44 0%, #050716 55%, #02030a 100%);
+      border-radius:22px 22px 0 0;
+      border:1px solid rgba(184,168,255,.8);
+      box-shadow:0 -24px 60px rgba(0,0,0,.98);
+      padding:10px 11px 12px;
+      transform:translateY(110%);
+      opacity:0;
+      transition:transform .28s cubic-bezier(.21,.9,.32,1), opacity .24s ease-out;
+      backdrop-filter:blur(22px);
+    }
+
+    .console-panel.open .console-panel-inner{
+      transform:translateY(0);
+      opacity:1;
+    }
+
+    .console-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:6px;
+    }
+
+    .console-title{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:var(--text-soft);
+    }
+
+    .console-close{
+      border:none;
+      outline:none;
+      width:26px;
+      height:26px;
+      border-radius:var(--radius-pill);
+      background:transparent;
+      color:var(--text-muted);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      cursor:pointer;
+    }
+
+    .console-body{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .console-section{
+      border-radius:14px;
+      background:rgba(7,9,22,.96);
+      border:1px solid rgba(138,146,244,.6);
+      padding:7px 8px;
+    }
+
+    .console-section h3{
+      margin:0 0 3px;
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      color:var(--text-soft);
+    }
+
+    .console-section small{
+      margin:0;
+      font-size:10px;
+      color:var(--text-muted);
+    }
+
+    .console-actions-row{
+      display:flex;
+      flex-wrap:wrap;
+      gap:5px;
+      margin-top:4px;
+    }
+
+    .console-btn{
+      border:none;
+      border-radius:var(--radius-pill);
+      padding:5px 9px;
+      font-size:10px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      background:linear-gradient(135deg,#25254a,#3b3a78);
+      color:var(--text-main);
+      box-shadow:0 10px 26px rgba(0,0,0,.9);
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      gap:4px;
+    }
+
+    .console-ls-dump{
+      margin-top:4px;
+      max-height:80px;
+      overflow:auto;
+      padding:4px 6px;
+      font-family:"SF Mono","JetBrains Mono",ui-monospace,monospace;
+      font-size:10px;
+      line-height:1.35;
+      background:rgba(3,5,16,.96);
+      border-radius:8px;
+      border:1px solid rgba(116,130,228,.7);
+      color:var(--text-soft);
+      white-space:pre-wrap;
+    }
+
+    .console-log-mirror{
+      margin-top:4px;
+      max-height:64px;
+      overflow:auto;
+      font-size:10px;
+      line-height:1.3;
+      color:var(--text-soft);
+      opacity:.88;
+    }
+
+    .console-log-mirror div{
+      padding:1px 0;
+    }
+
+    .hidden{ display:none !important; }
+    .mini-strip{
+      min-height:72px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    .hero-card.is-collapsed .hero-details,
+    .hero-card.is-collapsed .input-row,
+    .hero-card.is-collapsed .btn-row,
+    .hero-card.is-collapsed .time-sub,
+    .hero-card.is-collapsed .apps-wrapper,
+    .hero-card.is-collapsed .iframe-deck{
+      opacity:0;
+      transform:translateY(-10px) scale(.98);
+      pointer-events:none;
+      max-height:0;
+      overflow:hidden;
+      margin:0;
+      padding:0;
+    }
+
+    .hero-card.is-collapsed .time-main,
+    .hero-card.is-collapsed .small-preview{
+      display:none;
+    }
+
+    .hero-card.is-collapsed .hero-meta-row{
+      display:none;
+    }
+
+    .hero-card.is-collapsed .mini-strip{
+      display:flex;
+    }
+
+    .hero-card.is-collapsed .hero-greeting{
+      font-size:15px;
+      margin-bottom:0;
+    }
+
+    .hero-card.is-collapsed .hero-top{
+      align-items:center;
+    }
+
+    .hero-card.is-collapsed .hero-subtitle{
+      min-height:0;
+      opacity:0;
+      height:0;
+      overflow:hidden;
+      margin:0;
+    }
+
+    .hero-card.is-collapsed .hint{
+      display:none;
+    }
+
+    .hint{
+      margin-top:10px;
+      text-align:center;
+      font-size:10px;
+      color:var(--text-muted);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    @media (max-width: 380px){
+      .hero-greeting{ font-size:16px; }
+      .hero-matrix{ grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="orb-top" class="orb-bg"></div>
+  <div id="orb-bottom" class="orb-bg"></div>
+  <div id="particles-js"></div>
+
+  <div class="frase"><strong>Sempre</strong> único<strong>. Sempre</strong> seu<strong>.</strong></div>
+
+  <div class="app">
+
+    <header class="app-header">
+      <div class="brand-pill">Dual · Infodose</div>
+      <div class="header-actions">
+        <button class="console-toggle" id="consoleToggle" title="Abrir Console">◎</button>
+        <button class="mode-pill" type="button" id="modePill">
+          <span class="dot"></span>
+          <span>Modo 3·6·9</span>
+        </button>
+      </div>
+    </header>
+
+    <section class="card-origem" id="cardOrigem">
+      <div class="hero-card hero-embedded" id="heroPanel">
+        <div class="hero-top" id="heroToggle" title="Tocar para colapsar/expandir">
+          <span class="hero-hour-label">06h</span>
+
+          <div class="hero-main">
+            <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+            <div class="hero-subtitle" id="heroSubtitle">Sincronizando orbs...</div>
+          </div>
+
+          <span class="hero-hour-label">23h</span>
+        </div>
+
+        <div class="hero-meta-row">
+          <span class="time-chip" id="timeNow">--:--</span>
+        </div>
+
+        <div class="mini-strip">
+          <div class="mini-title">
+            <strong id="miniTitle">Linartask</strong>
+            <span id="miniSub">Hero ativo</span>
+          </div>
+          <div class="mini-pill" id="miniClock">--:--</div>
+        </div>
+
+        <div class="hero-details" id="heroDetails">
+          <div class="hero-matrix">
+            <div class="info-chip">
+              <span class="k">Fusion SL</span>
+              <span class="v" id="fusionName">Linartask</span>
+            </div>
+            <div class="info-chip">
+              <span class="k">Estado</span>
+              <span class="v" id="heroMood">Manhã focada</span>
+            </div>
+            <div class="info-chip">
+              <span class="k">Infodose</span>
+              <span class="v" id="heroInfodose">Infodose</span>
+            </div>
+            <div class="info-chip">
+              <span class="k">Sistema</span>
+              <span class="v" id="heroMode">CARD</span>
+            </div>
+          </div>
+
+          <div class="hero-slider">
+            <div class="hero-slider-row">
+              <span>06h</span>
+              <span id="moodLabel" class="label-mood">Manhã focada</span>
+              <span>23h</span>
+            </div>
+            <div class="range-wrap"><div id="rangeFill" class="range-fill"></div></div>
+            <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+          </div>
+        </div>
+
+        <div class="hint">toque no hero para colapsar</div>
+      </div>
+
+      <div id="timeSub" class="time-sub"></div>
+
+      <div class="input-row">
+        <label for="intentInput">Intenção / vibração</label>
+        <input id="intentInput" placeholder="O que pretendes ativar?" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="btnDocs" type="button">
+          <span class="emoji">📂</span>
+          <span>Docs &amp; Apps</span>
+        </button>
+        <button class="btn" id="btnAddApp" type="button">
+          <span class="emoji">＋</span>
+          <span>Novo app</span>
+        </button>
+      </div>
+    </section>
+
+    <section class="apps-wrapper">
+      <div class="apps-header-row">
+        <div class="apps-title">Meus apps / stacks</div>
+        <div class="apps-count" id="appsCount">0 apps</div>
+      </div>
+      <div id="appsList"></div>
+    </section>
+
+    <section class="iframe-deck" id="iframeDeck"></section>
+
+    <div id="logBox"></div>
+  </div>
+
+  <div class="console-panel" id="consolePanel" aria-hidden="true">
+    <div class="console-panel-inner">
+      <div class="console-header">
+        <div class="console-title">Dual Console</div>
+        <button class="console-close" id="consoleClose" type="button">✕</button>
+      </div>
+
+      <div class="console-body">
+        <div class="console-section">
+          <h3>Visibilidade &amp; grupos</h3>
+          <small>Esconde o card de origem e abre grupos de apps pelo nome.</small>
+          <div class="console-actions-row">
+            <button class="console-btn" id="toggleOrigemBtn" type="button">Ocultar/Mostrar card</button>
+            <button class="console-btn" id="openGroupBtn" type="button">Abrir grupo</button>
+          </div>
+        </div>
+
+        <div class="console-section">
+          <h3>Local Storage</h3>
+          <small>Intenção + lista de apps ficam em <code class="di-key">di_origin_*</code> — integração com <code class="di-key">di_system_dual_apps</code>.</small>
+          <div class="console-actions-row">
+            <button class="console-btn" data-ls-action="dump" type="button">Ver chaves</button>
+            <button class="console-btn" data-ls-action="clear-intent" type="button">Limpar intenção</button>
+            <button class="console-btn" data-ls-action="clear-apps" type="button">Limpar apps</button>
+          </div>
+          <pre class="console-ls-dump" id="consoleLsDump"></pre>
+        </div>
+
+        <div class="console-section">
+          <h3>Log místico</h3>
+          <small>Últimos eventos: intenção, apps criados, grupos abertos.</small>
+          <div class="console-log-mirror" id="consoleLogMirror"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-VwR-di/js/modules/inline-di.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const card = document.getElementById('cardOrigem');
+      const heroTop = document.getElementById('heroToggle');
+      const greeting = document.getElementById('heroGreeting');
+      const subtitle = document.getElementById('heroSubtitle');
+      const heroMode = document.getElementById('heroMode');
+      const heroInfodose = document.getElementById('heroInfodose');
+      const miniTitle = document.getElementById('miniTitle');
+      const miniSub = document.getElementById('miniSub');
+      const miniClock = document.getElementById('miniClock');
+      const fusionName = document.getElementById('fusionName');
+      const heroMood = document.getElementById('heroMood');
+      const moodLabel = document.getElementById('moodLabel');
+      const timeNow = document.getElementById('timeNow');
+      const timeSub = document.getElementById('timeSub');
+      const rangeFill = document.getElementById('rangeFill');
+      const timeRange = document.getElementById('timeRange');
+      const heroSubtitle = document.getElementById('heroSubtitle');
+      const appsCount = document.getElementById('appsCount');
+      const appsList = document.getElementById('appsList');
+      const iframeDeck = document.getElementById('iframeDeck');
+      const consoleToggle = document.getElementById('consoleToggle');
+      const consolePanel = document.getElementById('consolePanel');
+      const consoleClose = document.getElementById('consoleClose');
+      const consoleLsDump = document.getElementById('consoleLsDump');
+      const consoleLogMirror = document.getElementById('consoleLogMirror');
+      const toggleOrigemBtn = document.getElementById('toggleOrigemBtn');
+      const openGroupBtn = document.getElementById('openGroupBtn');
+      const btnAddApp = document.getElementById('btnAddApp');
+      const btnDocs = document.getElementById('btnDocs');
+      const modePill = document.getElementById('modePill');
+      const inputUser = document.getElementById('intentInput');
+      const infodoseInput = document.getElementById('infodoseNameInput');
+      const activationToggle = document.getElementById('activationToggle');
+      const activationCard = document.getElementById('activationCard');
+      const systemToggle = document.getElementById('systemToggle');
+      const systemCard = document.getElementById('systemCard');
+      const saveSystemBtn = document.getElementById('saveSystemBtn');
+      const keyList = document.getElementById('keyList');
+      const keysModal = document.getElementById('keysModal');
+      const closeKeysBtn = document.getElementById('closeKeysBtn');
+      const lockVaultBtn = document.getElementById('lockVaultBtn');
+      const vaultModal = document.getElementById('vaultModal');
+      const vaultPassInput = document.getElementById('vaultPassInput');
+      const vaultUnlockBtn = document.getElementById('vaultUnlockBtn');
+      const vaultCancelBtn = document.getElementById('vaultCancelBtn');
+      const keyNameInput = document.getElementById('keyNameInput');
+      const keyTokenInput = document.getElementById('keyTokenInput');
+      const addKeyBtn = document.getElementById('addKeyBtn');
+      const appsWrapper = document.querySelector('.apps-wrapper');
+
+      const ORB_KEYS = {
+        INTENT: 'di_origin_intent',
+        LOCAL: 'di_origin_apps_v3',
+        FUSION_V4: 'DI_SYSTEM_DUAL_APPS',
+        FUSION_V3: 'fusion_os_state_v2_3',
+        USER: 'di_userName',
+        INFODOSE: 'di_infodoseName',
+        CARD: 'di_card_collapsed',
+        MODE: 'di_interface_mode',
+        KEYS: 'di_vault_keys',
+        VAULT_LOCKED: 'di_vault_locked',
+        VAULT_PASS: 'di_vault_pass'
+      };
+
+      let apps = [];
+      const load = (k, fallback = '') => {
+        try {
+          const v = localStorage.getItem(k);
+          return v === null ? fallback : v;
+        } catch {
+          return fallback;
+        }
+      };
+      const save = (k, v) => {
+        try { localStorage.setItem(k, v); } catch {}
+      };
+
+      function escapeHtml(s){
+        if(s === null || s === undefined) return '';
+        return String(s)
+          .replace(/&/g,'&amp;')
+          .replace(/</g,'&lt;')
+          .replace(/>/g,'&gt;')
+          .replace(/"/g,'&quot;');
+      }
+
+      function log(msg){
+        const box = document.getElementById('logBox');
+        const time = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+        const txt = `${time} · ${msg}`;
+
+        if(box){
+          const line = document.createElement('div');
+          line.textContent = txt;
+          box.prepend(line);
+          while(box.childElementCount > 20) box.removeChild(box.lastElementChild);
+        }
+
+        if(consoleLogMirror){
+          const line = document.createElement('div');
+          line.textContent = txt;
+          consoleLogMirror.prepend(line);
+          while(consoleLogMirror.childElementCount > 10) consoleLogMirror.removeChild(consoleLogMirror.lastElementChild);
+        }
+      }
+
+      function getGreetingByHour(){
+        const h = new Date().getHours();
+        if(h >= 5 && h < 12) return 'Bom dia';
+        if(h >= 12 && h < 18) return 'Boa tarde';
+        return 'Boa noite';
+      }
+
+      function syncIdentity(){
+        const user = load(ORB_KEYS.USER, load('userName', load('infodose:username', 'Dual')));
+        const infodose = load(ORB_KEYS.INFODOSE, 'Infodose');
+
+        if(greeting) greeting.textContent = `${getGreetingByHour()}, ${user}`;
+        if(heroSubtitle) heroSubtitle.textContent = `${infodose} sincronizada com seus orbs`;
+        if(subtitle) subtitle.textContent = `${infodose} ativa e organizada`;
+        if(heroInfodose) heroInfodose.textContent = infodose;
+        if(heroMode) heroMode.textContent = (document.getElementById('bodyPlayer')?.dataset?.mode || 'CARD').toUpperCase();
+        if(miniTitle) miniTitle.textContent = infodose;
+        if(miniSub) miniSub.textContent = `${user} · hero ativo`;
+        if(fusionName) fusionName.textContent = 'Linartask';
+        if(heroMood) heroMood.textContent = moodLabel?.textContent || 'Manhã focada';
+      }
+
+      function tick(){
+        const t = new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+        if(timeNow) timeNow.textContent = t;
+        if(miniClock) miniClock.textContent = t;
+      }
+
+      const moods = {
+        morning: {
+          label: 'Manhã focada',
+          subtitle: 'Ajustando o foco e deixando tudo leve',
+        },
+        afternoon: {
+          label: 'Tarde produtiva',
+          subtitle: 'Energia estável para continuar o fluxo',
+        },
+        night: {
+          label: 'Noite silenciosa',
+          subtitle: 'Modo calmo, limpo e pronto para amanhã',
+        },
+      };
+
+      function setMoodByHour(){
+        const h = new Date().getHours();
+        let bucket = 'night';
+        if(h >= 5 && h < 12) bucket = 'morning';
+        else if(h >= 12 && h < 18) bucket = 'afternoon';
+
+        if(moodLabel) moodLabel.textContent = moods[bucket].label;
+        if(heroMood) heroMood.textContent = moods[bucket].label;
+        if(timeSub) timeSub.textContent = `${load(ORB_KEYS.INFODOSE, 'Infodose')} · ${moods[bucket].subtitle}`;
+        if(heroSubtitle) heroSubtitle.textContent = `${load(ORB_KEYS.INFODOSE, 'Infodose')} · ${moods[bucket].subtitle}`;
+      }
+
+      function setRangeUI(){
+        if(!timeRange || !rangeFill) return;
+        const min = Number(timeRange.min || 6);
+        const max = Number(timeRange.max || 23);
+        const val = Number(timeRange.value || 9);
+        const pct = ((val - min) / (max - min)) * 100;
+        rangeFill.style.width = `${Math.max(0, Math.min(100, pct))}%`;
+      }
+
+      function setMode(mode){
+        const bodyPlayer = document.getElementById('bodyPlayer');
+        if(!bodyPlayer) return;
+        bodyPlayer.dataset.mode = mode;
+        save(ORB_KEYS.MODE, mode);
+        if(heroMode) heroMode.textContent = mode.toUpperCase();
+      }
+
+      function setConsoleOpen(open){
+        if(!consolePanel) return;
+        consolePanel.classList.toggle('open', open);
+        consolePanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+        consolePanel.style.display = open ? 'block' : 'none';
+        if(open) dumpLocalStorage();
+      }
+
+      function setCardCollapsed(collapsed){
+        if(!card) return;
+        card.classList.toggle('is-collapsed', collapsed);
+        save(ORB_KEYS.CARD, collapsed ? '1' : '0');
+      }
+
+      function toggleSection(el){
+        if(!el) return;
+        el.classList.toggle('activation-hidden');
+      }
+
+      window.toggleSection = (id) => toggleSection(document.getElementById(id));
+
+      function normalizeUrl(u){
+        try{ return new URL(u, location.href).href.replace(/\/+$/, ''); }
+        catch(e){ return (u || '').trim(); }
+      }
+
+      function loadLocalApps(){
+        try{
+          const raw = load(ORB_KEYS.LOCAL, '[]');
+          return JSON.parse(raw) || [];
+        }catch(e){
+          return [];
+        }
+      }
+
+      function getSystemOrbData(){
+        const systemApps = [];
+        const extract = (key, sourceName) => {
+          try{
+            const raw = load(key, '');
+            if(!raw) return;
+            const parsed = JSON.parse(raw);
+            const list = Array.isArray(parsed) ? parsed : (parsed.installed || []);
+            list.forEach(item => {
+              systemApps.push({
+                id: item.id || item.code || `sys_${Math.random().toString(36).slice(2)}`,
+                name: item.name || 'Módulo Fusion',
+                url: item.url || '',
+                group: item.group || sourceName,
+                isSystem: true
+              });
+            });
+            if(list.length) log(`Orb ${sourceName}: ${list.length} módulos detectados.`);
+          }catch(e){}
+        };
+        extract(ORB_KEYS.FUSION_V4, 'Fusion v2.4');
+        extract(ORB_KEYS.FUSION_V3, 'Fusion Legacy');
+        return systemApps;
+      }
+
+      function persistLocalApps(){
+        try{
+          const toSave = apps.filter(a => !a.isSystem);
+          localStorage.setItem(ORB_KEYS.LOCAL, JSON.stringify(toSave));
+        }catch(e){}
+      }
+
+      function convergeOrbs(){
+        const local = loadLocalApps();
+        const system = getSystemOrbData();
+        apps = [...local];
+
+        const existingUrls = new Set(apps.filter(a => a.url).map(a => normalizeUrl(a.url)));
+
+        system.forEach(sysApp => {
+          if(sysApp.url && existingUrls.has(normalizeUrl(sysApp.url))) return;
+          apps.push(sysApp);
+          if(sysApp.url) existingUrls.add(normalizeUrl(sysApp.url));
+        });
+
+        renderApps();
+        log(`Convergência completa: ${apps.length} cards ativos.`);
+      }
+
+      function renderApps(){
+        if(!appsList) return;
+        appsList.innerHTML = '';
+        if(appsCount) appsCount.textContent = apps.length + (apps.length === 1 ? ' app' : ' apps');
+
+        apps.forEach(app => {
+          const cardEl = document.createElement('div');
+          cardEl.className = 'app-card';
+          if(app.isSystem) cardEl.classList.add('is-system');
+          cardEl.innerHTML = `
+            <div class="app-main">
+              <div class="app-title">${app.isSystem ? '🔹 ' : ''}${escapeHtml(app.name || 'Sem nome')}</div>
+              <div class="app-meta">
+                <span class="app-group">${escapeHtml(app.group || 'Geral')}</span>
+                <span class="app-url">${escapeHtml(app.url || '').substring(0, 40)}</span>
+              </div>
+            </div>
+            <div class="app-actions">
+              <button class="app-btn open" data-action="open" title="Abrir Card" type="button">▣</button>
+              <button class="app-btn remove" data-action="remove" title="${app.isSystem ? 'Ocultar (Sistema)' : 'Remover'}" type="button">✕</button>
+            </div>
+          `;
+
+          cardEl.querySelectorAll('.app-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const action = btn.dataset.action;
+              if(action === 'open') openAppCard(app);
+              if(action === 'remove') removeApp(app.id, app.isSystem);
+            });
+          });
+
+          appsList.appendChild(cardEl);
+        });
+      }
+
+      function removeApp(id, isSystem){
+        const idx = apps.findIndex(a => a.id === id);
+        if(idx === -1) return;
+        const msg = isSystem
+          ? 'Este é um módulo do Fusion OS. Remover aqui apenas o oculta nesta sessão.'
+          : 'Remover este app da lista local?';
+        if(!confirm(msg)) return;
+        apps.splice(idx,1);
+        if(!isSystem) persistLocalApps();
+        log('Orb removido/ocultado.');
+        renderApps();
+      }
+
+      function openAppCard(app){
+        if(!app.url){
+          alert('URL inválida no Orb.');
+          return;
+        }
+
+        const existing = iframeDeck.querySelector(`[data-id="${CSS.escape(app.id)}"]`);
+        if(existing){
+          existing.scrollIntoView({behavior:'smooth', block:'start'});
+          return;
+        }
+
+        const section = document.createElement('section');
+        section.className = 'iframe-card';
+        section.dataset.id = app.id;
+        section.innerHTML = `
+          <div class="iframe-card-header">
+            <div class="iframe-card-title">${escapeHtml(app.name || 'App sem nome')}</div>
+            <div class="iframe-card-actions">
+              <span class="iframe-card-group">${escapeHtml(app.group || 'Sem grupo')}</span>
+              <button type="button" data-action="open-new" title="Nova Aba">⧉</button>
+              <button type="button" data-action="close" title="Fechar">✕</button>
+            </div>
+          </div>
+          <iframe src="${escapeHtml(app.url)}" loading="lazy" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+        `;
+
+        section.querySelectorAll('.iframe-card-actions button').forEach(btn => {
+          btn.addEventListener('click', () => {
+            if(btn.dataset.action === 'close'){
+              if(iframeDeck.contains(section)) iframeDeck.removeChild(section);
+              log('Card de app fechado.');
+            }else if(btn.dataset.action === 'open-new'){
+              window.open(app.url, '_blank');
+              log('App aberto em nova aba.');
+            }
+          });
+        });
+
+        iframeDeck.appendChild(section);
+        log(`Card expandido: ${app.name || 'sem nome'}`);
+      }
+
+      function dumpLocalStorage(){
+        if(!consoleLsDump) return;
+        try{
+          const lines = [];
+          for(let i=0;i<localStorage.length;i++){
+            const key = localStorage.key(i);
+            if(!key) continue;
+            const val = localStorage.getItem(key) || '';
+            const displayVal = val.length > 80 ? val.substring(0,80) + '...' : val;
+            lines.push(`${key}: ${displayVal}`);
+          }
+          consoleLsDump.textContent = lines.join('\n') || '(sem chaves no localStorage)';
+        }catch(e){
+          consoleLsDump.textContent = 'Erro de leitura de armazenamento.';
+        }
+      }
+
+      function renderKeys(){
+        if(!keyList) return;
+        let list = [];
+        try{
+          list = JSON.parse(load(ORB_KEYS.KEYS, '[]')) || [];
+        }catch(e){
+          list = [];
+        }
+
+        keyList.innerHTML = '';
+        if(!list.length){
+          keyList.innerHTML = '<div class="key-item"><div>Sem chaves salvas.</div><div>—</div></div>';
+          return;
+        }
+
+        list.forEach((item, index) => {
+          const row = document.createElement('div');
+          row.className = 'key-item';
+          row.innerHTML = `
+            <div>
+              <div style="font-weight:700">${escapeHtml(item.name || 'Sem nome')}</div>
+              <div style="font-size:12px;color:rgba(255,255,255,.55)">${item.token ? 'Token salvo' : 'Sem token'}</div>
+            </div>
+            <button class="small-btn danger" type="button">Excluir</button>
+          `;
+          row.querySelector('button').addEventListener('click', () => {
+            if(!confirm('Excluir esta chave?')) return;
+            list.splice(index,1);
+            save(ORB_KEYS.KEYS, JSON.stringify(list));
+            renderKeys();
+            log('Chave removida.');
+          });
+          keyList.appendChild(row);
+        });
+      }
+
+      function openKeysModal(){
+        renderKeys();
+        keysModal?.classList.add('open');
+      }
+
+      function closeKeysModal(){
+        keysModal?.classList.remove('open');
+      }
+
+      function openVaultModal(){
+        vaultModal?.classList.add('open');
+      }
+
+      function closeVaultModal(){
+        vaultModal?.classList.remove('open');
+      }
+
+      function saveIdentityFromInputs(){
+        const user = (inputUser?.value || '').trim() || 'Dual';
+        const infodose = (infodoseInput?.value || '').trim() || 'Infodose';
+        save(ORB_KEYS.USER, user);
+        save(ORB_KEYS.INFODOSE, infodose);
+        syncIdentity();
+        log('Identidade salva.');
+      }
+
+      function saveSystemConfig(){
+        saveIdentityFromInputs();
+        const apiKey = document.getElementById('apiKeyInput')?.value || '';
+        const model = document.getElementById('modelSelect')?.value || '';
+        if(apiKey) save('di_apiKey', apiKey);
+        if(model) save('di_modelName', model);
+        log('Configuração do sistema salva.');
+        alert('Configuração salva localmente.');
+      }
+
+      function openGroup(){
+        if(!apps.length){
+          alert('Você ainda não tem apps salvos.');
+          return;
+        }
+        const g = prompt('Nome do grupo que você quer abrir (ex: Chat, Solar, Índia):');
+        if(!g) return;
+        const groupName = g.trim();
+        const subset = apps.filter(a => (a.group || '').trim().toLowerCase() === groupName.toLowerCase());
+        if(!subset.length){
+          alert('Nenhum app encontrado com esse grupo.');
+          return;
+        }
+        subset.forEach(openAppCard);
+        log('Grupo aberto: ' + groupName + ' (' + subset.length + ' apps).');
+      }
+
+      function setConsoleVisible(open){
+        if(!consolePanel) return;
+        consolePanel.classList.toggle('open', open);
+        consolePanel.setAttribute('aria-hidden', open ? 'false' : 'true');
+        consolePanel.style.display = open ? 'block' : 'none';
+        if(open) dumpLocalStorage();
+      }
+
+      function init(){
+        try{
+          setMode(load(ORB_KEYS.MODE, 'card'));
+        }catch(e){}
+
+        const savedCollapsed = load(ORB_KEYS.CARD, '0') === '1';
+        setCardCollapsed(savedCollapsed);
+
+        if(inputUser) inputUser.value = load(ORB_KEYS.USER, load('userName', load('infodose:username', '')));
+        if(infodoseInput) infodoseInput.value = load(ORB_KEYS.INFODOSE, 'Infodose');
+
+        if(inputUser){
+          inputUser.addEventListener('input', () => {
+            save(ORB_KEYS.USER, inputUser.value.trim() || 'Dual');
+            syncIdentity();
+            clearTimeout(window.__di_name_timer);
+            window.__di_name_timer = setTimeout(() => log('Nome atualizado.'), 600);
+          });
+        }
+
+        if(infodoseInput){
+          infodoseInput.addEventListener('input', () => {
+            save(ORB_KEYS.INFODOSE, infodoseInput.value.trim() || 'Infodose');
+            syncIdentity();
+          });
+        }
+
+        if(timeRange){
+          timeRange.addEventListener('input', () => {
+            setRangeUI();
+            const v = Number(timeRange.value);
+            const label =
+              v < 10 ? 'Amanhecer' :
+              v < 13 ? 'Manhã focada' :
+              v < 18 ? 'Tarde produtiva' : 'Noite ativa';
+            if(moodLabel) moodLabel.textContent = label;
+            if(heroMood) heroMood.textContent = label;
+          });
+          const h = new Date().getHours();
+          timeRange.value = h;
+          setRangeUI();
+        }
+
+        btnDocs?.addEventListener('click', () => {
+          log('Docs / Apps acionado.');
+          const docApp = apps.find(a => (a.name || '').toLowerCase().includes('docs') || (a.name || '').toLowerCase().includes('livro'));
+          if(docApp) openAppCard(docApp);
+          else alert('Nenhum módulo de documentação encontrado nos Orbs.');
+        });
+
+        btnAddApp?.addEventListener('click', () => {
+          const name = prompt('Nome do app / stack:');
+          if(!name) return;
+          const url = prompt('URL do app (http://, https:// ou arquivo local):', 'https://');
+          if(url === null) return;
+          const group = prompt('Nome do grupo (ex: Chat, Solar, Docs):') || '';
+          const id = 'di_app_' + Date.now() + '_' + Math.floor(Math.random()*9999);
+          apps.push({ id, name, url, group, isSystem:false });
+          persistLocalApps();
+          renderApps();
+          log('Novo app local criado.');
+        });
+
+        activationToggle?.addEventListener('click', () => toggleSection(activationCard));
+        systemToggle?.addEventListener('click', () => toggleSection(systemCard));
+        saveSystemBtn?.addEventListener('click', saveSystemConfig);
+
+        consoleToggle?.addEventListener('click', () => setConsoleVisible(!consolePanel.classList.contains('open')));
+        consoleClose?.addEventListener('click', () => setConsoleVisible(false));
+        openGroupBtn?.addEventListener('click', openGroup);
+        closeKeysBtn?.addEventListener('click', closeKeysModal);
+
+        lockVaultBtn?.addEventListener('click', () => {
+          save(ORB_KEYS.VAULT_LOCKED, '1');
+          closeKeysModal();
+          openVaultModal();
+        });
+
+        vaultCancelBtn?.addEventListener('click', closeVaultModal);
+        vaultUnlockBtn?.addEventListener('click', () => {
+          const pass = vaultPassInput?.value || '';
+          if(!pass){
+            alert('Digite a senha.');
+            return;
+          }
+          save(ORB_KEYS.VAULT_PASS, pass);
+          save(ORB_KEYS.VAULT_LOCKED, '0');
+          closeVaultModal();
+          alert('Cofre desbloqueado.');
+          log('Cofre desbloqueado.');
+        });
+
+        addKeyBtn?.addEventListener('click', () => {
+          const name = (keyNameInput?.value || '').trim();
+          const token = (keyTokenInput?.value || '').trim();
+          if(!name){
+            alert('Digite o nome da chave.');
+            return;
+          }
+          let list = [];
+          try{ list = JSON.parse(load(ORB_KEYS.KEYS, '[]')) || []; }catch(e){ list = []; }
+          list.push({ name, token });
+          save(ORB_KEYS.KEYS, JSON.stringify(list));
+          if(keyNameInput) keyNameInput.value = '';
+          if(keyTokenInput) keyTokenInput.value = '';
+          renderKeys();
+          log('Chave adicionada.');
+        });
+
+        document.querySelectorAll('[data-ls-action]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const action = btn.getAttribute('data-ls-action');
+            if(action === 'dump') dumpLocalStorage();
+            if(action === 'clear-intent') {
+              localStorage.removeItem(ORB_KEYS.INTENT);
+              if(inputUser) inputUser.value = '';
+              save(ORB_KEYS.USER, 'Dual');
+              save(ORB_KEYS.INFODOSE, 'Infodose');
+              syncIdentity();
+              log('Intenção limpa.');
+              dumpLocalStorage();
+            }
+            if(action === 'clear-apps') {
+              if(confirm('Isso apaga seus apps LOCAIS. Confirmar?')){
+                localStorage.removeItem(ORB_KEYS.LOCAL);
+                apps = [];
+                renderApps();
+                log('Apps limpos.');
+                dumpLocalStorage();
+              }
+            }
+          });
+        });
+
+        if(consolePanel){
+          consolePanel.style.display = 'none';
+          consolePanel.setAttribute('aria-hidden', 'true');
+        }
+
+        if(activationCard) activationCard.classList.add('activation-hidden');
+        if(systemCard) systemCard.classList.add('activation-hidden');
+
+        syncIdentity();
+        tick();
+        setMoodByHour();
+        convergeOrbs();
+        renderKeys();
+        dumpLocalStorage();
+
+        const saved = load(ORB_KEYS.CARD, '0') === '1';
+        setCardCollapsed(saved);
+
+        const heroToggleTarget = heroTop || document.getElementById('heroPanel');
+        const toggleCard = () => setCardCollapsed(!card.classList.contains('is-collapsed'));
+        heroToggleTarget?.addEventListener('click', toggleCard);
+        toggleOrigemBtn?.addEventListener('click', toggleCard);
+
+        setInterval(tick, 60000);
+        setInterval(setMoodByHour, 5000);
+
+        window.addEventListener('storage', () => {
+          syncIdentity();
+          setMoodByHour();
+        });
+
+        if(window.lucide?.createIcons) window.lucide.createIcons();
+      }
+
+      init();
+
+      window.setMode = setMode;
+      window.openKeysModal = openKeysModal;
+      window.openVaultModal = openVaultModal;
+    });
+  </script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-VwR-di/js/modules/inline-di.js"></script>
+</body>
+</html>

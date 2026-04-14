@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dual · Infodose - Fusion</title>
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+
+<style>
+/* FUSION OVERRIDE - KODUX SIG ⚡︎◐ */
+:root{ 
+  --azul: #2E59FF; 
+  --dourado: #F2C75C;
+  --sig: '⚡︎◐';
+}
+
+/* Unifica frase no topo */
+.frase{
+  text-align: center;
+  padding: 12px 20px;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  color: rgba(255,255,255,0.6);
+}
+.frase strong{ color: var(--azul); }
+
+/* App container mantém base */
+.app{ max-width: 480px; margin: 0 auto; }
+
+/* Header da base permanece */
+.app-header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 20px;
+}
+.brand-pill{
+  padding: 8px 16px;
+  border-radius: 20px;
+  background: rgba(46,89,255,0.15);
+  border: 1px solid rgba(46,89,255,0.3);
+  color: var(--azul);
+  font-weight: 600;
+  font-size: 14px;
+}
+.header-actions{ display: flex; gap: 10px; }
+.console-toggle, .mode-pill{
+  padding: 8px 14px;
+  border-radius: 18px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  color: #EEEFF7;
+  cursor: pointer;
+  font-size: 13px;
+}
+.mode-pill{ display: flex; align-items: center; gap: 6px; }
+.mode-pill .dot{
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--dourado);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse{ 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+/* CARD ORIGEM = BASE FUSIONADA */
+.card-origem{
+  background: rgba(255,255,255,0.03);
+  border: 1px solid rgba(46,89,255,0.2);
+  border-radius: 24px;
+  padding: 24px 20px;
+  margin: 0 20px 20px;
+  backdrop-filter: blur(20px);
+}
+
+/* HERO INJETADO DENTRO DA BASE */
+.hero-fusion{
+  margin-bottom: 24px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.hero-top{
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+.hero-hour-label{
+  font-size: 11px;
+  color: rgba(255,255,255,0.4);
+  font-weight: 600;
+}
+.hero-main{ flex: 1; text-align: center; }
+.hero-greeting{
+  font-size: 18px;
+  font-weight: 700;
+  color: #EEEFF7;
+  margin-bottom: 4px;
+}
+.hero-subtitle{
+  font-size: 13px;
+  color: rgba(255,255,255,0.6);
+}
+.hero-meta-row{
+  display: flex;
+  justify-content: center;
+  margin: 16px 0;
+}
+.time-chip{
+  padding: 6px 14px;
+  border-radius: 16px;
+  background: rgba(46,89,255,0.15);
+  border: 1px solid rgba(46,89,255,0.3);
+  color: var(--azul);
+  font-size: 13px;
+  font-weight: 600;
+}
+.hero-slider{ margin-top: 20px; }
+.hero-slider-row{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: rgba(255,255,255,0.5);
+  margin-bottom: 8px;
+}
+.label-mood{
+  color: var(--dourado);
+  font-weight: 600;
+  font-size: 12px;
+}
+.range-wrap{
+  position: relative;
+  height: 4px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 2px;
+  margin-bottom: -14px;
+}
+.range-fill{
+  position: absolute;
+  height: 100%;
+  background: linear-gradient(90deg, var(--azul), var(--dourado));
+  border-radius: 2px;
+  transition: width 0.3s;
+}
+.hero-range{
+  width: 100%;
+  height: 20px;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+}
+.hero-range::-webkit-slider-thumb{
+  appearance: none;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--azul);
+  border: 2px solid #0B0D10;
+  box-shadow: 0 0 0 2px var(--azul);
+}
+
+/* ORB + TIME da base */
+.orb-wrap{
+  display: flex;
+  justify-content: center;
+  margin: 24px 0 20px;
+  position: relative;
+}
+.orb-core{
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--azul), transparent 70%);
+  animation: orbPulse 3s infinite ease-in-out;
+}
+.orb-ring{
+  position: absolute;
+  width: 100px; height: 100px;
+  border-radius: 50%;
+  border: 1px solid rgba(46,89,255,0.3);
+  animation: orbRotate 8s infinite linear;
+}
+@keyframes orbPulse{ 0%,100%{transform:scale(1);opacity:0.8} 50%{transform:scale(1.1);opacity:1} }
+@keyframes orbRotate{ from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+.time-main{
+  text-align: center;
+  font-size: 42px;
+  font-weight: 700;
+  color: #EEEFF7;
+  letter-spacing: -0.02em;
+}
+.time-sub{
+  text-align: center;
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  margin-top: 4px;
+}
+
+/* Input + Botões da base */
+.input-row{ margin-top: 24px; }
+.input-row label{
+  display: block;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 8px;
+}
+.input-row input{
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.04);
+  color: #EEEFF7;
+  font-size: 14px;
+}
+.btn-row{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 16px;
+}
+.btn{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 12px;
+  background: rgba(46,89,255,0.15);
+  border: 1px solid rgba(46,89,255,0.3);
+  color: var(--azul);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 13px;
+  transition: 0.2s;
+}
+.btn:hover{ background: rgba(46,89,255,0.25); }
+.btn .emoji{ font-size: 16px; }
+</style>
+</head>
+<body>
+
+<div class="frase"><strong>Sempre</strong> único<strong>. Sempre</strong> seu<strong>.</strong></div>
+
+<div class="app">
+  
+  <header class="app-header">
+    <div class="brand-pill">Dual · Infodose</div>
+    <div class="header-actions">
+      <button class="console-toggle" id="consoleToggle" title="Abrir Console">◎</button>
+      <button class="mode-pill" type="button">
+        <span class="dot"></span>
+        <span>Modo 3·6·9</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- CARD ÚNICO FUSIONADO -->
+  <section class="card-origem" id="cardOrigem">
+    
+    <!-- HERO INJETADO -->
+    <div class="hero-fusion">
+      <div class="hero-top">
+        <span class="hero-hour-label">06h</span>
+        <div class="hero-main">
+          <div class="hero-greeting" id="heroGreeting">Bom dia, Dual</div>
+          <div class="hero-subtitle" id="heroSubtitle">Sua dose de hoje já está organizada</div>
+        </div>
+        <span class="hero-hour-label">23h</span>
+      </div>
+      <div class="hero-meta-row"><span class="time-chip" id="timeNow">--:--</span></div>
+      <div class="hero-slider">
+        <div class="hero-slider-row">
+          <span>06h</span>
+          <span id="moodLabel" class="label-mood">Manhã focada</span>
+          <span>23h</span>
+        </div>
+        <div class="range-wrap"><div id="rangeFill" class="range-fill"></div></div>
+        <input id="timeRange" type="range" min="6" max="23" value="9" class="hero-range">
+      </div>
+    </div>
+
+    <!-- ORIGEM BASE -->
+    <div class="orb-wrap">
+      <div class="orb-core"></div>
+      <div class="orb-ring"></div>
+    </div>
+
+    <div id="timeSub" class="time-sub"></div>
+
+    <div class="input-row">
+      <label for="intentInput">Intenção / nome / vibração</label>
+      <input id="intentInput" placeholder="Escreve o que você quer ativar hoje..." />
+    </div>
+
+    <div class="btn-row">
+      <button class="btn" id="btnDocs" type="button">
+        <span class="emoji">📂</span>
+        <span>Docs & Apps</span>
+      </button>
+      <button class="btn" id="btnAddApp" type="button">
+        <span class="emoji">＋</span>
+        <span>Novo app / stack</span>
+      </button>
+    </div>
+
+  </section>
+
+</div>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+<script>
+// FUSION PATCH - Mantém di_mood.js funcionando
+document.addEventListener('DOMContentLoaded', () => {
+  // Garante que timeNow existe pro di_mood.js
+  const timeNow = document.getElementById('timeNow');
+  if(timeNow) timeNow.textContent = new Date().toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+});
+</script>
+
+</body>
+</html>
