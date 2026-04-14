@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Dual.Infodose · Ecossistema Integrado</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+  <!-- Estilos Externos (ordem mantida) -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/oiDoDia2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/css/mainK.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual-VwR-di/css/main.css">
+
+  <style>
+    /* ===== RESET & NORMALIZAÇÃO DE LARGURA ===== */
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background: #050816;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    /* Container principal – largura controlada */
+    .app {
+      width: 100%;
+      max-width: 500px;        /* largura máxima para telas grandes */
+      margin: 0 auto;
+      padding: 0 0 16px 0;      /* sem padding lateral, os cards cuidam disso */
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    /* Orbes de fundo (mantidos fixos) */
+    .orb-bg {
+      position: fixed;
+      width: 70vw;
+      height: 70vw;
+      border-radius: 50%;
+      filter: blur(80px);
+      z-index: -1;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+    #orb-top { top: -25%; right: -15%; background: radial-gradient(circle, #4facfe 0%, #00f2fe 100%); }
+    #orb-bottom { bottom: -25%; left: -15%; background: radial-gradient(circle, #667eea 0%, #764ba2 100%); }
+
+    #particles-js {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+    }
+
+    /* ===== HEADER ===== */
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 10px 8px 10px;  /* laterais reduzidas, mas com margem segura */
+      width: 100%;
+      flex-wrap: wrap;           /* evita quebra forçada em telas pequenas */
+    }
+
+    .brand-pill {
+      background: rgba(10, 15, 30, 0.8);
+      backdrop-filter: blur(8px);
+      padding: 6px 14px;
+      border-radius: 40px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-weight: 600;
+      font-size: 0.9rem;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .user-badge {
+      background: rgba(79, 172, 254, 0.15);
+      padding: 6px 12px;
+      border-radius: 40px;
+      border: 1px solid rgba(79, 172, 254, 0.25);
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #e0f0ff;
+      backdrop-filter: blur(8px);
+      white-space: nowrap;
+      display: inline-block;
+    }
+
+    .console-toggle,
+    .mode-pill {
+      background: rgba(20, 30, 50, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 30px;
+      padding: 6px 12px;
+      color: white;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .mode-pill .dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #4facfe;
+      box-shadow: 0 0 8px #4facfe;
+    }
+
+    /* ===== CARD ORIGEM (HERO) ===== */
+    .card-origem {
+      background: rgba(10, 12, 25, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 28px;
+      margin: 0 10px;            /* margem lateral controlada */
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.5s cubic-bezier(0.32, 0.72, 0, 1);
+      overflow: hidden;
+      width: auto;
+    }
+
+    /* Hero interno */
+    .hero-top {
+      cursor: pointer;
+      padding: 15px 6px 5px 6px;   /* lateral reduzida conforme pedido */
+    }
+
+    .hero-main {
+      text-align: left;
+    }
+
+    .hero-greeting {
+      font-size: 1.5rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: 0.9rem;
+      opacity: 0.8;
+      margin-bottom: 4px;
+    }
+
+    .hero-slogan {
+      font-size: 0.8rem;
+      opacity: 0.65;
+      font-style: italic;
+      margin-top: 6px;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 6px 15px 6px;
+    }
+
+    .time-chip {
+      background: rgba(79, 172, 254, 0.15);
+      color: #4facfe;
+      padding: 4px 10px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      border: 1px solid rgba(79, 172, 254, 0.2);
+    }
+
+    .label-mood {
+      font-size: 0.75rem;
+      opacity: 0.6;
+      font-weight: 500;
+      letter-spacing: 0.5px;
+    }
+
+    /* Elementos colapsáveis */
+    .input-row, .btn-row, .time-sub {
+      padding: 0 10px 10px 10px;
+      transition: all 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+    }
+
+    .input-row label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+
+    .input-row input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.2);
+      color: white;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 8px;
+      padding-bottom: 16px;
+    }
+
+    .btn {
+      flex: 1;
+      background: rgba(30, 40, 70, 0.6);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 40px;
+      padding: 12px 0;
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: rgba(50, 70, 120, 0.8);
+    }
+
+    /* Estado colapsado */
+    .card-origem.is-collapsed {
+      padding-bottom: 5px;
+      background: rgba(10, 12, 25, 0.6);
+    }
+
+    .card-origem.is-collapsed .hero-slider,
+    .card-origem.is-collapsed .input-row,
+    .card-origem.is-collapsed .btn-row,
+    .card-origem.is-collapsed .time-sub {
+      opacity: 0;
+      max-height: 0;
+      margin: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      overflow: hidden;
+    }
+
+    /* ===== LISTA DE APPS ===== */
+    .apps-wrapper {
+      margin: 8px 10px;
+    }
+
+    .apps-header-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      padding: 0 4px;
+    }
+
+    .apps-title {
+      font-weight: 600;
+      opacity: 0.8;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-size: 0.8rem;
+    }
+
+    .apps-count {
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
+
+    #appsList {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Estilo básico para cards de app (será refinado pelos scripts) */
+    .app-card {
+      background: rgba(15, 20, 30, 0.6);
+      backdrop-filter: blur(12px);
+      border-radius: 18px;
+      padding: 12px 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ===== IFRAME DECK ===== */
+    .iframe-deck {
+      margin: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .iframe-card {
+      border-radius: 20px;
+      overflow: hidden;
+      background: #0b0e1a;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .iframe-card iframe {
+      width: 100%;
+      height: 500px;
+      border: none;
+      display: block;
+    }
+
+    /* ===== CONSOLE PANEL (unificado) ===== */
+    .console-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      display: none;
+    }
+
+    .console-panel.active {
+      display: block;
+    }
+
+    .console-panel-inner {
+      background: #0b0e1a;
+      color: white;
+      border-radius: 24px 24px 0 0;
+      padding: 20px 16px;
+      max-width: 500px;
+      margin: 0 auto;
+      border-top: 1px solid #2a3a5a;
+      box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+    }
+
+    .console-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .console-title {
+      font-weight: 700;
+      letter-spacing: 0.5px;
+    }
+
+    .console-close {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .console-section {
+      margin-bottom: 20px;
+    }
+
+    .console-actions-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .console-btn {
+      background: #1e2a4a;
+      border: 1px solid #3a4a7a;
+      color: white;
+      padding: 8px 14px;
+      border-radius: 30px;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
+
+    .console-ls-dump {
+      background: #03050a;
+      padding: 12px;
+      border-radius: 12px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      max-height: 200px;
+      overflow: auto;
+      white-space: pre-wrap;
+      border: 1px solid #2a3a5a;
+      margin-top: 10px;
+    }
+
+    /* ===== RESPONSIVIDADE EXTRA ===== */
+    @media (max-width: 400px) {
+      .app-header {
+        padding: 12px 6px 6px 6px;
+      }
+      .user-badge {
+        font-size: 0.7rem;
+        padding: 4px 8px;
+      }
+      .brand-pill {
+        font-size: 0.8rem;
+        padding: 4px 10px;
+      }
+      .hero-greeting {
+        font-size: 1.3rem;
+      }
+    }
+
+    /* Garante que imagens e iframes não estourem */
+    img, iframe, video {
+      max-width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="orb-top" class="orb-bg"></div>
+  <div id="orb-bottom" class="orb-bg"></div>
+  <div id="particles-js"></div>
+
+  <div class="app">
+    <!-- HEADER COM IDENTIFICAÇÃO -->
+    <header class="app-header">
+      <div class="brand-pill">Dual · Infodose</div>
+      <div class="header-actions">
+        <div class="user-badge" id="userBadge">Dual • Infodose</div>
+        <button class="console-toggle" id="consoleToggle">◎</button>
+        <button class="mode-pill" type="button">
+          <span class="dot"></span>
+          <span>Modo 3·6·9</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- CARD ORIGEM UNIFICADO -->
+    <section class="card-origem" id="cardOrigem">
+      <!-- HERO INTEGRADO -->
+      <div class="hero-card hero-embedded" id="heroTouchArea">
+        <div class="hero-top">
+          <div class="hero-main">
+            <div class="hero-greeting" id="heroGreeting">Oi, Dual!</div>
+            <div class="hero-subtitle" id="heroSubtitle">Sua Infodose está pronta.</div>
+            <div class="hero-slogan" id="heroSlogan">Do seu jeito. Sempre único. Sempre seu.</div>
+          </div>
+        </div>
+
+        <div class="hero-meta-row">
+          <span class="time-chip" id="timeNow">--:--</span>
+          <span id="moodLabel" class="label-mood">Equilíbrio Ativo</span>
+        </div>
+      </div>
+
+      <!-- ÁREA DE TEMPO E INTERAÇÃO -->
+      <div id="timeSub" class="time-sub"></div>
+
+      <div class="input-row">
+        <label for="intentInput">Intenção / vibração</label>
+        <input id="intentInput" placeholder="O que pretendes ativar?" />
+      </div>
+
+      <div class="btn-row">
+        <button class="btn" id="btnDocs">
+          <span class="emoji">📂</span>
+          <span>Docs & Apps</span>
+        </button>
+        <button class="btn" id="btnAddApp">
+          <span class="emoji">＋</span>
+          <span>Novo app</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- LISTA DE APPS -->
+    <section class="apps-wrapper">
+      <div class="apps-header-row">
+        <div class="apps-title">Meus apps / stacks</div>
+        <div class="apps-count" id="appsCount">0 apps</div>
+      </div>
+      <div id="appsList"></div>
+    </section>
+
+    <section class="iframe-deck" id="iframeDeck"></section>
+    <div id="logBox" style="display:none"></div>
+  </div>
+
+  <!-- PAINEL CONSOLE (agora com classe .active controlada via JS) -->
+  <div class="console-panel" id="consolePanel" aria-hidden="true">
+    <div class="console-panel-inner">
+      <div class="console-header">
+        <div class="console-title">Dual Console · Sistema</div>
+        <button class="console-close" id="consoleClose">✕</button>
+      </div>
+      <div class="console-body">
+        <div class="console-section">
+          <h3>Gestão de Visualização</h3>
+          <div class="console-actions-row">
+            <button class="console-btn" id="toggleOrigemBtn">Colapsar Card</button>
+            <button class="console-btn" id="openGroupBtn">Abrir Grupo</button>
+          </div>
+        </div>
+        <div class="console-section">
+          <h3>Memória Local</h3>
+          <pre class="console-ls-dump" id="consoleLsDump"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÓDULOS DE SISTEMA -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-VwR-di/js/modules/inline-di.js"></script>
+
+  <script>
+    (function() {
+      // ---- IDENTIDADE E SAUDAÇÃO ----
+      const userNameKey = 'di_userName';
+      const infodoseKey = 'di_infodoseName';
+
+      const card = document.getElementById('cardOrigem');
+      const heroArea = document.getElementById('heroTouchArea');
+      const greeting = document.getElementById('heroGreeting');
+      const subtitle = document.getElementById('heroSubtitle');
+      const slogan = document.getElementById('heroSlogan');
+      const timeNowEl = document.getElementById('timeNow');
+      const userBadge = document.getElementById('userBadge');
+      const toggleOrigemBtn = document.getElementById('toggleOrigemBtn');
+
+      function syncIdentity() {
+        const userName = localStorage.getItem(userNameKey) || 'Dual';
+        const infodose = localStorage.getItem(infodoseKey) || 'Infodose';
+
+        if (userBadge) userBadge.textContent = `${userName} • ${infodose}`;
+        if (greeting) greeting.textContent = `Oi, ${userName}!`;
+        if (subtitle) subtitle.textContent = `Sua ${infodose} está pronta.`;
+        if (slogan) slogan.textContent = 'Do seu jeito. Sempre único. Sempre seu.';
+
+        const now = new Date();
+        const hours = now.getHours().toString().padStart(2, '0');
+        const minutes = now.getMinutes().toString().padStart(2, '0');
+        if (timeNowEl) timeNowEl.textContent = `${hours}:${minutes}`;
+
+        const moodLabel = document.getElementById('moodLabel');
+        if (moodLabel) {
+          const h = now.getHours();
+          if (h >= 5 && h < 12) moodLabel.textContent = 'Manhã focada';
+          else if (h >= 12 && h < 18) moodLabel.textContent = 'Tarde produtiva';
+          else moodLabel.textContent = 'Noite serena';
+        }
+      }
+
+      syncIdentity();
+      setInterval(syncIdentity, 30000);
+
+      // ---- COLAPSO DO CARD ----
+      const KEY_COLLAPSE = 'di_card_collapsed';
+      function toggleCollapse(forceState) {
+        const isNow = (forceState !== undefined) ? forceState : !card.classList.contains('is-collapsed');
+        card.classList.toggle('is-collapsed', isNow);
+        localStorage.setItem(KEY_COLLAPSE, isNow ? '1' : '0');
+        if (navigator.vibrate) navigator.vibrate(8);
+      }
+
+      const savedState = localStorage.getItem(KEY_COLLAPSE);
+      if (savedState === '1') {
+        toggleCollapse(true);
+      } else if (savedState === null) {
+        const hour = new Date().getHours();
+        if (hour >= 21 || hour < 6) toggleCollapse(true);
+      }
+
+      heroArea.addEventListener('click', () => toggleCollapse());
+      if (toggleOrigemBtn) {
+        toggleOrigemBtn.addEventListener('click', () => toggleCollapse());
+      }
+
+      // ---- CONSOLE TOGGLE ----
+      const consoleToggle = document.getElementById('consoleToggle');
+      const consolePanel = document.getElementById('consolePanel');
+      const consoleClose = document.getElementById('consoleClose');
+
+      consoleToggle?.addEventListener('click', () => {
+        consolePanel.classList.add('active');
+        consolePanel.setAttribute('aria-hidden', 'false');
+      });
+      consoleClose?.addEventListener('click', () => {
+        consolePanel.classList.remove('active');
+        consolePanel.setAttribute('aria-hidden', 'true');
+      });
+
+      // Atualiza dump se função existir (definida nos scripts externos)
+      if (typeof window.updateConsoleDump === 'function') {
+        window.updateConsoleDump();
+      }
+
+      // Reaplica identidade após possíveis mudanças de storage por outros scripts
+      window.addEventListener('storage', syncIdentity);
+    })();
+  </script>
+</body>
+</html>
