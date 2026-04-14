@@ -23,6 +23,49 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
 
+<style>
+    .kodux-range-override {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      z-index: 50; /* Garante que é clicável e está por cima */
+    }
+    
+    .kodux-range-override::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary, #00ffcc);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary, rgba(0,255,204,0.6));
+      cursor: grab;
+      transition: transform 0.1s ease;
+    }
+
+    .kodux-range-override::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.3);
+    }
+
+    .kodux-range-override::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: var(--primary, #00ffcc);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary, rgba(0,255,204,0.6));
+      cursor: grab;
+      border: none;
+    }
+
+    .time-display {
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
+  </style>
 
   
   </head>
@@ -499,6 +542,195 @@
 
 
 
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+
+<!-- SCRIPT ORIGINAL (Mantido) -->
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+
+  <!-- OVERRIDE JS: Sistema Avançado de Seek e Tempos -->
+  <script>
+    (function() {
+      window.addEventListener('load', () => {
+        // Aguarda 1.5s para garantir que o ss5.js criou os iframes (YouTube/SoundCloud)
+        setTimeout(() => {
+          const mainProgress = document.getElementById('main-progress');
+          const timeCurrent = document.getElementById('kodux-time-current');
+          const timeTotal = document.getElementById('kodux-time-total');
+          const localAudio = document.getElementById('local-audio');
+          const footerClick = document.getElementById('footer-progress-click');
+          const footerBar = document.getElementById('footer-progress-bar');
+
+          let isDragging = false;
+          let activeDuration = 0;
+          let scWidgetCache = null;
+
+          // Formatar segundos para MM:SS
+          const formatTime = (seconds) => {
+            if (!seconds || isNaN(seconds)) return "00:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          };
+
+          const updateTimeUI = (current, total) => {
+            if (timeCurrent) timeCurrent.innerText = formatTime(current);
+            if (timeTotal) timeTotal.innerText = formatTime(total);
+          };
+
+          // HACK: Interceptar a tentativa do ss5.js de atualizar a barra enquanto o utilizador a arrasta
+          if (mainProgress) {
+            const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+            Object.defineProperty(mainProgress, 'value', {
+              get: function() { return originalDescriptor.get.call(this); },
+              set: function(val) {
+                // Só permite que o script original mova a barra se o utilizador não estiver a mexer nela
+                if (!isDragging) {
+                  originalDescriptor.set.call(this, val);
+                  if (footerBar) footerBar.style.width = `${val}%`;
+                }
+              }
+            });
+          }
+
+          // Obter ou instanciar a API do SoundCloud
+          const getSCWidget = () => {
+            if (scWidgetCache) return scWidgetCache;
+            const iframe = document.querySelector('#sc-container iframe');
+            if (iframe && window.SC) scWidgetCache = SC.Widget(iframe);
+            return scWidgetCache;
+          };
+
+          // Função que descobre quem está a tocar e extrai a duração/tempo atual
+          const syncTimers = () => {
+            // 1. Verificar Áudio Local
+            if (localAudio && localAudio.duration && !localAudio.paused) {
+              activeDuration = localAudio.duration;
+              if (!isDragging) updateTimeUI(localAudio.currentTime, activeDuration);
+              return;
+            }
+
+            // 2. Verificar YouTube (Tenta as variáveis globais mais comuns)
+            const yt = window.ytPlayer || window.player;
+            if (yt && typeof yt.getPlayerState === 'function') {
+              // Se o estado for 1 (A tocar) ou se já tivermos a duração
+              if (yt.getPlayerState() === 1 || yt.getDuration() > 0) {
+                activeDuration = yt.getDuration();
+                if (!isDragging) updateTimeUI(yt.getCurrentTime(), activeDuration);
+                return;
+              }
+            }
+
+            // 3. Verificar SoundCloud
+            const sc = getSCWidget();
+            if (sc) {
+              sc.isPaused((paused) => {
+                if (!paused) {
+                  sc.getDuration((dur) => {
+                    activeDuration = dur / 1000; // SC retorna milissegundos
+                    sc.getPosition((pos) => {
+                      if (!isDragging) updateTimeUI(pos / 1000, activeDuration);
+                    });
+                  });
+                }
+              });
+              return;
+            }
+
+            // 4. Fallback (Se nenhum for detetado, calcula com base na barra do ss5.js)
+            if (activeDuration > 0 && mainProgress && !isDragging) {
+              let pct = parseFloat(mainProgress.value || 0);
+              updateTimeUI((pct / 100) * activeDuration, activeDuration);
+            }
+          };
+
+          // Executa a sincronização frequentemente
+          setInterval(syncTimers, 500);
+
+          // Função mestre para injetar o comando de "Avançar" nas diversas APIs
+          const performSeek = (percent) => {
+            const pctDec = percent / 100;
+
+            // Dispara eventos nativos caso o ss5.js os esteja a ouvir
+            if (mainProgress) {
+              mainProgress.dispatchEvent(new Event('input', { bubbles: true }));
+              mainProgress.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            // Forçar Avanço no Áudio Local
+            if (localAudio && localAudio.duration) {
+              localAudio.currentTime = pctDec * localAudio.duration;
+            }
+
+            // Forçar Avanço no YouTube
+            const yt = window.ytPlayer || window.player;
+            if (yt && typeof yt.seekTo === 'function') {
+              const dur = yt.getDuration() || activeDuration;
+              if (dur) yt.seekTo(pctDec * dur, true);
+            }
+
+            // Forçar Avanço no SoundCloud
+            const sc = getSCWidget();
+            if (sc) {
+              sc.getDuration((dur) => {
+                sc.seekTo(pctDec * dur); // SC aceita milissegundos
+              });
+            }
+          };
+
+          // Ligar os eventos do Slider
+          if (mainProgress) {
+            const handleDragStart = () => { isDragging = true; };
+            
+            const handleDragEnd = () => {
+              if (!isDragging) return;
+              isDragging = false;
+              performSeek(parseFloat(mainProgress.value));
+            };
+
+            const handleDragMove = () => {
+              if (isDragging && activeDuration > 0) {
+                const currentSec = (parseFloat(mainProgress.value) / 100) * activeDuration;
+                updateTimeUI(currentSec, activeDuration);
+              }
+            };
+
+            // Eventos Desktop
+            mainProgress.addEventListener('mousedown', handleDragStart);
+            mainProgress.addEventListener('mouseup', handleDragEnd);
+            mainProgress.addEventListener('change', handleDragEnd);
+            
+            // Eventos Mobile/Touch
+            mainProgress.addEventListener('touchstart', handleDragStart, { passive: true });
+            mainProgress.addEventListener('touchend', handleDragEnd);
+            
+            // Durante o arrasto (atualizar texto)
+            mainProgress.addEventListener('input', handleDragMove);
+          }
+
+          // Ligar o clique na mini-barra do footer (quando minimizado)
+          if (footerClick) {
+            footerClick.addEventListener('click', (e) => {
+              const rect = footerClick.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const percent = (x / rect.width) * 100;
+              
+              if (footerBar) footerBar.style.width = `${percent}%`;
+              
+              if (mainProgress) {
+                // Atualiza o slider principal escondido contornando o nosso bloqueio
+                const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+                originalDescriptor.set.call(mainProgress, percent);
+              }
+              
+              performSeek(percent);
+            });
+          }
+
+        }, 1500); // Fim do setTimeout
+      });
+    })();
+  </script>
+
 <div id="kblx-back">
   <div id="kblx-panel">
     <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
@@ -516,7 +748,6 @@
 
 
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
