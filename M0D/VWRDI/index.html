@@ -87,8 +87,9 @@
             letter-spacing: 2px;
             text-transform: uppercase;
             font-weight: 600;
-display:none;
-        }
+            }
+/*display:none;*/
+        
 
         /* Ajustes de Layout */
         .app-header {
@@ -242,7 +243,7 @@ display:none;
                 if (hour >= 18 || hour < 5) msg = "Boa noite";
                 
                 if (greeting) greeting.textContent = `${msg}, ${userName}`;
-                if (subtitle) subtitle.textContent = `A tua ${infodoseName} está pronta.`;
+                if (subtitle) subtitle.textContent = `Dual.Infodose ${infodoseName} online.`;
             };
             runChronos();
 
