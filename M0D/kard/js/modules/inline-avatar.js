@@ -179,65 +179,66 @@ async function loadData() {
 
 const hashStr = s => { let h=0xdeadbeef; for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),2654435761);} return (h^h>>>16)>>>0; };
 
-// 🔥 THE UNIVERSAL ORB GENERATOR 🔥
-function makeOrbAvatar(name = 'DUAL', size = 64) {
-  const seed = (name || 'DUAL')
-    .split('')
-    .reduce((a, c) => a + c.charCodeAt(0), 0);
+// 🔥 CORE — ORB UNIVERSAL
+function makeOrbAvatar(name, size = 36) {
+  const safe = name || 'DUAL';
+  const seed = safe.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
 
   const h1 = seed % 360;
   const h2 = (seed * 37) % 360;
-  const id = 'orb_' + seed.toString(36);
+
+  const id = 'g' + seed.toString(36);
 
   return `
-    <svg width="${size}" height="${size}" viewBox="0 0 100 100">
+    <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <radialGradient id="${id}_core" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="hsl(${h1},100%,60%)"/>
-          <stop offset="100%" stop-color="hsl(${h2},90%,30%)"/>
-        </radialGradient>
-
-        <linearGradient id="${id}_ring" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stop-color="hsl(${h1},100%,70%)"/>
-          <stop offset="100%" stop-color="hsl(${h2},100%,50%)"/>
+        <linearGradient id="${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="hsl(${h1},100%,55%)"/>
+          <stop offset="100%" stop-color="hsl(${h2},90%,45%)"/>
         </linearGradient>
       </defs>
 
-      <circle cx="50" cy="50" r="46" fill="#05070c"/>
+      <rect width="32" height="32" rx="7" fill="#071018"/>
+      
+      <!-- glow -->
+      <circle cx="16" cy="16" r="9" fill="url(#${id})" opacity="0.25"/>
 
-      <circle cx="50" cy="50" r="40" fill="url(#${id}_core)" opacity="0.9"/>
+      <!-- core -->
+      <circle cx="16" cy="16" r="7" fill="url(#${id})"/>
 
-      <circle cx="50" cy="50" r="46"
-        fill="none"
-        stroke="url(#${id}_ring)"
-        stroke-width="2"
-        opacity="0.6"/>
-
-      <circle cx="50" cy="50" r="18"
-        fill="white"
-        opacity="0.06"/>
+      <!-- ring -->
+      <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
     </svg>
   `;
 }
-window.makeOrbAvatar = makeOrbAvatar; // Hook global para acessar em qualquer lugar
 
+// 🔓 GLOBAL HOOK
+window.makeOrbAvatar = makeOrbAvatar;
+
+
+// 🔁 UPDATE UI
 function updateInterface(name){
   const safe = name || 'Convidado';
 
   els.lblName.innerText = safe;
   els.input.value = safe;
 
-  const activeKey = STATE.keys.find(k=>k.active);
+  const activeKey = STATE.keys.find(k => k.active);
 
   els.smallIdent.innerText = activeKey ? activeKey.name : '--';
   els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
 
-  // 🔥 TODOS USANDO O MESMO ORB
-  els.avatarTgt.innerHTML = makeOrbAvatar(safe, 64);
-  els.smallMiniAvatar.innerHTML = makeOrbAvatar(safe, 28);
-  els.actMiniAvatar.innerHTML = makeOrbAvatar(safe, 36);
+  // 🔥 TODOS SINCRONIZADOS PELO MESMO ORB
+  const orb64 = makeOrbAvatar(safe, 42);
+  const orb36 = makeOrbAvatar(safe, 36);
+  const orb28 = makeOrbAvatar(safe, 28);
+
+  els.avatarTgt.innerHTML = orb64;
+  els.smallMiniAvatar.innerHTML = orb28;
+  els.actMiniAvatar.innerHTML = orb36;
 
   els.actName.innerText = safe;
+}
 
   const phrases = ["Foco estável.","Ritmo criativo.","Percepção sutil."];
   els.smallText.innerText = activeKey
