@@ -214,6 +214,8 @@ function makeOrbAvatar(name, size = 36) {
 
 // 🔓 GLOBAL HOOK
 window.makeOrbAvatar = makeOrbAvatar;
+// 🔹 ALIAS OPCIONAL (mini semântico)
+window.makeMiniAvatar = (name) => makeOrbAvatar(name, 24);
 
 
 // 🔁 UPDATE UI
