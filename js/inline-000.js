@@ -179,12 +179,46 @@
 
     const hashStr = s => { let h=0xdeadbeef; for(let i=0;i<s.length;i++){h=Math.imul(h^s.charCodeAt(i),2654435761);} return (h^h>>>16)>>>0; };
     const createSvg = (id,sz) => `<svg viewBox="0 0 100 100" width="${sz}" height="${sz}"><defs><linearGradient id="g${id}"><stop offset="0%" stop-color="#00f2ff"/><stop offset="100%" stop-color="#bd00ff"/></linearGradient></defs><circle cx="50" cy="50" r="48" fill="#080b12" stroke="rgba(255,255,255,0.1)"/><circle cx="50" cy="50" r="20" fill="url(#g${id})" opacity="0.9"/></svg>`;
-    const createMiniSvg = (name,sz=30) => {
+    
+/* const createMiniSvg = (name,sz=30) => {
       const s = hashStr(name||'D'); const h1=s%360; const h2=(s*37)%360;
       const grad = `<linearGradient id="gm${s}" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="hsl(${h1},90%,50%)"/><stop offset="1" stop-color="hsl(${h2},90%,50%)"/></linearGradient>`;
       return `<svg width="${sz}" height="${sz}" viewBox="0 0 32 32"><defs>${grad}</defs><rect width="32" height="32" rx="8" fill="#0a1016"/><circle cx="16" cy="16" r="6" fill="url(#gm${s})"/></svg>`;
-    };
+    }; */
 
+const createSvg = (id, sz) => `
+<div class="di-orb-wrap" style="width:${sz}px;height:${sz}px">
+  <svg class="di-orb-bg" viewBox="0 0 100 100">
+    <defs>
+      <linearGradient id="g${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stop-color="#00f2ff"/>
+        <stop offset="100%" stop-color="#bd00ff"/>
+      </linearGradient>
+    </defs>
+
+    <circle
+      cx="50"
+      cy="50"
+      r="46"
+      fill="none"
+      stroke="rgba(255,255,255,.10)"
+      stroke-width="2"
+      class="di-orb-ring"
+    />
+
+    <circle
+      cx="50"
+      cy="50"
+      r="22"
+      fill="url(#g${id})"
+      class="di-orb-core-svg"
+    />
+  </svg>
+
+  <div class="di-orb-core-3d"></div>
+</div>
+`;
+}
     function updateInterface(name){
       const safe = name || 'Convidado';
       els.lblName.innerText = safe;
