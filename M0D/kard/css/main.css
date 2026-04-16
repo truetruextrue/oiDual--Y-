@@ -322,3 +322,10 @@ select.btn{ width:100%; padding:8px; background:rgba(0,0,0,0.4); color:#fff; bor
   animation: orbSpin var(--orb-speed) linear infinite;
 }
 
+
+.dual-orb-svg .orb-ring {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: orbSpin var(--orb-spin-speed) linear infinite;
+}
+
