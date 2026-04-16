@@ -1,0 +1,118 @@
+/* ===============================
+   🔥 ORB SYSTEM · STYLES
+   =============================== */
+
+:root {
+  --orb-primary: #78e3ff;
+  --orb-secondary: #b978ff;
+  --orb-accent: #ffffff;
+  --orb-speed: 7.8s;
+}
+
+.di-orb-root,
+#main-orb {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  aspect-ratio: 1;
+  overflow: hidden;
+}
+
+.di-orb-root .orb-bg,
+#main-orb .orb-bg {
+  width: 100%;
+  height: 100%;
+  display: block;
+  opacity: .55;
+  filter: brightness(.65) saturate(1.1);
+}
+
+.di-orb-root .orb-ring,
+#main-orb .orb-ring {
+  fill: #080b12;
+  stroke: rgba(255,255,255,.08);
+}
+
+.di-orb-root .orb-core-svg,
+#main-orb .orb-core-svg {
+  opacity: .85;
+}
+
+.di-orb-root .orb-3d,
+#main-orb .orb-3d {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  perspective: 800px;
+}
+
+.di-orb-root .orb,
+#main-orb .orb {
+  position: relative;
+  width: 42%;
+  height: 42%;
+  border-radius: 50%;
+  transform-style: preserve-3d;
+  animation: diOrbFloat 6s ease-in-out infinite;
+}
+
+.di-orb-root .orb::before,
+#main-orb .orb::before {
+  content: "";
+  position: absolute;
+  inset: -38%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(120,227,255,.22), transparent 70%);
+  filter: blur(22px);
+  opacity: .85;
+  animation: diOrbPulse 2.5s ease-in-out infinite alternate;
+}
+
+.di-orb-root .orb-core,
+#main-orb .orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+  box-shadow:
+    0 0 25px var(--orb-primary),
+    0 0 60px rgba(120,227,255,.35),
+    inset -10px -10px 20px rgba(0,0,0,.5),
+    inset 10px 10px 20px rgba(255,255,255,.08);
+  transform: translateZ(20px);
+  animation: diOrbSpin 8s linear infinite;
+}
+
+/* Estado de fala (Speaking) */
+#orb-root.speaking .orb-core,
+#main-orb.speaking .orb-core {
+  animation:
+    diOrbSpin 2s linear infinite,
+    diOrbSpeak .5s ease-in-out infinite alternate;
+}
+
+/* ===============================
+   🔁 ANIMATIONS
+   =============================== */
+
+@keyframes diOrbSpin {
+  to { transform: translateZ(20px) rotate(360deg); }
+}
+
+@keyframes diOrbPulse {
+  from { transform: scale(1); opacity: .6; }
+  to { transform: scale(1.3); opacity: 1; }
+}
+
+@keyframes diOrbFloat {
+  0%, 100% { transform: rotateX(0deg) rotateY(0deg); }
+  50% { transform: rotateX(12deg) rotateY(-12deg); }
+}
+
+@keyframes diOrbSpeak {
+  from { transform: translateZ(20px) scale(1); }
+  to { transform: translateZ(20px) scale(1.15); }
+}
