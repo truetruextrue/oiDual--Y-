@@ -256,3 +256,69 @@ select.btn{ width:100%; padding:8px; background:rgba(0,0,0,0.4); color:#fff; bor
     filter: drop-shadow(0 0 10px rgba(0,242,255,.10));
   }
 
+:root {
+  --orb-primary: #78e3ff;
+  --orb-secondary: #b978ff;
+  --orb-accent: #ffffff;
+  --orb-speed: 7.8s;
+}
+
+/* container */
+#orb-root {
+  position: relative;
+  width: 120px; /* controla tamanho aqui */
+  aspect-ratio: 1;
+}
+
+/* SVG base */
+.orb-bg {
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  filter: brightness(0.7);
+}
+
+.orb-ring {
+  fill: #080b12;
+  stroke: rgba(255,255,255,0.1);
+}
+
+.orb-core-svg {
+  fill: url(#orb-grad);
+  opacity: 0.9;
+}
+
+/* overlay */
+.orb-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+/* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
