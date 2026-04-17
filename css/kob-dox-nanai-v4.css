@@ -771,8 +771,7 @@ padding:12px;
     /* Indicador de voz original agora integrado ao orb */
     .voice-indicator {
         position: absolute;
-        top: -2px;
-        right: -2px;
+        /* top: -2px;right: -2px;*/
         width: 8px;
         height: 8px;
         border-radius: 50%;
@@ -904,7 +903,7 @@ body {
   color: var(--text);
   font-family: 'Inter', sans-serif;
   height: 100vh;
-  overflow: hidden;
+  overflow: auto;
   user-select: none;
 }
 
