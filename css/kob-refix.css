@@ -229,7 +229,7 @@ iframe {
 
 /* =========================
    SYMBOL WRAP
-   ========================= */
+   ========================= *
 .symbol-wrap {
   display: flex;
   align-items: center;
@@ -240,7 +240,7 @@ iframe {
 
 /* =========================
    BOTÕES
-   ========================= */
+   ========================= *
 .symbol-button {
   width: 44px;
   height: 44px;
@@ -402,7 +402,7 @@ iframe {
 
 /* =========================
    HUD INFO / TTS
-   ========================= *
+   ========================= */
 .hud-info {
   font-size: 12px;
   color: var(--kob-voice-primary);
