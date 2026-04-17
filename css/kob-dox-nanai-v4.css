@@ -1131,18 +1131,26 @@ body {
   justify-content: center;
   transition: all 0.2s;
 }
+#main-orb {
+  display: grid;
+  place-items: center;
 
+  width: 100%;
+  height: 100%;
+
+  position: relative;
+}
 .symbol-btn:hover {
   background: rgba(120, 227, 255, 0.1);
   color: var(--kob-voice-primary);
-  transform: translateY(-2px);
+  /* transform: translateY(-2px); */
 }
 
-/* Orb (no HUD) *
+/* Orb (no HUD) */
 .orb-container {
   display: flex;
   justify-content: center;
-  margin-top: 4px;
+/*  margin-top: 4px;*/
 }
 
 .ai-orb {
