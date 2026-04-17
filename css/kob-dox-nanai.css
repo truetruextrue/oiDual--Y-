@@ -343,19 +343,19 @@ padding:12px;
     /* Ajuste no botão para acomodar o */
 #btn-arch {
         position: relative;
-        display: block;
+        display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
         overflow: visible;
     }
 #main-orb {
-  display: grid;
+  display: flex;
   place-items: center;
 }
 
 #main-orb .orb-core svg {
   width: 100%;
   height: 100%;
-  display: block;
+  display: flex;
 }
