@@ -1,0 +1,505 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>KOBLLUX ΔUAL — Hypervisor 3.0</title>
+
+<!-- ECOSYSTEM FONTS -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Montserrat:wght@400;600;800&display=swap" rel="stylesheet">
+
+<!-- ECOSYSTEM LIBS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+
+<style>
+:root {
+  --bg-deep: #050811;
+  --primary: #00f5ff;   /* Cyan */
+  --secondary: #ff4bff; /* Magenta */
+  --tertiary: #ffd700;  /* Gold */
+  --danger: #ff4b6b;
+  --text-main: #e4ecff;
+  --text-muted: #9aa4c8;
+  --glass-border: rgba(255,255,255,0.08);
+  --glass-surface: rgba(18,18,22,0.85);
+  --font-ui: 'Montserrat', sans-serif;
+  --font-code: 'JetBrains Mono', monospace;
+  --header-h: 64px;
+  --dock-h: 72px;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  margin: 0; background: var(--bg-deep); color: var(--text-main);
+  font-family: var(--font-ui); height: 100dvh; overflow: hidden;
+  display: flex; flex-direction: column;
+}
+
+.nebula-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: 
+    radial-gradient(circle at 10% 20%, rgba(0, 245, 255, 0.08), transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(255, 75, 255, 0.08), transparent 40%);
+}
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   HEADER & NAVIGATION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.app-header {
+  height: var(--header-h);
+  background: rgba(5, 8, 17, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--glass-border);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px; z-index: 100;
+}
+
+.trinity-nav {
+  display: flex; background: rgba(255,255,255,0.03);
+  border-radius: 99px; padding: 4px; border: 1px solid var(--glass-border);
+}
+
+.t-tab {
+  padding: 6px 12px; border-radius: 99px; border: none;
+  background: transparent; color: var(--text-muted);
+  font-size: 10px; font-weight: 700; cursor: pointer;
+  transition: all 0.3s; display: flex; align-items: center; gap: 4px;
+}
+.t-tab.active { color: #000; }
+.t-tab[data-view="editor"].active { background: var(--tertiary); }
+.t-tab[data-view="preview"].active { background: var(--primary); }
+.t-tab[data-view="log"].active { background: var(--secondary); color: #fff; }
+.t-tab[data-view="memory"].active { background: #fff; color: #000; }
+
+/* ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+   STAGE & VIEWS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ */
+.stage { flex: 1; position: relative; overflow: hidden; z-index: 10; }
+
+.view {
+  position: absolute; inset: 0;
+  display: none; flex-direction: column;
+  background: var(--bg-deep);
+}
+.view.active { display: flex; }
+
+/* EDITOR ENHANCED */
+.editor-toolbar {
+  display: flex; gap: 8px; padding: 8px 12px; background: rgba(0,0,0,0.4);
+  border-bottom: 1px solid var(--glass-border);
+}
+.tool-btn {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border);
+  color: var(--text-muted); border-radius: 6px; width: 32px; height: 32px;
+  display: flex; justify-content: center; align-items: center; cursor: pointer;
+}
+.tool-btn:disabled { opacity: 0.2; pointer-events: none; }
+.tool-btn:active { transform: scale(0.9); }
+.tool-btn svg { width: 16px; height: 16px; }
+
+.editor-frame { flex: 1; display: flex; background: rgba(0,0,0,0.2); overflow: hidden; }
+.gutter {
+  width: 45px; background: rgba(0,0,0,0.3); border-right: 1px solid var(--glass-border);
+  padding: 12px 0; text-align: center; font-family: var(--font-code);
+  font-size: 12px; color: rgba(255,255,255,0.2); overflow: hidden; line-height: 1.6;
+}
+.code-area { flex: 1; position: relative; overflow: hidden; }
+#input-layer {
+  position: absolute; inset: 0; padding: 12px;
+  font-family: var(--font-code); font-size: 13px; line-height: 1.6;
+  white-space: pre; border: none; outline: none; overflow: auto;
+  tab-size: 2; width: 100%; height: 100%;
+  background: transparent; color: var(--text-main); caret-color: var(--primary); resize: none;
+}
+
+/* PREVIEW */
+.preview-box { width: 100%; height: 100%; background: #fff; border: none; }
+
+/* LOG AREA */
+.log-area {
+  flex: 1; padding: 16px; font-family: var(--font-code); font-size: 12px;
+  overflow-y: auto; background: #000; color: #0f0;
+}
+.log-entry { margin-bottom: 4px; border-bottom: 1px solid #111; padding-bottom: 2px; }
+.log-error { color: var(--danger); }
+
+/* MEMORY (CDN MANAGER) */
+.memory-content { flex: 1; padding: 20px; overflow-y: auto; }
+.cdn-card {
+  background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border);
+  border-radius: 12px; padding: 12px; margin-bottom: 10px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+.cdn-card.disabled { opacity: 0.4; }
+.cdn-url-text { font-family: var(--font-code); font-size: 11px; word-break: break-all; color: var(--text-muted); }
+.cdn-ctrls { display: flex; justify-content: flex-end; gap: 8px; }
+.cdn-btn {
+  background: rgba(255,255,255,0.05); border: none; color: var(--text-main);
+  padding: 6px; border-radius: 6px; cursor: pointer;
+}
+.add-module-box { display: flex; gap: 8px; margin-bottom: 20px; }
+.add-module-box input {
+  flex: 1; background: rgba(0,0,0,0.3); border: 1px solid var(--glass-border);
+  border-radius: 8px; padding: 10px; color: #fff; font-family: var(--font-code); font-size: 12px;
+}
+
+/* DOCK */
+.dock {
+  height: var(--dock-h); background: rgba(5, 8, 17, 0.98);
+  border-top: 1px solid var(--glass-border);
+  display: flex; align-items: center; padding: 0 12px; gap: 8px;
+  z-index: 100; padding-bottom: env(safe-area-inset-bottom);
+}
+.dock-btn {
+  flex: 1; height: 42px; border-radius: 10px; border: 1px solid var(--glass-border);
+  background: rgba(255,255,255,0.03); color: var(--text-main);
+  font-size: 11px; font-weight: 600; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; transition: 0.2s;
+}
+.dock-btn svg { width: 16px; height: 16px; margin-bottom: 2px; }
+.dock-btn.run { background: rgba(0, 245, 255, 0.15); color: var(--primary); border-color: var(--primary); }
+
+#toaster {
+  position: fixed; bottom: 90px; left: 50%; transform: translateX(-50%);
+  background: var(--primary); color: #000; padding: 8px 20px;
+  border-radius: 20px; font-weight: 800; font-size: 12px;
+  opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1000;
+}
+#toaster.show { opacity: 1; transform: translateX(-50%) translateY(-10px); }
+
+#loader {
+  position: fixed; inset: 0; background: var(--bg-deep);
+  display: flex; align-items: center; justify-content: center; z-index: 2000;
+}
+.orb { width: 50px; height: 50px; border: 3px solid var(--primary); border-radius: 50%; animation: pulse 1.5s infinite; }
+@keyframes pulse { 0% { transform: scale(0.8); opacity: 0.5; } 50% { transform: scale(1.1); opacity: 1; } 100% { transform: scale(0.8); opacity: 0.5; } }
+
+@media (min-width:700px) { body { width: 500px; margin: 0 auto; border-left: 1px solid var(--glass-border); border-right: 1px solid var(--glass-border); } }
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="orb"></div></div>
+<div class="nebula-layer"></div>
+
+<header class="app-header">
+  <div class="brand" style="font-weight:900; font-size: 1.1rem; color: var(--primary)">ΔUAL <span style="font-weight:400; font-size:0.7rem; color:var(--text-muted)">v3.0</span></div>
+  <div class="trinity-nav">
+    <button class="t-tab active" data-view="editor"><i data-lucide="code"></i> ED</button>
+    <button class="t-tab" data-view="preview"><i data-lucide="eye"></i> VIEW</button>
+    <button class="t-tab" data-view="log"><i data-lucide="terminal"></i> LOG</button>
+    <button class="t-tab" data-view="memory"><i data-lucide="database"></i> RAM</button>
+  </div>
+</header>
+
+<main class="stage">
+  <!-- Aba EDITOR -->
+  <section id="view-editor" class="view active">
+    <div class="editor-toolbar">
+      <button class="tool-btn" id="btn-undo" disabled title="Desfazer"><i data-lucide="undo-2"></i></button>
+      <button class="tool-btn" id="btn-redo" disabled title="Refazer"><i data-lucide="redo-2"></i></button>
+      <div style="flex:1"></div>
+      <button class="tool-btn" id="btn-clear" title="Limpar"><i data-lucide="trash-2"></i></button>
+    </div>
+    <div class="editor-frame">
+      <div class="gutter" id="gutter">1</div>
+      <div class="code-area">
+        <textarea id="input-layer" spellcheck="false" autocapitalize="off" placeholder="<h1>Hello World</h1>"></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- Aba PREVIEW -->
+  <section id="view-preview" class="view">
+    <iframe id="preview-frame" class="preview-box"></iframe>
+  </section>
+
+  <!-- Aba LOG -->
+  <section id="view-log" class="view">
+    <div class="log-area" id="log-display">
+      <div class="log-entry">> Hypervisor Core Online.</div>
+    </div>
+  </section>
+
+  <!-- Aba RAM (CDNs) -->
+  <section id="view-memory" class="view">
+    <div class="memory-content">
+      <h3 style="margin-top:0; color: var(--primary); font-size: 14px;">GESTÃO DE MÓDULOS</h3>
+      <div class="add-module-box">
+        <input type="text" id="cdn-input" placeholder="URL da CDN (js/css)...">
+        <button class="dock-btn" id="btn-add-cdn" style="flex:none; width: 60px; background: var(--primary); color:#000;">ADD</button>
+      </div>
+      <div id="cdn-list"></div>
+    </div>
+  </section>
+</main>
+
+<footer class="dock">
+  <input type="file" id="file-upload" class="hidden" style="display:none" accept=".html">
+  <button class="dock-btn" id="btn-upload"><i data-lucide="upload"></i>OPEN</button>
+  <button class="dock-btn" id="btn-download"><i data-lucide="download"></i>HTML</button>
+  <button class="dock-btn run" id="btn-run"><i data-lucide="play"></i>RUN</button>
+  <button class="dock-btn" id="btn-save"><i data-lucide="save"></i>SAVE</button>
+</footer>
+
+<div id="toaster">ESTADO ATUALIZADO</div>
+
+<script>
+(function() {
+  const UI = {
+    input: document.getElementById('input-layer'),
+    gutter: document.getElementById('gutter'),
+    preview: document.getElementById('preview-frame'),
+    log: document.getElementById('log-display'),
+    toaster: document.getElementById('toaster'),
+    cdnList: document.getElementById('cdn-list'),
+    cdnInput: document.getElementById('cdn-input')
+  };
+
+  let state = {
+    html: '',
+    cdns: [] // { url, active }
+  };
+
+  const history = { past: [], present: '', future: [] };
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CORE UTILS
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  function toast(msg) {
+    UI.toaster.innerText = msg;
+    UI.toaster.classList.add('show');
+    setTimeout(() => UI.toaster.classList.remove('show'), 2000);
+  }
+
+  function updateGutter() {
+    const lines = UI.input.value.split('\n').length;
+    UI.gutter.innerHTML = Array(lines).fill(0).map((_, i) => i + 1).join('<br>');
+  }
+
+  function logToUI(msg, type = 'info') {
+    const div = document.createElement('div');
+    div.className = `log-entry ${type === 'error' ? 'log-error' : ''}`;
+    div.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    UI.log.appendChild(div);
+    UI.log.scrollTop = UI.log.scrollHeight;
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // HISTORY SYSTEM
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  function saveHistory(val) {
+    if (val === history.present) return;
+    if (history.present !== '') {
+      history.past.push(history.present);
+      if (history.past.length > 50) history.past.shift();
+    }
+    history.present = val;
+    history.future = [];
+    updateHistoryBtns();
+  }
+
+  function updateHistoryBtns() {
+    document.getElementById('btn-undo').disabled = history.past.length === 0;
+    document.getElementById('btn-redo').disabled = history.future.length === 0;
+  }
+
+  document.getElementById('btn-undo').onclick = () => {
+    if (!history.past.length) return;
+    history.future.push(history.present);
+    history.present = history.past.pop();
+    UI.input.value = history.present;
+    updateGutter();
+    updateHistoryBtns();
+  };
+
+  document.getElementById('btn-redo').onclick = () => {
+    if (!history.future.length) return;
+    history.past.push(history.present);
+    history.present = history.future.pop();
+    UI.input.value = history.present;
+    updateGutter();
+    updateHistoryBtns();
+  };
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // CDN MANAGER
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  function renderCDNs() {
+    UI.cdnList.innerHTML = '';
+    state.cdns.forEach((cdn, i) => {
+      const card = document.createElement('div');
+      card.className = `cdn-card ${cdn.active ? '' : 'disabled'}`;
+      card.innerHTML = `
+        <div class="cdn-url-text">${cdn.url}</div>
+        <div class="cdn-ctrls">
+          <button class="cdn-btn" onclick="window.moveCDN(${i}, -1)"><i data-lucide="arrow-up"></i></button>
+          <button class="cdn-btn" onclick="window.moveCDN(${i}, 1)"><i data-lucide="arrow-down"></i></button>
+          <button class="cdn-btn" onclick="window.toggleCDN(${i})"><i data-lucide="${cdn.active ? 'eye' : 'eye-off'}"></i></button>
+          <button class="cdn-btn" onclick="window.deleteCDN(${i})" style="color:var(--danger)"><i data-lucide="trash-2"></i></button>
+        </div>
+      `;
+      UI.cdnList.appendChild(card);
+    });
+    lucide.createIcons();
+  }
+
+  window.toggleCDN = (i) => { state.cdns[i].active = !state.cdns[i].active; renderCDNs(); };
+  window.deleteCDN = (i) => { state.cdns.splice(i, 1); renderCDNs(); };
+  window.moveCDN = (i, dir) => {
+    if (i+dir < 0 || i+dir >= state.cdns.length) return;
+    [state.cdns[i], state.cdns[i+dir]] = [state.cdns[i+dir], state.cdns[i]];
+    renderCDNs();
+  };
+
+  document.getElementById('btn-add-cdn').onclick = () => {
+    const url = UI.cdnInput.value.trim();
+    if(url) {
+      state.cdns.push({ url, active: true });
+      UI.cdnInput.value = '';
+      renderCDNs();
+      toast("MÓDULO ADICIONADO");
+    }
+  };
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // RUNNER
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  function runCode() {
+    let html = UI.input.value;
+    
+    // Injeção de CDNs
+    const tags = state.cdns.filter(c => c.active).map(c => {
+      return c.url.endsWith('.css') ? `<link rel="stylesheet" href="${c.url}">` : `<script src="${c.url}"><\/script>`;
+    }).join('\n');
+
+    const consoleBridge = `
+      <script>
+        (function(){
+          const oldLog = console.log;
+          console.log = (...args) => {
+            window.parent.postMessage({type:'log', msg: args.join(' ')}, '*');
+            oldLog.apply(console, args);
+          };
+          window.onerror = (m,s,l) => window.parent.postMessage({type:'error', msg: m + " na linha " + l}, '*');
+        })();
+      <\/script>
+    `;
+
+    let finalCode = html;
+    if (finalCode.includes('<head>')) {
+      finalCode = finalCode.replace('<head>', '<head>' + consoleBridge + tags);
+    } else {
+      finalCode = consoleBridge + tags + finalCode;
+    }
+
+    UI.preview.srcdoc = finalCode;
+    logToUI("Executando Ciclo...");
+    switchTab('preview');
+  }
+
+  window.addEventListener('message', (e) => {
+    if (e.data.type === 'log') logToUI(e.data.msg);
+    if (e.data.type === 'error') logToUI(e.data.msg, 'error');
+  });
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // NAVIGATION
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  function switchTab(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.t-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(`view-${viewId}`).classList.add('active');
+    document.querySelector(`[data-view="${viewId}"]`).classList.add('active');
+  }
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // EVENTS
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  UI.input.oninput = () => {
+    updateGutter();
+    saveHistory(UI.input.value);
+  };
+
+  UI.input.onscroll = () => { UI.gutter.scrollTop = UI.input.scrollTop; };
+
+  UI.input.onkeydown = (e) => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const s = UI.input.selectionStart;
+      UI.input.value = UI.input.value.substring(0, s) + "  " + UI.input.value.substring(UI.input.selectionEnd);
+      UI.input.selectionEnd = s + 2;
+    }
+  };
+
+  document.querySelectorAll('.t-tab').forEach(t => {
+    t.onclick = () => switchTab(t.dataset.view);
+  });
+
+  document.getElementById('btn-run').onclick = runCode;
+  
+  document.getElementById('btn-save').onclick = () => {
+    state.html = UI.input.value;
+    localStorage.setItem('kobllux_v3_state', JSON.stringify(state));
+    toast("ESTADO PERSISTIDO");
+  };
+
+  document.getElementById('btn-clear').onclick = () => {
+    if(confirm("Deseja apagar o código?")) {
+      UI.input.value = '';
+      updateGutter();
+      saveHistory('');
+    }
+  };
+
+  document.getElementById('btn-download').onclick = () => {
+    const blob = new Blob([UI.input.value], {type: 'text/html'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `kobllux_v3_${Date.now()}.html`;
+    a.click();
+  };
+
+  document.getElementById('btn-upload').onclick = () => document.getElementById('file-upload').click();
+  document.getElementById('file-upload').onchange = async (e) => {
+    const f = e.target.files[0];
+    if (f) {
+      UI.input.value = await f.text();
+      updateGutter();
+      saveHistory(UI.input.value);
+      toast("ARQUIVO CARREGADO");
+    }
+  };
+
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  // BOOT
+  // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  window.onload = () => {
+    lucide.createIcons();
+    const saved = localStorage.getItem('kobllux_v3_state');
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      state = parsed;
+      UI.input.value = state.html;
+    } else {
+      UI.input.value = `<!DOCTYPE html>\n<html>\n<head>\n  <title>New Project</title>\n</head>\n<body>\n  <h1>Olá do ΔUAL 3.0</h1>\n  <script>\n    console.log("Sistema Pronto.");\n  <\/script>\n</body>\n</html>`;
+    }
+    history.present = UI.input.value;
+    updateGutter();
+    renderCDNs();
+    setTimeout(() => {
+      document.getElementById('loader').style.display = 'none';
+    }, 800);
+  };
+
+})();
+</script>
+</body>
+</html>
+
+

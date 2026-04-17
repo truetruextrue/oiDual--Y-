@@ -1,0 +1,489 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, viewport-fit=cover" />
+<title>KOBLLUX Editor Mix</title>
+<meta name="theme-color" content="#0a0e18" />
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+<style>
+:root {
+  --bg: #0a0e18; --ink: #e8ecf6; --muted: #9fb3c7; --ring: rgba(255,255,255,.12);
+  --panel: #0f1424; --accent: #36f6a2; --gradA: #ff00ff; --gradB: #00ffff;
+  --nav-bg: #0c1324; --active-color: #36f6a2; --danger: #f6365b;
+}
+
+html, body {
+  margin: 0; padding: 0; background: var(--bg); color: var(--ink);
+  font: 500 15px/1.4 'Inter', system-ui, -apple-system, sans-serif;
+  height: 100%; overflow: hidden; overscroll-behavior-y: none;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+#app { display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+
+/* header */
+header {
+  background: linear-gradient(42deg, var(--gradA), var(--gradB));
+  color: #071018; padding: 12px 16px; padding-top: env(safe-area-inset-top, 12px);
+  position: relative; z-index: 10; display: flex; justify-content: space-between; align-items: center;
+}
+header .title { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.5px; }
+header .actions { display: flex; gap: 8px; }
+.icon-btn {
+  background: rgba(0,0,0,0.15); border: none; border-radius: 8px;
+  width: 36px; height: 36px; display: flex; align-items: center; justify-content: center;
+  color: #000; cursor: pointer; transition: 0.2s;
+}
+.icon-btn:active { transform: scale(0.9); }
+.icon-btn svg { width: 18px; height: 18px; fill: currentColor; }
+
+/* main content areas */
+main { flex: 1; position: relative; overflow: hidden; background: var(--bg); }
+.view {
+  position: absolute; inset: 0; display: flex; flex-direction: column;
+  background: var(--panel); opacity: 0; pointer-events: none; z-index: 1;
+}
+.view.active { opacity: 1; pointer-events: auto; z-index: 2; }
+
+/* --- EDITOR --- */
+.editor-toolbar {
+  display: flex; gap: 8px; padding: 8px 12px; background: #0c1324; border-bottom: 1px solid var(--ring);
+}
+.icon-btn-small {
+  background: rgba(255,255,255,0.05); border: 1px solid var(--ring);
+  color: var(--muted); border-radius: 6px; width: 32px; height: 32px;
+  display: flex; justify-content: center; align-items: center; cursor: pointer; transition: 0.2s;
+}
+.icon-btn-small:hover, .icon-btn-small:active { background: rgba(255,255,255,0.1); color: var(--accent); }
+.icon-btn-small:disabled { opacity: 0.3; pointer-events: none; }
+.icon-btn-small svg { width: 16px; height: 16px; fill: currentColor; }
+
+.editor-wrapper {
+  display: flex; flex: 1; overflow: hidden; position: relative; background: #0f1424;
+}
+#line-numbers {
+  width: 40px; padding: 16px 8px; text-align: right; color: var(--muted);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; line-height: 1.5;
+  background: #0b0f1a; border-right: 1px solid var(--ring);
+  overflow: hidden; user-select: none;
+}
+#editor {
+  flex: 1; padding: 16px; border: 0; background: transparent; color: var(--ink);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 14px; line-height: 1.5;
+  outline: none; resize: none; overflow: auto; white-space: pre; tab-size: 2;
+}
+
+/* --- PREVIEW --- */
+iframe { width: 100%; height: 100%; border: 0; background: #fff; }
+
+/* --- CDNs --- */
+#cdns-container { padding: 16px; overflow-y: auto; flex: 1; }
+.cdn-header { font-size: 1.2rem; font-weight: 700; margin-bottom: 16px; color: var(--accent); }
+
+.add-cdn-row { display: flex; gap: 8px; margin-bottom: 20px; }
+.add-cdn-row input {
+  flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--ring); background: #0c1324;
+  color: var(--ink); outline: none; font-size: 14px;
+}
+.add-cdn-row button {
+  background: var(--accent); color: #000; font-weight: bold; border: 0;
+  border-radius: 8px; padding: 0 16px; cursor: pointer; transition: 0.2s;
+}
+.add-cdn-row button:active { transform: scale(0.95); }
+
+.cdn-item {
+  background: rgba(255,255,255,0.03); padding: 12px; border-radius: 8px;
+  margin-bottom: 8px; border: 1px solid var(--ring); display: flex; flex-direction: column; gap: 8px;
+  transition: opacity 0.2s;
+}
+.cdn-item.disabled { opacity: 0.4; border-color: rgba(255,255,255,0.05); }
+.cdn-item.disabled .cdn-url { text-decoration: line-through; }
+.cdn-url {
+  font-family: monospace; font-size: 12px; word-break: break-all; color: var(--ink);
+}
+.cdn-actions { display: flex; justify-content: flex-end; gap: 6px; }
+.cdn-actions button {
+  background: #18223a; border: none; width: 28px; height: 28px; border-radius: 6px;
+  display: flex; align-items: center; justify-content: center; color: var(--muted); cursor: pointer;
+}
+.cdn-actions button.del:hover { color: var(--danger); }
+.cdn-actions button:hover { color: var(--ink); }
+.cdn-actions button svg { width: 14px; height: 14px; fill: currentColor; }
+
+.empty-state { color: var(--muted); text-align: center; margin-top: 40px; font-style: italic; }
+
+/* --- BOTTOM NAV --- */
+nav.bottom-bar {
+  display: flex; background: var(--nav-bg); border-top: 1px solid var(--ring);
+  padding-bottom: env(safe-area-inset-bottom, 0); z-index: 10;
+}
+.nav-item {
+  flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 10px 0; color: var(--muted); cursor: pointer; transition: color 0.2s;
+}
+.nav-item svg { width: 22px; height: 22px; margin-bottom: 4px; stroke: currentColor; stroke-width: 2; fill: none; }
+.nav-item span { font-size: 11px; font-weight: 600; }
+.nav-item.active { color: var(--active-color); }
+.nav-item.active svg { stroke: var(--active-color); }
+
+/* --- Loader --- */
+#loader {
+  position: fixed; inset: 0; background: #0a0e18; display: flex; align-items: center; justify-content: center;
+  color: var(--accent); font-size: 2rem; z-index: 999; transition: opacity .5s ease;
+}
+#loader.hide { opacity: 0; pointer-events: none; }
+#loader .orb {
+  width: 48px; height: 48px; border-radius: 999px; border: 2px solid currentColor;
+  display: flex; align-items: center; justify-content: center; animation: orbPulse 2s infinite ease-in-out;
+}
+@keyframes orbPulse { 0%,100%{opacity:.3;transform:scale(1)} 50%{opacity:1;transform:scale(1.2)} }
+
+.hidden { display: none !important; }
+
+@media (min-width: 700px) {
+  #app { max-width: 480px; margin: auto; border-left: 1px solid var(--ring); border-right: 1px solid var(--ring); }
+}
+</style>
+</head>
+<body>
+
+<div id="loader"><div class="orb">◎</div></div>
+
+<div id="app">
+  <header>
+    <div class="title">KOBLLUX Mix</div>
+    <div class="actions">
+      <input class="hidden" type="file" id="uploadInput" accept=".html,text/html"/>
+      <button class="icon-btn" id="uploadBtn" title="Upload HTML">
+        <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+      </button>
+      <button class="icon-btn" id="downloadBtn" title="Download HTML">
+        <svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+      </button>
+      <button class="icon-btn" id="saveBtn" title="Salvar Local">
+        <svg viewBox="0 0 24 24"><path d="M17 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Aba 1: Editor -->
+    <div id="view-editor" class="view active">
+      <div class="editor-toolbar">
+        <button class="icon-btn-small" id="btn-undo" title="Desfazer" disabled>
+          <svg viewBox="0 0 24 24"><path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/></svg>
+        </button>
+        <button class="icon-btn-small" id="btn-redo" title="Refazer" disabled>
+          <svg viewBox="0 0 24 24"><path d="M11.5 8c2.65 0 5.05.99 6.9 2.6L22 7v9h-9l3.62-3.62c-1.39-1.16-3.16-1.88-5.12-1.88-3.54 0-6.55 2.31-7.6 5.5l-2.37-.78C3.92 11.03 7.85 8 11.5 8z"/></svg>
+        </button>
+        <div style="flex:1"></div>
+        <button class="icon-btn-small" id="btn-clear" title="Limpar Tudo">
+          <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <div class="editor-wrapper">
+        <div id="line-numbers">1</div>
+        <textarea id="editor" spellcheck="false" placeholder="<h1>Olá Mundo</h1>"></textarea>
+      </div>
+    </div>
+
+    <!-- Aba 2: Preview -->
+    <div id="view-preview" class="view">
+      <iframe id="iframe-view"></iframe>
+    </div>
+
+    <!-- Aba 3: CDNs -->
+    <div id="view-cdns" class="view">
+      <div id="cdns-container">
+        <div class="cdn-header">Dependências Externas</div>
+        <div class="add-cdn-row">
+          <input type="url" id="cdn-input" placeholder="https://cdn.exemplo.com/script.js">
+          <button id="btn-add-cdn">Add</button>
+        </div>
+        <div id="cdn-list"></div>
+      </div>
+    </div>
+  </main>
+
+  <nav class="bottom-bar">
+    <div class="nav-item active" data-target="editor">
+      <svg viewBox="0 0 24 24"><path d="M14.06 9.02l.92.92L5.92 19H5v-.92l9.06-9.06M17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29zm-3.6 3.19L3 17.25V21h3.75L17.81 9.94l-3.75-3.75z"/></svg>
+      <span>Código</span>
+    </div>
+    <div class="nav-item" data-target="preview">
+      <svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>
+      <span>Preview</span>
+    </div>
+    <div class="nav-item" data-target="cdns">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-5 14H4v-4h11v4zm0-5H4V9h11v4zm5 5h-4V9h4v9z"/></svg>
+      <span>CDNs</span>
+    </div>
+  </nav>
+</div>
+
+<script>
+(()=>{'use strict';
+const $ = q => document.querySelector(q);
+const $$ = q => document.querySelectorAll(q);
+
+const editor = $('#editor');
+const lineNumbers = $('#line-numbers');
+const iframe = $('#iframe-view');
+const cdnListContainer = $('#cdn-list');
+
+// --- Estado da Aplicação ---
+let state = {
+  html: '',
+  cdns: [] // { url: string, active: boolean }
+};
+
+// --- Histórico (Undo/Redo) ---
+const history = {
+  past: [], present: '', future: []
+};
+
+function saveToHistory(val) {
+  if (val === history.present) return;
+  history.past.push(history.present);
+  if (history.past.length > 50) history.past.shift();
+  history.present = val;
+  history.future = [];
+  updateHistoryButtons();
+}
+
+function updateHistoryButtons() {
+  $('#btn-undo').disabled = history.past.length === 0;
+  $('#btn-redo').disabled = history.future.length === 0;
+}
+
+$('#btn-undo').onclick = () => {
+  if (history.past.length === 0) return;
+  history.future.push(history.present);
+  history.present = history.past.pop();
+  editor.value = history.present;
+  updateEditorUI();
+};
+
+$('#btn-redo').onclick = () => {
+  if (history.future.length === 0) return;
+  history.past.push(history.present);
+  history.present = history.future.pop();
+  editor.value = history.present;
+  updateEditorUI();
+};
+
+$('#btn-clear').onclick = () => {
+  if(confirm("Tem certeza que deseja limpar todo o código?")) {
+    editor.value = '';
+    updateEditorUI();
+  }
+};
+
+// --- Funções do Editor (Linhas e Tab) ---
+function updateEditorUI() {
+  // Atualiza números de linha
+  const linesCount = editor.value.split('\n').length;
+  lineNumbers.innerHTML = Array(linesCount).fill(0).map((_, i) => i + 1).join('<br>');
+  // Salva estado e recarrega preview
+  state.html = editor.value;
+  saveToHistory(state.html);
+  processCode();
+}
+
+// Sincronizar scroll
+editor.addEventListener('scroll', () => {
+  lineNumbers.scrollTop = editor.scrollTop;
+});
+
+// Comportamento da tecla Tab
+editor.addEventListener('keydown', (e) => {
+  if (e.key === 'Tab') {
+    e.preventDefault();
+    document.execCommand('insertText', false, '  '); // Insere 2 espaços
+  }
+});
+
+let debounceTimer;
+editor.addEventListener('input', () => {
+  clearTimeout(debounceTimer);
+  // Atualiza linha rápido
+  const linesCount = editor.value.split('\n').length;
+  lineNumbers.innerHTML = Array(linesCount).fill(0).map((_, i) => i + 1).join('<br>');
+  
+  debounceTimer = setTimeout(() => {
+    updateEditorUI();
+  }, 500);
+});
+
+
+// --- Lógica de CDNs ---
+function renderCDNs() {
+  cdnListContainer.innerHTML = '';
+  if (state.cdns.length === 0) {
+    cdnListContainer.innerHTML = '<div class="empty-state">Nenhuma CDN adicionada.<br>Cole a URL acima para adicionar.</div>';
+    return;
+  }
+  
+  state.cdns.forEach((cdn, index) => {
+    const isFirst = index === 0;
+    const isLast = index === state.cdns.length - 1;
+    
+    cdnListContainer.innerHTML += `
+      <div class="cdn-item ${cdn.active ? '' : 'disabled'}">
+        <div class="cdn-url">${cdn.url}</div>
+        <div class="cdn-actions">
+          <button title="Mover para cima" onclick="moveCDN(${index}, -1)" ${isFirst ? 'disabled style="opacity:0.2"' : ''}>
+            <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5z"/></svg>
+          </button>
+          <button title="Mover para baixo" onclick="moveCDN(${index}, 1)" ${isLast ? 'disabled style="opacity:0.2"' : ''}>
+            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </button>
+          <button title="Editar" onclick="editCDN(${index})">
+            <svg viewBox="0 0 24 24"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg>
+          </button>
+          <button title="${cdn.active ? 'Ocultar' : 'Mostrar'}" onclick="toggleCDN(${index})">
+            ${cdn.active 
+              ? '<svg viewBox="0 0 24 24"><path d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"/></svg>'
+              : '<svg viewBox="0 0 24 24"><path d="M12 7c2.76 0 5 2.24 5 5 0 .65-.13 1.26-.36 1.83l2.92 2.92c1.51-1.26 2.7-2.89 3.43-4.75-1.73-4.39-6-7.5-11-7.5-1.4 0-2.74.25-3.98.7l2.16 2.16C10.74 7.13 11.35 7 12 7zM2 4.27l2.28 2.28.46.46C3.08 8.3 1.78 10.02 1 12c1.73 4.39 6 7.5 11 7.5 1.55 0 3.03-.3 4.38-.84l.42.42L19.73 22 21 20.73 3.27 3 2 4.27zM7.53 9.8l1.55 1.55c-.05.21-.08.43-.08.65 0 1.66 1.34 3 3 3 .22 0 .44-.03.65-.08l1.55 1.55c-.67.33-1.41.53-2.2.53-2.76 0-5-2.24-5-5 0-.79.2-1.53.53-2.2zm4.31-.78l3.15 3.15.02-.16c0-1.66-1.34-3-3-3l-.17.01z"/></svg>'}
+          </button>
+          <button title="Deletar" class="del" onclick="deleteCDN(${index})">
+            <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+          </button>
+        </div>
+      </div>
+    `;
+  });
+}
+
+$('#btn-add-cdn').onclick = () => {
+  const url = $('#cdn-input').value.trim();
+  if(url) {
+    state.cdns.push({ url, active: true });
+    $('#cdn-input').value = '';
+    renderCDNs();
+    processCode();
+  }
+};
+
+window.toggleCDN = (i) => { state.cdns[i].active = !state.cdns[i].active; renderCDNs(); processCode(); };
+window.deleteCDN = (i) => { state.cdns.splice(i, 1); renderCDNs(); processCode(); };
+window.editCDN = (i) => {
+  const newUrl = prompt("Editar URL da CDN:", state.cdns[i].url);
+  if(newUrl && newUrl.trim() !== "") {
+    state.cdns[i].url = newUrl.trim();
+    renderCDNs(); processCode();
+  }
+};
+window.moveCDN = (i, dir) => {
+  if (i + dir < 0 || i + dir >= state.cdns.length) return;
+  const temp = state.cdns[i];
+  state.cdns[i] = state.cdns[i + dir];
+  state.cdns[i + dir] = temp;
+  renderCDNs(); processCode();
+};
+
+// --- Injeção no Preview ---
+function getInjectedHTML() {
+  let cdnsTags = state.cdns.filter(c => c.active).map(c => {
+    if (c.url.toLowerCase().endsWith('.css')) return `<link rel="stylesheet" href="${c.url}">`;
+    return `<script src="${c.url}"><\/script>`;
+  }).join('\n');
+  
+  let finalHtml = state.html;
+  if(finalHtml.includes('<head>')) {
+    finalHtml = finalHtml.replace('<head>', `<head>\n${cdnsTags}\n`);
+  } else {
+    finalHtml = `${cdnsTags}\n${finalHtml}`;
+  }
+  return finalHtml;
+}
+
+function processCode() {
+  const doc = iframe.contentDocument || iframe.contentWindow.document;
+  doc.open(); doc.write(getInjectedHTML()); doc.close();
+}
+
+
+// --- Lógica de Carregamento e Navegação ---
+window.addEventListener('load', () => {
+  gsap.to('#loader', {opacity: 0, duration: 0.6, delay: 0.2, onComplete: () => $('#loader').classList.add('hide')});
+  
+  // Carregar dados salvos
+  const saved = localStorage.getItem('kobllux_project');
+  if(saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      if(parsed.html !== undefined) state = parsed;
+    } catch(e) {
+      // Fallback para versão anterior do editor
+      state.html = saved;
+    }
+  }
+  
+  editor.value = state.html;
+  history.present = state.html;
+  
+  updateEditorUI();
+  renderCDNs();
+});
+
+// Navegação (Tabs)
+const navItems = $$('.nav-item');
+const views = $$('.view');
+
+navItems.forEach(item => {
+  item.addEventListener('click', () => {
+    navItems.forEach(nav => nav.classList.remove('active'));
+    item.classList.add('active');
+
+    const targetId = `view-${item.dataset.target}`;
+    views.forEach(view => {
+      if(view.id === targetId) {
+        view.classList.add('active');
+        gsap.fromTo(view, {opacity: 0, y: 10}, {opacity: 1, y: 0, duration: 0.2});
+      } else {
+        view.classList.remove('active');
+      }
+    });
+  });
+});
+
+// --- Ações de Arquivo ---
+$('#uploadBtn').onclick = () => $('#uploadInput').click();
+$('#uploadInput').addEventListener('change', async (e) => {
+  const f = e.target.files && e.target.files[0]; if(!f) return;
+  state.html = await f.text();
+  editor.value = state.html;
+  updateEditorUI();
+  gsap.from(editor, {opacity: 0.2, duration: 0.3});
+});
+
+$('#downloadBtn').onclick = () => {
+  // Baixa o HTML final COM as CDNs injetadas
+  const blob = new Blob([getInjectedHTML() || ''], {type: 'text/html'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'kobllux_projeto.html';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  gsap.fromTo('#downloadBtn', {scale: 1}, {scale: 1.2, yoyo: true, repeat: 1, duration: 0.15});
+};
+
+$('#saveBtn').onclick = () => {
+  localStorage.setItem('kobllux_project', JSON.stringify(state));
+  gsap.fromTo('#saveBtn', {scale: 1}, {scale: 1.3, yoyo: true, repeat: 1, duration: 0.2, ease: 'power1.inOut'});
+  
+  const icon = $('#saveBtn').innerHTML;
+  $('#saveBtn').innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>';
+  setTimeout(() => $('#saveBtn').innerHTML = icon, 1000);
+};
+
+})();
+</script>
+</body>
+</html>
