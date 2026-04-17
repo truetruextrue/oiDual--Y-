@@ -653,7 +653,7 @@ iframe#content-frame {
 
 /* =========================
    REMOÇÃO DO FUSION CARD
-   ========================= */
+   ========================= *
 .fusion-hud,
 .fusion-card,
 .card-header,
@@ -685,7 +685,7 @@ iframe#content-frame {
 .arch-chip.active,
 .chat-container {
   all: unset;
-}
+} */
 
 /* =========================
    AJUSTES FINAIS
