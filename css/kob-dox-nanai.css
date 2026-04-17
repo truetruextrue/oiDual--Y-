@@ -321,7 +321,7 @@ padding:12px;
         to { transform: scale(1.15); } 
     }
 
-    /* Indicador de voz original agora integrado ao orb */
+    /* Indicador de voz original agora integrado ao orb *
     .voice-indicator {
         position: absolute;
         top: -2px;
