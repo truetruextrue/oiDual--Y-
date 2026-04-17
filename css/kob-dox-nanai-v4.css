@@ -1087,7 +1087,7 @@ body {
   max-height: 400px;
   padding: 12px 4px;
 }
-
+*/
 .trigger-btn {
   background: var(--kob-voice-primary);
   border: none;
@@ -1103,6 +1103,32 @@ body {
   filter: brightness(1.2);
   box-shadow: 0 0 18px var(--kob-voice-primary);
 }
+
+
+
+.txt-heavy {
+  font-weight: 800;
+  color: var(--kob-voice-primary);
+}
+
+.brand-dual {
+  font-size: 0.7rem;
+  opacity: 0.6;
+  letter-spacing: 2px;
+}
+
+.clock-widget {
+  text-align: right;
+}
+
+.time-display {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.3rem;
+  color: var(--kob-voice-primary);
+}
+
+
+
 
 /* Dock (integrado ao HUD) */
 .symbol-dock {
@@ -1132,7 +1158,7 @@ body {
   transition: all 0.2s;
 }
 #main-orb {
-  display: grid;
+  display: flex;
   place-items: center;
 
   width: 100%;
@@ -1374,3 +1400,12 @@ iframe {
     radial-gradient(circle at 97% 88%, var(--arch-glow), transparent 78%),
     rgba(5, 7, 10, 0.5);
 }
+
+#btn-arch #main-orb{
+       
+        display: flex !important;
+         padding: 0;
+       width: 56px; 
+height: 56px;
+
+    }
