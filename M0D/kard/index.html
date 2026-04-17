@@ -1030,7 +1030,202 @@ border-radius: 9999px;
 
   
 
-<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script>
+<html><head><style>
+
+ #btn-arch #main-orb{
+       
+        display: flex !important;
+         padding: 0;
+       width: 56px; 
+height: 56px;
+
+    }
+
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style>
+
+<script>
+(function () {
+  function di_getSafeName() {
+    return (
+      (document.querySelector('#inputUser')?.value ||
+       document.querySelector('#infodoseNameInput')?.value ||
+       localStorage.getItem('di_userName') ||
+       localStorage.getItem('userName') ||
+       'DUAL')
+      .trim() || 'Convidado'
+    );
+  }
+
+  function di_setText(sel, value) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = value;
+  }
+
+  function di_setHtml(sel, html) {
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = html;
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'Convidado';
+
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+
+    di_setText('#lblName', safe);
+    di_setText('#actName', safe);
+    di_setText('#smallText', safe);
+    di_setText('#hudStatus', safe);
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    di_setText('#smallIdent', activeKey ? activeKey.name : '--');
+    di_setText('#actBadge', activeKey ? `key:${activeKey.name}` : 'v:--');
+
+    const mainOrb = document.querySelector('#main-orb');
+    if (mainOrb && typeof window.makeOrbAvatar === 'function') {
+      mainOrb.innerHTML = window.makeOrbAvatar(safe, 48);
+    }
+
+    const avatarTarget = document.querySelector('#avatarTarget');
+    if (avatarTarget && typeof window.makeOrbAvatar === 'function') {
+      avatarTarget.innerHTML = window.makeOrbAvatar(safe, 64);
+    }
+
+    const smallMiniAvatar = document.querySelector('#smallMiniAvatar');
+    if (smallMiniAvatar && typeof window.makeOrbAvatar === 'function') {
+      smallMiniAvatar.innerHTML = window.makeOrbAvatar(safe, 24);
+    }
+
+    const actMiniAvatar = document.querySelector('#actMiniAvatar');
+    if (actMiniAvatar && typeof window.makeOrbAvatar === 'function') {
+      actMiniAvatar.innerHTML = window.makeOrbAvatar(safe, 36);
+    }
+  }
+
+  function di_bindLiveName() {
+    const inputs = [
+      document.querySelector('#inputUser'),
+      document.querySelector('#infodoseNameInput')
+    ].filter(Boolean);
+
+    const initial = di_getSafeName();
+
+    inputs.forEach(inp => {
+      if (!inp) return;
+      if (!inp.value) inp.value = initial;
+
+      const onChange = () => di_syncNameUI(inp.value);
+      inp.addEventListener('input', onChange);
+      inp.addEventListener('change', onChange);
+    });
+
+    di_syncNameUI(initial);
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'di_userName' || e.key === 'userName') {
+        di_syncNameUI(e.newValue);
+      }
+    });
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  window.di_syncNameUI = di_syncNameUI;
+  window.di_bindLiveName = di_bindLiveName;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+</script> <style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+ /* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style></head><body><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script>
 
 // 🔥 ===============================
 // 🔥 ORB SYSTEM · CORE UNIFICADO
@@ -1111,4 +1306,7 @@ function updateInterface(name){
   els.actName.innerText = safe;
 }
 
-</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script></body></html>
+</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+      
+      
+      </body></html>
