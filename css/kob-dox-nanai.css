@@ -13,7 +13,7 @@
       background: var(--bg);
       color: var(--ink);
       font-family: system-ui, -apple-system, sans-serif;
-      padding: 20px;
+      /* padding: 20px; */
       line-height: 1.6;
     }
 
