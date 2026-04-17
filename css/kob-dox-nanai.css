@@ -340,12 +340,12 @@ padding:12px;
         box-shadow: 0 0 8px #f44336;
     }
 
-    /* Ajuste no botão para acomodar o orb */
-   /* #btn-arch {
+    /* Ajuste no botão para acomodar o */
+#btn-arch {
         position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
         padding: 0;
         overflow: visible;
-    }*/
+    }
