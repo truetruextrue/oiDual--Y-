@@ -1107,19 +1107,12 @@ body {
 
 
 .txt-heavy {
-  font-weight: 800;
+ /* font-weight: 800; */
   color: var(--kob-voice-primary);
 }
 
-.brand-dual {
-  font-size: 0.7rem;
-  opacity: 0.6;
-  letter-spacing: 2px;
-}
 
-.clock-widget {
-  text-align: right;
-}
+
 
 .time-display {
   font-family: 'JetBrains Mono', monospace;
