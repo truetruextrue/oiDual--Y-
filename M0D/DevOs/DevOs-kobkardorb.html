@@ -1,0 +1,1265 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <title>Fusion Card // Core Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css"><style>
+
+#main-orb svg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+color: var(--kob-voice-primary);
+background: var(--kob-voice-bg-soft);
+border: 4px;
+border-color: var(--ink);
+border-radius: 9999px;
+
+}
+
+</style><style>
+ /* orb */
+.orb {
+  width: 96%;
+  height: 96%;
+  border-radius: 50%;
+
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style><style> 
+
+/* estado normal */
+.kob-tts-dock{
+  transition: transform .35s ease, opacity .65s ease;
+}
+
+/* quase invisível */
+.kob-tts-dock.idle{
+  opacity: .18;
+  transform: scale(.92);
+}
+
+/* quando passa o dedo ou mouse */
+.kob-tts-dock:hover{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kob-tts-dock{
+
+ 
+  box-shadow:none !important;
+}</style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="./css/main.css"><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+
+ #btn-arch #main-orb{
+       
+        display: flex !important;
+         padding: 0;
+       width: 56px; 
+height: 56px;
+
+    }
+
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style></head>
+<body>
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <!-- CONTAINER PARA CENTRALIZAR INICIALMENTE -->
+  <div class="container">
+    <div class="fusion-card closed" id="mainCard">
+
+      <div class="card-header" id="cardHeader">
+        <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+        <div class="text-block">
+          <div class="greeting-row">
+            <span class="txt-thin" id="lblHello">Oi,</span>
+            <span class="txt-heavy" id="lblName">Convidado</span>
+          </div>
+          <div class="brand-dual">DUAL</div>
+        </div>
+        <div class="clock-widget">
+          <div class="time-display" id="clockTime">00:00</div>
+          <span class="status-led">ONLINE</span>
+        </div>
+        <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido"><i data-lucide="menu"></i></button>
+      </div>
+      
+      <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+      <div class="drag-handle"></div>
+
+      <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+        <div class="mini-avatar" id="smallMiniAvatar"></div>
+        <div class="small-text" id="smallText">Aguardando ativação...</div>
+        <div class="ident-badge" id="smallIdent">--</div>
+      </div>
+
+      <div class="card-body" id="cardBody">
+        <!-- Main Input User -->
+        <div class="input-wrapper stagger-item">
+          <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+        </div>
+
+        <!-- Section 1: ASCII Activation -->
+        <div class="activation-wrap stagger-item">
+          <div class="activation-toggle" onclick="toggleSection('activationCard')">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+              <strong style="letter-spacing:1px;font-size:0.9rem">Ativação ASCII</strong>
+            </div>
+            <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">BASE v1</div>
+          </div>
+          <div id="activationCard" class="activation-card activation-hidden">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="mini-avatar" id="actMiniAvatar"></div>
+                <div><div style="font-weight:700">CÉREBRO</div><div style="font-size:0.78rem;opacity:0.6"><span id="actName">User</span></div></div>
+              </div>
+              <div class="activation-badge" id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:0.8em">v:--</div>
+            </div>
+            <pre id="actPre" class="activation-pre">Carregando...</pre>
+            <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+              <button class="trigger-btn" id="copyActBtn">COPIAR</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: System & Neural (Config) -->
+        <div class="activation-wrap stagger-item">
+            <div class="activation-toggle" onclick="toggleSection('systemCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                  <strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong>
+                </div>
+                <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+            </div>
+            <div id="systemCard" class="activation-card activation-hidden">
+                <div class="col">
+                   <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                   <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                   <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="model-toggle">
+                      <select id="modelSelect" class="btn">
+                        <option value="" disabled="">Selecione Modelo</option>
+                        <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                        <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                        <option value="mistralai/devstral-2512:free">DevStral</option>
+                        <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                      </select>
+                   </div>
+                   
+                   <div class="panel-divider" style="margin:10px 0; border-top:1px solid rgba(255,255,255,0.05)"></div>
+                   <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stagger-item" style="margin-top:4px">
+            <div class="stat-lbl" style="margin-bottom:6px; font-size:0.6rem; color:rgba(255,255,255,0.4)">INTERFACE MODE</div>
+            <div style="display:flex; gap:8px;">
+                <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
+                <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
+                <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- KEYS MANAGER MODAL -->
+  <div id="keysModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card" role="dialog">
+      <div class="keys-header">
+        <div>
+          <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+        </div>
+        <button id="closeKeysBtn" class="small-btn">X</button>
+      </div>
+      <div class="key-list" id="keyList"></div>
+      <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div class="form-grid">
+          <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+          <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+        </div>
+        <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)">ADICIONAR CHAVE</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+          <i data-lucide="shield-check" style="width:14px"></i> <span id="vaultStatusText">Cofre Aberto</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VAULT UNLOCK MODAL -->
+  <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card">
+      <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+      <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+      <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+      <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+      <div style="display:flex;gap:8px;justify-content:center">
+         <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+         <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script>
+
+<script>
+
+// 🔥 ===============================
+// 🔥 ORB SYSTEM · CORE UNIFICADO
+// 🔥 ===============================
+
+// 🔹 GERADOR UNIVERSAL
+function makeOrbAvatar(name, size = 36) {
+  const safe = name || 'DUAL';
+
+  // seed determinística baseada no nome
+  const seed = safe.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+
+  const h1 = seed % 360;
+  const h2 = (seed * 37) % 360;
+
+  // 🔒 evita colisão de gradient no DOM
+  const uid = Math.random().toString(36).slice(2, 6);
+  const id = 'g' + seed.toString(36) + uid;
+
+  return `
+    <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="hsl(${h1},100%,55%)"/>
+          <stop offset="100%" stop-color="hsl(${h2},90%,45%)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- base -->
+      <rect width="32" height="32" rx="7" fill="#071018"/>
+
+      <!-- glow -->
+      <circle cx="16" cy="16" r="9" fill="url(#${id})" opacity="0.25"/>
+
+      <!-- core -->
+      <circle cx="16" cy="16" r="7" fill="url(#${id})"/>
+
+      <!-- ring -->
+      <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+    </svg>
+  `;
+}
+
+
+// 🔓 GLOBAL HOOK
+window.makeOrbAvatar = makeOrbAvatar;
+
+// 🔹 ALIAS OPCIONAL (mini semântico)
+window.makeMiniAvatar = (name) => makeOrbAvatar(name, 24);
+
+
+// 🔁 ===============================
+// 🔁 UPDATE INTERFACE
+// 🔁 ===============================
+function updateInterface(name){
+  const safe = name || 'Convidado';
+
+  // 🔹 texto
+  els.lblName.innerText = safe;
+  els.input.value = safe;
+
+  // 🔹 estado ativo
+  const activeKey = STATE.keys.find(k => k.active);
+
+  els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+  els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+  // 🔥 ORBS SINCRONIZADOS
+  const orbBig  = makeOrbAvatar(safe, 64);
+  const orbMid  = makeOrbAvatar(safe, 36);
+  const orbMini = makeOrbAvatar(safe, 24);
+
+  els.avatarTgt.innerHTML = orbBig;
+  els.smallMiniAvatar.innerHTML = orbMini;
+  els.actMiniAvatar.innerHTML = orbMid;
+
+  // 🔹 nome ativo
+  els.actName.innerText = safe;
+}
+
+</script>
+
+<style>
+ /* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+
+<!--
+<script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"defer></script>
+-->
+
+
+
+
+
+
+<div id="root">
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+
+<div class="wrap">
+  <div class="content">
+    <iframe id="frame" src="about:blank"></iframe>
+    <div id="kob-tts-outline"></div>
+  </div>
+
+  <!-- HUD Inteligente -->
+  <div class="symbol-bar floating" id="symbolBar">
+    
+    <!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+    <!-- Controles de Navegação de Leitura -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+    </div>
+
+    <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+        </div>
+<!--
+        <div class="voice-indicator" id="voiceIndicator"></div> -->
+
+      </div>
+    </button>
+
+    <!-- Outros atalhos -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+    </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+       <div id="arch-overlay"></div>  
+<!-- Scripts -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+</div>
+
+
+
+
+
+<script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
+     ║  Segurar 3s → edita data-url do botão   ║
+     ║  Clique curto → sistema externo cuida   ║
+     ╚══════════════════════════════════════════╝ -->
+
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-22.js"></script>
+
+<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+
+
+<script>
+(function () {
+  function di_getSafeName() {
+    return (
+      (document.querySelector('#inputUser')?.value ||
+       document.querySelector('#infodoseNameInput')?.value ||
+       localStorage.getItem('di_userName') ||
+       localStorage.getItem('userName') ||
+       'DUAL')
+      .trim() || 'Convidado'
+    );
+  }
+
+  function di_setText(sel, value) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = value;
+  }
+
+  function di_setOrb(sel, name, size) {
+    const el = document.querySelector(sel);
+    if (el && typeof window.makeOrbAvatar === 'function') {
+      el.innerHTML = window.makeOrbAvatar(name, size);
+    }
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'Convidado';
+
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+
+    di_setText('#lblName', safe);
+    di_setText('#actName', safe);
+    di_setText('#smallText', safe);
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    di_setText('#smallIdent', activeKey ? activeKey.name : '--');
+    di_setText('#actBadge', activeKey ? `key:${activeKey.name}` : 'v:--');
+
+    di_setOrb('#main-orb', safe, 48);
+    di_setOrb('#avatarTarget', safe, 64);
+    di_setOrb('#smallMiniAvatar', safe, 24);
+    di_setOrb('#actMiniAvatar', safe, 36);
+  }
+
+  function di_bindLiveName() {
+    const inputs = [
+      document.querySelector('#inputUser'),
+      document.querySelector('#infodoseNameInput')
+    ].filter(Boolean);
+
+    const initial = di_getSafeName();
+
+    inputs.forEach((inp) => {
+      if (!inp) return;
+      if (!inp.value) inp.value = initial;
+      inp.addEventListener('input', () => di_syncNameUI(inp.value));
+      inp.addEventListener('change', () => di_syncNameUI(inp.value));
+    });
+
+    di_syncNameUI(initial);
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'di_userName' || e.key === 'userName') {
+        di_syncNameUI(e.newValue);
+      }
+    });
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  window.di_syncNameUI = di_syncNameUI;
+  window.di_bindLiveName = di_bindLiveName;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+</script>
+
+
+
+<button id="dev-btn" onclick="KDevPanel.toggle()" class="fixed bottom-6 left-6 z-[99998] bg-black/80 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 hover:border-blue-500/50 group flex items-center gap-2">
+
+ 
+ <i data-lucide="terminal" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>
+    <span class="text-[10px] font-mono font-bold uppercase tracking-widest hidden md:block">Dev Panel</span>
+  </button>
+
+  <!-- Panel Drawer -->
+  <div id="dev-panel" class="fixed inset-y-0 left-0 w-[90%] md:w-[420px] bg-[#050505]/95 backdrop-blur-3xl border-r border-white/10 z-[99999] transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
+     
+     <!-- Header -->
+     <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+         <div>
+             <h3 class="text-white font-display font-bold tracking-widest uppercase text-xs flex items-center gap-2">
+                <i data-lucide="cpu" class="w-4 h-4 text-blue-500"></i> Fusion DevOS
+             </h3>
+             <p class="text-[9px] text-white/30 font-mono mt-1">Inspeção de Assets &amp; Variáveis</p>
+         </div>
+         <button onclick="KDevPanel.toggle()" class="text-white/30 hover:text-white bg-white/5 p-2 rounded-lg transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+     </div>
+     
+     <!-- Content -->
+     <div class="p-6 flex-1 overflow-y-auto dev-scroll space-y-8">
+         
+         <!-- Theme Variables -->
+         <div>
+             <h4 class="text-[10px] uppercase text-white/40 font-bold tracking-[0.2em] mb-4 flex items-center gap-2">
+                 <i data-lucide="palette" class="w-3 h-3"></i> Variáveis CSS Globais
+             </h4>
+             <div class="space-y-3 bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                 
+                 <div class="flex justify-between items-center group">
+                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--bg (Fundo Topo)</span>
+                     <div class="flex items-center gap-2">
+                         <span id="val--bg" class="text-[9px] text-white/30 font-mono">#050505</span>
+                         <input type="color" value="#050505" oninput="KDevPanel.updateVar('--bg', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
+                     </div>
+                 </div>
+                 
+                 <div class="flex justify-between items-center group">
+                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--bg-dark (Fundo Base)</span>
+                     <div class="flex items-center gap-2">
+                         <span id="val--bg-dark" class="text-[9px] text-white/30 font-mono">#000000</span>
+                         <input type="color" value="#000000" oninput="KDevPanel.updateVar('--bg-dark', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
+                     </div>
+                 </div>
+                 
+                 <div class="flex justify-between items-center group">
+                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--active-color</span>
+                     <div class="flex items-center gap-2">
+                         <span id="val--active-color" class="text-[9px] text-white/30 font-mono">#3b82f6</span>
+                         <input type="color" value="#3b82f6" oninput="KDevPanel.updateVar('--active-color', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
+                     </div>
+                 </div>
+                 
+             </div>
+         </div>
+
+         <!-- Active Links/Scripts -->
+         <div>
+             <div class="flex justify-between items-center mb-4">
+                 <h4 class="text-[10px] uppercase text-white/40 font-bold tracking-[0.2em] flex items-center gap-2">
+                     <i data-lucide="link" class="w-3 h-3"></i> Recursos (Links &amp; Scripts)
+                 </h4>
+                 <button onclick="KDevPanel.scan()" class="text-blue-400 hover:text-white transition p-1"><i data-lucide="refresh-cw" class="w-3 h-3"></i></button>
+             </div>
+             
+             <!-- Add New Resource -->
+             <div class="flex gap-2 mb-4">
+                 <select id="dev-new-type" class="bg-white/5 border border-white/10 rounded-lg text-[10px] text-white px-2 outline-none">
+                     <option value="css">CSS</option>
+                     <option value="js">JS</option>
+                 </select>
+                 <input id="dev-new-url" type="text" placeholder="https://..." class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] text-white outline-none focus:border-blue-500/50">
+                 <button onclick="KDevPanel.addResource()" class="bg-blue-500/20 text-blue-400 px-3 rounded-lg border border-blue-500/30 hover:bg-blue-500/40 transition">
+                     <i data-lucide="plus" class="w-3 h-3"></i>
+                 </button>
+             </div>
+
+             <!-- Resources List -->
+             <div id="dev-resources-list" class="space-y-2">
+                 <!-- Injected by JS -->
+             </div>
+         </div>
+
+     </div>
+     
+     <!-- Footer Controls -->
+     <div class="p-6 border-t border-white/5 bg-black/50">
+         <button onclick="KDevPanel.exportHTML()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+             <i data-lucide="download" class="w-4 h-4"></i> Exportar HTML Final
+         </button>
+         <p class="text-center text-[8px] text-white/30 mt-3 font-mono">O painel será removido automaticamente do código exportado.</p>
+     </div>
+  </div>
+
+
+  <!-- ORIGINAL SCRIPTS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0B.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0K.js"></script>
+  
+  
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DevOs/js/modules/inline-0-kdev.js"></script>
+
+  <!-- ========================================== -->
+  <!-- KODUX DEV PANEL IMPLEMENTATION (LOGIC)     -->
+  <!-- ========================================== -->
+  
+
+
+
+<script>
+
+(function() {
+  window.DI = window.DI || {};
+
+  // Estado central
+  DI.state = {
+    name: 'DUAL',
+    seed: 0,
+    h1: 180,
+    h2: 320,
+    tone: 'cool',
+    mode: 'classic'
+  };
+
+  function di_seed(name) {
+    const safe = (name || 'DUAL').trim() || 'DUAL';
+    let seed = 0;
+    for (let i = 0; i < safe.length; i++) seed += safe.charCodeAt(i);
+    return seed;
+  }
+
+  function di_compute(name) {
+    const safe = (name || 'DUAL').trim() || 'DUAL';
+    const seed = di_seed(safe);
+    const h1 = seed % 360;
+    const h2 = (seed * 37) % 360;
+    const tone = h1 > 180 ? 'warm' : 'cool';
+    const mode = seed % 2 === 0 ? 'fusion' : 'classic';
+    return { safe, seed, h1, h2, tone, mode };
+  }
+
+  function di_applyRootVars(name) {
+    const data = di_compute(name);
+    DI.state = data;
+    const root = document.documentElement;
+
+    root.style.setProperty('--kob-voice-primary', `hsl(${data.h1} 100% 55%)`);
+    root.style.setProperty('--kob-voice-secondary', `hsl(${data.h2} 90% 45%)`);
+    root.style.setProperty('--arch-color', `hsl(${data.h1} 100% 55%)`);
+    root.style.setProperty('--grad-a', `hsl(${data.h1} 100% 55%)`);
+    root.style.setProperty('--grad-b', `hsl(${data.h2} 90% 45%)`);
+
+    root.dataset.diName = data.safe;
+    root.dataset.arch = data.safe;
+    root.dataset.tone = data.tone;
+    root.dataset.mode = data.mode;
+  }
+
+  function di_makeOrbAvatar(name, size = 36) {
+    const data = di_compute(name);
+    const gid = 'g' + data.seed.toString(36);
+    return `
+      <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="${gid}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="hsl(${data.h1} 100% 55%)"/>
+            <stop offset="100%" stop-color="hsl(${data.h2} 90% 45%)"/>
+          </linearGradient>
+        </defs>
+        <rect width="32" height="32" rx="7" fill="#071018"/>
+        <circle cx="16" cy="16" r="9" fill="url(#${gid})" opacity="0.25"/>
+        <circle cx="16" cy="16" r="7" fill="url(#${gid})"/>
+        <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      </svg>
+    `;
+  }
+
+  function di_renderOrb(selector, name, size) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.classList.add('di-orb-shell');
+    el.style.setProperty('--orb-size', size + 'px');
+    el.dataset.arch = name;
+    el.innerHTML = di_makeOrbAvatar(name, size);
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'DUAL';
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+    di_applyRootVars(safe);
+
+    const setText = (sel, val) => {
+      const el = document.querySelector(sel);
+      if (el) el.textContent = val;
+    };
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    const keyName = activeKey ? activeKey.name : '--';
+
+    setText('#lblName', safe);
+    setText('#actName', safe);
+    setText('#smallText', safe);
+    setText('#hudStatus', safe);
+    setText('#smallIdent', keyName);
+    setText('#actBadge', activeKey ? `key:${keyName}` : 'v:--');
+
+    di_renderOrb('#main-orb', safe, 48);
+    di_renderOrb('#avatarTarget', safe, 64);
+    di_renderOrb('#smallMiniAvatar', safe, 24);
+    di_renderOrb('#actMiniAvatar', safe, 24);
+  }
+
+  function di_bindLiveName() {
+    const input = document.querySelector('#inputUser') || document.querySelector('#infodoseNameInput');
+    if (!input) return;
+
+    const initial = (input.value || localStorage.getItem('di_userName') || 'DUAL').trim() || 'DUAL';
+    input.value = initial;
+    di_syncNameUI(initial);
+
+    input.addEventListener('input', () => di_syncNameUI(input.value));
+    input.addEventListener('change', () => di_syncNameUI(input.value));
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  // Expor API pública
+  DI.applyRootVars = di_applyRootVars;
+  DI.makeOrbAvatar = di_makeOrbAvatar;
+  DI.renderOrb = di_renderOrb;
+  DI.syncNameUI = di_syncNameUI;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+
+</script><script>
+(function () {
+  function di_getSafeName() {
+    return (
+      (document.querySelector('#inputUser')?.value ||
+       document.querySelector('#infodoseNameInput')?.value ||
+       localStorage.getItem('di_userName') ||
+       localStorage.getItem('userName') ||
+       'DUAL')
+      .trim() || 'Convidado'
+    );
+  }
+
+  function di_setText(sel, value) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = value;
+  }
+
+  function di_setHtml(sel, html) {
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = html;
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'Convidado';
+
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+
+    di_setText('#lblName', safe);
+    di_setText('#actName', safe);
+    di_setText('#smallText', safe);
+    di_setText('#hudStatus', safe);
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    di_setText('#smallIdent', activeKey ? activeKey.name : '--');
+    di_setText('#actBadge', activeKey ? `key:${activeKey.name}` : 'v:--');
+
+    const mainOrb = document.querySelector('#main-orb');
+    if (mainOrb && typeof window.makeOrbAvatar === 'function') {
+      mainOrb.innerHTML = window.makeOrbAvatar(safe, 48);
+    }
+
+    const avatarTarget = document.querySelector('#avatarTarget');
+    if (avatarTarget && typeof window.makeOrbAvatar === 'function') {
+      avatarTarget.innerHTML = window.makeOrbAvatar(safe, 64);
+    }
+
+    const smallMiniAvatar = document.querySelector('#smallMiniAvatar');
+    if (smallMiniAvatar && typeof window.makeOrbAvatar === 'function') {
+      smallMiniAvatar.innerHTML = window.makeOrbAvatar(safe, 24);
+    }
+
+    const actMiniAvatar = document.querySelector('#actMiniAvatar');
+    if (actMiniAvatar && typeof window.makeOrbAvatar === 'function') {
+      actMiniAvatar.innerHTML = window.makeOrbAvatar(safe, 36);
+    }
+  }
+
+  function di_bindLiveName() {
+    const inputs = [
+      document.querySelector('#inputUser'),
+      // document.querySelector('#infodoseNameInput')
+    ].filter(Boolean);
+
+    const initial = di_getSafeName();
+
+    inputs.forEach(inp => {
+      if (!inp) return;
+      if (!inp.value) inp.value = initial;
+
+      const onChange = () => di_syncNameUI(inp.value);
+      inp.addEventListener('input', onChange);
+      inp.addEventListener('change', onChange);
+    });
+
+    di_syncNameUI(initial);
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'di_userName' || e.key === 'userName') {
+        di_syncNameUI(e.newValue);
+      }
+    });
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  window.di_syncNameUI = di_syncNameUI;
+  window.di_bindLiveName = di_bindLiveName;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script><script>
+
+(function() {
+  window.DI = window.DI || {};
+
+  // Estado central
+  DI.state = {
+    name: 'DUAL',
+    seed: 0,
+    h1: 180,
+    h2: 320,
+    tone: 'cool',
+    mode: 'classic'
+  };
+
+  function di_seed(name) {
+    const safe = (name || 'DUAL').trim() || 'DUAL';
+    let seed = 0;
+    for (let i = 0; i < safe.length; i++) seed += safe.charCodeAt(i);
+    return seed;
+  }
+
+  function di_compute(name) {
+    const safe = (name || 'DUAL').trim() || 'DUAL';
+    const seed = di_seed(safe);
+    const h1 = seed % 360;
+    const h2 = (seed * 37) % 360;
+    const tone = h1 > 180 ? 'warm' : 'cool';
+    const mode = seed % 2 === 0 ? 'fusion' : 'classic';
+    return { safe, seed, h1, h2, tone, mode };
+  }
+
+  function di_applyRootVars(name) {
+    const data = di_compute(name);
+    DI.state = data;
+    const root = document.documentElement;
+
+    root.style.setProperty('--kob-voice-primary', `hsl(${data.h1} 100% 55%)`);
+    root.style.setProperty('--kob-voice-secondary', `hsl(${data.h2} 90% 45%)`);
+    root.style.setProperty('--arch-color', `hsl(${data.h1} 100% 55%)`);
+    root.style.setProperty('--grad-a', `hsl(${data.h1} 100% 55%)`);
+    root.style.setProperty('--grad-b', `hsl(${data.h2} 90% 45%)`);
+
+    root.dataset.diName = data.safe;
+    root.dataset.arch = data.safe;
+    root.dataset.tone = data.tone;
+    root.dataset.mode = data.mode;
+  }
+
+  function di_makeOrbAvatar(name, size = 36) {
+    const data = di_compute(name);
+    const gid = 'g' + data.seed.toString(36);
+    return `
+      <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="${gid}" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="hsl(${data.h1} 100% 55%)"/>
+            <stop offset="100%" stop-color="hsl(${data.h2} 90% 45%)"/>
+          </linearGradient>
+        </defs>
+        <rect width="32" height="32" rx="7" fill="#071018"/>
+        <circle cx="16" cy="16" r="9" fill="url(#${gid})" opacity="0.25"/>
+        <circle cx="16" cy="16" r="7" fill="url(#${gid})"/>
+        <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+      </svg>
+    `;
+  }
+
+  function di_renderOrb(selector, name, size) {
+    const el = document.querySelector(selector);
+    if (!el) return;
+    el.classList.add('di-orb-shell');
+    el.style.setProperty('--orb-size', size + 'px');
+    el.dataset.arch = name;
+    el.innerHTML = di_makeOrbAvatar(name, size);
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'DUAL';
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+    di_applyRootVars(safe);
+
+    const setText = (sel, val) => {
+      const el = document.querySelector(sel);
+      if (el) el.textContent = val;
+    };
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    const keyName = activeKey ? activeKey.name : '--';
+
+    setText('#lblName', safe);
+    setText('#actName', safe);
+ //   setText('#smallText', safe);
+//    setText('#hudStatus', safe);
+    setText('#smallIdent', keyName);
+    setText('#actBadge', activeKey ? `key:${keyName}` : 'v:--');
+
+    di_renderOrb('#main-orb', safe, 48);
+    di_renderOrb('#avatarTarget', safe, 64);
+    di_renderOrb('#smallMiniAvatar', safe, 24);
+    di_renderOrb('#actMiniAvatar', safe, 24);
+  }
+
+  function di_bindLiveName() {
+    const input = document.querySelector('#inputUser') || document.querySelector('#infodoseNameInput');
+    if (!input) return;
+
+    const initial = (input.value || localStorage.getItem('di_userName') || 'DUAL').trim() || 'DUAL';
+    input.value = initial;
+    di_syncNameUI(initial);
+
+    input.addEventListener('input', () => di_syncNameUI(input.value));
+    input.addEventListener('change', () => di_syncNameUI(input.value));
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  // Expor API pública
+  DI.applyRootVars = di_applyRootVars;
+  DI.makeOrbAvatar = di_makeOrbAvatar;
+  DI.renderOrb = di_renderOrb;
+  DI.syncNameUI = di_syncNameUI;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+
+</script><script>
+(function () {
+  function di_getSafeName() {
+    return (
+      (document.querySelector('#inputUser')?.value ||
+       document.querySelector('#infodoseNameInput')?.value ||
+       localStorage.getItem('di_userName') ||
+       localStorage.getItem('userName') ||
+       'DUAL')
+      .trim() || 'Convidado'
+    );
+  }
+
+  function di_setText(sel, value) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = value;
+  }
+
+  function di_setHtml(sel, html) {
+    const el = document.querySelector(sel);
+    if (el) el.innerHTML = html;
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'Convidado';
+
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+
+    di_setText('#lblName', safe);
+    di_setText('#actName', safe);
+  //  di_setText('#smallText', safe);
+ //   di_setText('#hudStatus', safe);
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    di_setText('#smallIdent', activeKey ? activeKey.name : '--');
+    di_setText('#actBadge', activeKey ? `key:${activeKey.name}` : 'v:--');
+
+    const mainOrb = document.querySelector('#main-orb');
+    if (mainOrb && typeof window.makeOrbAvatar === 'function') {
+      mainOrb.innerHTML = window.makeOrbAvatar(safe, 48);
+    }
+
+    const avatarTarget = document.querySelector('#avatarTarget');
+    if (avatarTarget && typeof window.makeOrbAvatar === 'function') {
+      avatarTarget.innerHTML = window.makeOrbAvatar(safe, 64);
+    }
+
+    const smallMiniAvatar = document.querySelector('#smallMiniAvatar');
+    if (smallMiniAvatar && typeof window.makeOrbAvatar === 'function') {
+      smallMiniAvatar.innerHTML = window.makeOrbAvatar(safe, 24);
+    }
+
+    const actMiniAvatar = document.querySelector('#actMiniAvatar');
+    if (actMiniAvatar && typeof window.makeOrbAvatar === 'function') {
+      actMiniAvatar.innerHTML = window.makeOrbAvatar(safe, 36);
+    }
+  }
+
+  function di_bindLiveName() {
+    const inputs = [
+      document.querySelector('#inputUser'),
+      document.querySelector('#infodoseNameInput')
+    ].filter(Boolean);
+
+    const initial = di_getSafeName();
+
+    inputs.forEach(inp => {
+      if (!inp) return;
+      if (!inp.value) inp.value = initial;
+
+      const onChange = () => di_syncNameUI(inp.value);
+      inp.addEventListener('input', onChange);
+      inp.addEventListener('change', onChange);
+    });
+
+    di_syncNameUI(initial);
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'di_userName' || e.key === 'userName') {
+        di_syncNameUI(e.newValue);
+      }
+    });
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  window.di_syncNameUI = di_syncNameUI;
+  window.di_bindLiveName = di_bindLiveName;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+</script></body></html>
