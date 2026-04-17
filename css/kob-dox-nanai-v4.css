@@ -971,10 +971,10 @@ body {
   backdrop-filter: var(--panel-blur);
   -webkit-backdrop-filter: var(--panel-blur);
   border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
-  border-radius: 32px;
+  /* border-radius: 32px; 
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
   transition: border-color 0.3s, opacity 0.3s, transform 0.3s;
-  overflow: hidden;
+  overflow: auto;
 }
 
 .fusion-card.hidden {
@@ -1088,6 +1088,49 @@ body {
   padding: 12px 4px;
 }
 */
+
+/* Fusion Card */
+.fusion-card {
+  background: var(--panel-bg);
+  backdrop-filter: var(--panel-blur);
+  -webkit-backdrop-filter: var(--panel-blur);
+  border: 1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+  /* border-radius: 32px; */
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.8);
+  transition: border-color 0.3s, opacity 0.3s, transform 0.3s;
+  overflow: auto;
+}
+
+.fusion-card.hidden {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+  pointer-events: none;
+}
+
+
+
+.avatar-slot {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--arch-color) 40%, black);
+  border: 2px solid var(--arch-color);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--arch-color) 50%, transparent);
+}
+
+
+.status-led {
+  display: inline-block;
+  background: var(--kob-voice-primary);
+  color: #000;
+  font-size: 0.6rem;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 700;
+  box-shadow: 0 0 8px var(--kob-voice-primary);
+}
+
+
 .trigger-btn {
   background: var(--kob-voice-primary);
   border: none;
