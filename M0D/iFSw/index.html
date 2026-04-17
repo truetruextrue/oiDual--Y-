@@ -1,25 +1,72 @@
-<html lang="pt-BR"><head>
-  <meta charset="UTF-8">
-  
-                <!-- PWA METADATA & VIEWPORT FIX -->
+<html lang="pt-BR"><head> 
+
+  <meta charset="utf-8">
+  <title>Fusion Card // Core Controller </title>
+
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#05070a">
-  <title>KOBLLUX Monolith - Shell Integrado</title>
+<meta name="theme-color" content="#0f0f11">
+
 <!-- iOS Support -->
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
 <link rel="apple-touch-icon" href="./icon-192.png">
 
 <!-- Manifest -->
 <link rel="manifest" href="./manifest.json">
-  
 
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/iFSw/css/iFSw-fix.css">
 
- 
+
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
 <style>
+    .kodux-range-override {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      z-index: 50; /* Garante que é clicável e está por cima */
+    }
+    
+    .kodux-range-override::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 16px;
+      height: 16px;
+      background: var(--primary, #00ffcc);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary, rgba(0,255,204,0.6));
+      cursor: grab;
+      transition: transform 0.1s ease;
+    }
+
+    .kodux-range-override::-webkit-slider-thumb:active {
+      cursor: grabbing;
+      transform: scale(1.3);
+    }
+
+    .kodux-range-override::-moz-range-thumb {
+      width: 16px;
+      height: 16px;
+      background: var(--primary, #00ffcc);
+      border-radius: 50%;
+      box-shadow: 0 0 10px var(--primary, rgba(0,255,204,0.6));
+      cursor: grab;
+      border: none;
+    }
+
+    .time-display {
+      text-shadow: 0 0 5px rgba(255,255,255,0.3);
+    }
+  </style>
+
+  
+  <style>
         :root {
           --z-base: 0;
           --z-content: 100;
@@ -27,208 +74,373 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/sDKHWm_nebula_styles.css">
-        
+      </style><style>
+ /* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
 
-<body class="field-closed mode-night">
- <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script>
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style></head>
+
+
+        <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+  
+  <body> 
   <!-- Ambient Blobs -->
   <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
   <div id="snap-zone"></div>
   <div class="toaster-wrap" id="toasterWrap"></div>
 
-  <!-- Distortion SVG Filter -->
-  <svg style="display: none;">
-    <filter id="distort">
-      <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"></feTurbulence>
-      <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"></feDisplacementMap>
-    </filter>
-  </svg>
+  <!-- CONTAINER PARA CENTRALIZAR INICIALMENTE -->
+  <div class="container">
+    <div class="fusion-card closed" id="mainCard">
 
-  <!-- Áudio Suave -->
-  <audio id="transitionSound" src="https://kodux78k.github.io/oiDual-oiio/suave_portal.mp3" preload="auto"></audio>
-
-  <!-- Partículas -->
-  <div id="particles-js"></div>
-
-  <!-- Logo com Transição -->
-  <div class="logo-container" id="logo" onclick="goToIndex()">
-    <object data="https://kodux78k.github.io/oiDual-oiio/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
-  </div>
-
-  <!-- Título e Frase -->
-  <div class="infodose">dual.<strong>Infodose</strong></div>
- 
-
-<svg style="display:none">
-    <symbol id="icon-orb" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="7"></circle>
-      <circle cx="12" cy="12" r="8"></circle>
-    </symbol>
-    <symbol id="icon-cards" viewBox="0 0 24 24">
-      <rect x="2" y="2" width="16" height="16" rx="2"></rect>
-      <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
-    </symbol>
-    <symbol id="icon-gem" viewBox="0 0 24 24">
-      <path d="M6 3h12l4 6-10 12L2 9z"></path>
-    </symbol>
-    <symbol id="icon-settings" viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="3"></circle>
-      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-    </symbol>
-    <symbol id="icon-send" viewBox="0 0 24 24">
-      <line x1="22" y1="2" x2="11" y2="13"></line>
-      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
-    </symbol>
-    <symbol id="icon-voice" viewBox="0 0 24 24">
-      <rect x="9" y="1" width="6" height="12" rx="3"></rect>
-      <path d="M5 10a7 7 0 0 0 14 0"></path>
-      <line x1="12" y1="19" x2="12" y2="23"></line>
-      <line x1="8" y1="23" x2="16" y2="23"></line>
-    </symbol>
-    <symbol id="icon-upload" viewBox="0 0 24 24">
-      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-      <polyline points="7 10 12 3 7 8"></polyline>
-      <line x1="12" y1="3" x2="12" y2="15"></line>
-    </symbol>
-  </svg>
-
-  <div class="sky-layer"><div class="sun-background"></div></div>
-  <div id="bg-fake-custom"></div>
-  <div id="nv-toast"></div>
-  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
-
-  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
-    <svg><use href="#icon-orb"></use></svg>
-  </div>
-
-  <div id="usernameDisplay"></div>
-
- 
-
-  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
-
-  <div id="drawerProfile" class="drawer" aria-hidden="true">
-    <div class="drawer-content">
-      <div class="drawer-header">
-        <h3>
-          <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
-          Cockpit Solar
-        </h3>
-        <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
-      </div>
-
-      <div class="drawer-body">
-        <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
-          <div class="cockpit-label">Ciclo Solar</div>
-          <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
-          <div class="control-row">
-            <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
-            <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
+      <div class="card-header" id="cardHeader">
+        <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+        <div class="text-block">
+          <div class="greeting-row">
+            <span class="txt-thin" id="lblHello">Oi,</span>
+            <span class="txt-heavy" id="lblName">Convidado</span>
           </div>
+          <div class="brand-dual">DUAL</div>
+        </div>
+        <div class="clock-widget">
+          <div class="time-display" id="clockTime">00:00</div>
+          <span class="status-led">ONLINE</span>
+        </div>
+        <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido"><i data-lucide="menu"></i></button>
+      </div>
+      
+      <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+      <div class="drag-handle"></div>
+
+
+     <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+        <div class="mini-avatar" id="smallMiniAvatar"></div>
+        <div class="small-text" id="smallText">Aguardando ativação...</div>
+        <div class="ident-badge" id="smallIdent">--</div>
+      </div>  
+
+      <div class="card-body" id="cardBody">
+        <!-- Main Input User -->
+        <div class="input-wrapper stagger-item">
+          <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
         </div>
 
-        <div class="cockpit-grid">
-          <div class="cockpit-item">
-            <div class="cockpit-label">Identificação</div>
-            <input type="text" id="inputUserId" class="cockpit-input" placeholder="Anônimo">
+        <!-- Section 1: ASCII Activation -->
+        <div class="activation-wrap stagger-item">
+          <div class="activation-toggle" onclick="toggleSection('activationCard')">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+              <strong style="letter-spacing:1px;font-size:0.9rem">Ativação ASCII</strong>
+            </div>
+            <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">BASE v1</div>
           </div>
-
-          <div class="cockpit-item">
-            <div class="cockpit-label">Modelo IA</div>
-            <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
-          </div>
-
-          <div class="cockpit-item">
-            <div class="cockpit-label">Background</div>
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span id="bgStatusText" style="font-size:0.8rem;color:var(--text-muted)">Nenhum</span>
-              <label class="btn-icon" style="width:30px;height:30px;border-radius:5px;">
-                <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
-                <svg><use href="#icon-cards"></use></svg>
-              </label>
+          <div id="activationCard" class="activation-card activation-hidden">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="mini-avatar" id="actMiniAvatar"></div>
+                <div><div style="font-weight:700">CÉREBRO</div><div style="font-size:0.78rem;opacity:0.6"><span id="actName">User</span></div></div>
+              </div>
+              <div class="activation-badge" id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:0.8em">v:--</div>
+            </div>
+            <pre id="actPre" class="activation-pre">Carregando...</pre>
+            <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+              <button class="trigger-btn" id="copyActBtn">COPIAR</button>
             </div>
           </div>
+        </div>
 
-          <div id="bgThumbPanel" style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:15px;"></div>
+        <!-- Section 2: System & Neural (Config) -->
+        <div class="activation-wrap stagger-item">
+            <div class="activation-toggle" onclick="toggleSection('systemCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                  <strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong>
+                </div>
+                <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+            </div>
+            <div id="systemCard" class="activation-card activation-hidden">
+                <div class="col">
+                   <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                   <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                   <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="model-toggle">
+                      <select id="modelSelect" class="btn">
+                        <option value="" disabled="">Selecione Modelo</option>
+                        <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                        <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                        <option value="mistralai/devstral-2512:free">DevStral</option>
+                        <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                      </select>
+                   </div>
+                   
+                   <div class="panel-divider" style="margin:10px 0; border-top:1px solid rgba(255,255,255,0.05)"></div>
+                   <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stagger-item" style="margin-top:4px">
+            <div class="stat-lbl" style="margin-bottom:6px; font-size:0.6rem; color:rgba(255,255,255,0.4)">INTERFACE MODE</div>
+            <div style="display:flex; gap:8px;">
+                <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
+                <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
+                <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
+            </div> 
+        </div>
+
+      </div> 
+    </div>
+  </div>
+
+  <!-- KEYS MANAGER MODAL -->
+  <div id="keysModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card" role="dialog">
+      <div class="keys-header">
+        <div>
+          <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+        </div>
+        <button id="closeKeysBtn" class="small-btn">X</button>
+      </div>
+      <div class="key-list" id="keyList"></div>
+      <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div class="form-grid">
+          <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+          <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+        </div>
+        <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)">ADICIONAR CHAVE</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+          <i data-lucide="shield-check" style="width:14px"></i> <span id="vaultStatusText">Cofre Aberto</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button>
         </div>
       </div>
     </div>
   </div>
 
-  
- 
- <!-- Seus Scripts Originais -->
-  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
-  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script> 
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
-  
-<!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
--->
- </head>
-
-<body class="ui-safe-vertical">
-  <div id="kxtsk-shell">
-    <div class="os-topbar">
-      <div class="os-brand">
-        KxTsK
-        <small>Unified Patch Loader</small>
-      </div>
-
-      <div class="top-actions">
-        <button class="launcher-btn" id="openKobBtn">+ Abrir KOB</button>
-        <button class="soft-btn" id="openLogsBtn">Logs</button>
-      </div>
-    </div>
-
-    <div id="dock"></div>
-
-    <div id="stackWrap">
-      <div class="session-window collapsed" id="session-iframe">
-        <div class="win-hdr" onclick="handleHeaderClick(event, 'session-iframe')">
-          <div class="win-title">🌐 DUAL H0 // KOB LV BASE</div>
-
-          <div class="win-controls" onclick="event.stopPropagation()">
-            <button onclick="toggleCollapse('session-iframe')" title="Colapsar">—</button>
-            <button onclick="toggleMaximize('session-iframe')" title="Maximizar">⬜</button>
-            <button onclick="minimizeWindow('session-iframe')" title="Minimizar para o Dock">🔘</button>
-            <button onclick="closeWindow('session-iframe')" title="Fechar">✕</button>
-          </div>
-        </div>
-
-        <iframe class="win-frame" src="https://kodux78k.github.io/oiDual-H0/DH0-10.html" sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-popups-to-escape-sandbox" allow="fullscreen; accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture" loading="lazy">
-        </iframe>
+  <!-- VAULT UNLOCK MODAL -->
+  <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card">
+      <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+      <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+      <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+      <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+      <div style="display:flex;gap:8px;justify-content:center">
+         <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+         <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
       </div>
     </div>
   </div>
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
-
- 
 
 
-<script src="https://unpkg.com/lucide@latest"></script><script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script><script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script><script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/0-inline-000.js"></script>
+<script> // 🔥 HASH CORE (mais estável e distribuído)
+const hashStr = s => {
+  let h = 0xdeadbeef;
+  for (let i = 0; i < s.length; i++) {
+    h = Math.imul(h ^ s.charCodeAt(i), 2654435761);
+  }
+  return (h ^ (h >>> 16)) >>> 0;
+};
 
+// 🔥 STYLE INJECTOR (idempotente)
+function injectOrbStyles() {
+  if (document.getElementById('dual-orb-styles')) return;
 
+  const style = document.createElement('style');
+  style.id = 'dual-orb-styles';
+  style.innerHTML = `
+    @keyframes orbBreathe {
+      0%,100% { transform: scale(1); opacity:.85; filter:brightness(1); }
+      50% { transform: scale(1.08); opacity:1; filter:brightness(1.3); }
+    }
+    @keyframes orbSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes orbPulse {
+      0% { transform: scale(.7); opacity:.5; }
+      100% { transform: scale(1.3); opacity:0; }
+    }
 
-<script src="https://kodux78k.github.io/oiDual--Y-/js/0RB-0S17.js"></script>
+    .dual-orb {
+      cursor:pointer;
+      transition:transform .3s cubic-bezier(.175,.885,.32,1.275);
+    }
+    .dual-orb:active { transform:scale(.9); }
 
+    .orb-glow {
+      animation: orbBreathe var(--orb-speed,4s) ease-in-out infinite;
+      transform-origin:center;
+    }
+    .orb-ring {
+      animation: orbSpin var(--orb-spin-speed,12s) linear infinite;
+      transform-origin:center;
+    }
+    .orb-pulse {
+      animation: orbPulse var(--orb-pulse-speed,2s) cubic-bezier(.2,.8,.2,1) infinite;
+      transform-origin:center;
+    }
 
+    .dual-orb:hover .orb-glow { animation-duration:1.5s!important; }
+    .dual-orb:hover .orb-ring { animation-duration:4s!important; }
+    .dual-orb:hover .orb-pulse { animation-duration:1s!important; }
+  `;
+  document.head.appendChild(style);
+}
+
+// 🔥 UNIVERSAL ORB GENERATOR (FINAL FUSION)
+function makeOrbAvatar(name = 'DUAL', size = 64) {
+  injectOrbStyles();
+
+  const seed = hashStr(name || 'DUAL');
+
+  // 🎨 HUE derivado + fallback pro tema
+  const baseHue = seed % 360;
+  const accentHue = (seed * 1.618) % 360;
+
+  // usa variável global se quiser forçar cor do sistema
+  const usePrimary = getComputedStyle(document.documentElement)
+    .getPropertyValue('--kob-voice-primary')
+    .trim();
+
+  const h1 = usePrimary ? null : baseHue;
+  const h2 = usePrimary ? null : accentHue;
+
+  const id = 'orb_' + seed.toString(36);
+
+  return `
+  <svg width="${size}" height="${size}" viewBox="0 0 100 100" class="dual-orb" id="${id}">
+    <defs>
+      <radialGradient id="${id}_core">
+        <stop offset="0%" stop-color="${usePrimary || `hsl(${h1},100%,65%)`}"/>
+        <stop offset="60%" stop-color="${usePrimary || `hsl(${h2},90%,40%)`}"/>
+        <stop offset="100%" stop-color="${usePrimary || `hsl(${h2},100%,10%)`}" stop-opacity="0"/>
+      </radialGradient>
+
+      <linearGradient id="${id}_ring">
+        <stop offset="0%" stop-color="${usePrimary || `hsl(${h1},100%,75%)`}"/>
+        <stop offset="100%" stop-color="${usePrimary || `hsl(${h2},100%,55%)`}"/>
+      </linearGradient>
+    </defs>
+
+    <!-- base -->
+    <circle cx="50" cy="50" r="46" fill="var(--bg, #05070c)"/>
+
+    <!-- pulse -->
+    <circle cx="50" cy="50" r="38"
+      fill="none"
+      stroke="url(#${id}_ring)"
+      stroke-width="1"
+      class="orb-pulse"/>
+
+    <!-- glow -->
+    <circle cx="50" cy="50" r="42"
+      fill="url(#${id}_core)"
+      class="orb-glow"/>
+
+    <!-- ring -->
+    <circle cx="50" cy="50" r="46"
+      fill="none"
+      stroke="url(#${id}_ring)"
+      stroke-width="2.5"
+      stroke-dasharray="70 20 10 30"
+      stroke-linecap="round"
+      class="orb-ring"
+      opacity="0.85"/>
+
+    <!-- core -->
+    <circle cx="50" cy="50" r="8" fill="#fff" opacity="0.3" filter="blur(2px)"/>
+    <circle cx="50" cy="50" r="3" fill="#fff" opacity="0.8"/>
+  </svg>
+  `;
+}
+
+window.makeOrbAvatar = makeOrbAvatar;</script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://w.soundcloud.com/player/api.js"></script>
 
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-sw.css">
+
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+
+        <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
+
+
+
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
 
@@ -240,10 +452,11 @@
 
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
 
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-2.js"></script>
 
 -->
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-2.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
 
   <style>
     :root {
@@ -267,14 +480,14 @@
     [data-idle-target]{
       transition: transform .35s ease, opacity .65s ease;
       will-change: transform, opacity;
-      box-shadow: none !important;
+      box-shadow: none !important; z-index:0;
     }
 
     .kob-tts-dock.idle,
     #kodux-widget.idle,
     [data-idle-target].idle{
       opacity: .18;
-      transform: scale(.87);
+      transform: scale(.78);
     }
 
     .kob-tts-dock:hover,
@@ -299,7 +512,7 @@
 -->
 
 
-  <!-- Ambient Blobs -->
+  <!-- Ambient Blobs --
   <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
   <div id="snap-zone"></div>
   <div class="toaster-wrap" id="toasterWrap"></div>
@@ -331,18 +544,18 @@
 
 
 
-    </div>
+    
 
     <div id="root">
       <div class="wrap">
         <div class="content">
-          <iframe id="frame" src="https://kodux78k.github.io/oiDual-VwR/index.html"></iframe>
+          <iframe id="frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/VWRDI/index.html"></iframe>
           <div id="kob-tts-outline"></div>
         </div>
 
         <div class="symbol-bar floating" id="symbolBar">
           <div class="toggle-wrap">
-            <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+            <button class="symbol-button tts-orb-mini main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
           </div>
 
           <div class="symbol-wrap">
@@ -368,7 +581,7 @@
           </button>
 
  <div class="symbol-wrap">
-          <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual-VwR/index.html">Φ</button>
+          <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/VWRDI/index.html">Φ</button>
         </div>
         <div class="symbol-wrap">
           <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">꩜</button>
@@ -389,128 +602,344 @@
 
 
         </div>
-      </div>
-    </div>
+      
+    
 
 
- <!-- === OVERLAY DE ARQUÉTIPOS (áudio/tts) === -->
+
 
 
 
 
     <div id="yt-container" class="absolute -left-[9999px]"></div>
-    <div id="sc-container" class="absolute -left-[9999px]"></div>
-    <audio id="local-audio" crossorigin="anonymous"></audio>
+  <div id="sc-container" class="absolute -left-[9999px]"></div>
+  <audio id="local-audio" crossorigin="anonymous"></audio>
 
-    <div id="kodux-widget" data-idle-target class="state-ball" style="right: 20px; bottom: 100px;">
-      <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
-        <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration: 4s; font-size: 28px;"></i>
+  <div id="kodux-widget" class="state-ball" style="right: 20px; bottom: 100px;">
+    <div id="content-ball" class="w-full h-full flex items-center justify-center text-[var(--primary)]">
+      <i class="ph-fill ph-vinyl-record animate-spin" style="animation-duration: 4s; font-size: 28px;"></i>
+    </div>
+
+    <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
+      <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg preview-clickable cursor-pointer transition-transform hover:scale-105" onclick="openFullFromPreview(event)">
+      <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
+        <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
+        <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
       </div>
+      <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10">
+        <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+      </button>
+    </div>
 
-      <div id="content-preview" class="hidden-content w-full h-full flex items-center px-3 gap-3">
-        <img id="prev-cover" src="https://picsum.photos/100" class="w-12 h-12 rounded-full object-cover border border-[var(--primary)] shadow-lg preview-clickable cursor-pointer transition-transform hover:scale-105" onclick="openFullFromPreview(event)">
-        <div class="flex-1 overflow-hidden preview-clickable cursor-pointer" onclick="openFullFromPreview(event)">
-          <h4 id="prev-title" class="text-[11px] font-bold text-white truncate glow-text">Kodux System</h4>
-          <p id="prev-artist" class="text-[9px] text-[var(--muted)] truncate">Aguardando...</p>
+    <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
+      <div class="absolute top-0 left-0 w-full h-1.5 bg-white/10 cursor-pointer hover:h-2 transition-all" id="footer-progress-click">
+        <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)] pointer-events-none"></div>
+      </div>
+      <div class="drag-header flex-1 flex items-center px-6 gap-4">
+        <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
+        <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
+          <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
+          <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
         </div>
-        <button onclick="togglePlay(event)" class="text-white hover:text-[var(--primary)] transition z-10">
-          <i id="prev-play-icon" class="ph-fill ph-play-circle text-4xl"></i>
+        <div class="flex items-center gap-5">
+          <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
+          <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
+          <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
+          <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
+      <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
+        <div class="flex items-center gap-3">
+          <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
+          <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
+        </div>
+        <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
+          <i class="ph ph-caret-down-bold"></i>
         </button>
       </div>
 
-      <div id="content-footer" class="hidden-content w-full h-full flex flex-col relative">
-        <div class="absolute top-0 left-0 w-full h-1 bg-white/5 cursor-pointer" id="footer-progress-click">
-          <div id="footer-progress-bar" class="h-full bg-[var(--primary)] w-0 shadow-[0_0_10px_var(--primary)]"></div>
+      <div class="flex-1 overflow-y-auto p-5 pb-40 soft-scroll">
+        <div class="mb-4">
+          <div class="flex items-center gap-2 overflow-x-auto pb-2 soft-scroll" id="playlist-tabs"></div>
         </div>
 
-        <div class="drag-header flex-1 flex items-center px-6 gap-4">
-          <img id="foot-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl object-cover shadow-xl border border-white/10">
-          <div class="flex-1 overflow-hidden cursor-pointer" onclick="updateWidgetState('full')">
-            <h4 id="foot-title" class="text-sm font-bold text-white truncate">Kodux System</h4>
-            <p id="foot-artist" class="text-xs text-[var(--muted)] truncate">Aguardando...</p>
+        <div class="flex gap-2 mb-4">
+          <div class="flex-1 relative">
+            <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+            <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
           </div>
-          <div class="flex items-center gap-5">
-            <button onclick="playPrev(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-back text-2xl"></i></button>
-            <button onclick="togglePlay(event)" class="text-white hover:scale-110 transition"><i id="foot-play-icon" class="ph-fill ph-play-circle text-5xl"></i></button>
-            <button onclick="playNext(event)" class="text-[var(--muted)] hover:text-white"><i class="ph-fill ph-skip-forward text-2xl"></i></button>
-            <button onclick="collapseToBall(event)" class="text-[var(--muted)] ml-2"><i class="ph ph-minus-circle text-2xl"></i></button>
-          </div>
-        </div>
-      </div>
-
-      <div id="content-full" class="hidden-content flex flex-col w-full h-full relative">
-        <div class="drag-header w-full p-5 flex justify-between items-center bg-white/5 border-b border-white/5">
-          <div class="flex items-center gap-3">
-            <i class="ph-fill ph-lightning text-[var(--primary)] text-xl"></i>
-            <span class="text-sm font-black tracking-widest glow-text">ORÁCULO DUAL</span>
-          </div>
-          <button onclick="collapseToBall(event)" class="text-[var(--muted)] hover:text-white p-2 bg-white/5 rounded-lg">
-            <i class="ph ph-caret-down-bold"></i>
+          <select id="destination-select" class="glass-select rounded-xl px-3 text-xs min-w-[135px]">
+            <option value="all">Todas</option>
+          </select>
+          <button onclick="addLink()" class="btn-primary px-4 rounded-xl shadow-lg">
+            <i class="ph ph-plus-bold"></i>
           </button>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-5 pb-36 soft-scroll">
-          <div class="mb-4">
-            <div class="flex items-center gap-2 overflow-x-auto pb-2 soft-scroll" id="playlist-tabs"></div>
+        <div class="flex gap-2 mb-4 items-center">
+          <div class="flex-1 relative">
+            <i class="ph ph-folder-simple absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
+            <input type="text" id="new-playlist-input" placeholder="Criar nova playlist" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
           </div>
-
-          <div class="flex gap-2 mb-4">
-            <div class="flex-1 relative">
-              <i class="ph ph-link absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
-              <input type="text" id="link-input" placeholder="YouTube ou SoundCloud link" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
-            </div>
-            <select id="destination-select" class="glass-select rounded-xl px-3 text-xs min-w-[135px]">
-              <option value="all">Todas</option>
-            </select>
-            <button onclick="addLink()" class="btn-primary px-4 rounded-xl shadow-lg">
-              <i class="ph ph-plus-bold"></i>
-            </button>
-          </div>
-
-          <div class="flex gap-2 mb-4 items-center">
-            <div class="flex-1 relative">
-              <i class="ph ph-folder-simple absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted)]"></i>
-              <input type="text" id="new-playlist-input" placeholder="Criar nova playlist" class="glass-input w-full rounded-xl pl-10 pr-4 py-3 text-xs">
-            </div>
-            <button onclick="createPlaylist()" class="btn-primary px-4 rounded-xl shadow-lg">
-              <i class="ph ph-folder-plus"></i>
-            </button>
-          </div>
-
-          <div class="flex items-center justify-between mb-3">
-            <div>
-              <h3 class="text-sm font-bold text-white">Playlists carregadas</h3>
-              <p class="text-[10px] text-[var(--muted)]">Toque para trocar de grupo, criar, remover ou organizar.</p>
-            </div>
-          </div>
-
-          <div id="playlist-container" class="flex flex-col gap-3"></div>
+          <button onclick="createPlaylist()" class="btn-primary px-4 rounded-xl shadow-lg">
+            <i class="ph ph-folder-plus"></i>
+          </button>
         </div>
 
-        <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6">
-          <input type="range" id="main-progress" min="0" max="100" value="0" class="w-full mb-4">
-          <div class="flex items-center justify-between gap-4">
-            <div class="flex items-center gap-4 overflow-hidden">
-              <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
-              <div class="overflow-hidden">
-                <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
-                <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
-              </div>
+        <div class="flex items-center justify-between mb-3">
+          <div>
+            <h3 class="text-sm font-bold text-white">Playlists carregadas</h3>
+            <p class="text-[10px] text-[var(--muted)]">Toque para trocar de grupo, criar, remover ou organizar.</p>
+          </div>
+        </div>
+
+        <div id="playlist-container" class="flex flex-col gap-3"></div>
+      </div>
+
+      <div class="absolute bottom-0 left-0 w-full bg-black/80 backdrop-blur-xl border-t border-[var(--primary)] p-6 pt-8">
+        
+        <!-- OVERRIDE HTML: Estrutura do Progresso com Tempo Atual e Total -->
+        <div class="relative w-full mb-6">
+          <div class="flex justify-between text-[11px] font-mono text-[var(--primary)] time-display absolute -top-6 w-full px-1 pointer-events-none">
+            <span id="kodux-time-current">00:00</span>
+            <span id="kodux-time-total">00:00</span>
+          </div>
+          <input type="range" id="main-progress" min="0" max="100" value="0" step="0.1" class="w-full kodux-range-override">
+        </div>
+        <!-- FIM OVERRIDE HTML -->
+
+        <div class="flex items-center justify-between gap-4">
+          <div class="flex items-center gap-4 overflow-hidden">
+            <img id="main-cover" src="https://picsum.photos/100" class="w-14 h-14 rounded-xl border border-white/20 object-cover">
+            <div class="overflow-hidden">
+              <h4 id="main-title" class="text-sm font-bold text-white truncate">Oráculo</h4>
+              <p id="main-artist" class="text-[10px] text-[var(--muted)] truncate">Sistema KODUX v2.5</p>
             </div>
-            <div class="flex items-center gap-5 shrink-0">
-              <button onclick="playPrev()" class="text-white text-2xl"><i class="ph-fill ph-skip-back"></i></button>
-              <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)]">
-                <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
-              </button>
-              <button onclick="playNext()" class="text-white text-2xl"><i class="ph-fill ph-skip-forward"></i></button>
-            </div>
+          </div>
+          <div class="flex items-center gap-5 shrink-0">
+            <button onclick="playPrev()" class="text-white text-2xl hover:text-[var(--primary)] transition"><i class="ph-fill ph-skip-back"></i></button>
+            <button onclick="togglePlay()" class="w-14 h-14 rounded-full bg-[var(--primary)] text-black flex items-center justify-center shadow-[0_0_20px_var(--primary)] hover:scale-105 transition-transform">
+              <i id="main-play-icon" class="ph-fill ph-play text-3xl ml-1"></i>
+            </button>
+            <button onclick="playNext()" class="text-white text-2xl hover:text-[var(--primary)] transition"><i class="ph-fill ph-skip-forward"></i></button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
+
+
+
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
+
+<!-- SCRIPT ORIGINAL (Mantido) -->
+
+
+  <!-- OVERRIDE JS: Sistema Avançado de Seek e Tempos -->
+  <script>
+    (function() {
+      window.addEventListener('load', () => {
+        // Aguarda 1.5s para garantir que o ss5.js criou os iframes (YouTube/SoundCloud)
+        setTimeout(() => {
+          const mainProgress = document.getElementById('main-progress');
+          const timeCurrent = document.getElementById('kodux-time-current');
+          const timeTotal = document.getElementById('kodux-time-total');
+          const localAudio = document.getElementById('local-audio');
+          const footerClick = document.getElementById('footer-progress-click');
+          const footerBar = document.getElementById('footer-progress-bar');
+
+          let isDragging = false;
+          let activeDuration = 0;
+          let scWidgetCache = null;
+
+          // Formatar segundos para MM:SS
+          const formatTime = (seconds) => {
+            if (!seconds || isNaN(seconds)) return "00:00";
+            const m = Math.floor(seconds / 60);
+            const s = Math.floor(seconds % 60);
+            return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+          };
+
+          const updateTimeUI = (current, total) => {
+            if (timeCurrent) timeCurrent.innerText = formatTime(current);
+            if (timeTotal) timeTotal.innerText = formatTime(total);
+          };
+
+          // HACK: Interceptar a tentativa do ss5.js de atualizar a barra enquanto o utilizador a arrasta
+          if (mainProgress) {
+            const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+            Object.defineProperty(mainProgress, 'value', {
+              get: function() { return originalDescriptor.get.call(this); },
+              set: function(val) {
+                // Só permite que o script original mova a barra se o utilizador não estiver a mexer nela
+                if (!isDragging) {
+                  originalDescriptor.set.call(this, val);
+                  if (footerBar) footerBar.style.width = `${val}%`;
+                }
+              }
+            });
+          }
+
+          // Obter ou instanciar a API do SoundCloud
+          const getSCWidget = () => {
+            if (scWidgetCache) return scWidgetCache;
+            const iframe = document.querySelector('#sc-container iframe');
+            if (iframe && window.SC) scWidgetCache = SC.Widget(iframe);
+            return scWidgetCache;
+          };
+
+          // Função que descobre quem está a tocar e extrai a duração/tempo atual
+          const syncTimers = () => {
+            // 1. Verificar Áudio Local
+            if (localAudio && localAudio.duration && !localAudio.paused) {
+              activeDuration = localAudio.duration;
+              if (!isDragging) updateTimeUI(localAudio.currentTime, activeDuration);
+              return;
+            }
+
+            // 2. Verificar YouTube (Tenta as variáveis globais mais comuns)
+            const yt = window.ytPlayer || window.player;
+            if (yt && typeof yt.getPlayerState === 'function') {
+              // Se o estado for 1 (A tocar) ou se já tivermos a duração
+              if (yt.getPlayerState() === 1 || yt.getDuration() > 0) {
+                activeDuration = yt.getDuration();
+                if (!isDragging) updateTimeUI(yt.getCurrentTime(), activeDuration);
+                return;
+              }
+            }
+
+            // 3. Verificar SoundCloud
+            const sc = getSCWidget();
+            if (sc) {
+              sc.isPaused((paused) => {
+                if (!paused) {
+                  sc.getDuration((dur) => {
+                    activeDuration = dur / 1000; // SC retorna milissegundos
+                    sc.getPosition((pos) => {
+                      if (!isDragging) updateTimeUI(pos / 1000, activeDuration);
+                    });
+                  });
+                }
+              });
+              return;
+            }
+
+            // 4. Fallback (Se nenhum for detetado, calcula com base na barra do ss5.js)
+            if (activeDuration > 0 && mainProgress && !isDragging) {
+              let pct = parseFloat(mainProgress.value || 0);
+              updateTimeUI((pct / 100) * activeDuration, activeDuration);
+            }
+          };
+
+          // Executa a sincronização frequentemente
+          setInterval(syncTimers, 500);
+
+          // Função mestre para injetar o comando de "Avançar" nas diversas APIs
+          const performSeek = (percent) => {
+            const pctDec = percent / 100;
+
+            // Dispara eventos nativos caso o ss5.js os esteja a ouvir
+            if (mainProgress) {
+              mainProgress.dispatchEvent(new Event('input', { bubbles: true }));
+              mainProgress.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+
+            // Forçar Avanço no Áudio Local
+            if (localAudio && localAudio.duration) {
+              localAudio.currentTime = pctDec * localAudio.duration;
+            }
+
+            // Forçar Avanço no YouTube
+            const yt = window.ytPlayer || window.player;
+            if (yt && typeof yt.seekTo === 'function') {
+              const dur = yt.getDuration() || activeDuration;
+              if (dur) yt.seekTo(pctDec * dur, true);
+            }
+
+            // Forçar Avanço no SoundCloud
+            const sc = getSCWidget();
+            if (sc) {
+              sc.getDuration((dur) => {
+                sc.seekTo(pctDec * dur); // SC aceita milissegundos
+              });
+            }
+          };
+
+          // Ligar os eventos do Slider
+          if (mainProgress) {
+            const handleDragStart = () => { isDragging = true; };
+            
+            const handleDragEnd = () => {
+              if (!isDragging) return;
+              isDragging = false;
+              performSeek(parseFloat(mainProgress.value));
+            };
+
+            const handleDragMove = () => {
+              if (isDragging && activeDuration > 0) {
+                const currentSec = (parseFloat(mainProgress.value) / 100) * activeDuration;
+                updateTimeUI(currentSec, activeDuration);
+              }
+            };
+
+            // Eventos Desktop
+            mainProgress.addEventListener('mousedown', handleDragStart);
+            mainProgress.addEventListener('mouseup', handleDragEnd);
+            mainProgress.addEventListener('change', handleDragEnd);
+            
+            // Eventos Mobile/Touch
+            mainProgress.addEventListener('touchstart', handleDragStart, { passive: true });
+            mainProgress.addEventListener('touchend', handleDragEnd);
+            
+            // Durante o arrasto (atualizar texto)
+            mainProgress.addEventListener('input', handleDragMove);
+          }
+
+          // Ligar o clique na mini-barra do footer (quando minimizado)
+          if (footerClick) {
+            footerClick.addEventListener('click', (e) => {
+              const rect = footerClick.getBoundingClientRect();
+              const x = e.clientX - rect.left;
+              const percent = (x / rect.width) * 100;
+              
+              if (footerBar) footerBar.style.width = `${percent}%`;
+              
+              if (mainProgress) {
+                // Atualiza o slider principal escondido contornando o nosso bloqueio
+                const originalDescriptor = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value');
+                originalDescriptor.set.call(mainProgress, percent);
+              }
+              
+              performSeek(percent);
+            });
+          }
+
+        }, 1500); // Fim do setTimeout
+      });
+    })();
+  </script>
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+
+
+
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
@@ -558,9 +987,53 @@
       resetIdle();
     })();
   </script>
+
+
+
+<style>
+
+#main-orb svg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+color: var(--kob-voice-primary);
+background: var(--kob-voice-bg-soft);
+border: 4px;
+border-color: var(--ink);
+border-radius: 9999px;
+
+}
+
+</style>
+
+<script>
+
+// 🔒 SAFE ORB INJECTION (non-breaking)
+(function injectOrbSafe() {
+  const target = document.querySelector('#main-orb');
+  if (!target || target.dataset.orbInjected) return;
+
+  // mantém fallback original caso algo dê errado
+  try {
+    const name =
+      localStorage.getItem('di_userName') ||
+      localStorage.getItem('userName') ||
+      'DUAL';
+
+    target.innerHTML = makeOrbAvatar(name, 48);
+    target.dataset.orbInjected = "true";
+  } catch (e) {
+    console.warn('orb inject fail → fallback mantido', e);
+  }
+})();
+
+</script>
+
+
+
   
-  
-  <style>
+
+<style>
 
  #btn-arch #main-orb{
        
@@ -611,8 +1084,8 @@ height: 56px;
 
     di_setText('#lblName', safe);
     di_setText('#actName', safe);
-    // di_setText('#smallText', safe);
-    di_setText('#hudStatus', safe);
+  //  di_setText('#smallText', safe);
+  //  di_setText('#hudStatus', safe);
 
     const activeKey = window.STATE?.keys?.find?.(k => k.active);
     di_setText('#smallIdent', activeKey ? activeKey.name : '--');
@@ -642,7 +1115,7 @@ height: 56px;
   function di_bindLiveName() {
     const inputs = [
       document.querySelector('#inputUser'),
-      document.querySelector('#infodoseNameInput')
+      // document.querySelector('#infodoseNameInput')
     ].filter(Boolean);
 
     const initial = di_getSafeName();
@@ -747,7 +1220,15 @@ height: 56px;
     orbPulse 0.5s ease-in-out infinite alternate;
 }
 
-</style></head><body><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script>
+</style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style></head><body><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script>
 
 // 🔥 ===============================
 // 🔥 ORB SYSTEM · CORE UNIFICADO
@@ -829,4 +1310,6 @@ function updateInterface(name){
 }
 
 </script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
-</body></html>
+      
+      
+      </body></html>
