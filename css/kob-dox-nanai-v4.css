@@ -925,6 +925,7 @@ body {
   transition: background 1.2s;
   pointer-events: none;
   opacity: 0.39;
+  mix-blend-mode: soft-light;
 }
 
 /* ===== STATUS BAR ===== */
