@@ -153,6 +153,14 @@ height: 56px;
           --z-overlay: 1000;
           --z-system: 5000;
         }
+      </style><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
       </style></head>
 <body>
 
@@ -1265,6 +1273,73 @@ resetIdle();
 </script>
 
 <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+
+<style>
+/* ===== DI FUSION LAYER — LOAD LAST ===== */
+#mainCard,
+#symbolBar {
+  transition:
+    transform .22s cubic-bezier(.2,.9,.3,1),
+    opacity .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease,
+    filter .22s ease;
+  will-change: transform, opacity, box-shadow, filter;
+}
+
+#mainCard.di-near-bar {
+  transform: scale(.965);
+  opacity: .82;
+  filter: saturate(1.05) brightness(.98);
+}
+
+#mainCard.di-fused {
+  transform: scale(.90);
+  opacity: .58;
+  filter: saturate(1.08) brightness(.92);
+}
+
+#symbolBar.di-fuse-glow {
+  border-color: color-mix(in srgb, var(--kob-voice-primary, #78e3ff) 62%, transparent);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--kob-voice-primary, #78e3ff) 38%, transparent),
+    0 0 18px color-mix(in srgb, var(--kob-voice-primary, #78e3ff) 30%, transparent),
+    0 0 42px color-mix(in srgb, var(--kob-voice-primary, #78e3ff) 18%, transparent);
+}
+
+#symbolBar.di-fuse-glow .symbol-button {
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--kob-voice-primary, #78e3ff) 22%, transparent));
+}
+
+#btn-arch.di-orb-returning {
+  transform: scale(.96);
+  opacity: .88;
+}
+
+#btn-arch.di-orb-returning .orb,
+#btn-arch.di-orb-returning #main-orb {
+  transform: scale(.94);
+  opacity: .85;
+}
+
+#btn-arch.di-orb-pulse {
+  animation: diOrbPulse .45s ease-out 1;
+}
+
+@keyframes diOrbPulse {
+  0%   { transform: scale(1); }
+  55%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+</style>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script> 
+
+
+
+
 
 
 </body></html>
