@@ -89,7 +89,7 @@
     
 
     makeOrbAvatar(name = "DUAL", size = 64) {
-      this.injectOrbStyles();
+      // this.injectOrbStyles();
 
       const safe = this.norm(name, "DUAL");
       const seed = this.hashStr(safe);
