@@ -1,4 +1,3 @@
-
 (() => {
   if (window.KoduxBrain?.__brainStable) return;
 
