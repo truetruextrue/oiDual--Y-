@@ -29,7 +29,7 @@
   // =========================================================
   // STYLE INJECTION
   // =========================================================
-  const ORB_STYLE_ID = 'dual-orb-styles';
+/*  const ORB_STYLE_ID = 'dual-orb-styles';
 
   function injectOrbStyles() {
     if (document.getElementById(ORB_STYLE_ID)) return;
@@ -105,7 +105,7 @@
     `;
     document.head.appendChild(style);
   }
-
+*/
   // =========================================================
   // COMPUTE / ROOT VARS
   // =========================================================
