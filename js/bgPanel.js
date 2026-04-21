@@ -37,7 +37,7 @@
     el.style.backgroundImage = dataUrl ? `url("${dataUrl}")` : '';
     // transição sutil
     el.style.transition = 'opacity 450ms ease, background-image 300ms ease';
-    el.style.opacity = dataUrl ? '0.39' : '0';
+    el.style.opacity = dataUrl ? '0.18' : '0';
     el.style.mixBlendMode = 'soft-light';
     el.style.filter = 'saturate(0.9) contrast(1.05)';
     // atualiza texto de status se existir
