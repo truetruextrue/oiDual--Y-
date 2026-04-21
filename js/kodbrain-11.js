@@ -70,15 +70,15 @@
     style.id = ORB_STYLE_ID;
     style.textContent = `
       .orb-wrap {
-        display: grid;
+        display: flex;
         place-items: center;
-        width: var(--orb-size, 36px);
-        height: var(--orb-size, 36px);
+        width: var(--orb-size, 56px);
+        height: var(--orb-size, 56px);
       }
       .orb-wrap svg {
         width: 100%;
         height: 100%;
-        display: block;
+        display: flex;
       }
       .orb-glow {
         opacity: 0.25;
