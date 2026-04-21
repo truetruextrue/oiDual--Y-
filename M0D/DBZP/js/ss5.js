@@ -490,7 +490,62 @@
       async function addLink() {
         const input = document.getElementById("link-input");
         const destination = document.getElementById("destination-select").value;
-        const url = input.value.trim();
+let url = input.value.trim(); // 👈 AQUI
+
+  // ==========================
+// NORMALIZA LINKS (SC + YT)
+// ==========================
+if (url.includes("soundcloud.com")) {
+  try {
+    const u = new URL(url);
+    u.hostname = "soundcloud.com"; // remove m.
+    u.search = ""; // limpa params lixo
+    url = u.toString();
+  } catch (e) {
+    url = url.replace("://m.soundcloud.com", "://soundcloud.com");
+  }
+}
+
+// ==========================
+// YOUTUBE NORMALIZER
+// ==========================
+if (
+  url.includes("youtube.com") ||
+  url.includes("youtu.be") ||
+  url.includes("youtube-nocookie.com")
+) {
+  try {
+    const u = new URL(url);
+
+    // remove m., music., etc
+    u.hostname = "youtube.com";
+
+    let id = null;
+
+    // formatos possíveis
+    if (u.pathname.startsWith("/watch")) {
+      id = u.searchParams.get("v");
+    } else if (u.hostname.includes("youtu.be")) {
+      id = u.pathname.slice(1);
+    } else if (u.pathname.startsWith("/shorts/")) {
+      id = u.pathname.split("/")[2];
+    } else if (u.pathname.startsWith("/embed/")) {
+      id = u.pathname.split("/")[2];
+    }
+
+    // limpa params inúteis
+    if (id) {
+      url = `https://youtu.be/${id}`;
+    }
+
+  } catch (e) {
+    // fallback bruto
+    url = url
+      .replace("://m.youtube.com", "://youtube.com")
+      .replace("://music.youtube.com", "://youtube.com");
+  }
+}
+
         if (!url) return;
 
         let newTrack = {
