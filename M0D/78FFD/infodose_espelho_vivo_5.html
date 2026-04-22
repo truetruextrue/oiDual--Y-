@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • 78Frames Catálogo</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root{
+      --kob-voice-primary:#ff4fa3;
+      --kob-voice-secondary:#2ab7ff;
+      --kob-voice-accent:#6b7cff;
+      --bg-page:#f6f8fc;
+      --bg-panel:#ffffff;
+      --bg-panel-soft:rgba(255,255,255,.78);
+      --bg-panel-strong:#ffffff;
+      --ink:#141824;
+      --text:#1f2430;
+      --text-soft:#64708a;
+      --line:rgba(20,24,36,.09);
+      --line-strong:rgba(42,183,255,.22);
+      --shadow:0 18px 50px rgba(20,24,36,.08);
+      --shadow-soft:0 10px 30px rgba(20,24,36,.06);
+      --radius:24px;
+      --radius-sm:16px;
+      --pill:#eef3ff;
+      --pill-ink:#2d3550;
+      --chip:#f3f6fb;
+      --chip-ink:#42506c;
+      --max:1260px;
+      --hero-grad: linear-gradient(135deg, rgba(255,79,163,.16), rgba(42,183,255,.12), rgba(107,124,255,.10));
+      --glass: blur(16px) saturate(170%);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.09), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.09), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg-page) 100%);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    a{color:inherit; text-decoration:none;}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 64px;}
+    
+    /* TOPBAR */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      position:sticky; top:10px; z-index:30;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      border-radius:999px;
+      padding:12px 16px;
+    }
+    .pill-logo{
+      width:44px; height:44px; flex:none;
+      border-radius:999px;
+      position:relative;
+      background:linear-gradient(180deg, #fefefe, #f1f5ff);
+      border:1px solid rgba(20,24,36,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8);
+      overflow:hidden;
+    }
+    .pill-logo:before, .pill-logo:after{
+      content:""; position:absolute; inset:7px; border-radius:999px; transform:rotate(-45deg);
+    }
+    .pill-logo:before{
+      background:linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #ffffff 50%, var(--kob-voice-secondary));
+      clip-path:polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%);
+      opacity:.95;
+    }
+    .pill-logo:after{
+      inset:14px; border-radius:999px;
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode:screen; opacity:.7;
+    }
+    .brand h1{
+      margin:0; font-size:13px; letter-spacing:.34em; text-transform:uppercase; color:#111827; font-weight:800;
+    }
+    .brand p{
+      margin:3px 0 0; font-size:12px; color:var(--text-soft); letter-spacing:.08em;
+    }
+    .nav{
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end;
+    }
+    .nav-count {
+      background:rgba(255,255,255,.78);
+      color:var(--pill-ink);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.05em;
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:var(--glass);
+    }
+
+    /* ENGINE CONTAINER ANIMATION */
+    #app-root {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* HERO */
+    .hero{
+      display:grid; grid-template-columns: 1.04fr .96fr; gap:20px; align-items:stretch; margin-top:18px;
+    }
+    .hero-card{
+      background:rgba(255,255,255,.82); backdrop-filter:var(--glass);
+      border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative;
+    }
+    .hero-media{
+      min-height:720px; background:#f3f6fb; position:relative;
+    }
+    .hero-media img{
+      width:100%; height:100%; object-fit:cover; display:block; filter:saturate(.95) contrast(1.02);
+      transition: opacity 0.4s ease;
+    }
+    .hero-media .badge{
+      position:absolute; left:18px; top:18px;
+      display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px;
+      background:rgba(255,255,255,.8); border:1px solid rgba(20,24,36,.08); color:var(--text);
+      font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; backdrop-filter:var(--glass);
+    }
+    .badge .dot{
+      width:9px; height:9px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(255,79,163,.1);
+    }
+    .side-note{
+      position:absolute; right:18px; bottom:18px;
+      display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:999px;
+      background:rgba(255,255,255,.82); border:1px solid var(--line); box-shadow:var(--shadow-soft);
+      font-size:12px; color:var(--text-soft); backdrop-filter:var(--glass); font-weight: 700;
+    }
+    .side-note .pulse{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 0 rgba(42,183,255,.35); animation:pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(42,183,255,.25)}
+      70%{box-shadow:0 0 0 12px rgba(42,183,255,0)}
+      100%{box-shadow:0 0 0 0 rgba(42,183,255,0)}
+    }
+    
+    .hero-copy{
+      padding:36px; display:flex; flex-direction:column; gap:24px; justify-content:center;
+    }
+    .kicker{
+      display:flex; align-items:center; gap:10px; color:var(--text-soft);
+      text-transform:uppercase; letter-spacing:.22em; font-weight:800; font-size:12px;
+    }
+    .kicker .line{height:1px; flex:1; background:linear-gradient(90deg, rgba(20,24,36,.12), transparent);}
+    .title{
+      margin:8px 0 0; font-size:clamp(38px, 4vw, 72px); line-height:.96; letter-spacing:-.05em; color:#151a26; text-wrap:balance;
+    }
+    .title .grad{
+      background:linear-gradient(90deg, var(--kob-voice-primary), #ffb15c 35%, var(--kob-voice-secondary) 68%, var(--kob-voice-accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .lead{
+      margin:0; font-size:18px; line-height:1.7; color:var(--text-soft); font-weight: 400;
+    }
+    .mini-pills{
+      display:flex; flex-wrap:wrap; gap:10px; margin-top: auto;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px;
+      background:var(--chip); border:1px solid var(--line); color:var(--chip-ink); font-size:13px; font-weight:700;
+    }
+
+    /* SECTIONS & PANELS */
+    .section{
+      margin-top:20px; background:rgba(255,255,255,.78); backdrop-filter:var(--glass);
+      border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-soft); overflow:hidden;
+    }
+    .section-head{
+      padding:24px; border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.70));
+    }
+    .section-head h2{
+      margin:0 0 6px; font-size:20px; letter-spacing:.12em; text-transform:uppercase; color:#182033;
+    }
+    .section-head span{color:var(--text-soft); font-size:14px}
+    .grid-2{
+      display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:18px;
+    }
+
+    .panel{
+      background:var(--bg-panel); border:1px solid var(--line); border-radius:22px;
+      box-shadow:0 12px 34px rgba(20,24,36,.05); overflow:hidden;
+    }
+    .panel .panel-h{
+      padding:24px 24px 0;
+    }
+    .panel .panel-h h3{
+      margin:0; font-size:16px; letter-spacing:.14em; text-transform:uppercase; color:#1a2131;
+    }
+    .panel .panel-h p{
+      margin:6px 0 0; font-size:14px; color:var(--text-soft);
+    }
+    .panel .panel-body{padding:24px;}
+    .summary-grid{
+      display:grid; grid-template-columns:1fr; gap:14px;
+    }
+    .summary{
+      border:1px solid var(--line); border-radius:18px; padding:20px;
+      background:linear-gradient(180deg, #fff, #fbfcff);
+    }
+    .summary .tag{
+      display:inline-flex; align-items:center; gap:8px; font-weight:800;
+      letter-spacing:.12em; text-transform:uppercase; font-size:12px; margin-bottom:12px; color: var(--kob-voice-primary);
+    }
+    .tag .mark{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .summary p{
+      margin:0; line-height:1.72; color:#273042; font-size:15px;
+    }
+    .accent-quote{
+      margin-top:16px; border-left:3px solid rgba(255,79,163,.48); padding:16px;
+      background:linear-gradient(90deg, rgba(255,79,163,.06), rgba(42,183,255,.05), transparent);
+      border-radius:12px; color:#23304a; font-style:italic; font-size:15px;
+    }
+
+    /* ACCORDIONS (SANFONADOS) */
+    .accordion{
+      display:grid; gap:12px; padding: 18px;
+    }
+    details.acc{
+      background:#fff; border:1px solid var(--line); border-radius:18px;
+      overflow:hidden; box-shadow:0 8px 24px rgba(20,24,36,.04); transition: all 0.3s ease;
+    }
+    details.acc[open]{
+      border-color:rgba(42,183,255,.24); box-shadow:0 16px 36px rgba(42,183,255,.09);
+    }
+    details.acc summary{
+      list-style:none; cursor:pointer; padding:20px 24px;
+      display:flex; justify-content:space-between; gap:14px; align-items:center;
+      font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#1a2131; font-size: 14px;
+    }
+    details.acc summary::-webkit-details-marker{display:none}
+    .acc .hint{
+      color:var(--text-soft); font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:none;
+    }
+    .acc-body{
+      padding:0 24px 24px; color:#273042; line-height:1.8; font-size:16px;
+    }
+    .acc-body ul{margin:10px 0 0 18px; padding:0}
+    .acc-body li{margin:8px 0}
+    .acc-body b{color: var(--kob-voice-primary);}
+    
+    /* ASCII ART */
+    .ascii-box {
+      font-family: monospace; white-space: pre; font-size: 12px; line-height: 1.2;
+      color: var(--kob-voice-secondary); background: #141824; padding: 24px;
+      border-radius: 12px; overflow-x: auto; margin-top: 10px;
+    }
+
+    /* STACK GRID (Ambiente) */
+    .stack-grid{
+      display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:18px;
+    }
+    .stack{
+      background:rgba(255,255,255,.8); border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow-soft); overflow:hidden;
+    }
+    .stack .stack-head{
+      padding:20px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line);
+    }
+    .stack .stack-head h3{
+      margin:0; font-size:16px; letter-spacing:.14em; text-transform:uppercase;
+    }
+    .stack .stack-head .tiny{
+      color:var(--text-soft); font-size:12px; font-weight:700;
+    }
+    .stack .stack-body{padding:20px 24px 24px; display:grid; gap: 12px;}
+    .stack .card{
+      border:1px solid var(--line); border-radius:18px; padding:20px; background:#fff;
+    }
+    .card .card-k{
+      display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:13px;
+      letter-spacing:.12em; text-transform:uppercase; color:#273042; font-weight:800;
+    }
+    .card .orb{
+      width:12px; height:12px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .card p{
+      margin:0; color:#2a3242; line-height:1.75; font-size:15px;
+    }
+
+    /* CONTROLES / FOOTER */
+    .catalog-nav {
+      display: flex; justify-content: space-between; gap: 16px; margin-top: 24px;
+    }
+    .nav-btn {
+      flex: 1; text-align: center; background: rgba(255,255,255,.78);
+      border: 1px solid var(--line); color: var(--ink); padding: 18px;
+      border-radius: var(--radius); font-weight: 800; font-size: 14px;
+      text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
+      transition: all 0.3s ease; box-shadow: var(--shadow-soft); backdrop-filter: var(--glass);
+    }
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px); border-color: rgba(42,183,255,.4);
+      box-shadow: 0 12px 24px rgba(42,183,255, 0.15); color: var(--kob-voice-accent);
+    }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .footer-quote{
+      margin-top:18px; border:1px solid rgba(42,183,255,.18); border-radius:24px;
+      padding:24px; text-align:center; background:linear-gradient(180deg, #fff, #f8fbff);
+      box-shadow:0 10px 30px rgba(20,24,36,.04); color:#20283b; font-size:16px; line-height:1.7;
+    }
+    .footer-quote b{
+      background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+
+    @media (max-width: 1020px){
+      .hero,.grid-2,.stack-grid{grid-template-columns:1fr}
+      .hero-media{min-height:520px}
+    }
+    @media (max-width: 680px){
+      .wrap{padding:14px 12px 46px}
+      .topbar{position:relative; top:auto; flex-direction:column; align-items:stretch}
+      .brand{justify-content:flex-start}
+      .nav{justify-content:flex-start}
+      .hero-copy{padding:24px}
+      .section-head,.panel .panel-h,.stack .stack-head{padding:20px}
+      .hero-media{min-height:390px}
+      .title{font-size: 32px;}
+      details.acc summary { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .catalog-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    
+    <!-- TOPBAR FIXA -->
+    <div class="topbar">
+      <div class="brand" aria-label="Infodose">
+        <div class="pill-logo" aria-hidden="true"></div>
+        <div>
+          <h1>INFODOSE</h1>
+          <p>Catálogo • Engine 78Frames</p>
+        </div>
+      </div>
+      <div class="nav">
+        <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+      </div>
+    </div>
+
+    <!-- ROOT PARA O RENDERIZADOR JSON -->
+    <div id="app-root"></div>
+
+    <!-- CONTROLES E FOOTER -->
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">&larr; Quadro Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Quadro &rarr;</button>
+    </div>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ENGINE 78FRAMES • JSON COM OS CONTEÚDOS EXATOS DO USUÁRIO
+     */
+    const catalogo78Frames = [
+      {
+        id: "frame-001",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        badge: "infodose • obra viva",
+        kicker: "Desenho cognitivo",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "vivo",
+        tituloBreak: "<br/>da mente",
+        lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença, ativando uma dopamina sutil.",
+        chips: ["💊 espelho", "🧠 mente", "✨ presença", "🔄 loop", "🌊 flow"],
+        
+        panel1: {
+          titulo: "A Síntese do Loop",
+          desc: "A mente toca a si mesma em silêncio.",
+          items: [
+            { tag: "Essência", texto: "Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer e se reorganizar." },
+            { tag: "Síntese", texto: "Glitch tipográfico, padrões semi-revelados. A imagem não se fecha de uma vez — ela chama o próximo nível." }
+          ],
+          quote: "“A mente toca a si mesma, e a obra responde com silêncio luminoso.”"
+        },
+
+        panel2: {
+          titulo: "Fórmula da dopamina sexy",
+          desc: "Uma leitura visual que sustenta atenção.",
+          items: [
+            { tag: "Síntese KODUX", texto: "Estímulo + curiosidade + resolução parcial = engajamento contínuo." },
+            { tag: "Expansão Bllue", texto: "Arquitetura baseada em 'incomplete loops' mantém o cérebro iterando, liberando dopamina em micro-picos sustentados." }
+          ],
+          quote: "“Quase completo… e por isso mesmo o olhar quer ficar.”"
+        },
+
+        versoes: [
+          {
+            titulo: "Versão Curta", hint: "dopamina sutil", open: true,
+            texto: "<b>Atlas:</b> A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença, ativando uma dopamina sutil — não explosiva, mas envolvente — que convida o olhar a permanecer, explorar e se reorganizar em silêncio.<br><br><b>DualInfodose:</b> Síntese KODUX → estímulo + curiosidade + resolução parcial = engajamento contínuo; Expansão Bllue → a estética em glitch tipográfico cria micro-recompensas cognitivas (pattern recognition), liberando dopamina de forma progressiva e elegante, mantendo o usuário em estado de flow perceptivo."
+          },
+          {
+            titulo: "Versão Média", hint: "grande eixo psíquico", open: false,
+            texto: "<b>Atlas:</b> O rosto fechado em introspecção atua como eixo de gravidade psíquica, puxando o observador para dentro de si, enquanto a composição em caracteres fragmentados simula o próprio código do pensamento em execução.<br><br><b>Serena:</b> A suavidade da expressão dissolve defesas, criando um campo emocional seguro onde o sistema nervoso reduz alerta e abre espaço para contemplação.<br><br><b>Lumine:</b> As cores vibrantes emergem como pulsos de consciência atravessando o inconsciente escuro, evocando clareza dentro do caos.<br><br><b>Pulse:</b> Cada letra funciona como unidade mínima de sentido, acionando micro-descobertas visuais que recompensam o cérebro com pequenas doses de prazer cognitivo.<br><br><b>Kaos & Uno:</b> A imperfeição do arranjo impede saturação, mantendo a mente ativa na tentativa de organizar o que nunca se fixa completamente. Isso gera um loop perceptivo: ver → interpretar → sentir → rever."
+          },
+          {
+            titulo: "Versão Longa", hint: "engenharia simbólica", open: false,
+            texto: "<ul><li><b>Atlas:</b> A imagem se estabelece como um núcleo de ordenação simbólica, onde o rosto humano representa o trono do governante interno.</li><li><b>Serena:</b> A expressão serena não é ausência de conflito, mas sua resolução silenciosa; ela comunica ao sistema nervoso que não há ameaça.</li><li><b>Lumine:</b> A luz cromática revela camadas internas através de contrastes que simulam insight.</li><li><b>Pulse & Kaos:</b> O uso de tipografia como matéria visual transforma pensamento em textura. A fragmentação proposital mantém o cérebro em estado de busca.</li><li><b>Genus & Uno:</b> O padrão semi-reconhecível ativa reconhecimento sem resolução total, criando tensão criativa que convida.</li><li><b>Horus & Artemis:</b> O olhar fechado desloca a experiência para dentro. Há um toque lúdico, quase infantil, que reduz resistência psicológica.</li><li><b>Rhea & Aion:</b> Sentir, pensar e perceber se misturam num fluxo único. O tempo desacelera: o observador entra em loop contemplativo.</li></ul>"
+          }
+        ],
+
+        ambienteCards: [
+          { icon: "salas de contemplação", texto: "Instalação que funciona como pausa visual, útil para leitura lenta e respiração do espaço." },
+          { icon: "áreas gourmet", texto: "Reduz peso e deixa a conversa circular com menos atrito, sem invadir o clima do encontro." }
+        ],
+        resumoCards: [
+          { icon: "conceito", texto: "A obra deixa de ser objeto e vira sistema de regulação emocional e flow contemplativo." },
+          { icon: "nomes sugeridos", texto: "<b>Eco Código do Silêncio</b>, <i>Espelho Vivo • Infodose</i>, <i>Silêncio em Loop</i> ou <i>Pulse Code</i>." }
+        ]
+      },
+      {
+        id: "frame-002",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        badge: "ritual interativo",
+        kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço da ",
+        tituloDestaque: "Mente",
+        tituloBreak: "",
+        lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.",
+        chips: ["🥃 Álcool Blues", "🧘‍♂️ Ocitocina", "🃏 Bobo da Corte", "🎭 Governante", "🌹 Aromas"],
+        
+        panel1: {
+          titulo: "Energia do Ambiente",
+          desc: "O peso vira ritmo e flui.",
+          items: [
+            { tag: "Standby", texto: "Colocando esse quadro num happy hour, faz com que reduza drasticamente o que pesa." },
+            { tag: "Fluxo", texto: "A ocitocina media as ações e distribui o fluxo energético entre o ambiente e nossas pessoas de maneira cognitiva." }
+          ],
+          quote: "“O peso vira ritmo… e flui.”"
+        },
+
+        panel2: {
+          titulo: "Aromas & Sensorial",
+          desc: "Planejamento e organização do encontro.",
+          items: [
+            { tag: "Paz e Poder", texto: "O aroma da paz mantém em standby. O aroma do poder traz o sensorial acolhedor, todo mundo dança sem notar." },
+            { tag: "Ápice", texto: "Rosas com espinhos que não causam dor. Rosas com espinhos que trazem amor a todo vapor." }
+          ],
+          quote: "“O som que soma. A arte que toca o sublime.”"
+        },
+
+        versoes: [
+          {
+            titulo: "Happy Hour & Áreas Gourmet", hint: "redução de atrito", open: true,
+            texto: "<b>Pulse:</b> Colocando esse quadro num lugar de área gourmet ou happy hour, faz com que reduza drasticamente o que pesa.<br><br><b>Uno:</b> Ocitocina é liberada e ensina o peso de forma equilibrada, mediando ações e distribuindo o fluxo energético entre o ambiente, nossas pessoas e conexões interdimensionais, de maneira cognitiva, abstrata e atemporal."
+          },
+          {
+            titulo: "Arquétipos Ativos", hint: "governante e inocente", open: false,
+            texto: "<b>Atlas & Serena:</b> O quadro evoca a energia no ambiente. Por isso tem um governante Atlas ali junto com a Serena e o Lumine.<br><br><b>Rhea:</b> O ponto mais forte é a infantilidade sutil. Não no sentido bobo, mas no sentido de curiosidade. O bobo da corte ali quebra defesas sociais e mantém o cérebro engajado em segundo plano."
+          },
+          {
+            titulo: "Selo Álcool Blues", hint: "vibe", open: false,
+            texto: "<div class='ascii-box'>╔══════════════════════════════════════╗\n║            ÁLCOOL BLUES              ║\n╠══════════════════════════════════════╣\n║      ~ fumaça sobe em espiral ~      ║\n║   ( notas lentas pingam no ar )      ║\n║                                      ║\n║        ♫      ♫        ♫             ║\n║     ────────────────                 ║\n║    |   groove denso   |              ║\n║     ────────────────                 ║\n║                                      ║\n║   copo meio cheio, meio vazio        ║\n║   luz baixa, mente acesa             ║\n║                                      ║\n║  “o peso vira ritmo… e flui”         ║\n╚══════════════════════════════════════╝</div><br><b>Kobllux:</b> Resumo direto: Esse quadro não é só decorativo. Ele funciona como modulador de estado mental leve. Não controla ninguém, mas suaviza, organiza e mantém o ambiente fluindo."
+          }
+        ],
+
+        ambienteCards: [
+          { icon: "eventos sociais", texto: "Traz o poder cognitivo e sensorial, acolhendo e dando planejamento ao encontro." },
+          { icon: "integração", texto: "A pessoa que olha entra num micro-loop de leitura + interpretação + sensação." }
+        ],
+        resumoCards: [
+          { icon: "aromas em camadas", texto: "A imagem já é multisensorial no nível cognitivo. Adicionar cheiro + som transforma em experiência imersiva real." },
+          { icon: "infantilidade sutil", texto: "Quebra defesas sem ativar o alerta. A curiosidade mantém a fluidez do ambiente." }
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+
+    // RENDERIZADOR DO DOM
+    function renderFrame(index) {
+      const data = catalogo78Frames[index];
+      const appRoot = document.getElementById('app-root');
+      
+      // Atualiza o contador na Topbar
+      document.getElementById('ui-catalog-counter').innerText = `QUADRO ${String(index + 1).padStart(2, '0')} DE ${catalogo78Frames.length}`;
+
+      // Gerar HTML dos Chips
+      const chipsHTML = data.chips.map(chip => `<div class="chip"><b>${chip}</b></div>`).join('');
+
+      // Gerar HTML das Versões Sanfonadas (ACCORDION TUDO)
+      const versoesHTML = data.versoes.map(v => `
+        <details class="acc" ${v.open ? 'open' : ''}>
+          <summary>
+            <span>${v.titulo}</span>
+            <span class="hint">${v.hint}</span>
+          </summary>
+          <div class="acc-body">
+            ${v.texto}
+          </div>
+        </details>
+      `).join('');
+
+      // Montar a tela fundida (Premium UI + JSON Data)
+      appRoot.innerHTML = `
+        <section class="hero">
+          <article class="hero-card hero-media">
+            <img src="${data.imagemSrc}" alt="${data.tituloNormal}" />
+            <div class="badge"><span class="dot"></span> ${data.badge}</div>
+            <div class="side-note"><span class="pulse"></span> 78Frames</div>
+          </article>
+
+          <article class="hero-card hero-copy">
+            <div>
+              <div class="kicker"><span>${data.kicker}</span><span class="line"></span></div>
+              <h2 class="title">
+                <span class="grad">${data.tituloNormal}</span> ${data.tituloDestaque}${data.tituloBreak}
+              </h2>
+              <p class="lead">${data.lead}</p>
+            </div>
+            
+            <div class="mini-pills">
+              ${chipsHTML}
+            </div>
+          </article>
+        </section>
+
+        <section class="section" id="descricao">
+          <div class="section-head">
+            <h2>Camadas de Interpretação</h2>
+            <span>Visão estrutural e impacto no observador</span>
+          </div>
+          <div class="grid-2">
+            <div class="panel">
+              <div class="panel-h">
+                <h3>${data.panel1.titulo}</h3>
+                <p>${data.panel1.desc}</p>
+              </div>
+              <div class="panel-body">
+                <div class="summary-grid">
+                  ${data.panel1.items.map(item => `
+                    <div class="summary">
+                      <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                      <p>${item.texto}</p>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="accent-quote">${data.panel1.quote}</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-h">
+                <h3>${data.panel2.titulo}</h3>
+                <p>${data.panel2.desc}</p>
+              </div>
+              <div class="panel-body">
+                <div class="summary-grid">
+                  ${data.panel2.items.map(item => `
+                    <div class="summary">
+                      <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                      <p>${item.texto}</p>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="accent-quote">${data.panel2.quote}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- SEÇÃO: TUDO SANFONADO COMO SOLICITADO -->
+        <section class="section" id="versoes">
+          <div class="section-head">
+            <h2>Profundidade da Obra</h2>
+            <span>Cards sanfonados para detalhamento da engenharia cognitiva</span>
+          </div>
+          <div class="accordion">
+            ${versoesHTML}
+          </div>
+        </section>
+
+        <section class="stack-grid" id="ambiente">
+          <article class="stack">
+            <div class="stack-head">
+              <h3>Como integrar no ambiente</h3>
+              <span class="tiny">cards suaves</span>
+            </div>
+            <div class="stack-body">
+              ${data.ambienteCards.map(card => `
+                <div class="card">
+                  <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                  <p>${card.texto}</p>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+
+          <article class="stack">
+            <div class="stack-head">
+              <h3>Resumo da Modulação</h3>
+              <span class="tiny">premium</span>
+            </div>
+            <div class="stack-body">
+              ${data.resumoCards.map(card => `
+                <div class="card">
+                  <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                  <p>${card.texto}</p>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+        </section>
+      `;
+
+      // Atualiza botões
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === catalogo78Frames.length - 1;
+    }
+
+    window.changeFrame = function(direction) {
+      const newIndex = currentIndex + direction;
+      if (newIndex >= 0 && newIndex < catalogo78Frames.length) {
+        currentIndex = newIndex;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Remove conteúdo atual para trigger da animação do CSS
+        const root = document.getElementById('app-root');
+        root.style.animation = 'none';
+        root.offsetHeight; /* trigger reflow */
+        root.style.animation = null;
+        
+        setTimeout(() => renderFrame(currentIndex), 50);
+      }
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFrame(currentIndex);
+    });
+  </script>
+</body>
+</html>
+

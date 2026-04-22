@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • Premium Catálogo</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root {
+      --kob-voice-primary: #ff4fa3;
+      --kob-voice-secondary: #2ab7ff;
+      --kob-voice-accent: #6b7cff;
+      --bg-page: #f6f8fc;
+      --bg-panel: #ffffff;
+      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --ink: #141824;
+      --text: #1f2430;
+      --text-soft: #64708a;
+      --line: rgba(20, 24, 36, 0.09);
+      --shadow: 0 18px 50px rgba(20, 24, 36, 0.08);
+      --radius: 24px;
+      --glass: blur(16px) saturate(170%);
+      
+      /* BG Custom State */
+      --bg-opacity: 0.15;
+      --bg-blend: normal;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* CAMADA DE BACKGROUND FIXO */
+    #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacity);
+      mix-blend-mode: var(--bg-blend);
+      transition: opacity 0.4s ease, background-image 0.5s ease;
+    }
+
+    .wrap { max-width: 1260px; margin: 0 auto; padding: 22px 18px 80px; position: relative; z-index: 1; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      position: sticky; top: 10px; z-index: 100; margin-bottom: 24px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px;
+      box-shadow: var(--shadow);
+    }
+    .brand h1 { margin: 0; font-size: 13px; letter-spacing: .3em; text-transform: uppercase; font-weight: 900; }
+    
+    .controls-pill {
+      display: flex; gap: 8px; background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 6px; box-shadow: var(--shadow);
+    }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; color: var(--text);
+    }
+    .icon-btn:hover { background: rgba(0,0,0,0.05); }
+
+    /* MODAL / PAINEL DE CONTROLE DE BG */
+    #bg-panel-modal {
+      display: none; position: fixed; top: 70px; right: 20px; width: 300px;
+      background: var(--bg-panel); border-radius: var(--radius); border: 1px solid var(--line);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 200; padding: 20px;
+      animation: slideIn 0.3s ease-out;
+    }
+    @keyframes slideIn { from { opacity:0; transform: translateY(-10px); } to { opacity:1; transform: translateY(0); } }
+    
+    .panel-section { margin-bottom: 15px; }
+    .panel-section label { display: block; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 8px; color: var(--text-soft); }
+    
+    .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .preset-btn { 
+      padding: 6px; font-size: 10px; border: 1px solid var(--line); border-radius: 8px; 
+      background: #f0f0f0; cursor: pointer; font-weight: bold;
+    }
+    .preset-btn:hover { background: #e0e0e0; }
+
+    /* HERO SECTION */
+    .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    .hero-media { 
+      background: #000; border-radius: var(--radius); overflow: hidden; height: 600px; 
+      position: relative; border: 1px solid var(--line); box-shadow: var(--shadow);
+    }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .hero-content {
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border-radius: var(--radius); border: 1px solid var(--line); padding: 40px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 800; color: var(--kob-voice-primary); margin-bottom: 12px; }
+    .hero-title { font-size: 48px; line-height: 1.1; font-weight: 900; margin: 0 0 20px; }
+    .hero-title span { color: var(--kob-voice-secondary); }
+    .hero-desc { font-size: 18px; color: var(--text-soft); line-height: 1.6; margin-bottom: 30px; }
+
+    /* BUTTONS */
+    .btn-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px 24px; background: var(--ink); color: #fff; border: none;
+      border-radius: 999px; font-weight: 800; cursor: pointer; transition: 0.3s;
+    }
+    .btn-action:hover { transform: scale(1.05); background: var(--kob-voice-accent); }
+
+    /* ACCORDION */
+    .accordion-group { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+    details { background: var(--bg-panel-soft); border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+    summary { padding: 20px; cursor: pointer; font-weight: 800; display: flex; justify-content: space-between; }
+    .acc-content { padding: 0 20px 20px; color: var(--text-soft); line-height: 1.7; }
+
+    /* CATALOG NAV */
+    .catalog-nav { display: flex; gap: 16px; margin-top: 40px; }
+    .nav-btn { 
+      flex: 1; padding: 20px; border-radius: 20px; border: 1px solid var(--line); 
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass); font-weight: 900; cursor: pointer;
+    }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    /* THUMBS EM GRID */
+    .bg-thumbs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 150px; overflow-y: auto; padding: 4px; }
+    .thumb-item { 
+      height: 60px; border-radius: 8px; background-size: cover; background-position: center; 
+      cursor: pointer; border: 2px solid transparent; transition: 0.2s;
+    }
+    .thumb-item.active { border-color: var(--kob-voice-primary); }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-media { height: 400px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CAMADA DE FUNDO -->
+  <div id="bg-layer-fixed"></div>
+
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="brand">
+        <h1>INFODOSE</h1>
+      </div>
+      <div class="controls-pill">
+        <button class="icon-btn" onclick="toggleBgPanel()" title="Ajustes de Background">⚙️</button>
+        <button class="icon-btn" onclick="setAsBg()" title="Usar esta obra como fundo">🖼️</button>
+      </div>
+    </header>
+
+    <!-- PAINEL DE CONTROLE DE BG (FLUTUANTE) -->
+    <div id="bg-panel-modal">
+      <div class="panel-section">
+        <label>Presets de Estilo</label>
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+      
+      <div class="panel-section">
+        <label>Opacidade (<span id="val-op">15</span>%)</label>
+        <input type="range" min="0" max="100" value="15" style="width:100%" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label>Mix Blend Mode</label>
+        <select style="width:100%; padding:5px;" onchange="updateBgAttr('blend', this.value)" id="select-blend">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay">Overlay</option>
+          <option value="luminosity">Luminosity</option>
+          <option value="color-dodge">Color Dodge</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label>Biblioteca Local</label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <input type="file" id="file-upload" hidden onchange="handleUpload(this)">
+        <button class="btn-action" style="width:100%; margin-top:10px; font-size:12px; padding:10px" onclick="document.getElementById('file-upload').click()">+ Upload Imagem</button>
+      </div>
+    </div>
+
+    <!-- ÁREA DINÂMICA -->
+    <div id="app-root"></div>
+
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo</button>
+    </div>
+  </div>
+
+  <script>
+    const catalogo78Frames = [
+      {
+        id: "frame-001",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        badge: "infodose • obra viva",
+        kicker: "Desenho cognitivo",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "vivo",
+        lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença.",
+        versoes: [
+          { titulo: "A Síntese do Loop", texto: "Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer." },
+          { titulo: "Engenharia Cognitiva", texto: "A estética em glitch tipográfico cria micro-recompensas cognitivas, liberando dopamina de forma progressiva." }
+        ]
+      },
+      {
+        id: "frame-002",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        badge: "ritual interativo",
+        kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço da ",
+        tituloDestaque: "Mente",
+        lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.",
+        versoes: [
+          { titulo: "Vibe de Ambiente", texto: "Reduz drasticamente o que pesa. Ideal para áreas gourmet e momentos de descompressão." },
+          { titulo: "Selo Álcool Blues", texto: "O peso vira ritmo e flui. Luz baixa, mente acesa." }
+        ]
+      },
+      {
+        id: "frame-003",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+        badge: "frequência azul",
+        kicker: "Expansão Bllue",
+        tituloNormal: "Fluxo ",
+        tituloDestaque: "Contínuo",
+        lead: "Arquitetura visual baseada em ciclos incompletos que mantêm o cérebro em estado de flow perceptivo.",
+        versoes: [
+          { titulo: "Pattern Recognition", texto: "A mente tenta fechar as formas, gerando um estado de engajamento ativo e prazeroso." },
+          { titulo: "Aplicação", texto: "Perfeito para escritórios criativos e salas de ideação." }
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderFrame(index) {
+      const data = catalogo78Frames[index];
+      const root = document.getElementById('app-root');
+      
+      root.innerHTML = `
+        <div class="hero">
+          <div class="hero-media">
+            <img src="${data.imagemSrc}" alt="Obra">
+          </div>
+          <div class="hero-content">
+            <div class="kicker">${data.kicker}</div>
+            <h2 class="hero-title">${data.tituloNormal} <span>${data.tituloDestaque}</span></h2>
+            <p class="hero-desc">${data.lead}</p>
+            <button class="btn-action" onclick="setAsBg()">Usar como Background</button>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          ${data.versoes.map((v, i) => `
+            <details ${i === 0 ? 'open' : ''}>
+              <summary>${v.titulo} <span>▼</span></summary>
+              <div class="acc-content">${v.texto}</div>
+            </details>
+          `).join('')}
+        </div>
+      `;
+
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === catalogo78Frames.length - 1;
+    }
+
+    // --- SISTEMA DE BACKGROUND ---
+
+    function toggleBgPanel() {
+      const modal = document.getElementById('bg-panel-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function setAsBg() {
+      const currentImg = catalogo78Frames[currentIndex].imagemSrc;
+      applyBg(currentImg);
+      saveToLibrary(currentImg, catalogo78Frames[currentIndex].id);
+    }
+
+    function applyBg(url) {
+      document.getElementById('bg-layer-fixed').style.backgroundImage = `url('${url}')`;
+    }
+
+    function updateBgAttr(type, val) {
+      const layer = document.getElementById('bg-layer-fixed');
+      if (type === 'opacity') {
+        layer.style.opacity = val / 100;
+        document.getElementById('val-op').innerText = val;
+      } else if (type === 'blend') {
+        layer.style.mixBlendMode = val;
+      }
+    }
+
+    function applyPreset(mode) {
+      const opInput = document.querySelector('input[type="range"]');
+      const blendSelect = document.getElementById('select-blend');
+      
+      if (mode === 'ghost') {
+        updateBgAttr('opacity', 8);
+        updateBgAttr('blend', 'luminosity');
+        opInput.value = 8;
+        blendSelect.value = 'luminosity';
+      } else if (mode === 'vivid') {
+        updateBgAttr('opacity', 30);
+        updateBgAttr('blend', 'overlay');
+        opInput.value = 30;
+        blendSelect.value = 'overlay';
+      } else if (mode === 'deep') {
+        updateBgAttr('opacity', 45);
+        updateBgAttr('blend', 'multiply');
+        opInput.value = 45;
+        blendSelect.value = 'multiply';
+      }
+    }
+
+    // --- BIBLIOTECA E UPLOAD ---
+
+    let library = [];
+
+    function saveToLibrary(url, id) {
+      if (!library.find(item => item.url === url)) {
+        library.push({ url, id });
+        renderLibrary();
+      }
+    }
+
+    function renderLibrary() {
+      const list = document.getElementById('thumb-list');
+      list.innerHTML = library.map(item => `
+        <div class="thumb-item" style="background-image:url('${item.url}')" onclick="applyBg('${item.url}')"></div>
+      `).join('');
+    }
+
+    function handleUpload(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const url = e.target.result;
+          applyBg(url);
+          saveToLibrary(url, 'upload_' + Date.now());
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    window.changeFrame = function(dir) {
+      currentIndex += dir;
+      renderFrame(currentIndex);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFrame(0);
+      // Background inicial suave
+      applyBg(catalogo78Frames[0].imagemSrc);
+      saveToLibrary(catalogo78Frames[0].imagemSrc, 'default');
+    });
+  </script>
+</body>
+</html>
+
+

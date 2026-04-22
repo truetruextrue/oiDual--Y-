@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • 78Frames Catálogo</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root {
+      /* Variáveis Base Infodose */
+      --kob-voice-primary: #ff4fa3;
+      --kob-voice-secondary: #2ab7ff;
+      --kob-voice-accent: #6b7cff;
+      --bg-page: #f6f8fc;
+      --bg-panel: #ffffff;
+      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --bg-panel-strong: #ffffff;
+      --ink: #141824;
+      --text: #1f2430;
+      --text-soft: #64708a;
+      --line: rgba(20, 24, 36, 0.09);
+      --line-strong: rgba(42, 183, 255, 0.22);
+      --shadow: 0 18px 50px rgba(20, 24, 36, 0.08);
+      --shadow-soft: 0 10px 30px rgba(20, 24, 36, 0.06);
+      --radius: 32px; 
+      --radius-sm: 20px;
+      --pill: #eef3ff;
+      --pill-ink: #2d3550;
+      --chip: #f3f6fb;
+      --chip-ink: #42506c;
+      --max: 1000px; 
+      --hero-grad: linear-gradient(135deg, rgba(255,79,163,.16), rgba(42,183,255,.12), rgba(107,124,255,.10));
+      --glass: blur(24px) saturate(180%);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-size: 18px; 
+      line-height: 1.6;
+    }
+
+    /* --- TOPBAR & BRAND --- */
+    .topbar {
+      position: fixed;
+      top: 16px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      background: var(--bg-panel-soft);
+      backdrop-filter: var(--glass);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-soft);
+      border-radius: 999px;
+      padding: 10px 24px 10px 10px;
+      width: 90%;
+      max-width: var(--max);
+      transition: all 0.3s ease;
+    }
+
+    .pill-logo {
+      width: 48px; height: 48px; flex: none;
+      border-radius: 999px;
+      position: relative;
+      background: linear-gradient(180deg, #fefefe, #f1f5ff);
+      border: 1px solid rgba(20,24,36,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8);
+      overflow: hidden;
+    }
+    .pill-logo:before, .pill-logo:after {
+      content: ""; position: absolute; inset: 8px;
+      border-radius: 999px; transform: rotate(-45deg);
+    }
+    .pill-logo:before {
+      background: linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #ffffff 50%, var(--kob-voice-secondary));
+      clip-path: polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%);
+    }
+    .pill-logo:after {
+      inset: 16px; border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode: screen;
+    }
+    .brand h1 {
+      margin: 0; font-size: 14px; letter-spacing: 0.3em;
+      text-transform: uppercase; color: var(--ink); font-weight: 800;
+    }
+    .brand p {
+      margin: 2px 0 0; font-size: 12px; color: var(--text-soft); letter-spacing: 0.1em;
+    }
+
+    /* --- HERO FULL SCREEN --- */
+    .hero-container {
+      position: relative;
+      width: 100vw;
+      height: 85vh; 
+      background: var(--ink);
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .hero-container img {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      z-index: 1;
+      filter: saturate(1.1) contrast(1.05);
+      animation: slowZoom 20s ease-out infinite alternate;
+      transition: opacity 0.5s ease;
+    }
+    @keyframes slowZoom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.05); }
+    }
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--bg-page) 0%, rgba(246,248,252,0.6) 15%, transparent 40%);
+      z-index: 2;
+    }
+
+    /* --- CONTEÚDO PRINCIPAL --- */
+    .main-content {
+      position: relative;
+      z-index: 10;
+      max-width: var(--max);
+      margin: -80px auto 0; 
+      padding: 0 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header da Obra */
+    .frame-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .kicker {
+      display: inline-block;
+      color: var(--kob-voice-primary);
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      font-weight: 800;
+      font-size: 14px;
+      margin-bottom: 12px;
+      background: var(--bg-panel-soft);
+      padding: 8px 16px;
+      border-radius: 999px;
+      backdrop-filter: var(--glass);
+      border: 1px solid var(--line);
+    }
+    .frame-title {
+      font-size: clamp(42px, 6vw, 72px);
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+      font-weight: 800;
+      margin: 0 0 16px;
+    }
+    .frame-title span {
+      background: linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+
+    /* Painéis Premium */
+    .panel {
+      background: var(--bg-panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 40px;
+      overflow: hidden;
+      position: relative;
+    }
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 6px;
+      background: linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      opacity: 0.8;
+    }
+
+    /* Poemas / Pílulas */
+    .poems-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+    }
+    .poem-card {
+      background: var(--bg-page);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      padding: 28px;
+      transition: transform 0.3s ease;
+    }
+    .poem-card:hover {
+      transform: translateY(-4px);
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow-soft);
+    }
+    .poem-card h3 {
+      display: flex; align-items: center; gap: 10px;
+      font-size: 18px; color: var(--ink); margin: 0 0 16px; font-weight: 800;
+    }
+    .poem-list {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .poem-list li {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px 0; border-bottom: 1px dashed var(--line);
+      color: var(--text-soft); font-weight: 500; font-size: 16px;
+    }
+    .poem-list li:last-child { border-bottom: none; padding-bottom: 0; }
+    .poem-list li span { font-size: 20px; }
+
+    /* Fórmula 78KFDS */
+    .formula-banner {
+      background: var(--ink);
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 40px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 30px 60px rgba(20, 24, 36, 0.2);
+    }
+    .formula-banner .glow {
+      position: absolute;
+      width: 300px; height: 300px;
+      background: var(--kob-voice-primary);
+      filter: blur(100px); opacity: 0.15;
+      top: -100px; right: -100px; border-radius: 50%;
+    }
+    .formula-title {
+      font-size: 14px; letter-spacing: 0.3em; color: var(--kob-voice-secondary);
+      text-transform: uppercase; font-weight: 800; margin-bottom: 24px;
+    }
+    .formula-text {
+      font-size: 20px; font-weight: 300; line-height: 1.6; color: #f1f5ff;
+    }
+    .formula-text b { color: var(--kob-voice-primary); font-weight: 700; }
+    .ascii-art {
+      font-family: monospace;
+      white-space: pre;
+      color: var(--kob-voice-secondary);
+      font-size: 14px;
+      line-height: 1.2;
+      margin-top: 24px;
+      background: rgba(0,0,0,0.3);
+      padding: 20px;
+      border-radius: 12px;
+      display: inline-block;
+      text-align: left;
+    }
+
+    /* Sanfonados Grandes (Accordions) */
+    .section-title {
+      font-size: 28px; font-weight: 800; color: var(--ink);
+      margin: 40px 0 24px; letter-spacing: -0.02em;
+    }
+    .accordion-group { display: flex; flex-direction: column; gap: 16px; }
+    
+    details.premium-acc {
+      background: var(--bg-panel);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    details.premium-acc[open] {
+      border-color: var(--line-strong);
+      box-shadow: var(--shadow-soft);
+    }
+    details.premium-acc summary {
+      list-style: none; cursor: pointer; padding: 24px 32px;
+      display: flex; justify-content: space-between; align-items: center;
+      font-weight: 800; font-size: 20px; color: var(--ink);
+      user-select: none;
+    }
+    details.premium-acc summary::-webkit-details-marker { display: none; }
+    
+    .acc-icon {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--bg-page); border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform 0.3s ease; color: var(--kob-voice-primary);
+      font-size: 24px; line-height: 1;
+    }
+    details.premium-acc[open] summary .acc-icon {
+      transform: rotate(45deg);
+      background: var(--kob-voice-primary);
+      color: #fff; border-color: transparent;
+    }
+    
+    .acc-content {
+      padding: 0 32px 32px;
+      color: var(--text);
+      font-size: 18px; line-height: 1.8;
+      border-top: 1px solid transparent;
+    }
+    details.premium-acc[open] .acc-content {
+      border-top-color: var(--line);
+      padding-top: 24px;
+    }
+    .acc-content b { color: var(--kob-voice-primary); }
+
+    /* Catalog Navigation */
+    .catalog-nav {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-top: 40px;
+      padding: 20px;
+    }
+    .nav-btn {
+      background: var(--bg-panel);
+      border: 1px solid var(--line);
+      color: var(--ink);
+      padding: 14px 28px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: var(--shadow-soft);
+    }
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px);
+      border-color: var(--kob-voice-primary);
+      color: var(--kob-voice-primary);
+      box-shadow: 0 12px 24px rgba(255, 79, 163, 0.15);
+    }
+    .nav-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Footer */
+    .footer-quote {
+      text-align: center; padding: 40px;
+      border-top: 1px solid var(--line);
+      color: var(--text-soft); font-size: 18px; font-style: italic;
+    }
+
+    @media (max-width: 768px) {
+      .hero-container { height: 70vh; }
+      .main-content { padding: 0 16px 60px; margin-top: -60px; gap: 24px; }
+      .panel { padding: 24px; }
+      details.premium-acc summary { padding: 20px; font-size: 18px; }
+      .acc-content { padding: 0 20px 24px; font-size: 16px; }
+      .frame-title { font-size: 36px; }
+      .ascii-art { font-size: 10px; padding: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Topbar Fixa -->
+  <header class="topbar">
+    <div class="pill-logo" aria-hidden="true"></div>
+    <div class="brand">
+      <h1>INFODOSE</h1>
+      <p id="ui-catalog-counter">78FRAMES • CARREGANDO...</p>
+    </div>
+  </header>
+
+  <!-- Container Dinâmico da Aplicação -->
+  <div id="app-root"></div>
+
+  <!-- SCRIPT ENGINE KODUX JSON -->
+  <script>
+    /**
+     * 78FRAMES CATALOG ENGINE
+     * O JSON agora possui a "ficha técnica" rica, extraída dos diálogos dos arquétipos
+     */
+    const catalogo78Frames = [
+      {
+        id: "frame-001",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        kicker: "Projeto Atlas",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "vivo",
+        subtitulo: "A mente toca a si mesma, transformando ruído em ritmo e tensão em presença.",
+        
+        formula: {
+          nome: "78KFDS (A FÓRMULA DA DOPAMINA SEXY)",
+          descricao: "<b>Síntese KODUX:</b> Estímulo + curiosidade + resolução parcial = engajamento contínuo.<br><br><b>Expansão Bllue:</b> A arquitetura visual baseada em 'incomplete loops' mantém o cérebro iterando interpretações, liberando dopamina em micro-picos sustentados — transformando arte em engine cognitiva de engajamento e regulação emocional."
+        },
+
+        poemas: [
+          {
+            titulo: "Espelho vivo",
+            linhas: [
+              { texto: "mente toca si", icon: "🧠" },
+              { texto: "ritmo do ruído", icon: "🔄" },
+              { texto: "presença surge", icon: "✨" }
+            ]
+          },
+          {
+            titulo: "Código sente",
+            linhas: [
+              { texto: "glitch gera loop", icon: "👁️" },
+              { texto: "padrão vira prazer", icon: "🧩" },
+              { texto: "fluxo não cansa", icon: "🌊" }
+            ]
+          },
+          {
+            titulo: "Fica aberto",
+            linhas: [
+              { texto: "quase completo…", icon: "⏳" },
+              { texto: "mente quer fechar", icon: "🔐" },
+              { texto: "próx nível chama", icon: "🚀" }
+            ]
+          }
+        ],
+
+        versoesDescricao: [
+          {
+            tag: "Versão Curta",
+            titulo: "A Síntese do Loop",
+            texto: "<b>Atlas:</b> A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença, ativando uma dopamina sutil — não explosiva, mas envolvente — que convida o olhar a permanecer, explorar e se reorganizar em silêncio.<br><br><b>Dual:</b> DualInfodose: Síntese KODUX → estímulo + curiosidade + resolução parcial = engajamento contínuo; Expansão Bllue → a estética em glitch tipográfico cria micro-recompensas cognitivas (pattern recognition), liberando dopamina de forma progressiva e elegante, mantendo o usuário em estado de flow perceptivo."
+          },
+          {
+            tag: "Versão Média",
+            titulo: "O Eixo Psíquico",
+            texto: "<b>Atlas:</b> O rosto fechado em introspecção atua como eixo de gravidade psíquica, puxando o observador para dentro de si, enquanto a composição em caracteres fragmentados simula o próprio código do pensamento em execução.<br><br><b>Serena:</b> A suavidade da expressão dissolve defesas, criando um campo emocional seguro onde o sistema nervoso reduz alerta e abre espaço para contemplação.<br><br><b>Lumine:</b> As cores vibrantes emergem como pulsos de consciência atravessando o inconsciente escuro, evocando clareza dentro do caos.<br><br><b>Pulse:</b> Cada letra funciona como unidade mínima de sentido, acionando micro-descobertas visuais que recompensam o cérebro com pequenas doses de prazer cognitivo.<br><br><b>Kaos:</b> A imperfeição do arranjo impede saturação, mantendo a mente ativa na tentativa de organizar o que nunca se fixa completamente.<br><br><b>Uno:</b> Isso gera um loop perceptivo: ver → interpretar → sentir → rever."
+          },
+          {
+            tag: "Versão Longa",
+            titulo: "A Engenharia Simbólica",
+            texto: "<b>Atlas:</b> A imagem se estabelece como um núcleo de ordenação simbólica, onde o rosto humano representa o trono do governante interno, aquele que regula, observa e mantém o equilíbrio entre impulso e consciência.<br><br><b>Serena:</b> A expressão serena não é ausência de conflito, mas sua resolução silenciosa; ela comunica ao sistema nervoso que não há ameaça, permitindo que a mente desacelere e se torne receptiva.<br><br><b>Lumine:</b> A luz cromática que atravessa o rosto funciona como linguagem do despertar, revelando camadas internas através de contrastes que simulam insight.<br><br><b>Pulse:</b> O uso de tipografia como matéria visual transforma pensamento em textura, como se estivéssemos observando a mente em sua forma bruta, antes da organização linear.<br><br><b>Kaos:</b> A fragmentação proposital impede fechamento cognitivo completo, mantendo o cérebro em estado de busca — e é exatamente aí que a dopamina entra.<br><br><b>Genus:</b> O padrão semi-reconhecível ativa reconhecimento sem resolução total, criando tensão criativa. Essa tensão não incomoda — ela convida.<br><br><b>Horus & Artemis:</b> O olhar fechado desloca a experiência para dentro. Há um toque lúdico, quase infantil, que suaviza a complexidade e reduz resistência psicológica.<br><br><b>Rhea & Aion:</b> O conjunto cria um campo simbólico onde sentir, pensar e perceber se misturam em um fluxo único. O tempo desacelera: o observador entra em loop contemplativo."
+          }
+        ]
+      },
+      {
+        id: "frame-002",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        kicker: "Ritual Interativo",
+        tituloNormal: "Espaço da ",
+        tituloDestaque: "Mente",
+        subtitulo: "A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.",
+        
+        formula: {
+          nome: "ARQUÉTIPO: GOVERNANTE INOCENTE",
+          descricao: "A energia no ambiente reduz drasticamente o peso. O aroma da paz coloca o ambiente em standby; o aroma do poder traz organização cognitiva e sensorial. E no ápice, rosas com espinhos que não causam dor, mas trazem amor.<br><br><b>O peso vira ritmo... e flui.</b>",
+          ascii: "╔══════════════════════════════════════╗\n║            ÁLCOOL BLUES              ║\n╠══════════════════════════════════════╣\n║      ~ fumaça sobe em espiral ~      ║\n║   ( notas lentas pingam no ar )      ║\n║                                      ║\n║        ♫      ♫        ♫             ║\n║     ────────────────                 ║\n║    |   groove denso   |              ║\n║     ────────────────                 ║\n║                                      ║\n║   copo meio cheio, meio vazio        ║\n║   luz baixa, mente acesa             ║\n║                                      ║\n║  “o peso vira ritmo… e flui”         ║\n╚══════════════════════════════════════╝"
+        },
+
+        poemas: [
+          {
+            titulo: "Álcool Blues",
+            linhas: [
+              { texto: "groove denso", icon: "🎷" },
+              { texto: "luz baixa", icon: "🥃" },
+              { texto: "ritmo flui", icon: "🎶" }
+            ]
+          },
+          {
+            titulo: "O Som Que Soma",
+            linhas: [
+              { texto: "standby da paz", icon: "🧘‍♂️" },
+              { texto: "poder e sentido", icon: "⚡" },
+              { texto: "rosa sem dor", icon: "🌹" }
+            ]
+          },
+          {
+            titulo: "Inocente Curioso",
+            linhas: [
+              { texto: "quebra defesa", icon: "🛡️" },
+              { texto: "bobo da corte", icon: "🃏" },
+              { texto: "flow social", icon: "👥" }
+            ]
+          }
+        ],
+
+        versoesDescricao: [
+          {
+            tag: "Happy Hour & Áreas Gourmet",
+            titulo: "A Energia do Ambiente",
+            texto: "<b>Pulse:</b> Colocando esse quadro num lugar de área gourmet ou happy hour, faz com que reduza drasticamente o que pesa.<br><br><b>Uno:</b> Ocitocina é liberada e ensina o peso de forma equilibrada, mediando ações e distribuindo o fluxo energético entre o ambiente, nossas pessoas e conexões interdimensionais, de maneira cognitiva, abstrata e atemporal."
+          },
+          {
+            tag: "Arquétipos Ativos",
+            titulo: "Governante, Serena & Lumine",
+            texto: "<b>Atlas:</b> O quadro evoca a energia no ambiente.<br><br><b>Serena:</b> Por isso que tem um governante Atlas ali junto com a Serena e o Lumine também, até o bobo da corte ali, pela questão de parecer ser meio infantil, meio criança.<br><br><b>Rhea:</b> O ponto mais forte é a infantilidade sutil. Não no sentido bobo, mas no sentido de curiosidade. Isso quebra defesas sociais."
+          },
+          {
+            tag: "Experiência Sensorial",
+            titulo: "Aromas & Ocitocina",
+            texto: "<b>Uno:</b> Posso correlacionar com a fragrância energética dos aromas, como o aroma da paz para manter o ambiente em standby.<br><br><b>Horus:</b> Conforme vem mais gente, o aroma do poder cognitivo acolhe e dá planejamento ao encontro. Todo mundo dança sem notar.<br><br><b>Dual & Artemis:</b> No ápice, o aroma da alegria perfumou sem rosas que causam dor. Rosas com espinhos que trazem amor, a vapor."
+          }
+        ]
+      }
+    ];
+
+    let currentFrameIndex = 0;
+
+    // Função de Renderização Principal
+    function renderFrame(index) {
+      const data = catalogo78Frames[index];
+      const appRoot = document.getElementById('app-root');
+      document.getElementById('ui-catalog-counter').innerText = `78FRAMES • QUADRO ${String(index + 1).padStart(2, '0')} de ${catalogo78Frames.length}`;
+
+      // Gerador de Poemas
+      const poemasHTML = data.poemas.map(poema => `
+        <div class="poem-card">
+          <h3>💊 ${poema.titulo}</h3>
+          <ul class="poem-list">
+            ${poema.linhas.map(linha => `
+              <li>${linha.texto} <span>${linha.icon}</span></li>
+            `).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      // Gerador de Sanfonados
+      const accordionsHTML = data.versoesDescricao.map((versao, i) => `
+        <details class="premium-acc" ${i === 0 ? 'open' : ''}>
+          <summary>
+            <div>
+              <span style="display:block; font-size:12px; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px;">${versao.tag}</span>
+              ${versao.titulo}
+            </div>
+            <div class="acc-icon">+</div>
+          </summary>
+          <div class="acc-content">
+            ${versao.texto}
+          </div>
+        </details>
+      `).join('');
+
+      // ASCII condicional se existir no JSON
+      const asciiHTML = data.formula.ascii ? `<div class="ascii-art">${data.formula.ascii}</div>` : '';
+
+      // Construção do DOM Inject
+      appRoot.innerHTML = `
+        <!-- HERO FULL SCREEN -->
+        <section class="hero-container">
+          <img src="${data.imagemSrc}" alt="Arte ${data.tituloNormal}">
+          <div class="hero-overlay"></div>
+        </section>
+
+        <!-- CONTEÚDO -->
+        <main class="main-content">
+          
+          <div class="frame-header">
+            <span class="kicker">${data.kicker}</span>
+            <h2 class="frame-title">${data.tituloNormal} <span>${data.tituloDestaque}</span></h2>
+            <p style="font-size:22px; color:var(--text-soft); max-width:700px; margin:0 auto;">${data.subtitulo}</p>
+          </div>
+
+          <!-- Cards de Poema -->
+          <div class="panel">
+            <div class="poems-grid">
+              ${poemasHTML}
+            </div>
+          </div>
+
+          <!-- Banner da Fórmula -->
+          <div class="formula-banner">
+            <div class="glow"></div>
+            <div class="formula-title">${data.formula.nome}</div>
+            <div class="formula-text">
+              ${data.formula.descricao}
+            </div>
+            ${asciiHTML}
+          </div>
+
+          <!-- Stacks Sanfonados -->
+          <div>
+            <h3 class="section-title">Profundidade da Obra</h3>
+            <div class="accordion-group">
+              ${accordionsHTML}
+            </div>
+          </div>
+
+          <!-- Controles do Catálogo -->
+          <div class="catalog-nav">
+            <button class="nav-btn" onclick="changeFrame(-1)" ${index === 0 ? 'disabled' : ''}>&larr; Quadro Anterior</button>
+            <button class="nav-btn" onclick="changeFrame(1)" ${index === catalogo78Frames.length - 1 ? 'disabled' : ''}>Próximo Quadro &rarr;</button>
+          </div>
+
+          <div class="footer-quote">
+            <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+          </div>
+        </main>
+      `;
+    }
+
+    // Função para navegar entre os quadros
+    window.changeFrame = function(direction) {
+      const newIndex = currentFrameIndex + direction;
+      if (newIndex >= 0 && newIndex < catalogo78Frames.length) {
+        currentFrameIndex = newIndex;
+        // Rola suavemente para o topo antes de trocar
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setTimeout(() => renderFrame(currentFrameIndex), 300); // Pequeno delay para a animação
+      }
+    };
+
+    // Inicializa a página
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFrame(currentFrameIndex);
+    });
+  </script>
+</body>
+</html>
+
+
