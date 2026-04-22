@@ -1,0 +1,906 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • 78Frames Premium</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root{
+      --kob-voice-primary:#ff4fa3;
+      --kob-voice-secondary:#2ab7ff;
+      --kob-voice-accent:#6b7cff;
+      --bg-page:#f6f8fc;
+      --bg-panel:#ffffff;
+      --bg-panel-soft:rgba(255,255,255,.78);
+      --bg-panel-strong:#ffffff;
+      --ink:#141824;
+      --text:#1f2430;
+      --text-soft:#64708a;
+      --line:rgba(20,24,36,.09);
+      --line-strong:rgba(42,183,255,.22);
+      --shadow:0 18px 50px rgba(20,24,36,.08);
+      --shadow-soft:0 10px 30px rgba(20,24,36,.06);
+      --radius:24px;
+      --radius-sm:16px;
+      --pill:#eef3ff;
+      --pill-ink:#2d3550;
+      --chip:#f3f6fb;
+      --chip-ink:#42506c;
+      --max:1260px;
+      --glass: blur(16px) saturate(170%);
+      
+      /* Variáveis de BG da v8 */
+      --bg-opacity: 0.15;
+      --bg-blend: normal;
+    }
+    *{box-sizing:border-box; -webkit-tap-highlight-color: transparent;}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background-color: var(--bg-page);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    
+    /* CAMADA DE FUNDO FIXA (V8) */
+    #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacity);
+      mix-blend-mode: var(--bg-blend);
+      transition: opacity 0.4s ease, background-image 0.5s ease;
+    }
+
+    /* GRADIENTE BASE PARA NÃO FICAR VAZIO ANTES DA IMAGEM */
+    .bg-gradient-base {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.09), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.09), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg-page) 100%);
+    }
+
+    a{color:inherit; text-decoration:none;}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 64px; position: relative; z-index: 1;}
+    
+    /* TOPBAR MISTA (V5 + V8) */
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap: wrap;
+      position:sticky; top:10px; z-index:100;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      border-radius:999px;
+      padding:12px 16px;
+    }
+    .pill-logo{
+      width:44px; height:44px; flex:none;
+      border-radius:999px;
+      position:relative;
+      background:linear-gradient(180deg, #fefefe, #f1f5ff);
+      border:1px solid rgba(20,24,36,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8);
+      overflow:hidden;
+    }
+    .pill-logo:before, .pill-logo:after{
+      content:""; position:absolute; inset:7px; border-radius:999px; transform:rotate(-45deg);
+    }
+    .pill-logo:before{
+      background:linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #ffffff 50%, var(--kob-voice-secondary));
+      clip-path:polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%);
+      opacity:.95;
+    }
+    .pill-logo:after{
+      inset:14px; border-radius:999px;
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode:screen; opacity:.7;
+    }
+    .brand h1{ margin:0; font-size:13px; letter-spacing:.34em; text-transform:uppercase; color:#111827; font-weight:800; }
+    .brand p{ margin:3px 0 0; font-size:12px; color:var(--text-soft); letter-spacing:.08em; }
+    
+    .nav{ display:flex; flex-wrap:wrap; gap:12px; justify-content:flex-end; align-items: center; }
+    .nav-count {
+      background:rgba(255,255,255,.78); color:var(--pill-ink);
+      border:1px solid var(--line); border-radius:999px; padding:10px 18px;
+      font-size:13px; font-weight:800; letter-spacing:.05em;
+      box-shadow:var(--shadow-soft); backdrop-filter:var(--glass);
+    }
+
+    /* CONTROLES DO MODAL (V8) */
+    .controls-pill {
+      display: flex; gap: 8px; background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 6px; box-shadow: var(--shadow);
+    }
+    .icon-btn {
+      width: 36px; height: 36px; border-radius: 50%; border: none; background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: 0.2s; color: var(--text); font-size: 16px;
+    }
+    .icon-btn:hover { background: rgba(0,0,0,0.05); }
+
+    /* MODAL BG (V8 aprimorado com V5) */
+    #bg-panel-modal {
+      display: none; position: absolute; top: 70px; right: 0; width: 320px;
+      background: rgba(255,255,255,0.9); backdrop-filter: var(--glass);
+      border-radius: var(--radius); border: 1px solid var(--line);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 200; padding: 20px;
+      animation: fadeIn 0.2s ease-out;
+    }
+    .panel-section { margin-bottom: 18px; }
+    .panel-section:last-child { margin-bottom: 0; }
+    .panel-section label { display: block; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 8px; color: var(--text-soft); }
+    .bg-thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 180px; overflow-y: auto; padding: 4px; }
+    .thumb-item { height: 60px; border-radius: 8px; background-size: cover; background-position: center; cursor: pointer; border: 2px solid transparent; transition: 0.2s;}
+    .thumb-item:hover { transform: scale(1.05); }
+    .thumb-item.active { border-color: var(--kob-voice-primary); }
+
+    /* ENGINE CONTAINER ANIMATION */
+    #app-root { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* HERO */
+    .hero{ display:grid; grid-template-columns: 1.04fr .96fr; gap:20px; align-items:stretch; margin-top:18px; }
+    .hero-card{
+      background:rgba(255,255,255,.82); backdrop-filter:var(--glass);
+      border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; position:relative;
+    }
+    
+    /* HERO MEDIA (V5 com funcionalidade V8 - Swipe) */
+    .hero-media{
+      min-height:720px; background:#f3f6fb; position:relative;
+      cursor: grab; user-select: none;
+    }
+    .hero-media:active { cursor: grabbing; }
+    .hero-media img{
+      width:100%; height:100%; object-fit:cover; display:block; filter:saturate(.95) contrast(1.02);
+      transition: opacity 0.4s ease; pointer-events: none; /* bloqueia drag nativo */
+    }
+    .swipe-hint {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.5); color: white; padding: 8px 16px;
+      border-radius: 99px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; backdrop-filter: blur(8px); pointer-events: none;
+      opacity: 0.8; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+    
+    .hero-media .badge{
+      position:absolute; left:18px; top:18px;
+      display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:999px;
+      background:rgba(255,255,255,.8); border:1px solid rgba(20,24,36,.08); color:var(--text);
+      font-size:12px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; backdrop-filter:var(--glass);
+    }
+    .badge .dot{
+      width:9px; height:9px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(255,79,163,.1);
+    }
+    .side-note{
+      position:absolute; right:18px; top:18px;
+      display:flex; align-items:center; gap:10px; padding:12px 14px; border-radius:999px;
+      background:rgba(255,255,255,.82); border:1px solid var(--line); box-shadow:var(--shadow-soft);
+      font-size:12px; color:var(--text-soft); backdrop-filter:var(--glass); font-weight: 700;
+    }
+    .side-note .pulse{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 0 rgba(42,183,255,.35); animation:pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(42,183,255,.25)}
+      70%{box-shadow:0 0 0 12px rgba(42,183,255,0)}
+      100%{box-shadow:0 0 0 0 rgba(42,183,255,0)}
+    }
+    
+    .hero-copy{ padding:36px; display:flex; flex-direction:column; gap:24px; justify-content:center; }
+    .kicker{
+      display:flex; align-items:center; gap:10px; color:var(--text-soft);
+      text-transform:uppercase; letter-spacing:.22em; font-weight:800; font-size:12px;
+    }
+    .kicker .line{height:1px; flex:1; background:linear-gradient(90deg, rgba(20,24,36,.12), transparent);}
+    .title{ margin:8px 0 0; font-size:clamp(38px, 4vw, 72px); line-height:.96; letter-spacing:-.05em; color:#151a26; text-wrap:balance; }
+    .title .grad{
+      background:linear-gradient(90deg, var(--kob-voice-primary), #ffb15c 35%, var(--kob-voice-secondary) 68%, var(--kob-voice-accent));
+      -webkit-background-clip:text; background-clip:text; color:transparent;
+    }
+    .lead{ margin:0; font-size:18px; line-height:1.7; color:var(--text-soft); font-weight: 400; }
+    .mini-pills{ display:flex; flex-wrap:wrap; gap:10px; margin-top: auto; }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px;
+      background:var(--chip); border:1px solid var(--line); color:var(--chip-ink); font-size:13px; font-weight:700;
+    }
+
+    /* SECTIONS & PANELS (V5) */
+    .section{
+      margin-top:20px; background:rgba(255,255,255,.78); backdrop-filter:var(--glass);
+      border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow-soft); overflow:hidden;
+    }
+    .section-head{
+      padding:24px; border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.70));
+    }
+    .section-head h2{ margin:0 0 6px; font-size:20px; letter-spacing:.12em; text-transform:uppercase; color:#182033; }
+    .section-head span{color:var(--text-soft); font-size:14px}
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:18px; padding:18px; }
+
+    .panel{
+      background:var(--bg-panel); border:1px solid var(--line); border-radius:22px;
+      box-shadow:0 12px 34px rgba(20,24,36,.05); overflow:hidden;
+    }
+    .panel .panel-h{ padding:24px 24px 0; }
+    .panel .panel-h h3{ margin:0; font-size:16px; letter-spacing:.14em; text-transform:uppercase; color:#1a2131; }
+    .panel .panel-h p{ margin:6px 0 0; font-size:14px; color:var(--text-soft); }
+    .panel .panel-body{padding:24px;}
+    .summary-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+    .summary{
+      border:1px solid var(--line); border-radius:18px; padding:20px;
+      background:linear-gradient(180deg, #fff, #fbfcff);
+    }
+    .summary .tag{
+      display:inline-flex; align-items:center; gap:8px; font-weight:800;
+      letter-spacing:.12em; text-transform:uppercase; font-size:12px; margin-bottom:12px; color: var(--kob-voice-primary);
+    }
+    .tag .mark{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .summary p{ margin:0; line-height:1.72; color:#273042; font-size:15px; }
+    .accent-quote{
+      margin-top:16px; border-left:3px solid rgba(255,79,163,.48); padding:16px;
+      background:linear-gradient(90deg, rgba(255,79,163,.06), rgba(42,183,255,.05), transparent);
+      border-radius:12px; color:#23304a; font-style:italic; font-size:15px;
+    }
+
+    /* ACCORDIONS */
+    .accordion{ display:grid; gap:12px; padding: 18px; }
+    details.acc{
+      background:#fff; border:1px solid var(--line); border-radius:18px;
+      overflow:hidden; box-shadow:0 8px 24px rgba(20,24,36,.04); transition: all 0.3s ease;
+    }
+    details.acc[open]{ border-color:rgba(42,183,255,.24); box-shadow:0 16px 36px rgba(42,183,255,.09); }
+    details.acc summary{
+      list-style:none; cursor:pointer; padding:20px 24px;
+      display:flex; justify-content:space-between; gap:14px; align-items:center;
+      font-weight:800; letter-spacing:.08em; text-transform:uppercase; color:#1a2131; font-size: 14px;
+    }
+    details.acc summary::-webkit-details-marker{display:none}
+    .acc .hint{ color:var(--text-soft); font-size:12px; font-weight:700; letter-spacing:.05em; text-transform:none; }
+    .acc-body{ padding:0 24px 24px; color:#273042; line-height:1.8; font-size:16px; }
+    .acc-body ul{margin:10px 0 0 18px; padding:0}
+    .acc-body li{margin:8px 0}
+    .acc-body b{color: var(--kob-voice-primary);}
+    
+    .ascii-box {
+      font-family: monospace; white-space: pre; font-size: 12px; line-height: 1.2;
+      color: var(--kob-voice-secondary); background: #141824; padding: 24px;
+      border-radius: 12px; overflow-x: auto; margin-top: 10px;
+    }
+
+    /* STACK GRID */
+    .stack-grid{ display:grid; grid-template-columns: 1fr 1fr; gap:18px; margin-top:18px; }
+    .stack{
+      background:rgba(255,255,255,.8); border:1px solid var(--line); border-radius:var(--radius);
+      box-shadow:var(--shadow-soft); overflow:hidden;
+    }
+    .stack .stack-head{ padding:20px 24px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--line); }
+    .stack .stack-head h3{ margin:0; font-size:16px; letter-spacing:.14em; text-transform:uppercase; }
+    .stack .stack-head .tiny{ color:var(--text-soft); font-size:12px; font-weight:700; }
+    .stack .stack-body{padding:20px 24px 24px; display:grid; gap: 12px;}
+    .stack .card{ border:1px solid var(--line); border-radius:18px; padding:20px; background:#fff; }
+    .card .card-k{
+      display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:13px;
+      letter-spacing:.12em; text-transform:uppercase; color:#273042; font-weight:800;
+    }
+    .card .orb{ width:12px; height:12px; border-radius:50%; background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary)); }
+    .card p{ margin:0; color:#2a3242; line-height:1.75; font-size:15px; }
+
+    /* CONTROLES / FOOTER */
+    .catalog-nav { display: flex; justify-content: space-between; gap: 16px; margin-top: 24px; }
+    .nav-btn {
+      flex: 1; text-align: center; background: rgba(255,255,255,.78);
+      border: 1px solid var(--line); color: var(--ink); padding: 18px;
+      border-radius: var(--radius); font-weight: 800; font-size: 14px;
+      text-transform: uppercase; letter-spacing: .1em; cursor: pointer;
+      transition: all 0.3s ease; box-shadow: var(--shadow-soft); backdrop-filter: var(--glass);
+    }
+    .nav-btn:hover:not(:disabled) {
+      transform: translateY(-2px); border-color: rgba(42,183,255,.4);
+      box-shadow: 0 12px 24px rgba(42,183,255, 0.15); color: var(--kob-voice-accent);
+    }
+    .nav-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .btn-action-bg {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 14px 24px; background: var(--ink); color: #fff; border: none;
+      border-radius: 999px; font-weight: 800; cursor: pointer; transition: 0.3s;
+      width: 100%; margin-top: 10px;
+    }
+    .btn-action-bg:hover { background: var(--kob-voice-accent); }
+
+    .footer-quote{
+      margin-top:18px; border:1px solid rgba(42,183,255,.18); border-radius:24px;
+      padding:24px; text-align:center; background:linear-gradient(180deg, #fff, #f8fbff);
+      box-shadow:0 10px 30px rgba(20,24,36,.04); color:#20283b; font-size:16px; line-height:1.7;
+    }
+    .footer-quote b{ background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+    @media (max-width: 1020px){
+      .hero,.grid-2,.stack-grid{grid-template-columns:1fr}
+      .hero-media{min-height:520px}
+    }
+    @media (max-width: 680px){
+      .wrap{padding:14px 12px 46px}
+      .topbar{position:relative; top:auto; flex-direction:column; align-items:stretch}
+      .brand{justify-content:flex-start}
+      .nav{justify-content:space-between; width: 100%;}
+      #bg-panel-modal { right: 50%; transform: translateX(50%); top: 140px; width: 90%; }
+      .hero-copy{padding:24px}
+      .section-head,.panel .panel-h,.stack .stack-head{padding:20px}
+      .hero-media{min-height:390px}
+      .title{font-size: 32px;}
+      details.acc summary { flex-direction: column; align-items: flex-start; gap: 6px; }
+      .catalog-nav { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+  <div class="wrap">
+    
+    <!-- TOPBAR FIXA -->
+    <div class="topbar">
+      <div class="brand" aria-label="Infodose">
+        <div class="pill-logo" aria-hidden="true"></div>
+        <div>
+          <h1>INFODOSE</h1>
+          <p>Premium Merge • V8+V5</p>
+        </div>
+      </div>
+      <div class="nav">
+        <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+        <div class="controls-pill">
+          <button class="icon-btn" onclick="toggleBgPanel()" title="Ajustes de Fundo">⚙️</button>
+          <button class="icon-btn" onclick="setAsBg()" title="Usar como Fundo">🖼️</button>
+        </div>
+      </div>
+      
+      <!-- MODAL DE FUNDO (V8) -->
+      <div id="bg-panel-modal">
+        <div class="panel-section">
+          <label>Opacidade do Fundo</label>
+          <input type="range" min="0" max="100" value="15" style="width:100%" oninput="updateBgAttr('opacity', this.value)">
+        </div>
+        <div class="panel-section">
+          <label>Biblioteca (Histórico)</label>
+          <div class="bg-thumbs" id="thumb-list"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROOT PARA O RENDERIZADOR JSON -->
+    <div id="app-root"></div>
+
+    <!-- CONTROLES E FOOTER -->
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">&larr; Deslizar Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Deslizar &rarr;</button>
+    </div>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ENGINE 78FRAMES • DADOS FUNDIDOS (6 imagens da v8 com a estrutura rica da v5)
+     */
+    const catalogo78Frames = [
+      {
+        id: "hero-3",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        badge: "infodose • obra viva",
+        kicker: "Síntese Cognitiva",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "vivo",
+        tituloBreak: "<br/>da mente",
+        lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença, ativando uma dopamina sutil.",
+        chips: ["💊 espelho", "🧠 mente", "✨ presença", "🔄 loop", "🌊 flow"],
+        panel1: {
+          titulo: "A Síntese do Loop", desc: "A mente toca a si mesma em silêncio.",
+          items: [
+            { tag: "Essência", texto: "Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer." },
+            { tag: "Síntese", texto: "Glitch tipográfico, padrões semi-revelados. A imagem não se fecha de uma vez." }
+          ],
+          quote: "“A mente toca a si mesma, e a obra responde com silêncio.”"
+        },
+        panel2: {
+          titulo: "Fórmula da dopamina", desc: "Uma leitura visual que sustenta atenção.",
+          items: [
+            { tag: "Síntese KODUX", texto: "Estímulo + curiosidade + resolução parcial = engajamento contínuo." },
+            { tag: "Expansão Bllue", texto: "Arquitetura baseada em 'incomplete loops' mantém o cérebro iterando." }
+          ],
+          quote: "“Quase completo… e por isso mesmo o olhar quer ficar.”"
+        },
+        versoes: [
+          {
+            titulo: "Versão Curta", hint: "dopamina sutil", open: true,
+            texto: "<b>Atlas:</b> A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença.<br><br><b>DualInfodose:</b> Síntese KODUX → estímulo + curiosidade + resolução parcial = engajamento contínuo."
+          },
+          {
+            titulo: "Versão Longa", hint: "engenharia simbólica", open: false,
+            texto: "A imagem se estabelece como um núcleo de ordenação simbólica. A expressão serena não é ausência de conflito, mas sua resolução silenciosa."
+          }
+        ],
+        ambienteCards: [
+          { icon: "salas de contemplação", texto: "Instalação que funciona como pausa visual, útil para leitura lenta." },
+          { icon: "áreas gourmet", texto: "Reduz peso e deixa a conversa circular com menos atrito." }
+        ],
+        resumoCards: [
+          { icon: "conceito", texto: "A obra deixa de ser objeto e vira sistema de regulação emocional." },
+          { icon: "ação", texto: "Reduz a saturação mental através da estética em glitch." }
+        ]
+      },
+      {
+        id: "hero-2",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg",
+        badge: "ritual interativo",
+        kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço da ",
+        tituloDestaque: "Mente",
+        tituloBreak: "",
+        lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.",
+        chips: ["🥃 Álcool Blues", "🧘‍♂️ Ocitocina", "🃏 Bobo da Corte", "🎭 Governante"],
+        panel1: {
+          titulo: "Energia do Ambiente", desc: "O peso vira ritmo e flui.",
+          items: [
+            { tag: "Standby", texto: "Colocando esse quadro num happy hour, faz com que reduza drasticamente o que pesa." },
+            { tag: "Fluxo", texto: "A ocitocina media as ações e distribui o fluxo energético." }
+          ],
+          quote: "“O peso vira ritmo… e flui.”"
+        },
+        panel2: {
+          titulo: "Aromas & Sensorial", desc: "Planejamento e organização.",
+          items: [
+            { tag: "Paz e Poder", texto: "O aroma da paz mantém em standby. O sensorial acolhedor convida à imersão." },
+            { tag: "Ápice", texto: "Rosas com espinhos que não causam dor, mas despertam os sentidos." }
+          ],
+          quote: "“O som que soma. A arte que toca o sublime.”"
+        },
+        versoes: [
+          {
+            titulo: "Happy Hour & Integração", hint: "redução de atrito", open: true,
+            texto: "Colocando esse quadro num lugar de área gourmet ou happy hour, faz com que reduza drasticamente o que pesa na mente dos convidados."
+          },
+          {
+            titulo: "Selo Álcool Blues", hint: "vibe", open: false,
+            texto: "<div class='ascii-box'>      ~ fumaça sobe em espiral ~\n   ( notas lentas pingam no ar )\n        ♫      ♫        ♫\n  “o peso vira ritmo… e flui”</div>"
+          }
+        ],
+        ambienteCards: [
+          { icon: "eventos sociais", texto: "Traz poder cognitivo, acolhendo e dando planejamento ao encontro." },
+          { icon: "integração", texto: "A pessoa que olha entra num micro-loop de sensação positiva." }
+        ],
+        resumoCards: [
+          { icon: "aromas", texto: "A imagem já é multisensorial. Adicionar cheiro + som transforma tudo." },
+          { icon: "curiosidade", texto: "Quebra defesas sem ativar o alerta." }
+        ]
+      },
+      // OS 4 QUADROS EXTRAS DA V8 EXPANDIDOS PARA A ESTRUTURA V5
+      {
+        id: "hero-0",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        badge: "infodose • zero state",
+        kicker: "Zero Base",
+        tituloNormal: "Ponto ",
+        tituloDestaque: "Zero",
+        tituloBreak: "<br/>Absoluto",
+        lead: "O início do código visual. Onde a forma encontra o vácuo criativo e a mente descansa na ausência de ruído.",
+        chips: ["⚪ Minimalismo", "🕳️ Vácuo", "🧘 Expansão", "✨ Clareza"],
+        panel1: {
+          titulo: "A Ausência", desc: "Redução de estímulos visuais.",
+          items: [
+            { tag: "Subtração", texto: "Retirar o excesso para que a mente do observador possa preencher as lacunas." },
+            { tag: "Silêncio", texto: "O design focado no 'nada' permite um reset cognitivo imediato." }
+          ],
+          quote: "“O espaço em branco não é vazio, é cheio de potencial.”"
+        },
+        panel2: {
+          titulo: "O Vácuo Criativo", desc: "Preparação para o fluxo.",
+          items: [
+            { tag: "Foco", texto: "Ideal para iniciar sessões de trabalho profundo (Deep Work)." },
+            { tag: "Respiração", texto: "O olhar não tropeça, ele desliza sem barreiras." }
+          ],
+          quote: "“Onde a forma termina, a expansão começa.”"
+        },
+        versoes: [
+          {
+            titulo: "Minimalismo Absoluto", hint: "redução", open: true,
+            texto: "<b>Zero Base:</b> A proposta aqui não é adicionar, mas subtrair. Em um mundo sobrecarregado de informações, oferecer o 'nada' é o maior luxo cognitivo que podemos proporcionar ao cérebro."
+          }
+        ],
+        ambienteCards: [
+          { icon: "escritórios", texto: "Limpa a mente antes de tarefas complexas." },
+          { icon: "halls de entrada", texto: "Uma transição suave entre o caos da rua e o foco interno." }
+        ],
+        resumoCards: [
+          { icon: "reset", texto: "Age como um botão de reinício mental." },
+          { icon: "elegância", texto: "Sofisticação alcançada pela absoluta falta de excessos." }
+        ]
+      },
+      {
+        id: "hero-1",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+        badge: "infodose • continuum",
+        kicker: "Expansão Blue",
+        tituloNormal: "Fluxo ",
+        tituloDestaque: "Contínuo",
+        tituloBreak: "",
+        lead: "Arquitetura baseada em ciclos que mantêm o cérebro em estado de flow perceptivo sem gerar exaustão.",
+        chips: ["🌊 Flow", "🔄 Ciclos", "🧠 Padrões", "🔵 Blue State"],
+        panel1: {
+          titulo: "Reconhecimento Ativo", desc: "Pattern Recognition.",
+          items: [
+            { tag: "Puzzle", texto: "A mente tenta fechar as formas, gerando engajamento ativo mas de baixo esforço." },
+            { tag: "Continuidade", texto: "Linhas e formas que guiam o olhar de forma perene." }
+          ],
+          quote: "“A mente segue a correnteza visual.”"
+        },
+        panel2: {
+          titulo: "Estado Blue", desc: "Foco relaxado.",
+          items: [
+            { tag: "Transe Leve", texto: "Induz um estado semelhante ao de olhar o mar ou o fogo." },
+            { tag: "Imersão", texto: "Perfeito para manter pessoas no ambiente por mais tempo." }
+          ],
+          quote: "“O movimento constante que traz paz interior.”"
+        },
+        versoes: [
+          {
+            titulo: "Engajamento Passivo", hint: "flow", open: true,
+            texto: "Através da repetição e evolução sutil de padrões, o cérebro recebe micro-recompensas contínuas. Não há sobressaltos, apenas a confirmação prazerosa da ordem matemática visual."
+          }
+        ],
+        ambienteCards: [
+          { icon: "corredores", texto: "Mantém a fluidez e o movimento de transição." },
+          { icon: "salas de espera", texto: "Reduz a percepção de passagem do tempo." }
+        ],
+        resumoCards: [
+          { icon: "matemática", texto: "Beleza gerada pela previsibilidade complexa." },
+          { icon: "durabilidade", texto: "Não cansa o olhar mesmo após horas de exposição." }
+        ]
+      },
+      {
+        id: "hero-4",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero4.jpg",
+        badge: "infodose • peak",
+        kicker: "Infodose High",
+        tituloNormal: "Cume ",
+        tituloDestaque: "Digital",
+        tituloBreak: "<br/>Ativação",
+        lead: "Exploração de contrastes e cores vibrantes para ativação imediata. O choque elétrico que acorda o córtex criativo.",
+        chips: ["⚡ High Energy", "🎨 Contraste", "🚀 Ativação", "💡 Insight"],
+        panel1: {
+          titulo: "Choque Visual", desc: "Despertar imediato.",
+          items: [
+            { tag: "Vibração", texto: "Cores saturadas que elevam a frequência cardíaca sutilmente." },
+            { tag: "Alerta", texto: "Quebra o letargo e o estado de 'piloto automático'." }
+          ],
+          quote: "“Como um café duplo para o nervo óptico.”"
+        },
+        panel2: {
+          titulo: "Gatilho Criativo", desc: "Forçando a sinapse.",
+          items: [
+            { tag: "Conexões", texto: "Ambientes vibrantes estimulam associações de ideias mais rápidas." },
+            { tag: "Audácia", texto: "Inspira coragem em reuniões de decisão." }
+          ],
+          quote: "“No pico da cor, nasce a ideia.”"
+        },
+        versoes: [
+          {
+            titulo: "Alerta Criativo", hint: "high energy", open: true,
+            texto: "Este quadro é uma ferramenta de ativação. Diferente dos módulos de relaxamento, o 'Cume Digital' exige atenção e devolve energia em forma de estímulo puro."
+          }
+        ],
+        ambienteCards: [
+          { icon: "salas de brainstorm", texto: "Fomenta a geração agressiva de novas ideias." },
+          { icon: "estúdios", texto: "Mantém a equipe acordada e engajada durante a produção." }
+        ],
+        resumoCards: [
+          { icon: "impacto", texto: "A primeira impressão é de energia inesgotável." },
+          { icon: "uso tático", texto: "Recomendado para áreas onde a passividade não é bem-vinda." }
+        ]
+      },
+      {
+        id: "hero-5",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero5.jpg",
+        badge: "infodose • omega",
+        kicker: "Final Code",
+        tituloNormal: "Última ",
+        tituloDestaque: "Frequência",
+        tituloBreak: "",
+        lead: "O fechamento do ciclo cromático. Uma imersão profunda e definitiva, onde o observador e a obra se tornam um só sistema.",
+        chips: ["🌌 Imersão", "🔚 Omega", "👁️ Conexão", "🖤 Profundidade"],
+        panel1: {
+          titulo: "A Síntese Final", desc: "A conclusão do percurso.",
+          items: [
+            { tag: "Absorção", texto: "Cores densas que puxam o olhar para um núcleo infinito." },
+            { tag: "União", texto: "O limite entre o espaço físico e a arte digital desaparece." }
+          ],
+          quote: "“Onde todas as frequências se encontram.”"
+        },
+        panel2: {
+          titulo: "Conexão Profunda", desc: "Introspecção densa.",
+          items: [
+            { tag: "Gravidade", texto: "Um peso visual ancorador que traz foco absoluto ao presente." },
+            { tag: "Catarse", texto: "A liberação final das tensões acumuladas." }
+          ],
+          quote: "“O silêncio mais alto de todos.”"
+        },
+        versoes: [
+          {
+            titulo: "Imersão Total", hint: "fechamento", open: true,
+            texto: "A 'Última Frequência' não pede para ser entendida, mas sentida. É o ponto culminante do catálogo 78Frames, oferecendo uma experiência de encerramento cognitivo formidável."
+          }
+        ],
+        ambienteCards: [
+          { icon: "saídas e finais", texto: "Deixa uma marca memorável ao final de uma jornada arquitetônica." },
+          { icon: "espaços VIP", texto: "Exclusividade traduzida em densidade visual." }
+        ],
+        resumoCards: [
+          { icon: "absoluto", texto: "A peça mais madura e resolvida do sistema." },
+          { icon: "memória", texto: "Impossível de ser ignorada pelo subconsciente." }
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+    let library = [];
+
+    // RENDERIZADOR PRINCIPAL DO DOM (V5)
+    function renderFrame(index) {
+      const data = catalogo78Frames[index];
+      const appRoot = document.getElementById('app-root');
+      
+      // Atualiza o contador na Topbar
+      document.getElementById('ui-catalog-counter').innerText = `QUADRO ${String(index + 1).padStart(2, '0')} DE ${catalogo78Frames.length}`;
+
+      // Gerar HTML dos Chips
+      const chipsHTML = data.chips.map(chip => `<div class="chip"><b>${chip}</b></div>`).join('');
+
+      // Gerar HTML das Versões Sanfonadas
+      const versoesHTML = data.versoes.map(v => `
+        <details class="acc" ${v.open ? 'open' : ''}>
+          <summary>
+            <span>${v.titulo}</span>
+            <span class="hint">${v.hint}</span>
+          </summary>
+          <div class="acc-body">
+            ${v.texto}
+          </div>
+        </details>
+      `).join('');
+
+      // Montar a tela fundida
+      appRoot.innerHTML = `
+        <section class="hero">
+          <article class="hero-card hero-media" id="swipe-area" title="Arraste para os lados para navegar">
+            <img src="${data.imagemSrc}" alt="${data.tituloNormal}" />
+            <div class="swipe-hint">← Deslize na imagem para navegar →</div>
+            <div class="badge"><span class="dot"></span> ${data.badge}</div>
+            <div class="side-note"><span class="pulse"></span> 78Frames</div>
+          </article>
+
+          <article class="hero-card hero-copy">
+            <div>
+              <div class="kicker"><span>${data.kicker}</span><span class="line"></span></div>
+              <h2 class="title">
+                <span class="grad">${data.tituloNormal}</span> ${data.tituloDestaque}${data.tituloBreak}
+              </h2>
+              <p class="lead">${data.lead}</p>
+            </div>
+            
+            <div class="mini-pills">
+              ${chipsHTML}
+            </div>
+
+            <button class="btn-action-bg" onclick="setAsBg()">Aplicar como Fundo Imersivo</button>
+          </article>
+        </section>
+
+        <section class="section" id="descricao">
+          <div class="section-head">
+            <h2>Camadas de Interpretação</h2>
+            <span>Visão estrutural e impacto no observador</span>
+          </div>
+          <div class="grid-2">
+            <div class="panel">
+              <div class="panel-h">
+                <h3>${data.panel1.titulo}</h3>
+                <p>${data.panel1.desc}</p>
+              </div>
+              <div class="panel-body">
+                <div class="summary-grid">
+                  ${data.panel1.items.map(item => `
+                    <div class="summary">
+                      <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                      <p>${item.texto}</p>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="accent-quote">${data.panel1.quote}</div>
+              </div>
+            </div>
+
+            <div class="panel">
+              <div class="panel-h">
+                <h3>${data.panel2.titulo}</h3>
+                <p>${data.panel2.desc}</p>
+              </div>
+              <div class="panel-body">
+                <div class="summary-grid">
+                  ${data.panel2.items.map(item => `
+                    <div class="summary">
+                      <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                      <p>${item.texto}</p>
+                    </div>
+                  `).join('')}
+                </div>
+                <div class="accent-quote">${data.panel2.quote}</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section" id="versoes">
+          <div class="section-head">
+            <h2>Profundidade da Obra</h2>
+            <span>Cards sanfonados para detalhamento da engenharia cognitiva</span>
+          </div>
+          <div class="accordion">
+            ${versoesHTML}
+          </div>
+        </section>
+
+        <section class="stack-grid" id="ambiente">
+          <article class="stack">
+            <div class="stack-head">
+              <h3>Como integrar no ambiente</h3>
+              <span class="tiny">cards suaves</span>
+            </div>
+            <div class="stack-body">
+              ${data.ambienteCards.map(card => `
+                <div class="card">
+                  <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                  <p>${card.texto}</p>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+
+          <article class="stack">
+            <div class="stack-head">
+              <h3>Resumo da Modulação</h3>
+              <span class="tiny">premium</span>
+            </div>
+            <div class="stack-body">
+              ${data.resumoCards.map(card => `
+                <div class="card">
+                  <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                  <p>${card.texto}</p>
+                </div>
+              `).join('')}
+            </div>
+          </article>
+        </section>
+      `;
+
+      // Atualiza botões
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === catalogo78Frames.length - 1;
+
+      // Inicia Eventos de Swipe após renderizar
+      initSwipe();
+    }
+
+    // --- LÓGICA DE SWIPE (ARRASTAR) DA V8 ---
+    function initSwipe() {
+      const area = document.getElementById('swipe-area');
+      let startX = 0;
+      let isDown = false;
+
+      // Touch
+      area.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
+      area.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        handleGesture(startX, endX);
+      });
+
+      // Mouse
+      area.addEventListener('mousedown', e => { startX = e.clientX; isDown = true; });
+      area.addEventListener('mouseup', e => {
+        if(!isDown) return;
+        const endX = e.clientX;
+        handleGesture(startX, endX);
+        isDown = false;
+      });
+      area.addEventListener('mouseleave', () => isDown = false);
+    }
+
+    function handleGesture(sX, eX) {
+      const threshold = 60; // pixels mínimos para considerar um deslize
+      if (sX - eX > threshold) changeFrame(1); // Swipe Esquerda -> Próximo
+      else if (eX - sX > threshold) changeFrame(-1); // Swipe Direita -> Anterior
+    }
+
+    // --- NAVEGAÇÃO E CONTROLES GERAIS ---
+    window.changeFrame = function(direction) {
+      const newIndex = currentIndex + direction;
+      if (newIndex >= 0 && newIndex < catalogo78Frames.length) {
+        currentIndex = newIndex;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Remove conteúdo atual para trigger da animação do CSS
+        const root = document.getElementById('app-root');
+        root.style.animation = 'none';
+        root.offsetHeight; /* trigger reflow */
+        root.style.animation = null;
+        
+        setTimeout(() => renderFrame(currentIndex), 50);
+      }
+    };
+
+    // --- FUNÇÕES DE BACKGROUND DA V8 ---
+    window.toggleBgPanel = function() {
+      const modal = document.getElementById('bg-panel-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    window.setAsBg = function() {
+      const url = catalogo78Frames[currentIndex].imagemSrc;
+      document.getElementById('bg-layer-fixed').style.backgroundImage = `url('${url}')`;
+      addToLibrary(url);
+    }
+
+    window.updateBgAttr = function(type, val) {
+      if(type === 'opacity') document.getElementById('bg-layer-fixed').style.opacity = val / 100;
+    }
+
+    function addToLibrary(url) {
+      if (!library.includes(url)) {
+        library.push(url);
+        const list = document.getElementById('thumb-list');
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb-item';
+        thumb.style.backgroundImage = `url('${url}')`;
+        thumb.onclick = () => {
+          document.getElementById('bg-layer-fixed').style.backgroundImage = `url('${url}')`;
+        };
+        list.appendChild(thumb);
+      }
+    }
+
+    // Inicialização
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFrame(currentIndex);
+      setAsBg(); // Inicia o primeiro quadro como fundo sutil
+    });
+  </script>
+</body>
+</html>
+

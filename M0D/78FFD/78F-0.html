@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Infodose · 78Frames Solar Monolito</title>
+  <meta name="color-scheme" content="light">
+  <style>
+    /* ===== INFODOSE · 78FRAMES — SOLAR MONOLITO ===== */
+    :root {
+      --kob-voice-primary: #ff4fa3;
+      --kob-voice-secondary: #2ab7ff;
+      --kob-voice-accent: #6b7cff;
+      --bg-page: #f6f8fc;
+      --bg-panel: #ffffff;
+      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --ink: #141824;
+      --text: #1f2430;
+      --text-soft: #64708a;
+      --text-muted: #7c88a0;
+      --line: rgba(20, 24, 36, 0.09);
+      --shadow: 0 18px 50px rgba(20, 24, 36, 0.08);
+      --shadow-soft: 0 10px 30px rgba(20, 24, 36, 0.06);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --chip: #f3f6fb;
+      --chip-ink: #42506c;
+      --max: 1260px;
+      --glass: blur(16px) saturate(170%);
+      --drawer-width: 360px;
+      
+      /* Valores padrão de BG */
+      --bg-opacity: 0.15;
+      --bg-blend: overlay;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* CAMADA DE BACKGROUND FIXA (ENGINE) */
+    #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacity);
+      mix-blend-mode: var(--bg-blend);
+      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
+      filter: saturate(1.05) contrast(1.02);
+      pointer-events: none;
+    }
+
+    /* GRADIENTE BASE PARA TRANSIÇÕES SUAVES */
+    .bg-gradient-base {
+      position: fixed; inset: 0; z-index: -2;
+      background: radial-gradient(circle at top left, rgba(255,79,163,.06), transparent 28%),
+                  radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
+                  linear-gradient(180deg, #fbfcff 0%, var(--bg-page) 100%);
+    }
+
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 22px 18px 64px; position: relative; z-index: 1; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
+      position: sticky; top: 10px; z-index: 50; margin-bottom: 24px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .pill-logo {
+      width: 44px; height: 44px; flex: none; border-radius: 999px; position: relative; overflow: hidden;
+      background: linear-gradient(180deg, #fefefe, #f1f5ff); border: 1px solid rgba(20,24,36,.08);
+    }
+    .pill-logo:before, .pill-logo:after { content: ""; position: absolute; inset: 7px; border-radius: 999px; transform: rotate(-45deg); }
+    .pill-logo:before { background: linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #fff 50%, var(--kob-voice-secondary)); clip-path: polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%); }
+    .brand h1 { margin: 0; font-size: 13px; letter-spacing: .34em; text-transform: uppercase; font-weight: 900; }
+    .brand p { margin: 3px 0 0; font-size: 12px; color: var(--text-soft); letter-spacing: .08em; }
+
+    .nav-group { display: flex; gap: 10px; align-items: center; }
+    .nav-count {
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px;
+      font-size: 13px; font-weight: 800; letter-spacing: .05em; box-shadow: var(--shadow-soft);
+    }
+    .drawer-toggle {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--bg-panel-soft);
+      backdrop-filter: var(--glass); border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; cursor: pointer; box-shadow: var(--shadow-soft); transition: 0.2s;
+    }
+    .drawer-toggle:hover { border-color: var(--kob-voice-primary); transform: scale(1.05); }
+
+    /* DRAWER OVERLAY + PAINEL (BACKGROUND ENGINE) */
+    #drawerOverlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.2); backdrop-filter: blur(4px);
+      z-index: 100; opacity: 0; visibility: hidden; transition: 0.3s ease;
+    }
+    #drawerOverlay.active { opacity: 1; visibility: visible; }
+    
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: var(--drawer-width); max-width: 90vw;
+      background: rgba(255,255,255,.95); backdrop-filter: blur(20px); border-left: 1px solid var(--line);
+      box-shadow: -10px 0 40px rgba(0,0,0,.08); z-index: 101;
+      transform: translateX(100%); transition: transform 0.3s cubic-bezier(0.2,0.9,0.4,1);
+      display: flex; flex-direction: column;
+    }
+    .drawer.active { transform: translateX(0); }
+    .drawer-header {
+      padding: 24px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+    .drawer-header h2 { font-size: 16px; letter-spacing: .14em; text-transform: uppercase; font-weight: 900; }
+    .drawer-close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-soft); }
+    
+    .drawer-body { padding: 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 24px; }
+    
+    .panel-section label { display: flex; justify-content: space-between; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 10px; color: var(--text-muted); }
+    .panel-section input[type="range"] { width: 100%; cursor: pointer; }
+    .panel-section select { 
+      width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--line); 
+      background: #fff; font-size: 14px; outline: none; cursor: pointer;
+    }
+
+    .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .preset-btn { 
+      padding: 12px 8px; font-size: 11px; border: 1px solid var(--line); border-radius: 12px; 
+      background: #fff; cursor: pointer; font-weight: 800; transition: 0.2s; text-align: center;
+    }
+    .preset-btn:hover { border-color: var(--kob-voice-primary); color: var(--kob-voice-primary); }
+
+    .bg-thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; max-height: 200px; overflow-y: auto; padding-right: 4px; }
+    .thumb-item { 
+      height: 70px; border-radius: 12px; background-size: cover; background-position: center; 
+      cursor: pointer; border: 2px solid transparent; transition: 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,.05);
+    }
+    .thumb-item:hover { transform: scale(1.05); }
+    .thumb-item.active { border-color: var(--kob-voice-primary); }
+
+    .btn-upload {
+      display: block; width: 100%; padding: 14px; text-align: center; background: var(--bg-page);
+      border: 1px dashed var(--text-soft); border-radius: 12px; cursor: pointer; font-weight: 800;
+      font-size: 12px; color: var(--text-soft); transition: 0.2s; margin-top: 10px;
+    }
+    .btn-upload:hover { border-color: var(--kob-voice-primary); color: var(--kob-voice-primary); }
+
+    /* HERO & CONTEÚDO (SIMPLIFICADO) */
+    #app-root { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    
+    .hero-media { 
+      position: relative; background: #000; border-radius: var(--radius); overflow: hidden; 
+      min-height: 600px; border: 1px solid var(--line); box-shadow: var(--shadow);
+      cursor: grab; user-select: none;
+    }
+    .hero-media:active { cursor: grabbing; }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; pointer-events: none; }
+    
+    .badge {
+      position: absolute; left: 18px; top: 18px; display: inline-flex; align-items: center; gap: 8px; 
+      padding: 10px 14px; border-radius: 999px; background: rgba(255,255,255,.8); 
+      border: 1px solid var(--line); font-size: 11px; font-weight: 900; letter-spacing: .12em; 
+      text-transform: uppercase; backdrop-filter: var(--glass);
+    }
+    .badge .dot { width: 8px; height: 8px; border-radius: 50%; background: linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary)); }
+    
+    .swipe-hint {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.5); color: white; padding: 8px 16px;
+      border-radius: 99px; font-size: 10px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: 1px; backdrop-filter: blur(8px); pointer-events: none; opacity: 0.8;
+    }
+
+    .hero-content {
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border-radius: var(--radius); border: 1px solid var(--line); padding: 40px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 900; color: var(--text-soft); margin-bottom: 12px; display: flex; align-items: center; gap: 10px; }
+    .kicker .line { height: 1px; flex: 1; background: linear-gradient(90deg, var(--line), transparent); }
+    
+    .hero-title { font-size: clamp(38px, 4vw, 56px); line-height: 1.05; font-weight: 900; margin: 0 0 20px; letter-spacing: -0.04em; }
+    .hero-title span { background: linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .hero-desc { font-size: 18px; color: var(--text-soft); line-height: 1.6; margin-bottom: 30px; }
+
+    .btn-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 16px 28px; background: var(--ink); color: #fff; border: none;
+      border-radius: 999px; font-weight: 800; cursor: pointer; transition: 0.3s; align-self: flex-start;
+    }
+    .btn-action:hover { transform: translateY(-2px); background: var(--kob-voice-accent); box-shadow: 0 10px 20px rgba(107,124,255,.3); }
+
+    /* ACCORDION SIMPLIFICADO */
+    .accordion-group { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+    details { background: var(--bg-panel-soft); backdrop-filter: var(--glass); border: 1px solid var(--line); border-radius: 18px; transition: all 0.3s ease; }
+    details[open] { border-color: rgba(42,183,255,.3); box-shadow: 0 10px 30px rgba(42,183,255,.05); }
+    summary { padding: 22px 24px; cursor: pointer; font-weight: 800; font-size: 15px; display: flex; justify-content: space-between; align-items: center; text-transform: uppercase; letter-spacing: 0.05em; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    summary span.icon { transition: transform 0.3s; color: var(--kob-voice-primary); }
+    details[open] summary span.icon { transform: rotate(180deg); }
+    .acc-content { padding: 0 24px 24px; color: var(--text-soft); line-height: 1.7; font-size: 16px; }
+
+    /* NAVEGAÇÃO E FOOTER */
+    .catalog-nav { display: flex; gap: 16px; margin-top: 30px; }
+    .nav-btn { 
+      flex: 1; padding: 20px; border-radius: 20px; border: 1px solid var(--line); 
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass); font-weight: 900; 
+      cursor: pointer; text-transform: uppercase; letter-spacing: 0.1em; transition: 0.3s;
+    }
+    .nav-btn:hover:not(:disabled) { background: #fff; border-color: var(--kob-voice-secondary); color: var(--kob-voice-secondary); transform: translateY(-2px); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .footer-quote { margin-top: 24px; padding: 24px; text-align: center; border-radius: 24px; background: linear-gradient(180deg, #fff, #f8fbff); border: 1px solid rgba(42,183,255,.18); font-size: 15px; color: #20283b; box-shadow: var(--shadow-soft); }
+    .footer-quote b { background: linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-media { min-height: 450px; }
+      .catalog-nav { flex-direction: column; }
+    }
+    @media (max-width: 600px) {
+      .wrap { padding: 14px 12px 46px; }
+      .topbar { flex-direction: column; align-items: stretch; }
+      .nav-group { justify-content: space-between; }
+      .hero-title { font-size: 32px; }
+      .btn-action { width: 100%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- CAMADAS DE FUNDO -->
+  <div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+  <!-- DRAWER OVERLAY + PAINEL -->
+  <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+  <aside class="drawer" id="drawerPanel">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">&times;</button>
+    </div>
+    
+    <div class="drawer-body">
+      <!-- Opacidade -->
+      <div class="panel-section">
+        <label><span>Opacidade</span> <span id="val-op">15%</span></label>
+        <input type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <!-- Blend Mode -->
+      <div class="panel-section">
+        <label>Mix Blend Mode</label>
+        <select id="select-blend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <!-- Presets -->
+      <div class="panel-section">
+        <label>Presets de Estilo</label>
+        <div class="preset-grid">
+          <button class="preset-btn" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+
+      <!-- Biblioteca -->
+      <div class="panel-section">
+        <label>Biblioteca Local</label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+        </label>
+      </div>
+    </div>
+  </aside>
+
+  <div class="wrap">
+    <!-- TOPBAR -->
+    <header class="topbar">
+      <div class="brand">
+        <div class="pill-logo"></div>
+        <div>
+          <h1>INFODOSE</h1>
+          <p>Catálogo Premium • 78Frames</p>
+        </div>
+      </div>
+      <div class="nav-group">
+        <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+        <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
+      </div>
+    </header>
+
+    <!-- ÁREA DINÂMICA DO QUADRO -->
+    <div id="app-root"></div>
+
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">&larr; Quadro Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Quadro &rarr;</button>
+    </div>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script>
+    /**
+     * ESTRUTURA DE DADOS SIMPLIFICADA (Apenas o essencial em versoes)
+     */
+    const catalogo78Frames = [
+      {
+        id: "hero-3",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        badge: "obra viva", kicker: "Síntese Cognitiva",
+        tituloNormal: "Espelho ", tituloDestaque: "Vivo",
+        lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença.",
+        versoes: [
+          { titulo: "A Síntese do Loop", texto: "Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer e se reorganizar num estado de flow pacífico." },
+          { titulo: "Engenharia Cognitiva", texto: "A estética em glitch tipográfico cria micro-recompensas visuais. A imagem não se fecha de uma vez — ela chama o próximo nível de interpretação do cérebro." }
+        ]
+      },
+      {
+        id: "hero-2",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg",
+        badge: "ritual interativo", kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço da ", tituloDestaque: "Mente",
+        lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.",
+        versoes: [
+          { titulo: "Vibe de Ambiente", texto: "Reduz drasticamente o que pesa. Ideal para áreas gourmet e momentos de descompressão. A ocitocina media as ações de maneira atemporal." },
+          { titulo: "Selo Álcool Blues", texto: "O peso vira ritmo e flui. Luz baixa, mente acesa. Funciona como modulador de estado mental leve, mantendo o ambiente fluindo sem atrito." }
+        ]
+      },
+      {
+        id: "hero-0",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        badge: "zero state", kicker: "Zero Base",
+        tituloNormal: "Ponto ", tituloDestaque: "Zero",
+        lead: "O início do código visual. Onde a forma encontra o vácuo criativo e a mente descansa na ausência de ruído.",
+        versoes: [
+          { titulo: "A Ausência", texto: "Retirar o excesso para que a mente do observador possa preencher as lacunas. O design focado no 'nada' permite um reset cognitivo imediato." },
+          { titulo: "Vácuo Criativo", texto: "Ideal para iniciar sessões de trabalho profundo. O olhar não tropeça, ele desliza sem barreiras estruturais." }
+        ]
+      },
+      {
+        id: "hero-1",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+        badge: "frequência azul", kicker: "Expansão Bllue",
+        tituloNormal: "Fluxo ", tituloDestaque: "Contínuo",
+        lead: "Arquitetura visual baseada em ciclos incompletos que mantêm o cérebro em estado de flow perceptivo.",
+        versoes: [
+          { titulo: "Pattern Recognition", texto: "A mente tenta fechar as formas, gerando um estado de engajamento ativo e prazeroso, sem exaustão visual." },
+          { titulo: "Aplicação Constante", texto: "Induz um estado semelhante ao de olhar o mar ou o fogo. Perfeito para manter pessoas confortáveis no ambiente por mais tempo." }
+        ]
+      },
+      {
+        id: "hero-4",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero4.jpg",
+        badge: "infodose peak", kicker: "Infodose High",
+        tituloNormal: "Cume ", tituloDestaque: "Digital",
+        lead: "Exploração de contrastes e cores vibrantes para ativação imediata. O choque elétrico que acorda o córtex.",
+        versoes: [
+          { titulo: "Choque Visual", texto: "Cores saturadas que elevam a frequência cardíaca sutilmente e quebram o estado de 'piloto automático' instantaneamente." },
+          { titulo: "Gatilho Criativo", texto: "Ambientes vibrantes estimulam associações de ideias mais rápidas. Inspira coragem e audácia em salas de ideação." }
+        ]
+      },
+      {
+        id: "hero-5",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero5.jpg",
+        badge: "omega", kicker: "Final Code",
+        tituloNormal: "Última ", tituloDestaque: "Frequência",
+        lead: "O fechamento do ciclo cromático. Uma imersão profunda e definitiva, onde observador e obra se fundem.",
+        versoes: [
+          { titulo: "A Síntese Final", texto: "Cores densas que puxam o olhar para um núcleo infinito, onde o limite entre o espaço físico e a arte digital desaparece." },
+          { titulo: "Conexão Profunda", texto: "Um peso visual ancorador que traz foco absoluto ao presente. A liberação final das tensões acumuladas em puro silêncio." }
+        ]
+      }
+    ];
+
+    let currentIndex = 0;
+
+    // --- RENDERIZAÇÃO DO QUADRO ATUAL ---
+    function renderFrame(index) {
+      const data = catalogo78Frames[index];
+      const root = document.getElementById('app-root');
+      
+      // Atualiza o contador
+      document.getElementById('ui-catalog-counter').innerText = `QUADRO ${String(index + 1).padStart(2, '0')} DE ${catalogo78Frames.length}`;
+      
+      // Constrói o HTML Limpo
+      root.innerHTML = `
+        <div class="hero">
+          <div class="hero-media" id="swipe-area" title="Deslize para os lados">
+            <img src="${data.imagemSrc}" alt="${data.tituloNormal}">
+            <div class="badge"><span class="dot"></span> ${data.badge}</div>
+            <div class="swipe-hint">← Deslize para navegar →</div>
+          </div>
+          <div class="hero-content">
+            <div class="kicker"><span>${data.kicker}</span><div class="line"></div></div>
+            <h2 class="hero-title"><span>${data.tituloNormal}</span>${data.tituloDestaque}</h2>
+            <p class="hero-desc">${data.lead}</p>
+            <button class="btn-action" onclick="setAsBg()">Ativar no Background</button>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          ${data.versoes.map((v, i) => `
+            <details ${i === 0 ? 'open' : ''}>
+              <summary>${v.titulo} <span class="icon">▼</span></summary>
+              <div class="acc-content">${v.texto}</div>
+            </details>
+          `).join('')}
+        </div>
+      `;
+
+      // Atualiza estado dos botões
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === catalogo78Frames.length - 1;
+
+      initSwipe();
+    }
+
+    // --- CONTROLE DA GAVETA (DRAWER) ---
+    window.toggleDrawer = function() {
+      const overlay = document.getElementById('drawerOverlay');
+      const panel = document.getElementById('drawerPanel');
+      overlay.classList.toggle('active');
+      panel.classList.toggle('active');
+    };
+
+    // --- SISTEMA DE BACKGROUND ---
+    function setAsBg() {
+      const currentImg = catalogo78Frames[currentIndex].imagemSrc;
+      applyBg(currentImg);
+      saveToLibrary(currentImg);
+    }
+
+    function applyBg(url) {
+      document.getElementById('bg-layer-fixed').style.backgroundImage = `url('${url}')`;
+      highlightActiveThumb(url);
+    }
+
+    function updateBgAttr(type, val) {
+      const layer = document.getElementById('bg-layer-fixed');
+      if (type === 'opacity') {
+        layer.style.opacity = val / 100;
+        document.getElementById('val-op').innerText = `${val}%`;
+      } else if (type === 'blend') {
+        layer.style.mixBlendMode = val;
+      }
+    }
+
+    // --- PRESETS ---
+    window.applyPreset = function(mode) {
+      const opInput = document.querySelector('input[type="range"]');
+      const blendSelect = document.getElementById('select-blend');
+      
+      let newOp = 15;
+      let newBlend = 'overlay';
+
+      if (mode === 'ghost') {
+        newOp = 10; newBlend = 'luminosity';
+      } else if (mode === 'vivid') {
+        newOp = 35; newBlend = 'overlay';
+      } else if (mode === 'deep') {
+        newOp = 50; newBlend = 'multiply';
+      }
+
+      updateBgAttr('opacity', newOp);
+      updateBgAttr('blend', newBlend);
+      
+      opInput.value = newOp;
+      blendSelect.value = newBlend;
+    }
+
+    // --- BIBLIOTECA LOCAL ---
+    let libraryUrls = [];
+
+    function saveToLibrary(url) {
+      if (!libraryUrls.includes(url)) {
+        libraryUrls.push(url);
+        renderLibrary();
+      }
+    }
+
+    function renderLibrary() {
+      const list = document.getElementById('thumb-list');
+      const bgLayerUrl = document.getElementById('bg-layer-fixed').style.backgroundImage.slice(5, -2);
+
+      list.innerHTML = libraryUrls.map(url => `
+        <div class="thumb-item ${url === bgLayerUrl ? 'active' : ''}" 
+             style="background-image:url('${url}')" 
+             onclick="applyBg('${url}')">
+        </div>
+      `).join('');
+    }
+
+    function highlightActiveThumb(activeUrl) {
+      const thumbs = document.querySelectorAll('.thumb-item');
+      thumbs.forEach(t => {
+        t.classList.remove('active');
+        if(t.style.backgroundImage.includes(activeUrl)) {
+          t.classList.add('active');
+        }
+      });
+    }
+
+    window.handleUpload = function(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const url = e.target.result;
+          applyBg(url);
+          saveToLibrary(url);
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // --- NAVEGAÇÃO E GESTOS (SWIPE) ---
+    window.changeFrame = function(dir) {
+      const newIndex = currentIndex + dir;
+      if (newIndex >= 0 && newIndex < catalogo78Frames.length) {
+        currentIndex = newIndex;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
+        // Pequena reanimação
+        const root = document.getElementById('app-root');
+        root.style.animation = 'none';
+        root.offsetHeight; 
+        root.style.animation = null;
+        
+        setTimeout(() => renderFrame(currentIndex), 10);
+      }
+    };
+
+    function initSwipe() {
+      const area = document.getElementById('swipe-area');
+      let startX = 0;
+      let isDown = false;
+
+      // Touch
+      area.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
+      area.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        handleGesture(startX, endX);
+      });
+
+      // Mouse
+      area.addEventListener('mousedown', e => { startX = e.clientX; isDown = true; });
+      area.addEventListener('mouseup', e => {
+        if(!isDown) return;
+        handleGesture(startX, e.clientX);
+        isDown = false;
+      });
+      area.addEventListener('mouseleave', () => isDown = false);
+    }
+
+    function handleGesture(sX, eX) {
+      const threshold = 60;
+      if (sX - eX > threshold) changeFrame(1); 
+      else if (eX - sX > threshold) changeFrame(-1); 
+    }
+
+    // --- INICIALIZAÇÃO ---
+    window.addEventListener('DOMContentLoaded', () => {
+      // Adiciona os BGs padrão do sistema na biblioteca
+      catalogo78Frames.forEach(f => saveToLibrary(f.imagemSrc));
+      
+      renderFrame(0);
+      
+      // Set inicial do Background
+      const initialBg = catalogo78Frames[0].imagemSrc;
+      applyBg(initialBg);
+      applyPreset('vivid'); // Começa com uma opacidade um pouco mais notável (Vívido)
+    });
+  </script>
+</body>
+</html>
+

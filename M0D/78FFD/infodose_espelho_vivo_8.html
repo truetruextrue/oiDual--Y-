@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Infodose • Premium Catálogo</title>
+  <meta name="color-scheme" content="light">
+  <style>
+    :root {
+      --kob-voice-primary: #ff4fa3;
+      --kob-voice-secondary: #2ab7ff;
+      --kob-voice-accent: #6b7cff;
+      --bg-page: #f6f8fc;
+      --bg-panel: #ffffff;
+      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --ink: #141824;
+      --text: #1f2430;
+      --text-soft: #64708a;
+      --line: rgba(20, 24, 36, 0.09);
+      --shadow: 0 18px 50px rgba(20, 24, 36, 0.08);
+      --radius: 24px;
+      --glass: blur(16px) saturate(170%);
+      --bg-opacity: 0.15;
+      --bg-blend: normal;
+    }
+
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+      background-color: var(--bg-page);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacity);
+      mix-blend-mode: var(--bg-blend);
+      transition: opacity 0.4s ease, background-image 0.5s ease;
+    }
+
+    .wrap { max-width: 1260px; margin: 0 auto; padding: 20px 18px 100px; position: relative; z-index: 1; }
+
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      position: sticky; top: 10px; z-index: 100; margin-bottom: 24px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px;
+      box-shadow: var(--shadow);
+    }
+    .brand h1 { margin: 0; font-size: 13px; letter-spacing: .3em; text-transform: uppercase; font-weight: 900; }
+    
+    .controls-pill {
+      display: flex; gap: 8px; background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 6px; box-shadow: var(--shadow);
+    }
+    .icon-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: none; background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s; color: var(--text); font-size: 18px;
+    }
+
+    /* MODAL BG */
+    #bg-panel-modal {
+      display: none; position: fixed; top: 75px; right: 20px; width: 300px;
+      background: var(--bg-panel); border-radius: var(--radius); border: 1px solid var(--line);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.15); z-index: 200; padding: 20px;
+    }
+    
+    .panel-section { margin-bottom: 15px; }
+    .panel-section label { display: block; font-size: 11px; text-transform: uppercase; font-weight: 800; margin-bottom: 8px; color: var(--text-soft); }
+
+    /* HERO & SWIPE */
+    .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
+    
+    .hero-media-container {
+      position: relative;
+      background: #000; 
+      border-radius: var(--radius); 
+      overflow: hidden; 
+      height: 600px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--line);
+      cursor: grab;
+      user-select: none;
+    }
+    .hero-media-container:active { cursor: grabbing; }
+    
+    .hero-media-container img { 
+      width: 100%; height: 100%; object-fit: cover; 
+      pointer-events: none; /* impede arraste nativo da imagem */
+    }
+
+    .swipe-hint {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.4); color: white; padding: 6px 12px;
+      border-radius: 99px; font-size: 10px; text-transform: uppercase;
+      letter-spacing: 1px; backdrop-filter: blur(4px); pointer-events: none;
+      opacity: 0.7;
+    }
+
+    .hero-content {
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border-radius: var(--radius); border: 1px solid var(--line); padding: 40px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .kicker { font-size: 12px; text-transform: uppercase; letter-spacing: 0.2em; font-weight: 800; color: var(--kob-voice-primary); margin-bottom: 12px; }
+    .hero-title { font-size: clamp(32px, 5vw, 48px); line-height: 1.1; font-weight: 900; margin: 0 0 20px; }
+    .hero-title span { color: var(--kob-voice-secondary); }
+    .hero-desc { font-size: 18px; color: var(--text-soft); line-height: 1.6; margin-bottom: 30px; }
+
+    .btn-action {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      padding: 16px 28px; background: var(--ink); color: #fff; border: none;
+      border-radius: 999px; font-weight: 800; cursor: pointer; transition: 0.3s;
+    }
+    .btn-action:hover { background: var(--kob-voice-accent); transform: translateY(-2px); }
+
+    /* ACCORDION */
+    .accordion-group { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+    details { background: var(--bg-panel-soft); border: 1px solid var(--line); border-radius: 16px; transition: 0.3s; }
+    summary { padding: 20px; cursor: pointer; font-weight: 800; display: flex; justify-content: space-between; list-style: none; }
+    summary::-webkit-details-marker { display: none; }
+    .acc-content { padding: 0 20px 20px; color: var(--text-soft); line-height: 1.7; }
+
+    /* NAV */
+    .catalog-nav { display: flex; gap: 16px; margin-top: 40px; }
+    .nav-btn { 
+      flex: 1; padding: 20px; border-radius: 20px; border: 1px solid var(--line); 
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass); font-weight: 900; cursor: pointer;
+      transition: 0.2s;
+    }
+    .nav-btn:hover:not(:disabled) { background: white; border-color: var(--kob-voice-secondary); }
+    .nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+
+    .bg-thumbs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; max-height: 150px; overflow-y: auto; padding: 4px; }
+    .thumb-item { height: 60px; border-radius: 8px; background-size: cover; background-position: center; cursor: pointer; border: 2px solid transparent; }
+    .thumb-item.active { border-color: var(--kob-voice-primary); }
+
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-media-container { height: 450px; }
+      .hero-content { padding: 30px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="bg-layer-fixed"></div>
+
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand"><h1>INFODOSE</h1></div>
+      <div class="controls-pill">
+        <button class="icon-btn" onclick="toggleBgPanel()">⚙️</button>
+        <button class="icon-btn" onclick="setAsBg()">🖼️</button>
+      </div>
+    </header>
+
+    <div id="bg-panel-modal">
+      <div class="panel-section">
+        <label>Opacidade</label>
+        <input type="range" min="0" max="100" value="15" style="width:100%" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+      <div class="panel-section">
+        <label>Biblioteca de Fundo</label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+      </div>
+    </div>
+
+    <div id="app-root"></div>
+
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo</button>
+    </div>
+  </div>
+
+  <script>
+    // ORDEM SOLICITADA: Hero 3, 2, 0, 1, 4, 5
+    const catalogo78Frames = [
+      {
+        id: "hero-3",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        kicker: "Síntese Cognitiva",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "Vivo",
+        lead: "A obra onde a mente toca a si mesma, transformando ruído em ritmo.",
+        versoes: [{ titulo: "Dopamina Sutil", texto: "Engenharia visual para convidar o olhar ao estado de presença." }]
+      },
+      {
+        id: "hero-2",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg",
+        kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço ",
+        tituloDestaque: "Mente",
+        lead: "Frequências que apaziguam conflitos e equilibram o peso do dia.",
+        versoes: [{ titulo: "Vibe Blues", texto: "Ideal para descompressão e ambientes de foco relaxado." }]
+      },
+      {
+        id: "hero-0",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        kicker: "Zero Base",
+        tituloNormal: "Ponto ",
+        tituloDestaque: "Zero",
+        lead: "O início do código visual. Onde a forma encontra o vácuo criativo.",
+        versoes: [{ titulo: "Minimalismo Absoluto", texto: "Redução de estímulos para expansão da consciência." }]
+      },
+      {
+        id: "hero-1",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+        kicker: "Expansão Blue",
+        tituloNormal: "Fluxo ",
+        tituloDestaque: "Contínuo",
+        lead: "Arquitetura baseada em ciclos que mantêm o cérebro em estado de flow.",
+        versoes: [{ titulo: "Pattern Recognition", texto: "A mente tenta fechar as formas, gerando engajamento ativo." }]
+      },
+      {
+        id: "hero-4",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero4.jpg",
+        kicker: "Infodose High",
+        tituloNormal: "Cume ",
+        tituloDestaque: "Digital",
+        lead: "Exploração de contrastes e cores vibrantes para ativação imediata.",
+        versoes: [{ titulo: "Alerta Criativo", texto: "Perfeito para salas de brainstorm e inovação." }]
+      },
+      {
+        id: "hero-5",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero5.jpg",
+        kicker: "Final Code",
+        tituloNormal: "Última ",
+        tituloDestaque: "Frequência",
+        lead: "O fechamento do ciclo cromático. Conexão profunda com a cor.",
+        versoes: [{ titulo: "Imersão Total", texto: "Onde o observador e a obra se tornam um só sistema." }]
+      }
+    ];
+
+    let currentIndex = 0;
+
+    function renderFrame(index) {
+      const data = catalogo78Frames[index];
+      const root = document.getElementById('app-root');
+      
+      root.innerHTML = `
+        <div class="hero">
+          <div class="hero-media-container" id="swipe-area">
+            <img src="${data.imagemSrc}" alt="Obra">
+            <div class="swipe-hint">← Deslize para navegar →</div>
+          </div>
+          <div class="hero-content">
+            <div class="kicker">${data.kicker}</div>
+            <h2 class="hero-title">${data.tituloNormal} <span>${data.tituloDestaque}</span></h2>
+            <p class="hero-desc">${data.lead}</p>
+            <button class="btn-action" onclick="setAsBg()">Usar como Background</button>
+          </div>
+        </div>
+
+        <div class="accordion-group">
+          ${data.versoes.map((v, i) => `
+            <details ${i === 0 ? 'open' : ''}>
+              <summary>${v.titulo} <span>▼</span></summary>
+              <div class="acc-content">${v.texto}</div>
+            </details>
+          `).join('')}
+        </div>
+      `;
+
+      initSwipe();
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === catalogo78Frames.length - 1;
+    }
+
+    // --- LÓGICA DE SWIPE (ARRASTAR) ---
+    function initSwipe() {
+      const area = document.getElementById('swipe-area');
+      let startX = 0;
+      let isDown = false;
+
+      // Touch
+      area.addEventListener('touchstart', e => { startX = e.touches[0].clientX; });
+      area.addEventListener('touchend', e => {
+        const endX = e.changedTouches[0].clientX;
+        handleGesture(startX, endX);
+      });
+
+      // Mouse
+      area.addEventListener('mousedown', e => { startX = e.clientX; isDown = true; });
+      area.addEventListener('mouseup', e => {
+        if(!isDown) return;
+        const endX = e.clientX;
+        handleGesture(startX, endX);
+        isDown = false;
+      });
+      area.addEventListener('mouseleave', () => isDown = false);
+    }
+
+    function handleGesture(sX, eX) {
+      const threshold = 50; // pixels mínimos para considerar um deslize
+      if (sX - eX > threshold) changeFrame(1); // Swipe Esquerda -> Próximo
+      else if (eX - sX > threshold) changeFrame(-1); // Swipe Direita -> Anterior
+    }
+
+    // --- CONTROLES GERAIS ---
+    function changeFrame(dir) {
+      const nextIdx = currentIndex + dir;
+      if (nextIdx >= 0 && nextIdx < catalogo78Frames.length) {
+        currentIndex = nextIdx;
+        renderFrame(currentIndex);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function toggleBgPanel() {
+      const modal = document.getElementById('bg-panel-modal');
+      modal.style.display = modal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function setAsBg() {
+      const url = catalogo78Frames[currentIndex].imagemSrc;
+      document.getElementById('bg-layer-fixed').style.backgroundImage = `url('${url}')`;
+      addToLibrary(url);
+    }
+
+    function updateBgAttr(type, val) {
+      if(type === 'opacity') document.getElementById('bg-layer-fixed').style.opacity = val / 100;
+    }
+
+    let library = [];
+    function addToLibrary(url) {
+      if (!library.includes(url)) {
+        library.push(url);
+        const list = document.getElementById('thumb-list');
+        const thumb = document.createElement('div');
+        thumb.className = 'thumb-item';
+        thumb.style.backgroundImage = `url('${url}')`;
+        thumb.onclick = () => document.getElementById('bg-layer-fixed').style.backgroundImage = `url('${url}')`;
+        list.appendChild(thumb);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      renderFrame(0);
+      setAsBg(); // Inicia com a primeira imagem de fundo
+    });
+  </script>
+</body>
+</html>
+
+
