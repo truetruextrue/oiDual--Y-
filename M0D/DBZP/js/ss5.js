@@ -992,4 +992,4 @@
 
   // Faz os pré-conectados passarem pelo mesmo motor de metadados/imagem
   hydratePreloadedTracks();
-})();})();
+})();
