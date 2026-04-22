@@ -3,7 +3,7 @@
   const SNAP_MARGIN = 72;           // px distance from edge to trigger snap
   const TOP_THRESHOLD = 80;         // px from top to become horizontal
   const CONNECT_THRESHOLD = 72;     // px distance between centers to connect
-  const EDGE_PADDING = 12;          // keep docks from touching screen edge directly
+  const EDGE_PADDING = 0;          // keep docks from touching screen edge directly
 
   const bars = Array.from(document.querySelectorAll('.symbol-bar'));
 
