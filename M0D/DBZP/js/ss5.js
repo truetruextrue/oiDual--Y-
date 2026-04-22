@@ -8,10 +8,87 @@
       const FAVORITES_ID = "favorites";
 
       const PRELOADED = [
-        { type: "youtube", id: "Bt_rLbMjJDk", url: "https://youtu.be/Bt_rLbMjJDk", name: "Trilhas Aromas", artist: "Dual.NextLevel", cover: "https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg" },
-        { type: "youtube", id: "_0wVkryxanE", url: "https://youtu.be/_0wVkryxanE", name: "12 Arquétipos", artist: "Dual.NextLevel", cover: "https://img.youtube.com/vi/_0wVkryxanE/hqdefault.jpg" },
-        { type: "soundcloud", url: "https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso", name: "MAPEAMENTO PULSO", artist: "DUAL X", cover: "https://i1.sndcdn.com/artworks-000418386453-y1w0f1-t500x500.jpg" }
-      ];
+
+  // =========================
+  // YOUTUBE
+  // =========================
+  {
+    type: "youtube",
+    id: "Bt_rLbMjJDk",
+    url: "https://youtu.be/Bt_rLbMjJDk",
+    name: "Trilhas Aromas",
+    artist: "Dual.NextLevel",
+    cover: "https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg"
+  },
+  {
+    type: "youtube",
+    id: "_0wVkryxanE",
+    url: "https://youtu.be/_0wVkryxanE",
+    name: "12 Arquétipos",
+    artist: "Dual.NextLevel",
+    cover: "https://img.youtube.com/vi/_0wVkryxanE/hqdefault.jpg"
+  },
+
+  // =========================
+  // SOUNDCLOUD (PLAYLIST)
+  // =========================
+  {
+    type: "soundcloud",
+    url: "https://soundcloud.com/oi-dual-x-info-dose/sets/mapeamento-das-trilhas-pulso",
+    name: "MAPEAMENTO PULSO",
+    artist: "DUAL X",
+    cover: "https://i1.sndcdn.com/artworks-000418386453-y1w0f1-t500x500.jpg"
+  },
+
+  // =========================
+  // SOUNDCLOUD (TRACKS)
+  // =========================
+
+  {
+    type: "soundcloud",
+    url: "https://soundcloud.com/oi-dual-x-info-dose/h1",
+    name: "H1",
+    artist: "Dual x Info Dose",
+    cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
+  },
+
+  {
+    type: "soundcloud",
+    url: "https://soundcloud.com/heliocouto/passado-presente-e-futuro-nao",
+    name: "Passado, Presente e Futuro Não",
+    artist: "Hélio Couto",
+    cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
+  },
+
+  // =========================
+  // LINKS CURTOS (fallback)
+  // =========================
+
+  {
+    type: "soundcloud",
+    url: "https://on.soundcloud.com/f82pGFXHbCfruOW5pX",
+    name: "Track (Short Link 1)",
+    artist: "SoundCloud",
+    cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
+  },
+
+  {
+    type: "soundcloud",
+    url: "https://on.soundcloud.com/AQzXbe1GZHTFeCrBuc",
+    name: "Track (Short Link 2)",
+    artist: "SoundCloud",
+    cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
+  },
+
+  {
+    type: "soundcloud",
+    url: "https://on.soundcloud.com/S7N52OXKmJ8Yqs3ACP",
+    name: "Track (Short Link 3)",
+    artist: "SoundCloud",
+    cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
+  }
+
+];
 
       let db = createDefaultDB();
       let currentTrackId = null;
