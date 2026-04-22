@@ -1,5 +1,4 @@
-[
-(function () {
+function () {
   "use strict";
 
   const DB_NAME = "kodux-ss-db-v3";
@@ -8,13 +7,9 @@
   const ALL_ID = "all";
   const FAVORITES_ID = "favorites";
 
-  // ========================================================================
-  // NOVAS FAIXAS ADICIONADAS (SOUNDCLOUD - OI DUAL X INFO DOSE)
-  // Normalizadas e integradas ao PRELOADED
-  // ========================================================================
   const PRELOADED = [
     // =========================
-    // YOUTUBE (Mantidos do original)
+    // YOUTUBE
     // =========================
     {
       type: "youtube",
@@ -34,7 +29,7 @@
     },
 
     // =========================
-    // SOUNDCLOUD (PLAYLIST ORIGINAL)
+    // SOUNDCLOUD (PLAYLIST)
     // =========================
     {
       type: "soundcloud",
@@ -45,116 +40,25 @@
     },
 
     // =========================
-    // SOUNDCLOUD (NOVAS TRILHAS - OI DUAL X INFO DOSE)
+    // SOUNDCLOUD (TRACKS)
     // =========================
-    
-    // 1. Ativador Guiado 396Hz    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/4kYzC5989f7f17PwlO",
-      name: "[0×01h_]_78K_Ativador_Guiado_396Hz_Vox",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 2. Subir a Serra
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/jPOAf1DLk4ZvgzAi6W",
-      name: "[_0×01_]_KDX_78_Dm_SUBIR_A_SERRA",
-      artist: "Oi Dual × Info Dose",
+      url: "https://soundcloud.com/oi-dual-x-info-dose/h1",
+      name: "H1",
+      artist: "Dual x Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
-
-    // 3. Set Governante
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/smzPDY9RjJXm6bVemC",
-      name: "[0×08]_Trilhas - Set governante",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 4. Aroma da Paz
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/y3eNd0u4X56uiWzThJ",
-      name: "[0×07]_Trilhas_Aroma_da_Paz_Set",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 5. Aroma do Novo
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/EszycROQ67z8yt0EaL",
-      name: "[0×06]_Trilhas Aroma do Novo",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 6. Amante - Aroma do Desejo
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/f4KrWeUUfatZ5ibffO",
-      name: "[0×05]_Lofi Set - Amante - Aroma do Desejo",
-      artist: "Oi Dual × Info Dose",      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 7. Aroma da Mente
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/4MTtcMFkavoKeQZK14",
-      name: "[0×04]_Trilhas_Aroma_da_Mente",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 8. Aroma Das Raizes
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/RBJAnfKbBCFNBGnl0r",
-      name: "[0×03]_Trilhas_Aroma_Das_Raizes",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 9. Trilhas do Cuidador
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/HIqNO76sdGNxbFLjV1",
-      name: "[0×02]_Trilhas_do_Cuidador",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 10. Magia e Prosperidade (Link 1)
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/YDIwwTt594hdrDPjHj",
-      name: "[0×01]_Trilhas_da_Magia_e_Prosperidade",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 11. Magia e Prosperidade (Link 2 - Duplicate Check handled by logic)
-    {
-      type: "soundcloud",
-      url: "https://on.soundcloud.com/GqTomAGApHMVs2h2tX",
-      name: "[0×01]_Trilhas_da_Magia_e_Prosperidade_v2",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-
-    // 12. Código Python que Compila a Alma
-    {      type: "soundcloud",
-      url: "https://on.soundcloud.com/wpjRd4rqggH4sVE7lV",
-      name: "O_código_Python_que_compila_a_alma",
-      artist: "Oi Dual × Info Dose",
+      url: "https://soundcloud.com/heliocouto/passado-presente-e-futuro-nao",
+      name: "Passado, Presente e Futuro Não",
+      artist: "Hélio Couto",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
 
     // =========================
-    // LINKS CURTOS GENÉRICOS (Fallback Original)
+    // LINKS CURTOS (fallback)
     // =========================
     {
       type: "soundcloud",
@@ -195,7 +99,8 @@
   const widget = document.getElementById("kodux-widget");
   const contents = {
     ball: document.getElementById("content-ball"),
-    preview: document.getElementById("content-preview"),    footer: document.getElementById("content-footer"),
+    preview: document.getElementById("content-preview"),
+    footer: document.getElementById("content-footer"),
     full: document.getElementById("content-full")
   };
 
@@ -245,6 +150,7 @@
         } else if (u.pathname.startsWith("/embed/")) {
           id = u.pathname.split("/")[2];
         }
+
         if (id) url = `https://youtu.be/${id}`;
       } catch (e) {
         url = url
@@ -293,7 +199,8 @@
 
     if (!db.activePlaylistId || !db.playlists.some(p => p.id === db.activePlaylistId)) {
       db.activePlaylistId = ALL_ID;
-    }  }
+    }
+  }
 
   function saveDB() {
     localStorage.setItem(DB_NAME, JSON.stringify(db));
@@ -342,7 +249,8 @@
       } catch (e) {}
     }
 
-    db = createDefaultDB();    ensureSystemPlaylists();
+    db = createDefaultDB();
+    ensureSystemPlaylists();
     saveDB();
   }
 
@@ -362,7 +270,7 @@
     const active = getActivePlaylist();
     if (!active || active.id === ALL_ID) return db.library.slice();
     if (active.id === FAVORITES_ID) return db.library.filter(t => t.favorite);
-    return active.trackIds.map(getTrackById).filter(Boolean);
+    return active.trackIds.map(ge[(functionkById).filter(Boolean);
   }
 
   function syncPreviewAndMain(track) {
@@ -391,7 +299,8 @@
     document.getElementById("main-play-icon").className = `ph-fill ${iconSimple} text-3xl ${isPlaying ? "" : "ml-1"}`;
   }
 
-  function stopCurrentPlayback() {    try { audioEl.pause(); } catch (e) {}
+  function stopCurrentPlayback() {
+    try { audioEl.pause(); } catch (e) {}
     try { if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo(); } catch (e) {}
     try { if (scWidget && scWidget.pause) scWidget.pause(); } catch (e) {}
     isPlaying = false;
@@ -440,7 +349,8 @@
       initialX = touch.clientX - currentX;
       initialY = touch.clientY - currentY;
       widget.style.transition = "none";
-      document.addEventListener("mousemove", onMove);      document.addEventListener("mouseup", onEnd);
+      document.addEventListener("mousemove", onMove);
+      document.addEventListener("mouseup", onEnd);
       document.addEventListener("touchmove", onMove, { passive: false });
       document.addEventListener("touchend", onEnd);
     };
@@ -489,7 +399,8 @@
           },
           onStateChange: (e) => {
             if (e.data === YT.PlayerState.ENDED) playNext();
-            isPlaying = (e.data === YT.PlayerState.PLAYING);            syncIcons();
+            isPlaying = (e.data === YT.PlayerState.PLAYING);
+            syncIcons();
           }
         }
       });
@@ -538,7 +449,8 @@
     renderEverything();
   }
 
-  function togglePlay(e) {    if (e) e.stopPropagation();
+  function togglePlay(e) {
+    if (e) e.stopPropagation();
 
     const visible = getVisibleTracks();
     if (!visible.length) return;
@@ -587,7 +499,8 @@
   function setActivePlaylist(id) {
     db.activePlaylistId = id;
     saveDB();
-    renderEverything();  }
+    renderEverything();
+  }
 
   function createPlaylist() {
     const input = document.getElementById("new-playlist-input");
@@ -636,7 +549,8 @@
     if (playlist.id === ALL_ID) {
       db.activePlaylistId = ALL_ID;
     } else if (playlist.id === FAVORITES_ID) {
-      track.favorite = true;      db.activePlaylistId = FAVORITES_ID;
+      track.favorite = true;
+      db.activePlaylistId = FAVORITES_ID;
     } else {
       if (!playlist.trackIds.includes(trackId)) playlist.trackIds.unshift(trackId);
       db.activePlaylistId = playlist.id;
@@ -685,7 +599,8 @@
     }
     if (type === "soundcloud") {
       const norm = normalizeUrl(url);
-      return db.library.find(t => t.type === "soundcloud" && normalizeUrl(t.url) === norm) || null;    }
+      return db.library.find(t => t.type === "soundcloud" && normalizeUrl(t.url) === norm) || null;
+    }
     return db.library.find(t => normalizeUrl(t.url) === normalizeUrl(url)) || null;
   }
 
@@ -734,6 +649,7 @@
       const id =
         cleanUrl.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([0-9A-Za-z_-]{11})/)?.[1] ||
         cleanUrl.match(/youtu\.be\/([0-9A-Za-z_-]{11})/)?.[1];
+
       if (!id) throw new Error("Link YouTube inválido.");
 
       track.type = "youtube";
@@ -783,7 +699,8 @@
       try {
         const fresh = await buildTrackFromUrl(tr.url, tr);
         db.library[i] = {
-          ...tr,          ...fresh,
+          ...tr,
+          ...fresh,
           id: tr.id
         };
         changed = true;
@@ -832,7 +749,8 @@
 
     const ordered = [
       getPlaylistById(ALL_ID),
-      getPlaylistById(FAVORITES_ID),      ...db.playlists.filter(p => !p.system && p.id !== ALL_ID && p.id !== FAVORITES_ID)
+      getPlaylistById(FAVORITES_ID),
+      ...db.playlists.filter(p => !p.system && p.id !== ALL_ID && p.id !== FAVORITES_ID)
     ].filter(Boolean);
 
     ordered.forEach(pl => {
@@ -881,7 +799,8 @@
     if ([ALL_ID, FAVORITES_ID, ...custom.map(p => p.id)].includes(prev)) {
       select.value = prev;
     } else {
-      select.value = db.activePlaylistId || ALL_ID;    }
+      select.value = db.activePlaylistId || ALL_ID;
+    }
   }
 
   function renderPlaylist() {
@@ -930,7 +849,8 @@
           <i class="ph ph-trash"></i>
         </button>
 
-        ${activeItem && isPlaying ? '<i class="ph-fill ph-waveform text-[var(--primary)] animate-pulse ml-1"></i>' : ""}      `;
+        ${activeItem && isPlaying ? '<i class="ph-fill ph-waveform text-[var(--primary)] animate-pulse ml-1"></i>' : ""}
+      `;
 
       item.onclick = () => loadAndPlayById(t.id);
       container.appendChild(item);
@@ -979,7 +899,8 @@
   window.onYouTubeIframeAPIReady = () => { ytReady = true; };
 
   document.getElementById("kodux-widget").onclick = (e) => {
-    if (isDragging) return;    if (widgetState === "ball") updateWidgetState("preview");
+    if (isDragging) return;
+    if (widgetState === "ball") updateWidgetState("preview");
   };
 
   const tag = document.createElement("script");
@@ -994,4 +915,3 @@
   // Faz os pré-conectados passarem pelo mesmo motor de metadados/imagem
   hydratePreloadedTracks();
 })();
-]
