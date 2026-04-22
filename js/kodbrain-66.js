@@ -106,28 +106,20 @@
       const id = "orb_" + seed.toString(36);
 
       return `
-        <svg width="${size}" height="${size}" viewBox="0 0 100 100" class="dual-orb" id="${id}" xmlns="http://www.w3.org/2000/svg">
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <radialGradient id="${id}_core">
-              <stop offset="0%" stop-color="${c1}"/>
-              <stop offset="60%" stop-color="${c2}"/>
-              <stop offset="100%" stop-color="${c3}" stop-opacity="0"/>
-            </radialGradient>
-
-            <linearGradient id="${id}_ring">
-              <stop offset="0%" stop-color="${c1}"/>
-              <stop offset="100%" stop-color="${c2}"/>
+            <linearGradient id="${gid}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="hsl(${h1},100%,55%)"/>
+              <stop offset="100%" stop-color="hsl(${h2},90%,45%)"/>
             </linearGradient>
           </defs>
-
-          <circle cx="50" cy="50" r="46" fill="var(--bg, #05070c)"/>
-          <circle cx="50" cy="50" r="38" fill="none" stroke="url(#${id}_ring)" stroke-width="1" class="orb-pulse"/>
-          <circle cx="50" cy="50" r="42" fill="url(#${id}_core)" class="orb-glow"/>
-          <circle cx="50" cy="50" r="46" fill="none" stroke="url(#${id}_ring)" stroke-width="2.5" stroke-dasharray="70 20 10 30" stroke-linecap="round" class="orb-ring" opacity="0.86"/>
-          <circle cx="50" cy="50" r="8" fill="#fff" opacity="0.28" filter="blur(2px)"/>
-          <circle cx="50" cy="50" r="3" fill="#fff" opacity="0.82"/>
+          <rect width="32" height="32" rx="7" fill="#071018"/>
+          <circle cx="16" cy="16" r="9" fill="url(#${gid})" opacity="0.25"/>
+          <circle cx="16" cy="16" r="7" fill="url(#${gid})"/>
+          <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
         </svg>
       `;
+      el.dataset.orbName = safe;
     },
 
     renderOrb(targetSel, name, size) {
