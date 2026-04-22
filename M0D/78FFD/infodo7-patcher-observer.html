@@ -1,0 +1,200 @@
+<script>
+(() => {
+  if (window.__diBgStorageObserverReady) return;
+  window.__diBgStorageObserverReady = true;
+
+  const KEYS = {
+    images: 'di_bgImages',
+    opacity: 'di_bg_opacity',
+    blend: 'di_bg_blend',
+    active: 'di_bg_active',
+    auto: 'di_bg_auto'
+  };
+
+  const SNAPSHOT_KEY = '__di_bg_snapshot__';
+
+  function el(id) {
+    return document.getElementById(id);
+  }
+
+  function safeParse(raw, fallback) {
+    try {
+      return raw ? JSON.parse(raw) : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function getBgLayer() {
+    return el('bg-fake-custom');
+  }
+
+  function getActiveBg() {
+    const list = safeParse(localStorage.getItem(KEYS.images), []);
+    const activeIndexRaw = localStorage.getItem(KEYS.active);
+
+    if (activeIndexRaw !== null && activeIndexRaw !== '') {
+      const idx = Number(activeIndexRaw);
+      if (Number.isFinite(idx) && list[idx]?.data) {
+        return {
+          url: list[idx].data,
+          label: list[idx].name || list[idx].id || 'background',
+          opacity: localStorage.getItem(KEYS.opacity),
+          blend: localStorage.getItem(KEYS.blend),
+          auto: localStorage.getItem(KEYS.auto)
+        };
+      }
+    }
+
+    const activeItem = list.find(item => item && item.active && item.data);
+    if (activeItem) {
+      return {
+        url: activeItem.data,
+        label: activeItem.name || activeItem.id || 'background',
+        opacity: localStorage.getItem(KEYS.opacity),
+        blend: localStorage.getItem(KEYS.blend),
+        auto: localStorage.getItem(KEYS.auto)
+      };
+    }
+
+    return {
+      url: '',
+      label: 'Nenhum',
+      opacity: localStorage.getItem(KEYS.opacity),
+      blend: localStorage.getItem(KEYS.blend),
+      auto: localStorage.getItem(KEYS.auto)
+    };
+  }
+
+  function applyStateToUI(state) {
+    const layer = getBgLayer();
+    if (layer) {
+      const opacity = state.opacity !== null && state.opacity !== undefined ? Number(state.opacity) : 18;
+      const blend = state.blend || 'overlay';
+      layer.style.opacity = String(Math.max(0, Math.min(1, opacity / 100)));
+      layer.style.mixBlendMode = blend;
+      layer.style.backgroundImage = state.url ? `url("${state.url}")` : 'none';
+    }
+
+    const status = el('bgStatusText');
+    if (status) status.textContent = state.label || (state.url ? 'Ativo' : 'Nenhum');
+
+    const opacityLabel = el('bgOpacityLabel');
+    if (opacityLabel) {
+      const op = state.opacity !== null && state.opacity !== undefined ? Number(state.opacity) : 18;
+      opacityLabel.textContent = `${op}%`;
+    }
+
+    const opacityInput = el('bgOpacity');
+    if (opacityInput) {
+      const op = state.opacity !== null && state.opacity !== undefined ? String(state.opacity) : '18';
+      if (opacityInput.value !== op) opacityInput.value = op;
+    }
+
+    const blendSelect = el('bgBlend');
+    if (blendSelect) {
+      const blend = state.blend || 'overlay';
+      if (blendSelect.value !== blend) blendSelect.value = blend;
+    }
+
+    const autoBtn = el('btnAutoBgSync');
+    if (autoBtn) {
+      const autoOn = localStorage.getItem(KEYS.auto) === '1';
+      autoBtn.textContent = `Auto BG: ${autoOn ? 'ON' : 'OFF'}`;
+    }
+
+    if (typeof window.di_renderBgThumbs === 'function') {
+      window.di_renderBgThumbs();
+    } else if (typeof window.di_renderBgPanel === 'function') {
+      window.di_renderBgPanel();
+    }
+  }
+
+  function syncFromStorage() {
+    const state = getActiveBg();
+    applyStateToUI(state);
+    window.dispatchEvent(new CustomEvent('di:bg:sync', { detail: state }));
+  }
+
+  function snapshot() {
+    return [
+      localStorage.getItem(KEYS.images) || '',
+      localStorage.getItem(KEYS.opacity) || '',
+      localStorage.getItem(KEYS.blend) || '',
+      localStorage.getItem(KEYS.active) || '',
+      localStorage.getItem(KEYS.auto) || ''
+    ].join('||');
+  }
+
+  function startPollingFallback() {
+    let last = snapshot();
+    setInterval(() => {
+      const now = snapshot();
+      if (now !== last) {
+        last = now;
+        syncFromStorage();
+      }
+    }, 800);
+  }
+
+  function patchLocalStorage() {
+    const _setItem = localStorage.setItem.bind(localStorage);
+    const _removeItem = localStorage.removeItem.bind(localStorage);
+    const _clear = localStorage.clear.bind(localStorage);
+
+    localStorage.setItem = function(key, value) {
+      const oldValue = localStorage.getItem(key);
+      _setItem(key, value);
+      window.dispatchEvent(new CustomEvent('di:storage', {
+        detail: { key, oldValue, newValue: String(value) }
+      }));
+    };
+
+    localStorage.removeItem = function(key) {
+      const oldValue = localStorage.getItem(key);
+      _removeItem(key);
+      window.dispatchEvent(new CustomEvent('di:storage', {
+        detail: { key, oldValue, newValue: null }
+      }));
+    };
+
+    localStorage.clear = function() {
+      _clear();
+      window.dispatchEvent(new CustomEvent('di:storage', {
+        detail: { key: null, oldValue: null, newValue: null, clear: true }
+      }));
+    };
+  }
+
+  function bindEvents() {
+    window.addEventListener('storage', (e) => {
+      if (!e) return;
+      if (!Object.values(KEYS).includes(e.key)) return;
+      syncFromStorage();
+    });
+
+    window.addEventListener('di:storage', (e) => {
+      const key = e?.detail?.key;
+      if (key && !Object.values(KEYS).includes(key)) return;
+      syncFromStorage();
+    });
+
+    window.addEventListener('di:bg:requestSync', syncFromStorage);
+  }
+
+  function init() {
+    patchLocalStorage();
+    bindEvents();
+    syncFromStorage();
+    startPollingFallback();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+
+  window.di_syncBgFromStorage = syncFromStorage;
+})();
+</script>

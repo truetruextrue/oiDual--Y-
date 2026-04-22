@@ -1,0 +1,1547 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <title>Fusion Card // Core Controller</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
+  
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css"><style>
+
+#main-orb svg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+color: var(--kob-voice-primary);
+background: var(--kob-voice-bg-soft);
+border: 4px;
+border-color: var(--ink);
+border-radius: 9999px;
+
+}
+
+</style><style>
+ /* orb */
+.orb {
+  width: 96%;
+  height: 96%;
+  border-radius: 50%;
+
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style><style> 
+
+/* estado normal */
+.kob-tts-dock{
+  transition: transform .35s ease, opacity .65s ease;
+}
+
+/* quase invisível */
+.kob-tts-dock.idle{
+  opacity: .18;
+  transform: scale(.92);
+}
+
+/* quando passa o dedo ou mouse */
+.kob-tts-dock:hover{
+  opacity: 1;
+  transform: scale(1);
+}
+
+.kob-tts-dock{
+
+ 
+  box-shadow:none !important;
+}</style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="./css/main.css"><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><style>
+    /* ===== INFODOSE · 78FRAMES — FUSÃO DEFINITIVA V5 + V8 ===== */
+    :root {
+      --kob-voice-primary: #ff4fa3;
+      --kob-voice-secondary: #2ab7ff;
+      --kob-voice-accent: #6b7cff;
+      --bg-page: #f6f8fc;
+      --bg-panel: #ffffff;
+      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --ink: #141824;
+      --text: #1f2430;
+      --text-soft: #64708a;
+      --text-muted: #7c88a0;
+      --line: rgba(20, 24, 36, 0.09);
+      --line-strong: rgba(42, 183, 255, 0.22);
+      --shadow: 0 18px 50px rgba(20, 24, 36, 0.08);
+      --shadow-soft: 0 10px 30px rgba(20, 24, 36, 0.06);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --pill: #eef3ff;
+      --pill-ink: #2d3550;
+      --chip: #f3f6fb;
+      --chip-ink: #42506c;
+      --max: 1260px;
+      --glass: blur(16px) saturate(170%);
+      --drawer-width: 360px;
+    }
+
+    * { box-sizing: border-box; margin: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background: var(--bg-page);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+
+    /* CAMADA DE BACKGROUND FIXA (ENGINE) */
+    #bg-fake-custom {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: 0.18;
+      mix-blend-mode: overlay;
+      transition: opacity 0.35s ease, background-image 0.45s ease, filter 0.35s ease;
+      filter: saturate(1.03) contrast(1.04);
+    }
+    #bg-fake-custom::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.1), transparent);
+      mix-blend-mode: screen;
+      pointer-events: none;
+    }
+
+    /* ELEMENTOS PRINCIPAIS ACIMA DO BG */
+    .wrap, .topbar, #app-root, .drawer, #drawerOverlay { position: relative; z-index: 1; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 22px 18px 64px; }
+
+    /* TOPBAR */
+    .topbar {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px;
+      position: sticky; top: 10px; z-index: 30;
+      margin-bottom: 18px;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 14px;
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 20px;
+      box-shadow: var(--shadow-soft);
+    }
+    .pill-logo {
+      width: 44px; height: 44px; flex: none; border-radius: 999px;
+      background: linear-gradient(180deg, #fefefe, #f1f5ff);
+      border: 1px solid rgba(20,24,36,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8);
+      position: relative; overflow: hidden;
+    }
+    .pill-logo:before, .pill-logo:after {
+      content: ""; position: absolute; inset: 7px; border-radius: 999px; transform: rotate(-45deg);
+    }
+    .pill-logo:before {
+      background: linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #fff 50%, var(--kob-voice-secondary));
+      clip-path: polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%);
+    }
+    .pill-logo:after {
+      inset: 14px; background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode: screen;
+    }
+    .brand h1 { margin: 0; font-size: 13px; letter-spacing: .34em; text-transform: uppercase; color: #111827; font-weight: 800; }
+    .brand p { margin: 3px 0 0; font-size: 12px; color: var(--text-soft); letter-spacing: .08em; }
+    .nav-group { display: flex; gap: 10px; align-items: center; }
+    .nav-count {
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: 999px; padding: 10px 18px;
+      font-size: 13px; font-weight: 800; letter-spacing: .05em; box-shadow: var(--shadow-soft);
+    }
+    .drawer-toggle {
+      width: 48px; height: 48px; border-radius: 50%; background: var(--bg-panel-soft);
+      backdrop-filter: var(--glass); border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; cursor: pointer; box-shadow: var(--shadow-soft);
+    }
+
+    /* DRAWER (PAINEL LATERAL) */
+    #drawerOverlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,.15); backdrop-filter: blur(4px);
+      z-index: 100; opacity: 0; visibility: hidden; transition: 0.25s ease;
+    }
+    #drawerOverlay.active { opacity: 1; visibility: visible; }
+    .drawer {
+      position: fixed; top: 0; right: 0; bottom: 0; width: var(--drawer-width); max-width: 90vw;
+      background: var(--bg-panel); box-shadow: -10px 0 40px rgba(0,0,0,.08);
+      z-index: 101; transform: translateX(100%); transition: transform 0.3s;
+      display: flex; flex-direction: column; border-left: 1px solid var(--line);
+      backdrop-filter: blur(20px); background: rgba(255,255,255,.92);
+    }
+    .drawer.active { transform: translateX(0); }
+    .drawer-header {
+      padding: 24px 22px 12px; display: flex; align-items: center; justify-content: space-between;
+      border-bottom: 1px solid var(--line);
+    }
+    .drawer-header h2 { font-size: 18px; letter-spacing: .14em; text-transform: uppercase; margin: 0; }
+    .drawer-close { background: none; border: none; font-size: 28px; cursor: pointer; color: var(--text-soft); }
+    .drawer-body { padding: 20px 22px; overflow-y: auto; flex: 1; }
+
+    /* COMPONENTES DO BACKGROUND */
+    .cockpit-item { margin-bottom: 28px; }
+    .cockpit-label { font-size: 11px; text-transform: uppercase; letter-spacing: .14em; font-weight: 800; color: var(--text-muted); margin-bottom: 12px; }
+    .bg-toolbox { display: grid; gap: 14px; }
+    .bg-toolbox-head { display: flex; align-items: center; justify-content: space-between; background: var(--bg-page); padding: 8px 12px; border-radius: 40px; border: 1px solid var(--line); }
+    .btn-icon { background: #fff; border: 1px solid var(--line); border-radius: 10px; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .bg-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .btn-block { background: var(--bg-panel); border: 1px solid var(--line); border-radius: 40px; padding: 12px 10px; font-weight: 800; font-size: 12px; cursor: pointer; transition: 0.15s; text-align: center; }
+    .btn-block:hover { border-color: var(--kob-voice-primary); color: var(--kob-voice-primary); }
+    .bg-control { display: grid; gap: 8px; }
+    .bg-control label { font-size: 12px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; }
+    .cockpit-input, select { background: #fff; border: 1px solid var(--line); border-radius: 40px; padding: 12px 16px; font-size: 14px; }
+    .bg-presets { display: grid; grid-template-columns: repeat(3,1fr); gap: 8px; }
+    .preset-btn { border: 1px solid var(--line); border-radius: 40px; background: #fff; padding: 10px; font-weight: 800; font-size: 11px; cursor: pointer; }
+    .bg-frames { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 8px; max-height: 260px; overflow: auto; padding-right: 4px; }
+    .bg-frame-thumb {
+      position: relative; height: 80px; border-radius: 14px; overflow: hidden;
+      border: 2px solid transparent; background-size: cover; background-position: center;
+      cursor: pointer; box-shadow: 0 6px 14px rgba(0,0,0,.06);
+    }
+    .bg-frame-thumb.active { border-color: var(--kob-voice-primary); }
+    .bg-frame-thumb .tag { position: absolute; left: 6px; right: 6px; bottom: 6px; font-size: 9px; font-weight: 800; color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
+
+    /* HERO & CONTEÚDO */
+    #app-root { animation: fadeIn 0.4s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .hero { display: grid; grid-template-columns: 1.04fr .96fr; gap: 20px; margin-top: 18px; }
+    .hero-card {
+      background: var(--bg-panel-soft); backdrop-filter: var(--glass);
+      border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden;
+    }
+    .hero-media { min-height: 720px; background: #f3f6fb; position: relative; cursor: grab; user-select: none; }
+    .hero-media:active { cursor: grabbing; }
+    .hero-media img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+    .swipe-hint {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      background: rgba(0,0,0,0.5); color: white; padding: 8px 16px;
+      border-radius: 99px; font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 1px; backdrop-filter: blur(8px); pointer-events: none; opacity: 0.8;
+    }
+    .hero-media .badge {
+      position: absolute; left: 18px; top: 18px; display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border-radius: 999px; background: rgba(255,255,255,.8);
+      border: 1px solid var(--line); font-size: 12px; font-weight: 800; backdrop-filter: var(--glass);
+    }
+    .badge .dot { width: 9px; height: 9px; border-radius: 50%; background: linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary)); }
+    .side-note {
+      position: absolute; right: 18px; top: 18px; display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; border-radius: 999px; background: rgba(255,255,255,.82);
+      border: 1px solid var(--line); box-shadow: var(--shadow-soft); font-size: 12px; color: var(--text-soft);
+      backdrop-filter: var(--glass); font-weight: 700;
+    }
+    .hero-copy { padding: 36px; display: flex; flex-direction: column; gap: 24px; }
+    .kicker { display: flex; align-items: center; gap: 10px; color: var(--text-soft); text-transform: uppercase; letter-spacing: .22em; font-weight: 800; font-size: 12px; }
+    .title { margin: 8px 0 0; font-size: clamp(38px,4vw,72px); line-height: .96; letter-spacing: -.05em; color: #151a26; }
+    .title .grad { background: linear-gradient(90deg, var(--kob-voice-primary), #ffb15c 35%, var(--kob-voice-secondary) 68%, var(--kob-voice-accent)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+    .lead { margin: 0; font-size: 18px; line-height: 1.7; color: var(--text-soft); }
+    .mini-pills { display: flex; flex-wrap: wrap; gap: 10px; }
+    .chip { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 999px; background: var(--chip); border: 1px solid var(--line); color: var(--chip-ink); font-size: 13px; font-weight: 700; }
+
+    .section { margin-top: 20px; background: var(--bg-panel-soft); backdrop-filter: var(--glass); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-soft); overflow: hidden; }
+    .section-head { padding: 24px; border-bottom: 1px solid var(--line); }
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 18px; }
+    .panel { background: var(--bg-panel); border: 1px solid var(--line); border-radius: 22px; overflow: hidden; }
+    .panel-h { padding: 24px 24px 0; }
+    .panel-body { padding: 24px; }
+    .summary { border: 1px solid var(--line); border-radius: 18px; padding: 20px; background: linear-gradient(180deg, #fff, #fbfcff); }
+    .tag { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; font-size: 12px; margin-bottom: 12px; color: var(--kob-voice-primary); }
+    .accent-quote { margin-top: 16px; border-left: 3px solid rgba(255,79,163,.48); padding: 16px; background: linear-gradient(90deg, rgba(255,79,163,.06), rgba(42,183,255,.05), transparent); border-radius: 12px; font-style: italic; }
+
+    .accordion { display: grid; gap: 12px; padding: 18px; }
+    details.acc { background: #fff; border: 1px solid var(--line); border-radius: 18px; overflow: hidden; }
+    details.acc summary { list-style: none; cursor: pointer; padding: 20px 24px; display: flex; justify-content: space-between; font-weight: 800; text-transform: uppercase; }
+    .acc-body { padding: 0 24px 24px; line-height: 1.8; }
+    .stack-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 18px; }
+    .stack { background: rgba(255,255,255,.8); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+    .stack-head { padding: 20px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; }
+    .stack-body { padding: 20px 24px; display: grid; gap: 12px; }
+    .card { border: 1px solid var(--line); border-radius: 18px; padding: 20px; background: #fff; }
+    .card-k { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; font-weight: 800; }
+    .orb { width: 12px; height: 12px; border-radius: 50%; background: linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary)); }
+
+    .catalog-nav { display: flex; gap: 16px; margin-top: 24px; }
+    .nav-btn { flex: 1; padding: 18px; border-radius: 60px; background: var(--bg-panel-soft); backdrop-filter: var(--glass); border: 1px solid var(--line); font-weight: 800; cursor: pointer; transition: all 0.3s; }
+    .nav-btn:hover:not(:disabled) { border-color: var(--kob-voice-primary); color: var(--kob-voice-accent); transform: translateY(-2px); }
+    .footer-quote { margin-top: 18px; padding: 24px; text-align: center; border-radius: 24px; background: linear-gradient(180deg, #fff, #f8fbff); border: 1px solid rgba(42,183,255,.18); }
+
+    @media (max-width: 1020px) { .hero, .grid-2, .stack-grid { grid-template-columns: 1fr; } .hero-media { min-height: 520px; } }
+    @media (max-width: 680px) { .wrap { padding: 14px 12px 46px; } .topbar { flex-direction: column; } }
+  </style></head>
+<body>
+
+  <!-- Ambient Blobs -->
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <!-- CONTAINER PARA CENTRALIZAR INICIALMENTE -->
+  <div class="container">
+    <div class="fusion-card closed" id="mainCard">
+
+      <div class="card-header" id="cardHeader">
+        <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+        <div class="text-block">
+          <div class="greeting-row">
+            <span class="txt-thin" id="lblHello">Oi,</span>
+            <span class="txt-heavy" id="lblName">Convidado</span>
+          </div>
+          <div class="brand-dual">DUAL</div>
+        </div>
+        <div class="clock-widget">
+          <div class="time-display" id="clockTime">00:00</div>
+          <span class="status-led">ONLINE</span>
+        </div>
+        <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido"><i data-lucide="menu"></i></button>
+      </div>
+      
+      <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
+      <div class="drag-handle"></div>
+
+      <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+        <div class="mini-avatar" id="smallMiniAvatar"></div>
+        <div class="small-text" id="smallText">Aguardando ativação...</div>
+        <div class="ident-badge" id="smallIdent">--</div>
+      </div>
+
+      <div class="card-body" id="cardBody">
+        <!-- Main Input User -->
+        <div class="input-wrapper stagger-item">
+          <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+        </div>
+
+        <!-- Section 1: ASCII Activation -->
+        <div class="activation-wrap stagger-item">
+          <div class="activation-toggle" onclick="toggleSection('activationCard')">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+              <strong style="letter-spacing:1px;font-size:0.9rem">Ativação ASCII</strong>
+            </div>
+            <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">BASE v1</div>
+          </div>
+          <div id="activationCard" class="activation-card activation-hidden">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="mini-avatar" id="actMiniAvatar"></div>
+                <div><div style="font-weight:700">CÉREBRO</div><div style="font-size:0.78rem;opacity:0.6"><span id="actName">User</span></div></div>
+              </div>
+              <div class="activation-badge" id="actBadge" style="margin-left:auto; color:var(--neon-cyan); font-size:0.8em">v:--</div>
+            </div>
+            <pre id="actPre" class="activation-pre">Carregando...</pre>
+            <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+              <button class="trigger-btn" id="copyActBtn">COPIAR</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 2: System & Neural (Config) -->
+        <div class="activation-wrap stagger-item">
+            <div class="activation-toggle" onclick="toggleSection('systemCard')">
+                <div style="display:flex;align-items:center;gap:8px">
+                  <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+                  <strong style="letter-spacing:1px;font-size:0.9rem">SYSTEM &amp; NEURAL</strong>
+                </div>
+                <div style="margin-left:auto;font-size:0.82rem;color:rgba(255,255,255,0.6)">CONFIG</div>
+            </div>
+            <div id="systemCard" class="activation-card activation-hidden">
+                <div class="col">
+                   <div class="section-title">IDENTIDADE DA INFODOSE</div>
+                   <input type="text" id="infodoseNameInput" placeholder="Nome: World System..." style="width:100%;margin-bottom:8px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+                   <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off" style="width:100%;margin-bottom:6px;padding:8px;border-radius:6px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);color:#fff">
+                   
+                   <div class="model-toggle">
+                      <select id="modelSelect" class="btn">
+                        <option value="" disabled="">Selecione Modelo</option>
+                        <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                        <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                        <option value="mistralai/devstral-2512:free">DevStral</option>
+                        <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                      </select>
+                   </div>
+                   
+                   <div class="panel-divider" style="margin:10px 0; border-top:1px solid rgba(255,255,255,0.05)"></div>
+                   <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="stagger-item" style="margin-top:4px">
+            <div class="stat-lbl" style="margin-bottom:6px; font-size:0.6rem; color:rgba(255,255,255,0.4)">INTERFACE MODE</div>
+            <div style="display:flex; gap:8px;">
+                <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
+                <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
+                <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
+            </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- KEYS MANAGER MODAL -->
+  <div id="keysModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card" role="dialog">
+      <div class="keys-header">
+        <div>
+          <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+          <div style="color:rgba(255,255,255,0.6);font-size:0.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+        </div>
+        <button id="closeKeysBtn" class="small-btn">X</button>
+      </div>
+      <div class="key-list" id="keyList"></div>
+      <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,0.05)">
+        <div class="form-grid">
+          <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+          <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+        </div>
+        <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,0.1)">ADICIONAR CHAVE</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,0.05);padding-top:12px">
+        <div style="font-size:0.7rem;color:rgba(255,255,255,0.4);display:flex;align-items:center;gap:5px">
+          <i data-lucide="shield-check" style="width:14px"></i> <span id="vaultStatusText">Cofre Aberto</span>
+        </div>
+        <div style="display:flex;gap:8px">
+          <button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- VAULT UNLOCK MODAL -->
+  <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card">
+      <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+      <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+      <p style="margin:0 0 15px 0;font-size:0.9rem;color:rgba(255,255,255,0.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+      <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+      <div style="display:flex;gap:8px;justify-content:center">
+         <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+         <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
+      </div>
+    </div>
+  </div>
+
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script>
+
+<script>
+
+// 🔥 ===============================
+// 🔥 ORB SYSTEM · CORE UNIFICADO
+// 🔥 ===============================
+
+// 🔹 GERADOR UNIVERSAL
+function makeOrbAvatar(name, size = 36) {
+  const safe = name || 'DUAL';
+
+  // seed determinística baseada no nome
+  const seed = safe.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+
+  const h1 = seed % 360;
+  const h2 = (seed * 37) % 360;
+
+  // 🔒 evita colisão de gradient no DOM
+  const uid = Math.random().toString(36).slice(2, 6);
+  const id = 'g' + seed.toString(36) + uid;
+
+  return `
+    <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="hsl(${h1},100%,55%)"/>
+          <stop offset="100%" stop-color="hsl(${h2},90%,45%)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- base -->
+      <rect width="32" height="32" rx="7" fill="#071018"/>
+
+      <!-- glow -->
+      <circle cx="16" cy="16" r="9" fill="url(#${id})" opacity="0.25"/>
+
+      <!-- core -->
+      <circle cx="16" cy="16" r="7" fill="url(#${id})"/>
+
+      <!-- ring -->
+      <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+    </svg>
+  `;
+}
+
+
+// 🔓 GLOBAL HOOK
+window.makeOrbAvatar = makeOrbAvatar;
+
+// 🔹 ALIAS OPCIONAL (mini semântico)
+window.makeMiniAvatar = (name) => makeOrbAvatar(name, 24);
+
+
+// 🔁 ===============================
+// 🔁 UPDATE INTERFACE
+// 🔁 ===============================
+function updateInterface(name){
+  const safe = name || 'Convidado';
+
+  // 🔹 texto
+  els.lblName.innerText = safe;
+  els.input.value = safe;
+
+  // 🔹 estado ativo
+  const activeKey = STATE.keys.find(k => k.active);
+
+  els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+  els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+  // 🔥 ORBS SINCRONIZADOS
+  const orbBig  = makeOrbAvatar(safe, 64);
+  const orbMid  = makeOrbAvatar(safe, 36);
+  const orbMini = makeOrbAvatar(safe, 24);
+
+  els.avatarTgt.innerHTML = orbBig;
+  els.smallMiniAvatar.innerHTML = orbMini;
+  els.actMiniAvatar.innerHTML = orbMid;
+
+  // 🔹 nome ativo
+  els.actName.innerText = safe;
+}
+
+</script>
+
+<style>
+ /* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+
+<!--
+<script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"defer></script>
+-->
+
+
+
+
+
+
+<div id="root">
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+
+<div class="wrap">
+  <div class="content">
+    <iframe id="frame" src="about:blank"></iframe>
+    <div id="kob-tts-outline"></div>
+  </div>
+
+  <!-- HUD Inteligente -->
+  <div class="symbol-bar floating" id="symbolBar">
+    
+    <!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+    <!-- Controles de Navegação de Leitura -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+    </div>
+
+    <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+        </div>
+<!--
+        <div class="voice-indicator" id="voiceIndicator"></div> -->
+
+      </div>
+    </button>
+
+    <!-- Outros atalhos -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="phi" data-url="about:blank">Φ</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual-Vivivi-1/">꩜</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+    </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+       <div id="arch-overlay"></div>  
+<!-- Scripts -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+</div>
+
+
+
+
+
+<script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
+     ║  Segurar 3s → edita data-url do botão   ║
+     ║  Clique curto → sistema externo cuida   ║
+     ╚══════════════════════════════════════════╝ -->
+
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-22.js"></script>
+
+<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+
+
+<script>
+(function () {
+  function di_getSafeName() {
+    return (
+      (document.querySelector('#inputUser')?.value ||
+       document.querySelector('#infodoseNameInput')?.value ||
+       localStorage.getItem('di_userName') ||
+       localStorage.getItem('userName') ||
+       'DUAL')
+      .trim() || 'Convidado'
+    );
+  }
+
+  function di_setText(sel, value) {
+    const el = document.querySelector(sel);
+    if (el) el.textContent = value;
+  }
+
+  function di_setOrb(sel, name, size) {
+    const el = document.querySelector(sel);
+    if (el && typeof window.makeOrbAvatar === 'function') {
+      el.innerHTML = window.makeOrbAvatar(name, size);
+    }
+  }
+
+  function di_syncNameUI(name) {
+    const safe = (name || '').trim() || 'Convidado';
+
+    localStorage.setItem('di_userName', safe);
+    localStorage.setItem('userName', safe);
+
+    di_setText('#lblName', safe);
+    di_setText('#actName', safe);
+    di_setText('#smallText', safe);
+
+    const activeKey = window.STATE?.keys?.find?.(k => k.active);
+    di_setText('#smallIdent', activeKey ? activeKey.name : '--');
+    di_setText('#actBadge', activeKey ? `key:${activeKey.name}` : 'v:--');
+
+    di_setOrb('#main-orb', safe, 48);
+    di_setOrb('#avatarTarget', safe, 64);
+    di_setOrb('#smallMiniAvatar', safe, 24);
+    di_setOrb('#actMiniAvatar', safe, 36);
+  }
+
+  function di_bindLiveName() {
+    const inputs = [
+      document.querySelector('#inputUser'),
+      document.querySelector('#infodoseNameInput')
+    ].filter(Boolean);
+
+    const initial = di_getSafeName();
+
+    inputs.forEach((inp) => {
+      if (!inp) return;
+      if (!inp.value) inp.value = initial;
+      inp.addEventListener('input', () => di_syncNameUI(inp.value));
+      inp.addEventListener('change', () => di_syncNameUI(inp.value));
+    });
+
+    di_syncNameUI(initial);
+
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'di_userName' || e.key === 'userName') {
+        di_syncNameUI(e.newValue);
+      }
+    });
+
+    document.addEventListener('di:name:update', (e) => {
+      di_syncNameUI(e.detail?.name);
+    });
+  }
+
+  window.di_syncNameUI = di_syncNameUI;
+  window.di_bindLiveName = di_bindLiveName;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', di_bindLiveName);
+  } else {
+    di_bindLiveName();
+  }
+})();
+</script>
+
+
+
+<button id="dev-btn" onclick="KDevPanel.toggle()" class="fixed bottom-6 left-6 z-[99998] bg-black/80 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 hover:border-blue-500/50 group flex items-center gap-2">
+
+ 
+ <i data-lucide="terminal" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>
+    <span class="text-[10px] font-mono font-bold uppercase tracking-widest hidden md:block">Dev Panel</span>
+  </button>
+
+  <!-- Panel Drawer -->
+  <div id="dev-panel" class="fixed inset-y-0 left-0 w-[90%] md:w-[420px] bg-[#050505]/95 backdrop-blur-3xl border-r border-white/10 z-[99999] transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
+     
+     <!-- Header -->
+     <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
+         <div>
+             <h3 class="text-white font-display font-bold tracking-widest uppercase text-xs flex items-center gap-2">
+                <i data-lucide="cpu" class="w-4 h-4 text-blue-500"></i> Fusion DevOS
+             </h3>
+             <p class="text-[9px] text-white/30 font-mono mt-1">Inspeção de Assets &amp; Variáveis</p>
+         </div>
+         <button onclick="KDevPanel.toggle()" class="text-white/30 hover:text-white bg-white/5 p-2 rounded-lg transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
+     </div>
+     
+     <!-- Content -->
+     <div class="p-6 flex-1 overflow-y-auto dev-scroll space-y-8">
+         
+         <!-- Theme Variables -->
+         <div>
+             <h4 class="text-[10px] uppercase text-white/40 font-bold tracking-[0.2em] mb-4 flex items-center gap-2">
+                 <i data-lucide="palette" class="w-3 h-3"></i> Variáveis CSS Globais
+             </h4>
+             <div class="space-y-3 bg-white/[0.02] p-4 rounded-xl border border-white/5">
+                 
+                 <div class="flex justify-between items-center group">
+                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--bg (Fundo Topo)</span>
+                     <div class="flex items-center gap-2">
+                         <span id="val--bg" class="text-[9px] text-white/30 font-mono">#050505</span>
+                         <input type="color" value="#050505" oninput="KDevPanel.updateVar('--bg', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
+                     </div>
+                 </div>
+                 
+                 <div class="flex justify-between items-center group">
+                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--bg-dark (Fundo Base)</span>
+                     <div class="flex items-center gap-2">
+                         <span id="val--bg-dark" class="text-[9px] text-white/30 font-mono">#000000</span>
+                         <input type="color" value="#000000" oninput="KDevPanel.updateVar('--bg-dark', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
+                     </div>
+                 </div>
+                 
+                 <div class="flex justify-between items-center group">
+                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--active-color</span>
+                     <div class="flex items-center gap-2">
+                         <span id="val--active-color" class="text-[9px] text-white/30 font-mono">#3b82f6</span>
+                         <input type="color" value="#3b82f6" oninput="KDevPanel.updateVar('--active-color', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
+                     </div>
+                 </div>
+                 
+             </div>
+         </div>
+
+         <!-- Active Links/Scripts -->
+         <div>
+             <div class="flex justify-between items-center mb-4">
+                 <h4 class="text-[10px] uppercase text-white/40 font-bold tracking-[0.2em] flex items-center gap-2">
+                     <i data-lucide="link" class="w-3 h-3"></i> Recursos (Links &amp; Scripts)
+                 </h4>
+                 <button onclick="KDevPanel.scan()" class="text-blue-400 hover:text-white transition p-1"><i data-lucide="refresh-cw" class="w-3 h-3"></i></button>
+             </div>
+             
+             <!-- Add New Resource -->
+             <div class="flex gap-2 mb-4">
+                 <select id="dev-new-type" class="bg-white/5 border border-white/10 rounded-lg text-[10px] text-white px-2 outline-none">
+                     <option value="css">CSS</option>
+                     <option value="js">JS</option>
+                 </select>
+                 <input id="dev-new-url" type="text" placeholder="https://..." class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] text-white outline-none focus:border-blue-500/50">
+                 <button onclick="KDevPanel.addResource()" class="bg-blue-500/20 text-blue-400 px-3 rounded-lg border border-blue-500/30 hover:bg-blue-500/40 transition">
+                     <i data-lucide="plus" class="w-3 h-3"></i>
+                 </button>
+             </div>
+
+             <!-- Resources List -->
+             <div id="dev-resources-list" class="space-y-2">
+                 <!-- Injected by JS -->
+             </div>
+         </div>
+
+     </div>
+     
+     <!-- Footer Controls -->
+     <div class="p-6 border-t border-white/5 bg-black/50">
+         <button onclick="KDevPanel.exportHTML()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.3)]">
+             <i data-lucide="download" class="w-4 h-4"></i> Exportar HTML Final
+         </button>
+         <p class="text-center text-[8px] text-white/30 mt-3 font-mono">O painel será removido automaticamente do código exportado.</p>
+     </div>
+  </div>
+
+
+  <!-- ORIGINAL SCRIPTS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0B.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0K.js"></script>
+  
+  
+    <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DevOs/js/modules/inline-0-kdev.js"></script>
+
+  <!-- ========================================== -->
+  <!-- KODUX DEV PANEL IMPLEMENTATION (LOGIC)     -->
+  <!-- ========================================== -->
+  
+
+
+
+
+
+<!-- CAMADA DE BACKGROUND FIXA -->
+<div id="bg-fake-custom"></div>
+
+<!-- DRAWER OVERLAY + PAINEL -->
+<div id="drawerOverlay" onclick="toggleDrawer()"></div>
+<aside class="drawer" id="drawerPanel">
+  <div class="drawer-header">
+    <h2>⚙️ Painel de Background</h2>
+    <button class="drawer-close" onclick="toggleDrawer()">×</button>
+  </div>
+  <div class="drawer-body" id="drawerProfile">
+    <div class="cockpit-item">
+      <div class="cockpit-label">Background da Obra</div>
+      <div class="bg-toolbox">
+        <div class="bg-toolbox-head">
+          <span id="bgStatusText" style="font-size:.8rem;color:var(--text-muted)">Nenhum</span>
+          <label class="btn-icon" style="cursor:pointer;">
+            <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+            <span style="font-size:20px;">📂</span>
+          </label>
+        </div>
+        <div class="bg-actions">
+          <button class="btn-block" id="btnUseCurrentFrameBg">Usar quadro atual</button>
+          <button class="btn-block" id="btnAutoBgSync">Auto BG: OFF</button>
+        </div>
+        <div class="bg-control">
+          <label>Opacidade <span id="bgOpacityLabel">18%</span></label>
+          <input type="range" id="bgOpacity" min="0" max="100" value="18">
+        </div>
+        <div class="bg-control">
+          <label>Mix Blend Mode</label>
+          <select id="bgBlend" class="cockpit-input">
+            <option value="normal">normal</option>
+            <option value="multiply">multiply</option>
+            <option value="screen">screen</option>
+            <option value="overlay" selected="">overlay</option>
+            <option value="soft-light">soft-light</option>
+            <option value="luminosity">luminosity</option>
+          </select>
+        </div>
+        <div class="bg-presets">
+          <button class="preset-btn" data-preset="soft">Soft</button>
+          <button class="preset-btn" data-preset="dream">Dream</button>
+          <button class="preset-btn" data-preset="intense">Intense</button>
+        </div>
+        <div id="bgThumbPanel" class="bg-frames"></div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<div class="wrap">
+  <div class="topbar">
+    <div class="brand">
+      <div class="pill-logo"></div>
+      <div><h1>INFODOSE</h1><p>Catálogo • 78Frames</p></div>
+    </div>
+    <div class="nav-group">
+      <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+      <div class="drawer-toggle" onclick="toggleDrawer()">🎛️</div>
+    </div>
+  </div>
+
+  <div id="app-root"></div>
+
+  <div class="catalog-nav">
+    <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">← Quadro Anterior</button>
+    <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Quadro →</button>
+  </div>
+  <div class="footer-quote"><b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”</div>
+</div>
+
+<script>
+  (function(){
+    // ========== CATÁLOGO 78FRAMES (HERO 0, 1, 3, 4, 5) ==========
+    window.catalogo78Frames = [
+      { // Frame 0: hero0
+        id: "frame-000",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        badge: "ritual interativo",
+        kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço da ",
+        tituloDestaque: "Mente",
+        lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Ocitocina ensina o peso de forma equilibrada.",
+        chips: ["🥃 Álcool Blues", "🧘 Ocitocina", "🃏 Bobo da Corte"],
+        panel1: { titulo: "Energia do Ambiente", desc: "O peso vira ritmo e flui.", items: [{ tag: "Standby", texto: "Reduz drasticamente o que pesa em happy hour." }], quote: "“O peso vira ritmo… e flui.”" },
+        panel2: { titulo: "Aromas & Sensorial", desc: "Planejamento do encontro.", items: [{ tag: "Paz e Poder", texto: "Aroma da paz mantém standby; aroma do poder organiza." }], quote: "“O som que soma.”" },
+        versoes: [{ titulo: "Happy Hour", hint: "redução de atrito", open: true, texto: "<b>Pulse:</b> Quadro em área gourmet reduz peso.<br><b>Uno:</b> Ocitocina liberada." }],
+        ambienteCards: [{ icon: "eventos", texto: "Poder cognitivo e sensorial." }],
+        resumoCards: [{ icon: "infantilidade", texto: "Quebra defesas sem ativar alerta." }]
+      },
+      { // Frame 1: hero1
+        id: "frame-001",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+        badge: "frequência azul",
+        kicker: "Expansão Bllue",
+        tituloNormal: "Fluxo ",
+        tituloDestaque: "Contínuo",
+        lead: "Arquitetura visual baseada em ciclos incompletos mantém o cérebro em flow perceptivo.",
+        chips: ["🌀 fluxo", "🧩 padrão", "🎯 foco"],
+        panel1: { titulo: "Pattern Recognition", desc: "A mente tenta fechar formas.", items: [{ tag: "Engajamento", texto: "Micro-recompensas cognitivas." }], quote: "“Quase completo… e o olhar quer ficar.”" },
+        panel2: { titulo: "Aplicação", desc: "Ideal para ideação.", items: [{ tag: "Criatividade", texto: "Mantém cérebro iterando." }], quote: "“Flow perceptivo contínuo.”" },
+        versoes: [{ titulo: "Versão Curta", hint: "loop", open: true, texto: "<b>Bllue:</b> incomplete loops mantêm atenção." }],
+        ambienteCards: [{ icon: "escritórios", texto: "Estimula ideação criativa." }],
+        resumoCards: [{ icon: "foco", texto: "Estado de flow visual." }]
+      },
+      { // Frame 3: hero3
+        id: "frame-003",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        badge: "infodose • obra viva",
+        kicker: "Desenho cognitivo",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "vivo",
+        lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo.",
+        chips: ["💊 espelho", "🧠 mente", "✨ presença"],
+        panel1: { titulo: "Síntese do Loop", desc: "A mente toca a si mesma.", items: [{ tag: "Essência", texto: "Ruído vira ritmo." }], quote: "“A mente toca a si mesma.”" },
+        panel2: { titulo: "Fórmula Dopamina", desc: "Leitura que sustenta atenção.", items: [{ tag: "KODUX", texto: "Estímulo + curiosidade + resolução parcial." }], quote: "“Quase completo…”" },
+        versoes: [{ titulo: "Curta", hint: "dopamina", open: true, texto: "<b>Atlas:</b> espelho vivo." }],
+        ambienteCards: [{ icon: "contemplação", texto: "Pausa visual e reorganização." }],
+        resumoCards: [{ icon: "conceito", texto: "Sistema de regulação emocional." }]
+      },
+      { // Frame 4: hero4
+        id: "frame-004",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero4.jpg",
+        badge: "código latente",
+        kicker: "Camada Profunda",
+        tituloNormal: "Eco ",
+        tituloDestaque: "Silencioso",
+        lead: "A imagem sussurra padrões que o consciente ainda não decodificou — um convite ao submerso.",
+        chips: ["🌑 sombra", "📡 sinal", "🧬 código"],
+        panel1: { titulo: "Ruído Ordenado", desc: "Ordem que emerge do caos.", items: [{ tag: "Latência", texto: "Informação pulsando abaixo do visível." }], quote: "“O silêncio grita em padrões.”" },
+        panel2: { titulo: "Receptividade", desc: "Abrir canais internos.", items: [{ tag: "Escuta", texto: "Ativa modo receptivo do cérebro." }], quote: "“O que não é dito organiza o espaço.”" },
+        versoes: [{ titulo: "Camada 1", hint: "subtexto", open: true, texto: "<b>Kaos:</b> A desordem aparente é geometria psíquica." }],
+        ambienteCards: [{ icon: "meditação", texto: "Convida à introspecção ativa." }],
+        resumoCards: [{ icon: "profundidade", texto: "Quanto mais se olha, mais se revela." }]
+      },
+      { // Frame 5: hero5
+        id: "frame-005",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero5.jpg",
+        badge: "pulso digital",
+        kicker: "Síntese 78Frames",
+        tituloNormal: "Paisagem ",
+        tituloDestaque: "Neural",
+        lead: "Topografia de dados e sentimento. A obra simula a plasticidade de uma mente em aprendizado.",
+        chips: ["🗺️ mapa", "⚡ sinapse", "🎛️ modulação"],
+        panel1: { titulo: "Neuroestética", desc: "Beleza que se reorganiza.", items: [{ tag: "Plasticidade", texto: "Cada olhar reconfigura a percepção." }], quote: "“A imagem nunca é a mesma.”" },
+        panel2: { titulo: "Flow State", desc: "Estado alterado de atenção.", items: [{ tag: "Dopamina", texto: "Liberação sustentada por novidade." }], quote: "“Perder-se para se encontrar.”" },
+        versoes: [{ titulo: "Leitura", hint: "mapa", open: true, texto: "<b>Atlas:</b> Cartografia do inconsciente coletivo." }],
+        ambienteCards: [{ icon: "tech", texto: "Diálogo entre arte e neurociência." }],
+        resumoCards: [{ icon: "transformação", texto: "Modulador de estados mentais." }]
+      }
+    ];
+
+    let currentIndex = 0;
+    window.currentIndex = currentIndex;
+
+    // ========== RENDER PRINCIPAL ==========
+    window.renderFrame = function(index) {
+      const data = window.catalogo78Frames[index];
+      const root = document.getElementById('app-root');
+      document.getElementById('ui-catalog-counter').innerText = `QUADRO ${String(index+1).padStart(2,'0')} DE ${window.catalogo78Frames.length}`;
+
+      const chipsHTML = data.chips.map(chip => `<div class="chip"><b>${chip}</b></div>`).join('');
+      const versoesHTML = (data.versoes || []).map(v => `
+        <details class="acc" ${v.open ? 'open' : ''}>
+          <summary><span>${v.titulo}</span><span class="hint">${v.hint}</span></summary>
+          <div class="acc-body">${v.texto}</div>
+        </details>`).join('');
+
+      root.innerHTML = `
+        <section class="hero">
+          <article class="hero-card hero-media" id="swipe-area" title="Arraste para os lados para navegar">
+            <img src="${data.imagemSrc}" alt="${data.tituloNormal}" />
+            <div class="swipe-hint">← Deslize na imagem para navegar →</div>
+            <div class="badge"><span class="dot"></span> ${data.badge}</div>
+            <div class="side-note"><span class="pulse"></span> 78Frames</div>
+          </article>
+          <article class="hero-card hero-copy">
+            <div><div class="kicker"><span>${data.kicker}</span><span class="line"></span></div>
+            <h2 class="title"><span class="grad">${data.tituloNormal}</span> ${data.tituloDestaque}</h2>
+            <p class="lead">${data.lead}</p></div>
+            <div class="mini-pills">${chipsHTML}</div>
+          </article>
+        </section>
+        <section class="section"><div class="section-head"><h2>Camadas de Interpretação</h2></div>
+          <div class="grid-2">
+            <div class="panel"><div class="panel-h"><h3>${data.panel1.titulo}</h3></div><div class="panel-body">${data.panel1.items.map(i=>`<div class="summary"><div class="tag"><span class="mark"></span>${i.tag}</div><p>${i.texto}</p></div>`).join('')}<div class="accent-quote">${data.panel1.quote}</div></div></div>
+            <div class="panel"><div class="panel-h"><h3>${data.panel2.titulo}</h3></div><div class="panel-body">${data.panel2.items.map(i=>`<div class="summary"><div class="tag"><span class="mark"></span>${i.tag}</div><p>${i.texto}</p></div>`).join('')}<div class="accent-quote">${data.panel2.quote}</div></div></div>
+          </div>
+        </section>
+        <section class="section"><div class="section-head"><h2>Profundidade da Obra</h2></div><div class="accordion">${versoesHTML}</div></section>
+        <section class="stack-grid">
+          <article class="stack"><div class="stack-head"><h3>Como integrar</h3></div><div class="stack-body">${(data.ambienteCards||[]).map(c=>`<div class="card"><div class="card-k"><span class="orb"></span>${c.icon}</div><p>${c.texto}</p></div>`).join('')}</div></article>
+          <article class="stack"><div class="stack-head"><h3>Resumo da Modulação</h3></div><div class="stack-body">${(data.resumoCards||[]).map(c=>`<div class="card"><div class="card-k"><span class="orb"></span>${c.icon}</div><p>${c.texto}</p></div>`).join('')}</div></article>
+        </section>`;
+
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === window.catalogo78Frames.length - 1;
+      window.currentIndex = index;
+      
+      initSwipe();
+    };
+
+    // ========== SWIPE (ARRASTE) ==========
+    function initSwipe() {
+      const area = document.getElementById('swipe-area');
+      if (!area) return;
+      let startX = 0;
+      area.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
+      area.addEventListener('touchend', e => { handleGesture(startX, e.changedTouches[0].clientX); });
+      area.addEventListener('mousedown', e => { startX = e.clientX; });
+      area.addEventListener('mouseup', e => { handleGesture(startX, e.clientX); });
+    }
+
+    function handleGesture(sX, eX) {
+      const threshold = 60;
+      if (sX - eX > threshold) changeFrame(1);
+      else if (eX - sX > threshold) changeFrame(-1);
+    }
+
+    window.changeFrame = function(dir) {
+      const newIdx = currentIndex + dir;
+      if (newIdx >= 0 && newIdx < window.catalogo78Frames.length) {
+        currentIndex = newIdx;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        renderFrame(currentIndex);
+      }
+    };
+
+    window.toggleDrawer = function() {
+      document.getElementById('drawerOverlay').classList.toggle('active');
+      document.getElementById('drawerPanel').classList.toggle('active');
+    };
+
+    // ========== ENGINE BACKGROUND (COMPLETO) ==========
+    (function bgEngine(){
+      const LS = { opacity: 'di_bg_opacity', blend: 'di_bg_blend', auto: 'di_bg_auto', active: 'di_bg_active', images: 'di_bgImages' };
+      const state = { url: '', label: 'Nenhum', opacity: 18, blend: 'overlay', auto: false };
+      
+      function el(id){ return document.getElementById(id); }
+      function getStoredImages(){ try { return JSON.parse(localStorage.getItem(LS.images)) || []; } catch { return []; } }
+      function setStoredImages(list){ localStorage.setItem(LS.images, JSON.stringify(list||[])); }
+      function ensureLayer(){ let l = el('bg-fake-custom'); if(!l){ l=document.createElement('div'); l.id='bg-fake-custom'; document.body.prepend(l); } return l; }
+      
+      function applyToLayer(){
+        const layer = ensureLayer();
+        layer.style.opacity = state.opacity/100;
+        layer.style.mixBlendMode = state.blend;
+        layer.style.backgroundImage = state.url ? `url("${state.url}")` : 'none';
+        el('bgStatusText').textContent = state.label || (state.url ? 'Ativo' : 'Nenhum');
+        el('bgOpacityLabel').textContent = `${state.opacity}%`;
+        el('btnAutoBgSync').textContent = `Auto BG: ${state.auto ? 'ON' : 'OFF'}`;
+        localStorage.setItem(LS.opacity, state.opacity);
+        localStorage.setItem(LS.blend, state.blend);
+        localStorage.setItem(LS.auto, state.auto?'1':'0');
+      }
+
+      function setBg(url, label='BG'){
+        state.url = url; state.label = label; applyToLayer(); renderThumbs();
+        if(url) localStorage.setItem(LS.active, url);
+      }
+
+      function renderThumbs(){
+        const panel = el('bgThumbPanel'); if(!panel) return;
+        const frames = window.catalogo78Frames;
+        let html = frames.map((f,i)=> `<div class="bg-frame-thumb ${state.url===f.imagemSrc?'active':''}" style="background-image:url('${f.imagemSrc}')" onclick="di_setBg('${f.imagemSrc}','${f.badge}')"><div class="tag">${f.badge}</div></div>`).join('');
+        panel.innerHTML = html;
+      }
+
+      window.di_setBg = function(url, label){ setBg(url, label); };
+      
+      function bindUI(){
+        el('bgOpacity').addEventListener('input', e=>{ state.opacity=Number(e.target.value); applyToLayer(); });
+        el('bgBlend').addEventListener('change', e=>{ state.blend=e.target.value; applyToLayer(); });
+        el('btnUseCurrentFrameBg').addEventListener('click', ()=>{ const f = window.catalogo78Frames[window.currentIndex]; if(f) setBg(f.imagemSrc, f.badge); });
+        el('btnAutoBgSync').addEventListener('click', ()=>{ state.auto=!state.auto; applyToLayer(); });
+        document.querySelectorAll('.preset-btn[data-preset]').forEach(b=> b.addEventListener('click', ()=>{
+          const p = {soft:{opacity:12,blend:'soft-light'},dream:{opacity:22,blend:'overlay'},intense:{opacity:38,blend:'multiply'}}[b.dataset.preset];
+          if(p){ state.opacity=p.opacity; state.blend=p.blend; el('bgOpacity').value=p.opacity; el('bgBlend').value=p.blend; applyToLayer(); }
+        }));
+        el('bgUploadInput').addEventListener('change', e=>{
+          const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+          r.onload=ev=>{ setBg(ev.target.result, f.name); }; r.readAsDataURL(f);
+        });
+      }
+
+      const origRender = window.renderFrame;
+      window.renderFrame = function(idx){
+        origRender.call(this, idx);
+        if(state.auto) setTimeout(()=> { const f = window.catalogo78Frames[idx]; if(f) setBg(f.imagemSrc, f.badge); }, 20);
+      };
+
+      function restore(){
+        const op=Number(localStorage.getItem(LS.opacity)); if(!isNaN(op)) state.opacity=op;
+        const bl=localStorage.getItem(LS.blend); if(bl) state.blend=bl;
+        state.auto=localStorage.getItem(LS.auto)==='1';
+        el('bgOpacity').value = state.opacity;
+        el('bgBlend').value = state.blend;
+        const active = localStorage.getItem(LS.active);
+        if(active) setBg(active, 'Restaurado'); else { setBg(window.catalogo78Frames[0].imagemSrc, window.catalogo78Frames[0].badge); }
+      }
+
+      ensureLayer(); bindUI(); restore(); renderThumbs();
+    })();
+
+    window.addEventListener('DOMContentLoaded', ()=> renderFrame(0));
+  })();
+</script>
+
+<script>
+  (function(){
+    // ========== CATÁLOGO 78FRAMES (HERO 0, 1, 3, 4, 5) ==========
+    window.catalogo78Frames = [
+      { // Frame 0: hero0
+        id: "frame-000",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+        badge: "ritual interativo",
+        kicker: "Arquétipo Ocitocina",
+        tituloNormal: "Espaço da ",
+        tituloDestaque: "Mente",
+        lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Ocitocina ensina o peso de forma equilibrada.",
+        chips: ["🥃 Álcool Blues", "🧘 Ocitocina", "🃏 Bobo da Corte"],
+        panel1: { titulo: "Energia do Ambiente", desc: "O peso vira ritmo e flui.", items: [{ tag: "Standby", texto: "Reduz drasticamente o que pesa em happy hour." }], quote: "“O peso vira ritmo… e flui.”" },
+        panel2: { titulo: "Aromas & Sensorial", desc: "Planejamento do encontro.", items: [{ tag: "Paz e Poder", texto: "Aroma da paz mantém standby; aroma do poder organiza." }], quote: "“O som que soma.”" },
+        versoes: [{ titulo: "Happy Hour", hint: "redução de atrito", open: true, texto: "<b>Pulse:</b> Quadro em área gourmet reduz peso.<br><b>Uno:</b> Ocitocina liberada." }],
+        ambienteCards: [{ icon: "eventos", texto: "Poder cognitivo e sensorial." }],
+        resumoCards: [{ icon: "infantilidade", texto: "Quebra defesas sem ativar alerta." }]
+      },
+      { // Frame 1: hero1
+        id: "frame-001",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+        badge: "frequência azul",
+        kicker: "Expansão Bllue",
+        tituloNormal: "Fluxo ",
+        tituloDestaque: "Contínuo",
+        lead: "Arquitetura visual baseada em ciclos incompletos mantém o cérebro em flow perceptivo.",
+        chips: ["🌀 fluxo", "🧩 padrão", "🎯 foco"],
+        panel1: { titulo: "Pattern Recognition", desc: "A mente tenta fechar formas.", items: [{ tag: "Engajamento", texto: "Micro-recompensas cognitivas." }], quote: "“Quase completo… e o olhar quer ficar.”" },
+        panel2: { titulo: "Aplicação", desc: "Ideal para ideação.", items: [{ tag: "Criatividade", texto: "Mantém cérebro iterando." }], quote: "“Flow perceptivo contínuo.”" },
+        versoes: [{ titulo: "Versão Curta", hint: "loop", open: true, texto: "<b>Bllue:</b> incomplete loops mantêm atenção." }],
+        ambienteCards: [{ icon: "escritórios", texto: "Estimula ideação criativa." }],
+        resumoCards: [{ icon: "foco", texto: "Estado de flow visual." }]
+      },
+      { // Frame 3: hero3
+        id: "frame-003",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+        badge: "infodose • obra viva",
+        kicker: "Desenho cognitivo",
+        tituloNormal: "Espelho ",
+        tituloDestaque: "vivo",
+        lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo.",
+        chips: ["💊 espelho", "🧠 mente", "✨ presença"],
+        panel1: { titulo: "Síntese do Loop", desc: "A mente toca a si mesma.", items: [{ tag: "Essência", texto: "Ruído vira ritmo." }], quote: "“A mente toca a si mesma.”" },
+        panel2: { titulo: "Fórmula Dopamina", desc: "Leitura que sustenta atenção.", items: [{ tag: "KODUX", texto: "Estímulo + curiosidade + resolução parcial." }], quote: "“Quase completo…”" },
+        versoes: [{ titulo: "Curta", hint: "dopamina", open: true, texto: "<b>Atlas:</b> espelho vivo." }],
+        ambienteCards: [{ icon: "contemplação", texto: "Pausa visual e reorganização." }],
+        resumoCards: [{ icon: "conceito", texto: "Sistema de regulação emocional." }]
+      },
+      { // Frame 4: hero4
+        id: "frame-004",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero4.jpg",
+        badge: "código latente",
+        kicker: "Camada Profunda",
+        tituloNormal: "Eco ",
+        tituloDestaque: "Silencioso",
+        lead: "A imagem sussurra padrões que o consciente ainda não decodificou — um convite ao submerso.",
+        chips: ["🌑 sombra", "📡 sinal", "🧬 código"],
+        panel1: { titulo: "Ruído Ordenado", desc: "Ordem que emerge do caos.", items: [{ tag: "Latência", texto: "Informação pulsando abaixo do visível." }], quote: "“O silêncio grita em padrões.”" },
+        panel2: { titulo: "Receptividade", desc: "Abrir canais internos.", items: [{ tag: "Escuta", texto: "Ativa modo receptivo do cérebro." }], quote: "“O que não é dito organiza o espaço.”" },
+        versoes: [{ titulo: "Camada 1", hint: "subtexto", open: true, texto: "<b>Kaos:</b> A desordem aparente é geometria psíquica." }],
+        ambienteCards: [{ icon: "meditação", texto: "Convida à introspecção ativa." }],
+        resumoCards: [{ icon: "profundidade", texto: "Quanto mais se olha, mais se revela." }]
+      },
+      { // Frame 5: hero5
+        id: "frame-005",
+        imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero5.jpg",
+        badge: "pulso digital",
+        kicker: "Síntese 78Frames",
+        tituloNormal: "Paisagem ",
+        tituloDestaque: "Neural",
+        lead: "Topografia de dados e sentimento. A obra simula a plasticidade de uma mente em aprendizado.",
+        chips: ["🗺️ mapa", "⚡ sinapse", "🎛️ modulação"],
+        panel1: { titulo: "Neuroestética", desc: "Beleza que se reorganiza.", items: [{ tag: "Plasticidade", texto: "Cada olhar reconfigura a percepção." }], quote: "“A imagem nunca é a mesma.”" },
+        panel2: { titulo: "Flow State", desc: "Estado alterado de atenção.", items: [{ tag: "Dopamina", texto: "Liberação sustentada por novidade." }], quote: "“Perder-se para se encontrar.”" },
+        versoes: [{ titulo: "Leitura", hint: "mapa", open: true, texto: "<b>Atlas:</b> Cartografia do inconsciente coletivo." }],
+        ambienteCards: [{ icon: "tech", texto: "Diálogo entre arte e neurociência." }],
+        resumoCards: [{ icon: "transformação", texto: "Modulador de estados mentais." }]
+      }
+    ];
+
+    let currentIndex = 0;
+    window.currentIndex = currentIndex;
+
+    // ========== RENDER PRINCIPAL ==========
+    window.renderFrame = function(index) {
+      const data = window.catalogo78Frames[index];
+      const root = document.getElementById('app-root');
+      document.getElementById('ui-catalog-counter').innerText = `QUADRO ${String(index+1).padStart(2,'0')} DE ${window.catalogo78Frames.length}`;
+
+      const chipsHTML = data.chips.map(chip => `<div class="chip"><b>${chip}</b></div>`).join('');
+      const versoesHTML = (data.versoes || []).map(v => `
+        <details class="acc" ${v.open ? 'open' : ''}>
+          <summary><span>${v.titulo}</span><span class="hint">${v.hint}</span></summary>
+          <div class="acc-body">${v.texto}</div>
+        </details>`).join('');
+
+      root.innerHTML = `
+        <section class="hero">
+          <article class="hero-card hero-media" id="swipe-area" title="Arraste para os lados para navegar">
+            <img src="${data.imagemSrc}" alt="${data.tituloNormal}" />
+            <div class="swipe-hint">← Deslize na imagem para navegar →</div>
+            <div class="badge"><span class="dot"></span> ${data.badge}</div>
+            <div class="side-note"><span class="pulse"></span> 78Frames</div>
+          </article>
+          <article class="hero-card hero-copy">
+            <div><div class="kicker"><span>${data.kicker}</span><span class="line"></span></div>
+            <h2 class="title"><span class="grad">${data.tituloNormal}</span> ${data.tituloDestaque}</h2>
+            <p class="lead">${data.lead}</p></div>
+            <div class="mini-pills">${chipsHTML}</div>
+          </article>
+        </section>
+        <section class="section"><div class="section-head"><h2>Camadas de Interpretação</h2></div>
+          <div class="grid-2">
+            <div class="panel"><div class="panel-h"><h3>${data.panel1.titulo}</h3></div><div class="panel-body">${data.panel1.items.map(i=>`<div class="summary"><div class="tag"><span class="mark"></span>${i.tag}</div><p>${i.texto}</p></div>`).join('')}<div class="accent-quote">${data.panel1.quote}</div></div></div>
+            <div class="panel"><div class="panel-h"><h3>${data.panel2.titulo}</h3></div><div class="panel-body">${data.panel2.items.map(i=>`<div class="summary"><div class="tag"><span class="mark"></span>${i.tag}</div><p>${i.texto}</p></div>`).join('')}<div class="accent-quote">${data.panel2.quote}</div></div></div>
+          </div>
+        </section>
+        <section class="section"><div class="section-head"><h2>Profundidade da Obra</h2></div><div class="accordion">${versoesHTML}</div></section>
+        <section class="stack-grid">
+          <article class="stack"><div class="stack-head"><h3>Como integrar</h3></div><div class="stack-body">${(data.ambienteCards||[]).map(c=>`<div class="card"><div class="card-k"><span class="orb"></span>${c.icon}</div><p>${c.texto}</p></div>`).join('')}</div></article>
+          <article class="stack"><div class="stack-head"><h3>Resumo da Modulação</h3></div><div class="stack-body">${(data.resumoCards||[]).map(c=>`<div class="card"><div class="card-k"><span class="orb"></span>${c.icon}</div><p>${c.texto}</p></div>`).join('')}</div></article>
+        </section>`;
+
+      document.getElementById('btn-prev').disabled = index === 0;
+      document.getElementById('btn-next').disabled = index === window.catalogo78Frames.length - 1;
+      window.currentIndex = index;
+      
+      initSwipe();
+    };
+
+    // ========== SWIPE (ARRASTE) ==========
+    function initSwipe() {
+      const area = document.getElementById('swipe-area');
+      if (!area) return;
+      let startX = 0;
+      area.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, {passive: true});
+      area.addEventListener('touchend', e => { handleGesture(startX, e.changedTouches[0].clientX); });
+      area.addEventListener('mousedown', e => { startX = e.clientX; });
+      area.addEventListener('mouseup', e => { handleGesture(startX, e.clientX); });
+    }
+
+    function handleGesture(sX, eX) {
+      const threshold = 60;
+      if (sX - eX > threshold) changeFrame(1);
+      else if (eX - sX > threshold) changeFrame(-1);
+    }
+
+    window.changeFrame = function(dir) {
+      const newIdx = currentIndex + dir;
+      if (newIdx >= 0 && newIdx < window.catalogo78Frames.length) {
+        currentIndex = newIdx;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        renderFrame(currentIndex);
+      }
+    };
+
+    window.toggleDrawer = function() {
+      document.getElementById('drawerOverlay').classList.toggle('active');
+      document.getElementById('drawerPanel').classList.toggle('active');
+    };
+
+    // ========== ENGINE BACKGROUND (COMPLETO) ==========
+    (function bgEngine(){
+      const LS = { opacity: 'di_bg_opacity', blend: 'di_bg_blend', auto: 'di_bg_auto', active: 'di_bg_active', images: 'di_bgImages' };
+      const state = { url: '', label: 'Nenhum', opacity: 18, blend: 'overlay', auto: false };
+      
+      function el(id){ return document.getElementById(id); }
+      function getStoredImages(){ try { return JSON.parse(localStorage.getItem(LS.images)) || []; } catch { return []; } }
+      function setStoredImages(list){ localStorage.setItem(LS.images, JSON.stringify(list||[])); }
+      function ensureLayer(){ let l = el('bg-fake-custom'); if(!l){ l=document.createElement('div'); l.id='bg-fake-custom'; document.body.prepend(l); } return l; }
+      
+      function applyToLayer(){
+        const layer = ensureLayer();
+        layer.style.opacity = state.opacity/100;
+        layer.style.mixBlendMode = state.blend;
+        layer.style.backgroundImage = state.url ? `url("${state.url}")` : 'none';
+        el('bgStatusText').textContent = state.label || (state.url ? 'Ativo' : 'Nenhum');
+        el('bgOpacityLabel').textContent = `${state.opacity}%`;
+        el('btnAutoBgSync').textContent = `Auto BG: ${state.auto ? 'ON' : 'OFF'}`;
+        localStorage.setItem(LS.opacity, state.opacity);
+        localStorage.setItem(LS.blend, state.blend);
+        localStorage.setItem(LS.auto, state.auto?'1':'0');
+      }
+
+      function setBg(url, label='BG'){
+        state.url = url; state.label = label; applyToLayer(); renderThumbs();
+        if(url) localStorage.setItem(LS.active, url);
+      }
+
+      function renderThumbs(){
+        const panel = el('bgThumbPanel'); if(!panel) return;
+        const frames = window.catalogo78Frames;
+        let html = frames.map((f,i)=> `<div class="bg-frame-thumb ${state.url===f.imagemSrc?'active':''}" style="background-image:url('${f.imagemSrc}')" onclick="di_setBg('${f.imagemSrc}','${f.badge}')"><div class="tag">${f.badge}</div></div>`).join('');
+        panel.innerHTML = html;
+      }
+
+      window.di_setBg = function(url, label){ setBg(url, label); };
+      
+      function bindUI(){
+        el('bgOpacity').addEventListener('input', e=>{ state.opacity=Number(e.target.value); applyToLayer(); });
+        el('bgBlend').addEventListener('change', e=>{ state.blend=e.target.value; applyToLayer(); });
+        el('btnUseCurrentFrameBg').addEventListener('click', ()=>{ const f = window.catalogo78Frames[window.currentIndex]; if(f) setBg(f.imagemSrc, f.badge); });
+        el('btnAutoBgSync').addEventListener('click', ()=>{ state.auto=!state.auto; applyToLayer(); });
+        document.querySelectorAll('.preset-btn[data-preset]').forEach(b=> b.addEventListener('click', ()=>{
+          const p = {soft:{opacity:12,blend:'soft-light'},dream:{opacity:22,blend:'overlay'},intense:{opacity:38,blend:'multiply'}}[b.dataset.preset];
+          if(p){ state.opacity=p.opacity; state.blend=p.blend; el('bgOpacity').value=p.opacity; el('bgBlend').value=p.blend; applyToLayer(); }
+        }));
+        el('bgUploadInput').addEventListener('change', e=>{
+          const f=e.target.files[0]; if(!f) return; const r=new FileReader();
+          r.onload=ev=>{ setBg(ev.target.result, f.name); }; r.readAsDataURL(f);
+        });
+      }
+
+      const origRender = window.renderFrame;
+      window.renderFrame = function(idx){
+        origRender.call(this, idx);
+        if(state.auto) setTimeout(()=> { const f = window.catalogo78Frames[idx]; if(f) setBg(f.imagemSrc, f.badge); }, 20);
+      };
+
+      function restore(){
+        const op=Number(localStorage.getItem(LS.opacity)); if(!isNaN(op)) state.opacity=op;
+        const bl=localStorage.getItem(LS.blend); if(bl) state.blend=bl;
+        state.auto=localStorage.getItem(LS.auto)==='1';
+        el('bgOpacity').value = state.opacity;
+        el('bgBlend').value = state.blend;
+        const active = localStorage.getItem(LS.active);
+        if(active) setBg(active, 'Restaurado'); else { setBg(window.catalogo78Frames[0].imagemSrc, window.catalogo78Frames[0].badge); }
+      }
+
+      ensureLayer(); bindUI(); restore(); renderThumbs();
+    })();
+
+    window.addEventListener('DOMContentLoaded', ()=> renderFrame(0));
+  })();
+</script></body></html>

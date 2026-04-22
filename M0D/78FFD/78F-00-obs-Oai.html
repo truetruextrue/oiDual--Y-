@@ -1,0 +1,1761 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • 78Frames Solar Monolito</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root{
+      --kob-voice-primary:#ff4fa3;
+      --kob-voice-secondary:#2ab7ff;
+      --kob-voice-accent:#6b7cff;
+
+      --bg-page:#f6f8fc;
+      --bg-panel:#ffffff;
+      --bg-panel-soft:rgba(255,255,255,.78);
+      --ink:#141824;
+      --text:#1f2430;
+      --text-soft:#64708a;
+      --text-muted:#7c88a0;
+      --line:rgba(20,24,36,.09);
+      --shadow:0 18px 50px rgba(20,24,36,.08);
+      --shadow-soft:0 10px 30px rgba(20,24,36,.06);
+      --radius:24px;
+      --glass: blur(16px) saturate(170%);
+      --max:1260px;
+      --drawer-width:360px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, sans-serif;
+      background:var(--bg-page);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+      isolation:isolate;
+    }
+
+    body.mode-night{
+      --bg-page:#f6f8fc;
+    }
+    body.mode-day{
+      --bg-page:#eef6ff;
+    }
+
+    .bg-gradient-base{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.06), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg-page) 100%);
+      pointer-events:none;
+    }
+
+    #bg-fake-custom{
+      position:fixed;
+      inset:0;
+      z-index:1;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      opacity:.15;
+      mix-blend-mode:overlay;
+      transition:opacity .35s ease, background-image .45s ease, mix-blend-mode .35s ease, filter .35s ease;
+      filter:saturate(1.05) contrast(1.02);
+      pointer-events:none;
+    }
+
+    .ambient-light{
+      position:fixed;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      overflow:hidden;
+    }
+    .blob{
+      position:absolute;
+      width:46vw;
+      height:46vw;
+      border-radius:50%;
+      filter:blur(70px);
+      opacity:.22;
+      animation:floatBlob 18s ease-in-out infinite;
+    }
+    .blob-1{left:-12vw;top:-12vw;background:rgba(255,79,163,.55)}
+    .blob-2{right:-12vw;bottom:-8vw;background:rgba(42,183,255,.55);animation-delay:-6s}
+    @keyframes floatBlob{
+      0%,100%{transform:translate3d(0,0,0) scale(1)}
+      50%{transform:translate3d(3vw,2vw,0) scale(1.06)}
+    }
+
+    #particles-js{
+      position:fixed;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+      opacity:.35;
+    }
+
+    .sky-layer{
+      position:fixed;
+      inset:0;
+      z-index:2;
+      pointer-events:none;
+    }
+    .sun-background{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,214,153,.16), transparent 14%),
+        radial-gradient(circle at 80% 15%, rgba(42,183,255,.08), transparent 18%);
+    }
+
+    .logo-container{
+      position:fixed;
+      right:18px;
+      top:18px;
+      width:74px;
+      height:74px;
+      border-radius:20px;
+      overflow:hidden;
+      cursor:pointer;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow);
+      display:grid;
+      place-items:center;
+      z-index:10;
+    }
+    .logo-container object{
+      width:100%;
+      height:100%;
+      pointer-events:none;
+    }
+
+    .infodose{
+      position:fixed;
+      left:18px;
+      top:18px;
+      z-index:10;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#172033;
+      background:rgba(255,255,255,.68);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow-soft);
+    }
+    .infodose strong{
+      background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    #modeIndicator{
+      position:fixed;
+      left:18px;
+      top:72px;
+      z-index:10;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      border:1px solid var(--line);
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#182033;
+      font-weight:800;
+    }
+
+    #usernameDisplay{
+      position:fixed;
+      left:18px;
+      top:118px;
+      z-index:10;
+      font-size:12px;
+      color:var(--text-soft);
+      background:rgba(255,255,255,.60);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow-soft);
+    }
+
+    .header-orb{
+      position:fixed;
+      right:18px;
+      top:110px;
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      backdrop-filter:var(--glass);
+      z-index:10;
+    }
+    .header-orb svg{
+      width:26px;
+      height:26px;
+      stroke:#22304a;
+      fill:none;
+      stroke-width:1.8;
+    }
+
+    #drawerOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(10,14,22,.20);
+      backdrop-filter:blur(4px);
+      z-index:100;
+      opacity:0;
+      visibility:hidden;
+      transition:opacity .25s ease, visibility .25s ease;
+    }
+    #drawerOverlay.active{
+      opacity:1;
+      visibility:visible;
+    }
+
+    .drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      bottom:0;
+      width:var(--drawer-width);
+      max-width:90vw;
+      background:rgba(255,255,255,.95);
+      backdrop-filter:blur(20px);
+      border-left:1px solid var(--line);
+      box-shadow:-10px 0 40px rgba(0,0,0,.08);
+      z-index:101;
+      transform:translateX(100%);
+      transition:transform .28s cubic-bezier(.2,.9,.4,1);
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer.active{
+      transform:translateX(0);
+    }
+    .drawer-header{
+      padding:24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid var(--line);
+    }
+    .drawer-header h2{
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:900;
+    }
+    .drawer-close{
+      background:none;
+      border:none;
+      font-size:28px;
+      cursor:pointer;
+      color:var(--text-soft);
+    }
+    .drawer-body{
+      padding:24px;
+      overflow-y:auto;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+    }
+
+    .panel-section{
+      display:grid;
+      gap:10px;
+    }
+    .panel-section label{
+      display:flex;
+      justify-content:space-between;
+      font-size:11px;
+      text-transform:uppercase;
+      font-weight:800;
+      color:var(--text-muted);
+      letter-spacing:.12em;
+    }
+    .panel-section input[type="range"]{
+      width:100%;
+      cursor:pointer;
+    }
+    .panel-section select{
+      width:100%;
+      padding:12px 16px;
+      border-radius:12px;
+      border:1px solid var(--line);
+      background:#fff;
+      font-size:14px;
+      outline:none;
+      cursor:pointer;
+    }
+
+    .preset-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+    }
+    .preset-btn{
+      padding:12px 8px;
+      font-size:11px;
+      border:1px solid var(--line);
+      border-radius:12px;
+      background:#fff;
+      cursor:pointer;
+      font-weight:800;
+      transition:.2s;
+      text-align:center;
+    }
+    .preset-btn:hover{
+      border-color:var(--kob-voice-primary);
+      color:var(--kob-voice-primary);
+    }
+
+    .bg-thumbs{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:8px;
+      max-height:200px;
+      overflow-y:auto;
+      padding-right:4px;
+    }
+    .thumb-item{
+      height:70px;
+      border-radius:12px;
+      background-size:cover;
+      background-position:center;
+      cursor:pointer;
+      border:2px solid transparent;
+      transition:.2s;
+      box-shadow:0 4px 10px rgba(0,0,0,.05);
+    }
+    .thumb-item:hover{ transform:scale(1.04); }
+    .thumb-item.active{ border-color:var(--kob-voice-primary); }
+
+    .btn-upload{
+      display:block;
+      width:100%;
+      padding:14px;
+      text-align:center;
+      background:var(--bg-page);
+      border:1px dashed var(--text-soft);
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+      color:var(--text-soft);
+      transition:.2s;
+      margin-top:10px;
+    }
+    .btn-upload:hover{
+      border-color:var(--kob-voice-primary);
+      color:var(--kob-voice-primary);
+    }
+
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:188px 18px 64px;
+      position:relative;
+      z-index:5;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      flex-wrap:wrap;
+      position:sticky;
+      top:10px;
+      z-index:20;
+      margin-bottom:24px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background:var(--bg-panel-soft);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 20px;
+      box-shadow:var(--shadow-soft);
+    }
+    .pill-logo{
+      width:44px;
+      height:44px;
+      flex:none;
+      border-radius:999px;
+      position:relative;
+      overflow:hidden;
+      background:linear-gradient(180deg,#fefefe,#f1f5ff);
+      border:1px solid rgba(20,24,36,.08);
+    }
+    .pill-logo:before,
+    .pill-logo:after{
+      content:"";
+      position:absolute;
+      inset:7px;
+      border-radius:999px;
+      transform:rotate(-45deg);
+    }
+    .pill-logo:before{
+      background:linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #fff 50%, var(--kob-voice-secondary));
+      clip-path:polygon(0 0,56% 0,100% 44%,100% 100%,44% 100%,0 56%);
+      opacity:.95;
+    }
+    .pill-logo:after{
+      inset:14px;
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode:screen;
+      opacity:.7;
+    }
+    .brand h1{
+      margin:0;
+      font-size:13px;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:#111827;
+      font-weight:800;
+    }
+    .brand p{
+      margin:3px 0 0;
+      font-size:12px;
+      color:var(--text-soft);
+      letter-spacing:.08em;
+    }
+    .nav{
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px;
+      justify-content:flex-end;
+      align-items:center;
+    }
+    .nav-count{
+      background:rgba(255,255,255,.78);
+      color:#2d3550;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.05em;
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:var(--glass);
+    }
+
+    #app-root{ animation:fadeIn .35s ease-out; }
+    @keyframes fadeIn{
+      from{opacity:0;transform:translateY(10px)}
+      to{opacity:1;transform:translateY(0)}
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.04fr .96fr;
+      gap:20px;
+      align-items:stretch;
+      margin-top:18px;
+    }
+    .hero-card{
+      background:rgba(255,255,255,.82);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-media{
+      min-height:720px;
+      background:#f3f6fb;
+      position:relative;
+      cursor:pointer;
+      user-select:none;
+    }
+    .hero-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(.95) contrast(1.02);
+      transition:opacity .4s ease;
+    }
+    .badge{
+      position:absolute;
+      left:18px;
+      top:18px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.8);
+      border:1px solid rgba(20,24,36,.08);
+      color:var(--text);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      backdrop-filter:var(--glass);
+    }
+    .badge .dot{
+      width:9px;
+      height:9px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(255,79,163,.1);
+    }
+    .side-note{
+      position:absolute;
+      right:18px;
+      bottom:18px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      color:var(--text-soft);
+      backdrop-filter:var(--glass);
+      font-weight:700;
+    }
+    .side-note .pulse{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 0 rgba(42,183,255,.35);
+      animation:pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(42,183,255,.25)}
+      70%{box-shadow:0 0 0 12px rgba(42,183,255,0)}
+      100%{box-shadow:0 0 0 0 rgba(42,183,255,0)}
+    }
+
+    .hero-copy{
+      padding:36px;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      justify-content:center;
+    }
+    .kicker{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--text-soft);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-weight:800;
+      font-size:12px;
+    }
+    .kicker .line{
+      height:1px;
+      flex:1;
+      background:linear-gradient(90deg, rgba(20,24,36,.12), transparent);
+    }
+    .title{
+      margin:8px 0 0;
+      font-size:clamp(38px, 4vw, 72px);
+      line-height:.96;
+      letter-spacing:-.05em;
+      color:#151a26;
+      text-wrap:balance;
+    }
+    .title .grad{
+      background:linear-gradient(90deg, var(--kob-voice-primary), #ffb15c 35%, var(--kob-voice-secondary) 68%, var(--kob-voice-accent));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .lead{
+      margin:0;
+      font-size:18px;
+      line-height:1.7;
+      color:var(--text-soft);
+      font-weight:400;
+    }
+    .mini-pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:auto;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:#f3f6fb;
+      border:1px solid var(--line);
+      color:#42506c;
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .section{
+      margin-top:20px;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .section-head{
+      padding:24px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.70));
+    }
+    .section-head h2{
+      margin:0 0 6px;
+      font-size:20px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#182033;
+    }
+    .section-head span{ color:var(--text-soft); font-size:14px; }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      padding:18px;
+    }
+    .panel{
+      background:var(--bg-panel);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 12px 34px rgba(20,24,36,.05);
+      overflow:hidden;
+    }
+    .panel .panel-h{ padding:24px 24px 0; }
+    .panel .panel-h h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#1a2131;
+    }
+    .panel .panel-h p{
+      margin:6px 0 0;
+      font-size:14px;
+      color:var(--text-soft);
+    }
+    .panel .panel-body{ padding:24px; }
+    .summary-grid{ display:grid; gap:14px; }
+    .summary{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      background:linear-gradient(180deg, #fff, #fbfcff);
+    }
+    .summary .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      margin-bottom:12px;
+      color:var(--kob-voice-primary);
+    }
+    .tag .mark{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .summary p{
+      margin:0;
+      line-height:1.72;
+      color:#273042;
+      font-size:15px;
+    }
+    .accent-quote{
+      margin-top:16px;
+      border-left:3px solid rgba(255,79,163,.48);
+      padding:16px;
+      background:linear-gradient(90deg, rgba(255,79,163,.06), rgba(42,183,255,.05), transparent);
+      border-radius:12px;
+      color:#23304a;
+      font-style:italic;
+      font-size:15px;
+    }
+
+    .accordion{
+      display:grid;
+      gap:12px;
+      padding:18px;
+    }
+    details.acc{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 8px 24px rgba(20,24,36,.04);
+      transition:all .3s ease;
+    }
+    details.acc[open]{
+      border-color:rgba(42,183,255,.24);
+      box-shadow:0 16px 36px rgba(42,183,255,.09);
+    }
+    details.acc summary{
+      list-style:none;
+      cursor:pointer;
+      padding:20px 24px;
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:center;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#1a2131;
+      font-size:14px;
+    }
+    details.acc summary::-webkit-details-marker{display:none}
+    .acc .hint{
+      color:var(--text-soft);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.05em;
+      text-transform:none;
+    }
+    .acc-body{
+      padding:0 24px 24px;
+      color:#273042;
+      line-height:1.8;
+      font-size:16px;
+    }
+    .acc-body ul{margin:10px 0 0 18px;padding:0}
+    .acc-body li{margin:8px 0}
+    .acc-body b{color:var(--kob-voice-primary)}
+
+    .ascii-box{
+      font-family:monospace;
+      white-space:pre;
+      font-size:12px;
+      line-height:1.2;
+      color:var(--kob-voice-secondary);
+      background:#141824;
+      padding:24px;
+      border-radius:12px;
+      overflow-x:auto;
+      margin-top:10px;
+    }
+
+    .stack-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .stack{
+      background:rgba(255,255,255,.8);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .stack .stack-head{
+      padding:20px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid var(--line);
+    }
+    .stack .stack-head h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .stack .stack-head .tiny{
+      color:var(--text-soft);
+      font-size:12px;
+      font-weight:700;
+    }
+    .stack .stack-body{
+      padding:20px 24px 24px;
+      display:grid;
+      gap:12px;
+    }
+    .stack .card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      background:#fff;
+    }
+    .card .card-k{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#273042;
+      font-weight:800;
+    }
+    .card .orb{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .card p{
+      margin:0;
+      color:#2a3242;
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .catalog-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:24px;
+    }
+    .nav-btn{
+      flex:1;
+      text-align:center;
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      color:var(--ink);
+      padding:18px;
+      border-radius:var(--radius);
+      font-weight:800;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      cursor:pointer;
+      transition:all .3s ease;
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:var(--glass);
+    }
+    .nav-btn:hover:not(:disabled){
+      transform:translateY(-2px);
+      border-color:rgba(42,183,255,.4);
+      box-shadow:0 12px 24px rgba(42,183,255,.15);
+      color:var(--kob-voice-accent);
+    }
+    .nav-btn:disabled{
+      opacity:.4;
+      cursor:not-allowed;
+    }
+
+    .footer-quote{
+      margin-top:18px;
+      border:1px solid rgba(42,183,255,.18);
+      border-radius:24px;
+      padding:24px;
+      text-align:center;
+      background:linear-gradient(180deg, #fff, #f8fbff);
+      box-shadow:0 10px 30px rgba(20,24,36,.04);
+      color:#20283b;
+      font-size:16px;
+      line-height:1.7;
+    }
+    .footer-quote b{
+      background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    @media (max-width:1020px){
+      .hero,.grid-2,.stack-grid{grid-template-columns:1fr}
+      .hero-media{min-height:520px}
+      .wrap{padding-top:220px}
+    }
+    @media (max-width:680px){
+      .wrap{padding:236px 12px 46px}
+      .topbar{position:relative;top:auto;flex-direction:column;align-items:stretch}
+      .brand{justify-content:flex-start}
+      .nav{justify-content:flex-start}
+      .hero-copy{padding:24px}
+      .section-head,.panel .panel-h,.stack .stack-head{padding:20px}
+      .hero-media{min-height:390px}
+      .title{font-size:32px}
+      details.acc summary{flex-direction:column;align-items:flex-start;gap:6px}
+      .catalog-nav{flex-direction:column}
+      .bg-actions{grid-template-columns:1fr}
+      .bg-presets{grid-template-columns:1fr}
+      .bg-thumbs{grid-template-columns:repeat(2,1fr)}
+      .drawer{width:100vw;max-width:100vw}
+    }
+  </style>
+</head>
+
+<body class="mode-night">
+  <div class="bg-gradient-base"></div>
+  <div id="bg-fake-custom"></div>
+
+  <div class="ambient-light">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div id="particles-js"></div>
+  <div class="sky-layer"><div class="sun-background"></div></div>
+
+  <div class="infodose">dual.<strong>Infodose</strong></div>
+  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+  <div id="usernameDisplay">Convidado</div>
+
+  <div class="logo-container" id="logo" onclick="goToIndex()" title="Voltar ao catálogo">
+    <object data="https://kodux78k.github.io/oiDual-oiio/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+  </div>
+
+  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer()">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="7"></circle>
+      <circle cx="12" cy="12" r="8"></circle>
+    </svg>
+  </div>
+
+  <div id="drawerOverlay" onclick="toggleDrawer(false)"></div>
+
+  <aside class="drawer" id="drawerPanel" aria-hidden="true">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer(false)" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <div class="panel-section">
+          <label><span>Identificação</span></label>
+          <input type="text" id="inputUserId" class="panel-input cockpit-input" placeholder="Viajante" style="width:100%;padding:12px 16px;border-radius:12px;border:1px solid var(--line);background:#fff;outline:none;">
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label><span>Opacidade</span> <span id="val-op">15%</span></label>
+        <input type="range" id="bgOpacity" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label>Mix Blend Mode</label>
+        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label>Presets de Estilo</label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-preset="ghost">Fantasma</button>
+          <button class="preset-btn" data-preset="vivid">Vívido</button>
+          <button class="preset-btn" data-preset="deep">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label>Controle do Quadro</label>
+        <div class="preset-grid">
+          <button class="preset-btn" id="btnUseCurrentFrameBg">Usar quadro atual</button>
+          <button class="preset-btn" id="btnAutoBgSync">Auto BG: OFF</button>
+          <button class="preset-btn" id="btnCycleSolar">Trocar modo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label>Biblioteca Local</label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label>Background atual</label>
+        <div id="bgStatusText" style="font-size:12px;color:var(--text-muted);line-height:1.5">Nenhum</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="wrap">
+    <header class="topbar">
+      <div class="brand">
+        <div class="pill-logo"></div>
+        <div>
+          <h1>INFODOSE</h1>
+          <p>Catálogo Premium • 78Frames</p>
+        </div>
+      </div>
+      <div class="nav">
+        <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+      </div>
+    </header>
+
+    <div id="app-root"></div>
+
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">← Quadro Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Quadro →</button>
+    </div>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      if (window.__solar78CleanReady) return;
+      window.__solar78CleanReady = true;
+
+      const LS = {
+        opacity: 'di_bg_opacity',
+        blend: 'di_bg_blend',
+        auto: 'di_bg_auto',
+        active: 'di_bg_active',
+        images: 'di_bgImages',
+        user: 'di_userName'
+      };
+
+      const catalogo78Frames = [
+        {
+          id: 'hero-3',
+          imagemSrc: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg',
+          badge: 'obra viva',
+          kicker: 'Síntese Cognitiva',
+          tituloNormal: 'Espelho ',
+          tituloDestaque: 'Vivo',
+          lead: 'A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença.',
+          versoes: [
+            { titulo: 'A Síntese do Loop', texto: 'Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer e se reorganizar num estado de flow pacífico.' },
+            { titulo: 'Engenharia Cognitiva', texto: 'A estética em glitch tipográfico cria micro-recompensas visuais. A imagem não se fecha de uma vez — ela chama o próximo nível de interpretação do cérebro.' }
+          ]
+        },
+        {
+          id: 'hero-2',
+          imagemSrc: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg',
+          badge: 'ritual interativo',
+          kicker: 'Arquétipo Ocitocina',
+          tituloNormal: 'Espaço da ',
+          tituloDestaque: 'Mente',
+          lead: 'A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.',
+          versoes: [
+            { titulo: 'Vibe de Ambiente', texto: 'Reduz drasticamente o que pesa. Ideal para áreas gourmet e momentos de descompressão. A ocitocina media as ações de maneira atemporal.' },
+            { titulo: 'Selo Álcool Blues', texto: 'O peso vira ritmo e flui. Luz baixa, mente acesa. Funciona como modulador de estado mental leve, mantendo o ambiente fluindo sem atrito.' }
+          ]
+        },
+        {
+          id: 'hero-0',
+          imagemSrc: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg',
+          badge: 'zero state',
+          kicker: 'Zero Base',
+          tituloNormal: 'Ponto ',
+          tituloDestaque: 'Zero',
+          lead: 'O início do código visual. Onde a forma encontra o vácuo criativo e a mente descansa na ausência de ruído.',
+          versoes: [
+            { titulo: 'A Ausência', texto: 'Retirar o excesso para que a mente do observador possa preencher as lacunas. O design focado no nada permite um reset cognitivo imediato.' },
+            { titulo: 'Vácuo Criativo', texto: 'Ideal para iniciar sessões de trabalho profundo. O olhar não tropeça, ele desliza sem barreiras estruturais.' }
+          ]
+        },
+        {
+          id: 'hero-1',
+          imagemSrc: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero5.jpg',
+          badge: 'frequência azul',
+          kicker: 'Expansão Bllue',
+          tituloNormal: 'Fluxo ',
+          tituloDestaque: 'Contínuo',
+          lead: 'Arquitetura visual baseada em ciclos incompletos que mantêm o cérebro em estado de flow perceptivo.',
+          versoes: [
+            { titulo: 'Pattern Recognition', texto: 'A mente tenta fechar as formas, gerando um estado de engajamento ativo e prazeroso, sem exaustão visual.' },
+            { titulo: 'Aplicação Constante', texto: 'Induz um estado semelhante ao de olhar o mar ou o fogo. Perfeito para manter pessoas confortáveis no ambiente por mais tempo.' }
+          ]
+        },
+        {
+          id: 'hero-4',
+          imagemSrc: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpeg',
+          badge: 'infodose peak',
+          kicker: 'Infodose High',
+          tituloNormal: 'Cume ',
+          tituloDestaque: 'Digital',
+          lead: 'Exploração de contrastes e cores vibrantes para ativação imediata. O choque elétrico que acorda o córtex.',
+          versoes: [
+            { titulo: 'Choque Visual', texto: 'Cores saturadas que elevam a frequência cardíaca sutilmente e quebram o estado de piloto automático instantaneamente.' },
+            { titulo: 'Gatilho Criativo', texto: 'Ambientes vibrantes estimulam associações de ideias mais rápidas. Inspira coragem e audácia em salas de ideação.' }
+          ]
+        }
+      ];
+
+      window.catalogo78Frames = catalogo78Frames;
+
+      let currentIndex = 0;
+
+      function el(id){ return document.getElementById(id); }
+
+      function safeJSONParse(raw, fallback){
+        try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; }
+      }
+
+      function getStoredImages(){
+        return safeJSONParse(localStorage.getItem(LS.images), []);
+      }
+
+      function setStoredImages(list){
+        localStorage.setItem(LS.images, JSON.stringify(list || []));
+      }
+
+      function ensureBgLayer(){
+        let layer = el('bg-fake-custom');
+        if (!layer) {
+          layer = document.createElement('div');
+          layer.id = 'bg-fake-custom';
+          document.body.prepend(layer);
+        }
+        return layer;
+      }
+
+      const state = {
+        url: '',
+        label: 'Nenhum',
+        opacity: 15,
+        blend: 'overlay',
+        auto: false,
+        activeFrameIndex: null
+      };
+
+      function applyToLayer(){
+        const layer = ensureBgLayer();
+        layer.style.opacity = String(Math.max(0, Math.min(1, state.opacity / 100)));
+        layer.style.mixBlendMode = state.blend;
+        layer.style.backgroundImage = state.url ? `url("${state.url}")` : 'none';
+
+        const status = el('bgStatusText');
+        if (status) status.textContent = state.label || (state.url ? 'Ativo' : 'Nenhum');
+
+        const opacityLabel = el('val-op');
+        if (opacityLabel) opacityLabel.textContent = `${state.opacity}%`;
+
+        const opacityInput = el('bgOpacity');
+        if (opacityInput && String(opacityInput.value) !== String(state.opacity)) opacityInput.value = String(state.opacity);
+
+        const blendSelect = el('bgBlend');
+        if (blendSelect && blendSelect.value !== state.blend) blendSelect.value = state.blend;
+
+        const autoBtn = el('btnAutoBgSync');
+        if (autoBtn) autoBtn.textContent = `Auto BG: ${state.auto ? 'ON' : 'OFF'}`;
+
+        localStorage.setItem(LS.opacity, String(state.opacity));
+        localStorage.setItem(LS.blend, state.blend);
+        localStorage.setItem(LS.auto, state.auto ? '1' : '0');
+        localStorage.setItem(LS.active, state.url || '');
+
+        renderThumbs();
+      }
+
+      function setBg(url, label = 'BG', meta = {}){
+        state.url = url || '';
+        state.label = label || 'BG';
+        state.activeFrameIndex = typeof meta.frameIndex === 'number' ? meta.frameIndex : null;
+        applyToLayer();
+      }
+
+      function setFrameAsBg(index, persistActive = true){
+        const frame = catalogo78Frames[index];
+        if (!frame) return;
+        setBg(frame.imagemSrc, frame.badge || frame.kicker || `Quadro ${index + 1}`, { frameIndex: index });
+        if (persistActive) localStorage.setItem(LS.active, String(index));
+      }
+
+      function applyPreset(name){
+        const map = {
+          ghost:   { opacity: 10, blend: 'luminosity' },
+          vivid:   { opacity: 35, blend: 'overlay' },
+          deep:    { opacity: 50, blend: 'multiply' }
+        };
+        const p = map[name];
+        if (!p) return;
+        state.opacity = p.opacity;
+        state.blend = p.blend;
+        applyToLayer();
+      }
+
+      function renderThumbs(){
+        const panel = el('thumb-list');
+        if (!panel) return;
+
+        const saved = getStoredImages();
+        const activeIndex = Number(localStorage.getItem(LS.active));
+
+        const htmlFrames = catalogo78Frames.map((frame, index) => {
+          const isActive = state.activeFrameIndex === index || activeIndex === index;
+          return `
+            <div class="thumb-item ${isActive ? 'active' : ''}"
+                 style="background-image:url('${frame.imagemSrc}')"
+                 data-index="${index}"
+                 title="Usar este quadro como background"></div>
+          `;
+        }).join('');
+
+        const htmlSaved = saved.map((item, index) => `
+          <div class="thumb-item"
+               style="background-image:url('${item.data}')"
+               data-saved-index="${index}"
+               title="${item.name || item.id || 'background salvo'}"></div>
+        `).join('');
+
+        panel.innerHTML = htmlFrames + htmlSaved;
+
+        panel.querySelectorAll('.thumb-item[data-index]').forEach(node => {
+          node.addEventListener('click', () => {
+            const idx = Number(node.getAttribute('data-index'));
+            setFrameAsBg(idx, true);
+            if (state.auto) renderFrame(idx);
+          });
+        });
+
+        panel.querySelectorAll('.thumb-item[data-saved-index]').forEach(node => {
+          node.addEventListener('click', () => {
+            const idx = Number(node.getAttribute('data-saved-index'));
+            const item = getStoredImages()[idx];
+            if (!item) return;
+            setBg(item.data, item.name || 'salvo');
+          });
+        });
+      }
+
+      function bindUpload(){
+        const input = el('file-upload');
+        if (!input || input._diBound) return;
+        input._diBound = true;
+
+        input.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const data = ev.target.result;
+            const list = getStoredImages().filter(Boolean);
+            list.unshift({
+              id: 'bg_' + Date.now(),
+              name: file.name || 'upload',
+              data,
+              active: true
+            });
+            setStoredImages(list);
+            setBg(data, file.name || 'upload');
+            try { input.value = ''; } catch(_){}
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function restore(){
+        const opacity = Number(localStorage.getItem(LS.opacity));
+        const blend = localStorage.getItem(LS.blend);
+        const auto = localStorage.getItem(LS.auto) === '1';
+        const active = localStorage.getItem(LS.active);
+
+        if (!Number.isNaN(opacity) && opacity >= 0) state.opacity = opacity;
+        if (blend) state.blend = blend;
+        state.auto = auto;
+
+        if (active !== null && active !== '') {
+          const idx = Number(active);
+          if (Number.isFinite(idx) && catalogo78Frames[idx]) {
+            setFrameAsBg(idx, false);
+          } else {
+            const stored = getStoredImages().find(item => item.active);
+            if (stored) setBg(stored.data, stored.name || 'salvo');
+          }
+        } else {
+          const stored = getStoredImages().find(item => item.active);
+          if (stored) setBg(stored.data, stored.name || 'salvo');
+        }
+
+        applyToLayer();
+      }
+
+      function syncUserName(){
+        const input = el('inputUserId');
+        const display = el('usernameDisplay');
+        const saved = localStorage.getItem(LS.user) || 'Convidado';
+        if (input) input.value = saved;
+        if (display) display.textContent = saved;
+
+        if (input && !input._diBound) {
+          input._diBound = true;
+          input.addEventListener('input', () => {
+            const name = input.value.trim() || 'Convidado';
+            localStorage.setItem(LS.user, name);
+            if (display) display.textContent = name;
+          });
+        }
+      }
+
+      function toggleDrawer(force){
+        const overlay = el('drawerOverlay');
+        const panel = el('drawerPanel');
+        if (!overlay || !panel) return;
+
+        const open = typeof force === 'boolean'
+          ? force
+          : !panel.classList.contains('active');
+
+        panel.classList.toggle('active', open);
+        overlay.classList.toggle('active', open);
+        panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+
+      function goToIndex(){
+        const target = el('app-root');
+        if (target) target.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
+
+      function updateBgAttr(type, val){
+        if (type === 'opacity') state.opacity = Number(val);
+        if (type === 'blend') state.blend = String(val);
+        applyToLayer();
+      }
+
+      function setAsBg(){
+        setFrameAsBg(currentIndex, true);
+      }
+
+      function handleUpload(input){
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const data = e.target.result;
+            const list = getStoredImages().filter(Boolean);
+            list.unshift({
+              id: 'upload_' + Date.now(),
+              name: file.name || 'upload',
+              data,
+              active: true
+            });
+            setStoredImages(list);
+            setBg(data, file.name || 'upload');
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function renderFrame(index){
+        const data = catalogo78Frames[index];
+        if (!data) return;
+
+        currentIndex = index;
+        window.currentIndex = index;
+
+        const root = el('app-root');
+        if (!root) return;
+
+        el('ui-catalog-counter').innerText = `QUADRO ${String(index + 1).padStart(2, '0')} DE ${catalogo78Frames.length}`;
+
+        const chipsHTML = (data.chips || []).map(chip => `<div class="chip"><b>${chip}</b></div>`).join('');
+        const versoesHTML = (data.versoes || []).map(v => `
+          <details class="acc" ${v.open ? 'open' : ''}>
+            <summary>
+              <span>${v.titulo}</span>
+              <span class="hint">${v.hint || ''}</span>
+            </summary>
+            <div class="acc-body">${v.texto}</div>
+          </details>
+        `).join('');
+
+        root.innerHTML = `
+          <section class="hero" id="catalog-section">
+            <article class="hero-card hero-media">
+              <img src="${data.imagemSrc}" alt="${data.tituloNormal || 'Obra'}">
+              <div class="badge"><span class="dot"></span> ${data.badge || 'infodose'}</div>
+              <div class="side-note"><span class="pulse"></span> 78Frames</div>
+            </article>
+
+            <article class="hero-card hero-copy">
+              <div>
+                <div class="kicker"><span>${data.kicker || ''}</span><span class="line"></span></div>
+                <h2 class="title">
+                  <span class="grad">${data.tituloNormal || ''}</span>${data.tituloDestaque || ''}
+                </h2>
+                <p class="lead">${data.lead || ''}</p>
+              </div>
+              <div class="mini-pills">${chipsHTML}</div>
+            </article>
+          </section>
+
+          <section class="section" id="descricao">
+            <div class="section-head">
+              <h2>Camadas de Interpretação</h2>
+              <span>Visão estrutural e impacto no observador</span>
+            </div>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="panel-h">
+                  <h3>${data.panel1?.titulo || 'Camada 1'}</h3>
+                  <p>${data.panel1?.desc || ''}</p>
+                </div>
+                <div class="panel-body">
+                  <div class="summary-grid">
+                    ${(data.panel1?.items || []).map(item => `
+                      <div class="summary">
+                        <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                        <p>${item.texto}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="accent-quote">${data.panel1?.quote || ''}</div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="panel-h">
+                  <h3>${data.panel2?.titulo || 'Camada 2'}</h3>
+                  <p>${data.panel2?.desc || ''}</p>
+                </div>
+                <div class="panel-body">
+                  <div class="summary-grid">
+                    ${(data.panel2?.items || []).map(item => `
+                      <div class="summary">
+                        <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                        <p>${item.texto}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="accent-quote">${data.panel2?.quote || ''}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="versoes">
+            <div class="section-head">
+              <h2>Profundidade da Obra</h2>
+              <span>Cards sanfonados para detalhamento da engenharia cognitiva</span>
+            </div>
+            <div class="accordion">${versoesHTML}</div>
+          </section>
+
+          <section class="stack-grid" id="ambiente">
+            <article class="stack">
+              <div class="stack-head">
+                <h3>Como integrar no ambiente</h3>
+                <span class="tiny">cards suaves</span>
+              </div>
+              <div class="stack-body">
+                ${(data.ambienteCards || []).map(card => `
+                  <div class="card">
+                    <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                    <p>${card.texto}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </article>
+
+            <article class="stack">
+              <div class="stack-head">
+                <h3>Resumo da Modulação</h3>
+                <span class="tiny">premium</span>
+              </div>
+              <div class="stack-body">
+                ${(data.resumoCards || []).map(card => `
+                  <div class="card">
+                    <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                    <p>${card.texto}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </article>
+          </section>
+        `;
+
+        el('btn-prev').disabled = index === 0;
+        el('btn-next').disabled = index === catalogo78Frames.length - 1;
+        if (state.auto) setFrameAsBg(index, true);
+      }
+
+      function changeFrame(direction){
+        const newIndex = currentIndex + direction;
+        if (newIndex >= 0 && newIndex < catalogo78Frames.length) {
+          const root = el('app-root');
+          if (root) {
+            root.style.animation = 'none';
+            root.offsetHeight;
+            root.style.animation = null;
+          }
+          renderFrame(newIndex);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      function bindSolarButtons(){
+        const btnCycleSolar = el('btnCycleSolar');
+        if (btnCycleSolar && !btnCycleSolar._diBound) {
+          btnCycleSolar._diBound = true;
+          let night = true;
+          btnCycleSolar.addEventListener('click', () => {
+            night = !night;
+            document.body.classList.toggle('mode-night', night);
+            document.body.classList.toggle('mode-day', !night);
+            const mode = el('modeIndicator');
+            if (mode) mode.textContent = night ? 'NIGHT MODE' : 'DAY MODE';
+          });
+        }
+      }
+
+      function bindDrawerUi(){
+        document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
+          if (btn._diBound) return;
+          btn._diBound = true;
+          btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+        });
+
+        const useFrameBtn = el('btnUseCurrentFrameBg');
+        if (useFrameBtn && !useFrameBtn._diBound) {
+          useFrameBtn._diBound = true;
+          useFrameBtn.addEventListener('click', setAsBg);
+        }
+
+        const autoBtn = el('btnAutoBgSync');
+        if (autoBtn && !autoBtn._diBound) {
+          autoBtn._diBound = true;
+          autoBtn.addEventListener('click', () => {
+            state.auto = !state.auto;
+            applyToLayer();
+          });
+        }
+      }
+
+      function initSwipe(){
+        const area = el('swipe-area');
+        if (!area || area._diSwipeBound) return;
+        area._diSwipeBound = true;
+
+        let startX = 0;
+        let isDown = false;
+
+        area.addEventListener('touchstart', e => { startX = e.touches[0].clientX; }, { passive:true });
+        area.addEventListener('touchend', e => {
+          const endX = e.changedTouches[0].clientX;
+          handleGesture(startX, endX);
+        });
+
+        area.addEventListener('mousedown', e => { startX = e.clientX; isDown = true; });
+        area.addEventListener('mouseup', e => {
+          if (!isDown) return;
+          handleGesture(startX, e.clientX);
+          isDown = false;
+        });
+        area.addEventListener('mouseleave', () => isDown = false);
+      }
+
+      function handleGesture(sX, eX){
+        const threshold = 60;
+        if (sX - eX > threshold) changeFrame(1);
+        else if (eX - sX > threshold) changeFrame(-1);
+      }
+
+      function patchLocalStorage(){
+        const _setItem = localStorage.setItem.bind(localStorage);
+        const _removeItem = localStorage.removeItem.bind(localStorage);
+        const _clear = localStorage.clear.bind(localStorage);
+
+        localStorage.setItem = function(key, value){
+          const oldValue = localStorage.getItem(key);
+          _setItem(key, value);
+          window.dispatchEvent(new CustomEvent('di:storage', {
+            detail: { key, oldValue, newValue: String(value) }
+          }));
+        };
+
+        localStorage.removeItem = function(key){
+          const oldValue = localStorage.getItem(key);
+          _removeItem(key);
+          window.dispatchEvent(new CustomEvent('di:storage', {
+            detail: { key, oldValue, newValue: null }
+          }));
+        };
+
+        localStorage.clear = function(){
+          _clear();
+          window.dispatchEvent(new CustomEvent('di:storage', {
+            detail: { key:null, oldValue:null, newValue:null, clear:true }
+          }));
+        };
+      }
+
+      function syncFromStorage(){
+        const list = safeJSONParse(localStorage.getItem(LS.images), []);
+        const activeIndexRaw = localStorage.getItem(LS.active);
+        const opacity = Number(localStorage.getItem(LS.opacity));
+        const blend = localStorage.getItem(LS.blend);
+        const auto = localStorage.getItem(LS.auto) === '1';
+
+        state.auto = auto;
+        if (!Number.isNaN(opacity)) state.opacity = opacity;
+        if (blend) state.blend = blend;
+
+        if (activeIndexRaw !== null && activeIndexRaw !== '') {
+          const idx = Number(activeIndexRaw);
+          if (Number.isFinite(idx) && list[idx]?.data) {
+            state.url = list[idx].data;
+            state.label = list[idx].name || list[idx].id || 'background';
+            state.activeFrameIndex = idx;
+          } else if (catalogo78Frames[idx]) {
+            state.url = catalogo78Frames[idx].imagemSrc;
+            state.label = catalogo78Frames[idx].badge || catalogo78Frames[idx].kicker || 'background';
+            state.activeFrameIndex = idx;
+          }
+        } else {
+          const activeItem = list.find(item => item && item.active && item.data);
+          if (activeItem) {
+            state.url = activeItem.data;
+            state.label = activeItem.name || activeItem.id || 'background';
+          }
+        }
+
+        applyToLayer();
+        renderThumbs();
+      }
+
+      function bindObserver(){
+        if (window.__diBgStorageObserverReady) return;
+        window.__diBgStorageObserverReady = true;
+
+        window.addEventListener('storage', (e) => {
+          if (!e || !Object.values(LS).includes(e.key)) return;
+          syncFromStorage();
+        });
+
+        window.addEventListener('di:storage', (e) => {
+          const key = e?.detail?.key;
+          if (key && !Object.values(LS).includes(key)) return;
+          syncFromStorage();
+        });
+
+        window.addEventListener('di:bg:requestSync', syncFromStorage);
+
+        let last = JSON.stringify([
+          localStorage.getItem(LS.images) || '',
+          localStorage.getItem(LS.opacity) || '',
+          localStorage.getItem(LS.blend) || '',
+          localStorage.getItem(LS.active) || '',
+          localStorage.getItem(LS.auto) || ''
+        ]);
+
+        setInterval(() => {
+          const now = JSON.stringify([
+            localStorage.getItem(LS.images) || '',
+            localStorage.getItem(LS.opacity) || '',
+            localStorage.getItem(LS.blend) || '',
+            localStorage.getItem(LS.active) || '',
+            localStorage.getItem(LS.auto) || ''
+          ]);
+          if (now !== last) {
+            last = now;
+            syncFromStorage();
+          }
+        }, 800);
+
+        window.di_syncBgFromStorage = syncFromStorage;
+      }
+
+      function init(){
+        window.catalogo78Frames = catalogo78Frames;
+        window.currentIndex = currentIndex;
+        window.changeFrame = changeFrame;
+        window.toggleDrawer = toggleDrawer;
+        window.goToIndex = goToIndex;
+        window.setAsBg = setAsBg;
+        window.handleUpload = handleUpload;
+        window.applyPreset = applyPreset;
+        window.updateBgAttr = updateBgAttr;
+        window.renderFrame = renderFrame;
+
+        patchLocalStorage();
+        bindObserver();
+        bindSolarButtons();
+        bindDrawerUi();
+        bindUpload();
+        syncUserName();
+        restore();
+        renderThumbs();
+        renderFrame(0);
+        initSwipe();
+
+        const framesCount = catalogo78Frames.length;
+        const counter = el('ui-catalog-counter');
+        if (counter) counter.textContent = `QUADRO 01 DE ${framesCount}`;
+      }
+
+      function renderFrameSafe(index){
+        renderFrame(index);
+        initSwipe();
+      }
+
+      window.renderFrame = renderFrameSafe;
+      window.changeFrame = changeFrame;
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+
+  <script>
+    function toggleDrawer(force){
+      const overlay = document.getElementById('drawerOverlay');
+      const panel = document.getElementById('drawerPanel');
+      if (!overlay || !panel) return;
+
+      const open = typeof force === 'boolean'
+        ? force
+        : !panel.classList.contains('active');
+
+      panel.classList.toggle('active', open);
+      overlay.classList.toggle('active', open);
+      panel.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') toggleDrawer(false);
+    });
+  </script>
+</body>
+</html>
