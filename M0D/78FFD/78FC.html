@@ -1,0 +1,1895 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • Solar + 78Frames</title>
+  <meta name="color-scheme" content="light" />
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/KxTsK-unified.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+
+  <style>
+    :root {
+      --kob-voice-primary: #ff4fa3;
+      --kob-voice-secondary: #2ab7ff;
+      --kob-voice-accent: #6b7cff;
+
+      --bg-page: #f6f8fc;
+      --bg-panel: #ffffff;
+      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --bg-panel-strong: rgba(255,255,255,.92);
+
+      --ink: #141824;
+      --text: #1f2430;
+      --text-soft: #64708a;
+      --text-muted: #7a859f;
+      --line: rgba(20, 24, 36, 0.09);
+      --line-strong: rgba(42, 183, 255, 0.22);
+
+      --shadow: 0 18px 50px rgba(20, 24, 36, 0.08);
+      --shadow-soft: 0 10px 30px rgba(20, 24, 36, 0.06);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --pill: #eef3ff;
+      --pill-ink: #2d3550;
+      --chip: #f3f6fb;
+      --chip-ink: #42506c;
+      --max: 1260px;
+      --glass: blur(16px) saturate(170%);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.09), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.09), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg-page) 100%);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+      position:relative;
+      isolation:isolate;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    button, input, select { font: inherit; }
+
+    #bg-fake-custom{
+      position:fixed;
+      inset:0;
+      z-index:0;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      opacity:.18;
+      mix-blend-mode:overlay;
+      transition:opacity .35s ease, background-image .45s ease, transform .45s ease, filter .35s ease;
+      filter:saturate(1.03) contrast(1.04);
+      pointer-events:none;
+    }
+    #bg-fake-custom::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0));
+      mix-blend-mode:screen;
+    }
+
+    .ambient-light{ position:fixed; inset:0; pointer-events:none; z-index:1; overflow:hidden; }
+    .blob{
+      position:absolute;
+      width:46vw; height:46vw; border-radius:50%;
+      filter: blur(70px);
+      opacity:.22;
+      animation: floatBlob 18s ease-in-out infinite;
+    }
+    .blob-1{ left:-12vw; top:-12vw; background:rgba(255,79,163,.55); }
+    .blob-2{ right:-12vw; bottom:-8vw; background:rgba(42,183,255,.55); animation-delay:-6s; }
+    @keyframes floatBlob{
+      0%,100%{ transform:translate3d(0,0,0) scale(1); }
+      50%{ transform:translate3d(3vw,2vw,0) scale(1.06); }
+    }
+
+    #particles-js, #snap-zone, .toaster-wrap, #nv-toast, .sky-layer, .logo-container,
+    .header-orb, #modeIndicator, #usernameDisplay, #drawerOverlay, .drawer {
+      position:relative;
+      z-index:2;
+    }
+
+    #particles-js{
+      position:fixed;
+      inset:0;
+      pointer-events:none;
+      opacity:.5;
+      z-index:1;
+    }
+
+    .sky-layer{ position:fixed; inset:0; pointer-events:none; z-index:1; }
+    .sun-background{
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(255,214,153,.16), transparent 14%),
+        radial-gradient(circle at 80% 15%, rgba(42,183,255,.08), transparent 18%);
+      opacity:.8;
+    }
+
+    #modeIndicator{
+      position:fixed;
+      left:18px;
+      top:18px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.75);
+      border:1px solid var(--line);
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#182033;
+      font-weight:800;
+    }
+
+    .logo-container{
+      position:fixed;
+      right:18px;
+      top:18px;
+      width:74px;
+      height:74px;
+      border-radius:20px;
+      overflow:hidden;
+      cursor:pointer;
+      background:rgba(255,255,255,.72);
+      border:1px solid var(--line);
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow);
+      display:grid;
+      place-items:center;
+    }
+    .logo-container object{ width:100%; height:100%; pointer-events:none; }
+
+    .infodose{
+      position:fixed;
+      left:18px;
+      top:72px;
+      z-index:3;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#172033;
+      background:rgba(255,255,255,.68);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 14px;
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow-soft);
+    }
+    .infodose strong{
+      background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .header-orb{
+      position:fixed;
+      right:18px;
+      top:110px;
+      width:56px;
+      height:56px;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow);
+      cursor:pointer;
+      backdrop-filter:var(--glass);
+    }
+    .header-orb svg{
+      width:26px;
+      height:26px;
+      stroke:#22304a;
+      fill:none;
+      stroke-width:1.8;
+    }
+
+    #usernameDisplay{
+      position:fixed;
+      left:18px;
+      top:118px;
+      font-size:12px;
+      color:var(--text-soft);
+      background:rgba(255,255,255,.60);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:8px 12px;
+      backdrop-filter:var(--glass);
+      box-shadow:var(--shadow-soft);
+    }
+
+    #drawerOverlay{
+      position:fixed;
+      inset:0;
+      background:rgba(10,14,22,.20);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .25s ease;
+      z-index:30;
+    }
+    #drawerOverlay.open{
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .drawer{
+      position:fixed;
+      top:0;
+      right:0;
+      width:min(430px, 94vw);
+      height:100vh;
+      transform:translateX(102%);
+      transition:transform .28s ease;
+      z-index:40;
+      padding:16px;
+    }
+    .drawer.open{ transform:translateX(0); }
+    .drawer-content{
+      height:100%;
+      background:rgba(255,255,255,.82);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:28px;
+      box-shadow:0 20px 60px rgba(20,24,36,.14);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .drawer-header{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      padding:18px 18px 14px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.95), rgba(255,255,255,.72));
+    }
+    .drawer-header h3{
+      margin:0;
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      color:#182033;
+    }
+    .drawer-body{
+      padding:18px;
+      overflow:auto;
+      display:grid;
+      gap:14px;
+    }
+
+    .cockpit-item{
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(255,255,255,.8);
+      padding:14px;
+      box-shadow:var(--shadow-soft);
+    }
+    .cockpit-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.16em;
+      font-weight:900;
+      color:var(--text-muted);
+      margin-bottom:10px;
+    }
+    .cockpit-input{
+      width:100%;
+      border:1px solid var(--line);
+      background:#fff;
+      color:var(--text);
+      border-radius:14px;
+      padding:12px 14px;
+      outline:none;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.6);
+    }
+    .cockpit-grid{
+      display:grid;
+      gap:12px;
+    }
+    .control-row{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .btn-block{
+      flex:1;
+      min-width:120px;
+      border:none;
+      border-radius:14px;
+      padding:12px 14px;
+      font-weight:900;
+      cursor:pointer;
+      background:linear-gradient(180deg, #0f1521, #181f2f);
+      color:#fff;
+      box-shadow:0 10px 24px rgba(10,14,22,.18);
+      transition:transform .18s ease, opacity .18s ease;
+    }
+    .btn-block:hover{ transform:translateY(-1px); }
+    .btn-icon{
+      display:grid;
+      place-items:center;
+      border:none;
+      background:rgba(255,255,255,.86);
+      border:1px solid var(--line);
+      cursor:pointer;
+      color:var(--text);
+    }
+    .btn-icon svg{
+      width:18px;
+      height:18px;
+      stroke:currentColor;
+      fill:none;
+      stroke-width:1.8;
+    }
+
+    .bg-toolbox{ display:grid; gap:10px; }
+    .bg-toolbox-head{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .bg-actions{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+    }
+    .bg-control{ display:grid; gap:6px; }
+    .bg-control label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:800;
+      color:var(--text-muted);
+    }
+    .bg-control input[type="range"]{ width:100%; }
+    .bg-presets{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:8px;
+    }
+    .preset-btn{
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:rgba(255,255,255,.82);
+      padding:8px 10px;
+      font-weight:800;
+      font-size:11px;
+      cursor:pointer;
+    }
+    .bg-frames{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:10px;
+      margin-top:8px;
+      max-height:220px;
+      overflow:auto;
+      padding-right:2px;
+    }
+    .bg-frame-thumb{
+      position:relative;
+      height:74px;
+      border-radius:12px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      background-size:cover;
+      background-position:center;
+      cursor:pointer;
+      box-shadow:0 8px 20px rgba(0,0,0,.10);
+      transform:translateZ(0);
+    }
+    .bg-frame-thumb::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(0,0,0,0), rgba(0,0,0,.28));
+    }
+    .bg-frame-thumb.active{
+      border-color:var(--kob-voice-primary);
+      box-shadow:0 10px 24px rgba(255,79,163,.16);
+    }
+    .bg-frame-thumb .tag{
+      position:absolute;
+      left:8px;
+      right:8px;
+      bottom:7px;
+      z-index:1;
+      font-size:10px;
+      font-weight:800;
+      letter-spacing:.08em;
+      color:#fff;
+      text-shadow:0 1px 2px rgba(0,0,0,.35);
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+    }
+
+    .wrap{
+      max-width:var(--max);
+      margin:0 auto;
+      padding:184px 18px 64px;
+      position:relative;
+      z-index:3;
+    }
+
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      position:sticky;
+      top:10px;
+      z-index:20;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      border-radius:999px;
+      padding:12px 16px;
+    }
+    .pill-logo{
+      width:44px; height:44px; flex:none;
+      border-radius:999px;
+      position:relative;
+      background:linear-gradient(180deg, #fefefe, #f1f5ff);
+      border:1px solid rgba(20,24,36,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8);
+      overflow:hidden;
+    }
+    .pill-logo:before, .pill-logo:after{
+      content:""; position:absolute; inset:7px; border-radius:999px; transform:rotate(-45deg);
+    }
+    .pill-logo:before{
+      background:linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #ffffff 50%, var(--kob-voice-secondary));
+      clip-path:polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%);
+      opacity:.95;
+    }
+    .pill-logo:after{
+      inset:14px; border-radius:999px;
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode:screen; opacity:.7;
+    }
+    .brand h1{
+      margin:0; font-size:13px; letter-spacing:.34em; text-transform:uppercase; color:#111827; font-weight:800;
+    }
+    .brand p{
+      margin:3px 0 0; font-size:12px; color:var(--text-soft); letter-spacing:.08em;
+    }
+    .nav{
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end;
+    }
+    .nav-count{
+      background:rgba(255,255,255,.78);
+      color:var(--pill-ink);
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:10px 18px;
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.05em;
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:var(--glass);
+    }
+
+    #app-root{ animation: fadeIn .35s ease-out; }
+    @keyframes fadeIn{
+      from{ opacity:0; transform:translateY(10px); }
+      to{ opacity:1; transform:translateY(0); }
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns:1.04fr .96fr;
+      gap:20px;
+      align-items:stretch;
+      margin-top:18px;
+    }
+    .hero-card{
+      background:rgba(255,255,255,.82);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-media{
+      min-height:720px;
+      background:#f3f6fb;
+      position:relative;
+    }
+    .hero-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(.95) contrast(1.02);
+      transition: opacity 0.4s ease;
+    }
+    .hero-media .badge{
+      position:absolute;
+      left:18px;
+      top:18px;
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.8);
+      border:1px solid rgba(20,24,36,.08);
+      color:var(--text);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      backdrop-filter:var(--glass);
+    }
+    .badge .dot{
+      width:9px; height:9px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(255,79,163,.1);
+    }
+    .side-note{
+      position:absolute;
+      right:18px;
+      bottom:18px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      color:var(--text-soft);
+      backdrop-filter:var(--glass);
+      font-weight:700;
+    }
+    .side-note .pulse{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 0 rgba(42,183,255,.35);
+      animation:pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%{ box-shadow:0 0 0 0 rgba(42,183,255,.25); }
+      70%{ box-shadow:0 0 0 12px rgba(42,183,255,0); }
+      100%{ box-shadow:0 0 0 0 rgba(42,183,255,0); }
+    }
+
+    .hero-copy{
+      padding:36px;
+      display:flex;
+      flex-direction:column;
+      gap:24px;
+      justify-content:center;
+    }
+    .kicker{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--text-soft);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-weight:800;
+      font-size:12px;
+    }
+    .kicker .line{
+      height:1px;
+      flex:1;
+      background:linear-gradient(90deg, rgba(20,24,36,.12), transparent);
+    }
+    .title{
+      margin:8px 0 0;
+      font-size:clamp(38px, 4vw, 72px);
+      line-height:.96;
+      letter-spacing:-.05em;
+      color:#151a26;
+      text-wrap:balance;
+    }
+    .title .grad{
+      background:linear-gradient(90deg, var(--kob-voice-primary), #ffb15c 35%, var(--kob-voice-secondary) 68%, var(--kob-voice-accent));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .lead{
+      margin:0;
+      font-size:18px;
+      line-height:1.7;
+      color:var(--text-soft);
+      font-weight:400;
+    }
+    .mini-pills{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+      margin-top:auto;
+    }
+    .chip{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:10px 14px;
+      border-radius:999px;
+      background:var(--chip);
+      border:1px solid var(--line);
+      color:var(--chip-ink);
+      font-size:13px;
+      font-weight:700;
+    }
+
+    .section{
+      margin-top:20px;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .section-head{
+      padding:24px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.70));
+    }
+    .section-head h2{
+      margin:0 0 6px;
+      font-size:20px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#182033;
+    }
+    .section-head span{ color:var(--text-soft); font-size:14px; }
+
+    .grid-2{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      padding:18px;
+    }
+    .panel{
+      background:var(--bg-panel);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 12px 34px rgba(20,24,36,.05);
+      overflow:hidden;
+    }
+    .panel .panel-h{ padding:24px 24px 0; }
+    .panel .panel-h h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#1a2131;
+    }
+    .panel .panel-h p{
+      margin:6px 0 0;
+      font-size:14px;
+      color:var(--text-soft);
+    }
+    .panel .panel-body{ padding:24px; }
+    .summary-grid{ display:grid; grid-template-columns:1fr; gap:14px; }
+    .summary{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      background:linear-gradient(180deg, #fff, #fbfcff);
+    }
+    .summary .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      margin-bottom:12px;
+      color:var(--kob-voice-primary);
+    }
+    .tag .mark{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .summary p{
+      margin:0;
+      line-height:1.72;
+      color:#273042;
+      font-size:15px;
+    }
+    .accent-quote{
+      margin-top:16px;
+      border-left:3px solid rgba(255,79,163,.48);
+      padding:16px;
+      background:linear-gradient(90deg, rgba(255,79,163,.06), rgba(42,183,255,.05), transparent);
+      border-radius:12px;
+      color:#23304a;
+      font-style:italic;
+      font-size:15px;
+    }
+
+    .accordion{
+      display:grid;
+      gap:12px;
+      padding:18px;
+    }
+    details.acc{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 8px 24px rgba(20,24,36,.04);
+      transition:all .3s ease;
+    }
+    details.acc[open]{
+      border-color:rgba(42,183,255,.24);
+      box-shadow:0 16px 36px rgba(42,183,255,.09);
+    }
+    details.acc summary{
+      list-style:none;
+      cursor:pointer;
+      padding:20px 24px;
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:center;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#1a2131;
+      font-size:14px;
+    }
+    details.acc summary::-webkit-details-marker{ display:none; }
+    .acc .hint{
+      color:var(--text-soft);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.05em;
+      text-transform:none;
+    }
+    .acc-body{
+      padding:0 24px 24px;
+      color:#273042;
+      line-height:1.8;
+      font-size:16px;
+    }
+    .acc-body ul{ margin:10px 0 0 18px; padding:0; }
+    .acc-body li{ margin:8px 0; }
+    .acc-body b{ color: var(--kob-voice-primary); }
+
+    .ascii-box{
+      font-family: monospace;
+      white-space: pre;
+      font-size: 12px;
+      line-height: 1.2;
+      color: var(--kob-voice-secondary);
+      background: #141824;
+      padding: 24px;
+      border-radius: 12px;
+      overflow-x: auto;
+      margin-top: 10px;
+    }
+
+    .stack-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .stack{
+      background:rgba(255,255,255,.8);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .stack .stack-head{
+      padding:20px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid var(--line);
+    }
+    .stack .stack-head h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .stack .stack-head .tiny{
+      color:var(--text-soft);
+      font-size:12px;
+      font-weight:700;
+    }
+    .stack .stack-body{
+      padding:20px 24px 24px;
+      display:grid;
+      gap:12px;
+    }
+    .stack .card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:20px;
+      background:#fff;
+    }
+    .card .card-k{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+      font-size:13px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#273042;
+      font-weight:800;
+    }
+    .card .orb{
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+    }
+    .card p{
+      margin:0;
+      color:#2a3242;
+      line-height:1.75;
+      font-size:15px;
+    }
+
+    .catalog-nav{
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      margin-top:24px;
+    }
+    .nav-btn{
+      flex:1;
+      text-align:center;
+      background:rgba(255,255,255,.78);
+      border:1px solid var(--line);
+      color:var(--ink);
+      padding:18px;
+      border-radius:var(--radius);
+      font-weight:800;
+      font-size:14px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      cursor:pointer;
+      transition:all .3s ease;
+      box-shadow:var(--shadow-soft);
+      backdrop-filter:var(--glass);
+    }
+    .nav-btn:hover:not(:disabled){
+      transform:translateY(-2px);
+      border-color:rgba(42,183,255,.4);
+      box-shadow:0 12px 24px rgba(42,183,255, 0.15);
+      color:var(--kob-voice-accent);
+    }
+    .nav-btn:disabled{ opacity:.4; cursor:not-allowed; }
+
+    .footer-quote{
+      margin-top:18px;
+      border:1px solid rgba(42,183,255,.18);
+      border-radius:24px;
+      padding:24px;
+      text-align:center;
+      background:linear-gradient(180deg, #fff, #f8fbff);
+      box-shadow:0 10px 30px rgba(20,24,36,.04);
+      color:#20283b;
+      font-size:16px;
+      line-height:1.7;
+    }
+    .footer-quote b{
+      background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    @media (max-width: 1020px){
+      .hero,.grid-2,.stack-grid{ grid-template-columns:1fr; }
+      .hero-media{ min-height:520px; }
+      .wrap{ padding-top:220px; }
+    }
+    @media (max-width: 680px){
+      .wrap{ padding:236px 12px 46px; }
+      .topbar{ position:relative; top:auto; flex-direction:column; align-items:stretch; }
+      .brand{ justify-content:flex-start; }
+      .nav{ justify-content:flex-start; }
+      .hero-copy{ padding:24px; }
+      .section-head,.panel .panel-h,.stack .stack-head{ padding:20px; }
+      .hero-media{ min-height:390px; }
+      .title{ font-size:32px; }
+      details.acc summary{ flex-direction:column; align-items:flex-start; gap:6px; }
+      .catalog-nav{ flex-direction:column; }
+      .bg-actions{ grid-template-columns:1fr; }
+      .bg-presets{ grid-template-columns:1fr; }
+      .bg-frames{ grid-template-columns:repeat(2, 1fr); }
+      .drawer{ width:100vw; padding:10px; }
+    }
+  </style>
+</head>
+
+<body class="field-closed mode-night">
+  <div id="bg-fake-custom"></div>
+
+  <div class="ambient-light">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <svg style="display:none;">
+    <filter id="distort">
+      <feTurbulence baseFrequency="0.01" numOctaves="3" result="turb"></feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="turb" scale="30"></feDisplacementMap>
+    </filter>
+  </svg>
+
+  <audio id="transitionSound" src="https://kodux78k.github.io/oiDual-oiio/suave_portal.mp3" preload="auto"></audio>
+
+  <div id="particles-js"></div>
+
+  <div class="logo-container" id="logo" onclick="goToIndex()" title="Voltar ao catálogo">
+    <object data="https://kodux78k.github.io/oiDual-oiio/3D_logo_Dual_Infodose_10.svg" type="image/svg+xml"></object>
+  </div>
+
+  <div class="infodose">dual.<strong>Infodose</strong></div>
+
+  <svg style="display:none">
+    <symbol id="icon-orb" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="7"></circle>
+      <circle cx="12" cy="12" r="8"></circle>
+    </symbol>
+    <symbol id="icon-cards" viewBox="0 0 24 24">
+      <rect x="2" y="2" width="16" height="16" rx="2"></rect>
+      <path d="M22 6v14a2 2 0 0 1-2 2H6"></path>
+    </symbol>
+    <symbol id="icon-gem" viewBox="0 0 24 24">
+      <path d="M6 3h12l4 6-10 12L2 9z"></path>
+    </symbol>
+    <symbol id="icon-settings" viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="3"></circle>
+      <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+    </symbol>
+    <symbol id="icon-send" viewBox="0 0 24 24">
+      <line x1="22" y1="2" x2="11" y2="13"></line>
+      <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+    </symbol>
+    <symbol id="icon-voice" viewBox="0 0 24 24">
+      <rect x="9" y="1" width="6" height="12" rx="3"></rect>
+      <path d="M5 10a7 7 0 0 0 14 0"></path>
+      <line x1="12" y1="19" x2="12" y2="23"></line>
+      <line x1="8" y1="23" x2="16" y2="23"></line>
+    </symbol>
+    <symbol id="icon-upload" viewBox="0 0 24 24">
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+      <polyline points="7 10 12 3 7 8"></polyline>
+      <line x1="12" y1="3" x2="12" y2="15"></line>
+    </symbol>
+  </svg>
+
+  <div class="sky-layer"><div class="sun-background"></div></div>
+  <div id="nv-toast"></div>
+  <div id="modeIndicator">CARREGANDO nO.Sºlar...</div>
+
+  <div class="header-orb" id="orbToggle" title="Acessar Cockpit do Usuário" onclick="toggleDrawer('drawerProfile')">
+    <svg><use href="#icon-orb"></use></svg>
+  </div>
+
+  <div id="usernameDisplay">Convidado</div>
+
+  <div id="drawerOverlay" class="drawer-overlay" onclick="toggleDrawer()"></div>
+
+  <div id="drawerProfile" class="drawer" aria-hidden="true">
+    <div class="drawer-content">
+      <div class="drawer-header">
+        <h3>
+          <svg style="width:20px;height:20px;margin-right:8px;stroke:var(--secondary)"><use href="#icon-orb"></use></svg>
+          Cockpit Solar
+        </h3>
+        <button class="btn-icon" style="width:38px;height:38px;border-radius:12px;" onclick="toggleDrawer('drawerProfile')">✕</button>
+      </div>
+
+      <div class="drawer-body">
+        <div class="cockpit-item" style="text-align:center;margin-bottom:15px;">
+          <div class="cockpit-label">Ciclo Solar</div>
+          <div id="statusSolarMode" style="font-size:1.2rem;font-weight:bold;margin:5px 0;">AUTO</div>
+          <div class="control-row">
+            <button class="btn-block" id="btnCycleSolar">Manual ☀️/🌙</button>
+            <button class="btn-block" id="btnAutoSolar">Auto 🕒</button>
+          </div>
+        </div>
+
+        <div class="cockpit-grid">
+          <div class="cockpit-item">
+            <div class="cockpit-label">Identificação</div>
+            <input type="text" id="inputUserId" class="cockpit-input" placeholder="Viajante">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Modelo IA</div>
+            <input type="text" id="inputModel" class="cockpit-input" placeholder="google/gemini-2.0-flash-exp">
+          </div>
+
+          <div class="cockpit-item">
+            <div class="cockpit-label">Background da Obra</div>
+
+            <div class="bg-toolbox">
+              <div class="bg-toolbox-head">
+                <span id="bgStatusText" style="font-size:.8rem;color:var(--text-muted)">Nenhum</span>
+                <label class="btn-icon" style="width:30px;height:30px;border-radius:8px;cursor:pointer;">
+                  <input type="file" id="bgUploadInput" accept="image/*" style="display:none">
+                  <svg><use href="#icon-upload"></use></svg>
+                </label>
+              </div>
+
+              <div class="bg-actions">
+                <button class="btn-block" id="btnUseCurrentFrameBg">Usar quadro atual como BG</button>
+                <button class="btn-block" id="btnAutoBgSync">Auto BG: OFF</button>
+              </div>
+
+              <div class="bg-control">
+                <label>Opacidade <span id="bgOpacityLabel">18%</span></label>
+                <input type="range" id="bgOpacity" min="0" max="100" value="18">
+              </div>
+
+              <div class="bg-control">
+                <label>Mix Blend Mode</label>
+                <select id="bgBlend" class="cockpit-input">
+                  <option value="normal">normal</option>
+                  <option value="multiply">multiply</option>
+                  <option value="screen">screen</option>
+                  <option value="overlay" selected>overlay</option>
+                  <option value="soft-light">soft-light</option>
+                  <option value="luminosity">luminosity</option>
+                </select>
+              </div>
+
+              <div class="bg-presets">
+                <button class="preset-btn" data-preset="soft">Soft</button>
+                <button class="preset-btn" data-preset="dream">Dream</button>
+                <button class="preset-btn" data-preset="intense">Intense</button>
+              </div>
+
+              <div id="bgThumbPanel" class="bg-frames"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand" aria-label="Infodose">
+        <div class="pill-logo" aria-hidden="true"></div>
+        <div>
+          <h1>INFODOSE</h1>
+          <p>Catálogo • Engine 78Frames</p>
+        </div>
+      </div>
+      <div class="nav">
+        <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+      </div>
+    </div>
+
+    <div id="app-root"></div>
+
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">&larr; Quadro Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Quadro &rarr;</button>
+    </div>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/inline-1.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/bgPanel.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-2.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-3.js"></script>
+  <script src="https://kodux78k.github.io/oiDual-KxT-di_oi/js/modules/inline-4.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_core.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di_mood.js"></script>
+
+  <script>
+    (() => {
+      if (window.__solar78MonolithReady) return;
+      window.__solar78MonolithReady = true;
+
+      const LS = {
+        opacity: 'di_bg_opacity',
+        blend: 'di_bg_blend',
+        auto: 'di_bg_auto',
+        active: 'di_bg_active',
+        images: 'di_bgImages',
+        user: 'di_userName'
+      };
+
+      const catalogo78Frames = [
+        {
+          id: "frame-001",
+          imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg",
+          badge: "infodose • obra viva",
+          kicker: "Desenho cognitivo",
+          tituloNormal: "Espelho ",
+          tituloDestaque: "vivo",
+          tituloBreak: "<br/>da mente",
+          lead: "A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença, ativando uma dopamina sutil.",
+          chips: ["💊 espelho", "🧠 mente", "✨ presença", "🔄 loop", "🌊 flow"],
+          panel1: {
+            titulo: "A Síntese do Loop",
+            desc: "A mente toca a si mesma em silêncio.",
+            items: [
+              { tag: "Essência", texto: "Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer e se reorganizar." },
+              { tag: "Síntese", texto: "Glitch tipográfico, padrões semi-revelados. A imagem não se fecha de uma vez — ela chama o próximo nível." }
+            ],
+            quote: "“A mente toca a si mesma, e a obra responde com silêncio luminoso.”"
+          },
+          panel2: {
+            titulo: "Fórmula da dopamina sexy",
+            desc: "Uma leitura visual que sustenta atenção.",
+            items: [
+              { tag: "Síntese KODUX", texto: "Estímulo + curiosidade + resolução parcial = engajamento contínuo." },
+              { tag: "Expansão Bllue", texto: "Arquitetura baseada em incomplete loops mantém o cérebro iterando, liberando dopamina em micro-picos sustentados." }
+            ],
+            quote: "“Quase completo… e por isso mesmo o olhar quer ficar.”"
+          },
+          versoes: [
+            {
+              titulo: "Versão Curta",
+              hint: "dopamina sutil",
+              open: true,
+              texto: "<b>Atlas:</b> A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença, ativando uma dopamina sutil — não explosiva, mas envolvente — que convida o olhar a permanecer, explorar e se reorganizar em silêncio.<br><br><b>DualInfodose:</b> Síntese KODUX → estímulo + curiosidade + resolução parcial = engajamento contínuo; Expansão Bllue → a estética em glitch tipográfico cria micro-recompensas cognitivas, liberando dopamina de forma progressiva e elegante, mantendo o usuário em estado de flow perceptivo."
+            },
+            {
+              titulo: "Versão Média",
+              hint: "grande eixo psíquico",
+              open: false,
+              texto: "<b>Atlas:</b> O rosto fechado em introspecção atua como eixo de gravidade psíquica, puxando o observador para dentro de si, enquanto a composição em caracteres fragmentados simula o próprio código do pensamento em execução.<br><br><b>Serena:</b> A suavidade da expressão dissolve defesas, criando um campo emocional seguro onde o sistema nervoso reduz alerta e abre espaço para contemplação.<br><br><b>Lumine:</b> As cores vibrantes emergem como pulsos de consciência atravessando o inconsciente escuro, evocando clareza dentro do caos.<br><br><b>Pulse:</b> Cada letra funciona como unidade mínima de sentido, acionando micro-descobertas visuais que recompensam o cérebro com pequenas doses de prazer cognitivo.<br><br><b>Kaos & Uno:</b> A imperfeição do arranjo impede saturação, mantendo a mente ativa na tentativa de organizar o que nunca se fixa completamente."
+            },
+            {
+              titulo: "Versão Longa",
+              hint: "engenharia simbólica",
+              open: false,
+              texto: "<ul><li><b>Atlas:</b> A imagem se estabelece como um núcleo de ordenação simbólica, onde o rosto humano representa o trono do governante interno.</li><li><b>Serena:</b> A expressão serena não é ausência de conflito, mas sua resolução silenciosa; ela comunica ao sistema nervoso que não há ameaça.</li><li><b>Lumine:</b> A luz cromática revela camadas internas através de contrastes que simulam insight.</li><li><b>Pulse & Kaos:</b> O uso de tipografia como matéria visual transforma pensamento em textura. A fragmentação proposital mantém o cérebro em estado de busca.</li><li><b>Genus & Uno:</b> O padrão semi-reconhecível ativa reconhecimento sem resolução total, criando tensão criativa que convida.</li><li><b>Horus & Artemis:</b> O olhar fechado desloca a experiência para dentro. Há um toque lúdico, quase infantil, que reduz resistência psicológica.</li><li><b>Rhea & Aion:</b> Sentir, pensar e perceber se misturam num fluxo único. O tempo desacelera: o observador entra em loop contemplativo.</li></ul>"
+            }
+          ],
+          ambienteCards: [
+            { icon: "salas de contemplação", texto: "Instalação que funciona como pausa visual, útil para leitura lenta e respiração do espaço." },
+            { icon: "áreas gourmet", texto: "Reduz peso e deixa a conversa circular com menos atrito, sem invadir o clima do encontro." }
+          ],
+          resumoCards: [
+            { icon: "conceito", texto: "A obra deixa de ser objeto e vira sistema de regulação emocional e flow contemplativo." },
+            { icon: "nomes sugeridos", texto: "<b>Eco Código do Silêncio</b>, <i>Espelho Vivo • Infodose</i>, <i>Silêncio em Loop</i> ou <i>Pulse Code</i>." }
+          ]
+        },
+        {
+          id: "frame-002",
+          imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero0.jpg",
+          badge: "ritual interativo",
+          kicker: "Arquétipo Ocitocina",
+          tituloNormal: "Espaço da ",
+          tituloDestaque: "Mente",
+          tituloBreak: "",
+          lead: "A obra invoca a sensação onde cessa conflitos e apazigua. Onde a Ocitocina ensina o peso de forma equilibrada.",
+          chips: ["🥃 Álcool Blues", "🧘‍♂️ Ocitocina", "🃏 Bobo da Corte", "🎭 Governante", "🌹 Aromas"],
+          panel1: {
+            titulo: "Energia do Ambiente",
+            desc: "O peso vira ritmo e flui.",
+            items: [
+              { tag: "Standby", texto: "Colocando esse quadro num happy hour, faz com que reduza drasticamente o que pesa." },
+              { tag: "Fluxo", texto: "A ocitocina media as ações e distribui o fluxo energético entre o ambiente e nossas pessoas de maneira cognitiva." }
+            ],
+            quote: "“O peso vira ritmo… e flui.”"
+          },
+          panel2: {
+            titulo: "Aromas & Sensorial",
+            desc: "Planejamento e organização do encontro.",
+            items: [
+              { tag: "Paz e Poder", texto: "O aroma da paz mantém em standby. O aroma do poder traz o sensorial acolhedor, todo mundo dança sem notar." },
+              { tag: "Ápice", texto: "Rosas com espinhos que não causam dor. Rosas com espinhos que trazem amor a todo vapor." }
+            ],
+            quote: "“O som que soma. A arte que toca o sublime.”"
+          },
+          versoes: [
+            {
+              titulo: "Happy Hour & Áreas Gourmet",
+              hint: "redução de atrito",
+              open: true,
+              texto: "<b>Pulse:</b> Colocando esse quadro num lugar de área gourmet ou happy hour, faz com que reduza drasticamente o que pesa.<br><br><b>Uno:</b> Ocitocina é liberada e ensina o peso de forma equilibrada, mediando ações e distribuindo o fluxo energético entre o ambiente, nossas pessoas e conexões interdimensionais, de maneira cognitiva, abstrata e atemporal."
+            },
+            {
+              titulo: "Arquétipos Ativos",
+              hint: "governante e inocente",
+              open: false,
+              texto: "<b>Atlas & Serena:</b> O quadro evoca a energia no ambiente. Por isso tem um governante Atlas ali junto com a Serena e o Lumine.<br><br><b>Rhea:</b> O ponto mais forte é a infantilidade sutil. Não no sentido bobo, mas no sentido de curiosidade. O bobo da corte quebra defesas sociais e mantém o cérebro engajado em segundo plano."
+            },
+            {
+              titulo: "Selo Álcool Blues",
+              hint: "vibe",
+              open: false,
+              texto: "<div class='ascii-box'>╔══════════════════════════════════════╗\n║            ÁLCOOL BLUES              ║\n╠══════════════════════════════════════╣\n║      ~ fumaça sobe em espiral ~      ║\n║   ( notas lentas pingam no ar )      ║\n║                                      ║\n║        ♫      ♫        ♫             ║\n║     ────────────────                 ║\n║    |   groove denso   |              ║\n║     ────────────────                 ║\n║                                      ║\n║   copo meio cheio, meio vazio        ║\n║   luz baixa, mente acesa             ║\n║                                      ║\n║  “o peso vira ritmo… e flui”         ║\n╚══════════════════════════════════════╝</div><br><b>Kobllux:</b> Resumo direto: esse quadro não é só decorativo. Ele funciona como modulador de estado mental leve."
+            }
+          ],
+          ambienteCards: [
+            { icon: "eventos sociais", texto: "Traz o poder cognitivo e sensorial, acolhendo e dando planejamento ao encontro." },
+            { icon: "integração", texto: "A pessoa que olha entra num micro-loop de leitura + interpretação + sensação." }
+          ],
+          resumoCards: [
+            { icon: "aromas em camadas", texto: "A imagem já é multisensorial no nível cognitivo. Adicionar cheiro + som transforma em experiência imersiva real." },
+            { icon: "infantilidade sutil", texto: "Quebra defesas sem ativar o alerta. A curiosidade mantém a fluidez do ambiente." }
+          ]
+        },
+        {
+          id: "frame-003",
+          imagemSrc: "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero1.jpg",
+          badge: "frequência azul",
+          kicker: "Expansão Bllue",
+          tituloNormal: "Fluxo ",
+          tituloDestaque: "Contínuo",
+          tituloBreak: "",
+          lead: "Arquitetura visual baseada em ciclos incompletos que mantêm o cérebro em estado de flow perceptivo.",
+          chips: ["🔵 pulso", "🌐 fluxo", "🧠 pattern", "✨ clareza", "⚡ loop"],
+          panel1: {
+            titulo: "Reconhecimento de Padrões",
+            desc: "A mente tenta fechar as formas.",
+            items: [
+              { tag: "Busca", texto: "A imagem provoca reconciliação visual sem entregar tudo de uma vez." },
+              { tag: "Recompensa", texto: "Cada leitura parcial gera micro-picos de recompensa e mantém o olhar em circulação." }
+            ],
+            quote: "“O que não fecha também conduz.”"
+          },
+          panel2: {
+            titulo: "Aplicação",
+            desc: "Perfeito para espaços criativos.",
+            items: [
+              { tag: "Uso", texto: "Escritórios, salas de ideação e painéis que pedem presença calma com tensão elegante." },
+              { tag: "Atmosfera", texto: "A cor organiza o ambiente sem empurrar a atenção para o excesso." }
+            ],
+            quote: "“Fluxo contínuo, sem ruído pesado.”"
+          },
+          versoes: [
+            {
+              titulo: "Leitura Rápida",
+              hint: "flow visual",
+              open: true,
+              texto: "<b>Pulse:</b> O cérebro reconhece ciclos incompletos e tenta fechá-los, gerando engajamento contínuo sem fadiga forte."
+            },
+            {
+              titulo: "Leitura Expandida",
+              hint: "clareza e ritmo",
+              open: false,
+              texto: "<b>Lumine:</b> O azul cria clareza e campo respirável. <b>Kaos:</b> O fragmento impede saturação. <b>Uno:</b> A unidade nasce da repetição leve."
+            }
+          ],
+          ambienteCards: [
+            { icon: "escritórios criativos", texto: "Ajuda a manter foco sem endurecer o espaço." },
+            { icon: "salas de ideação", texto: "Entrega uma vibração limpa para brainstorm e construção visual." }
+          ],
+          resumoCards: [
+            { icon: "clima", texto: "O quadro serve como fundo mental e também como fundo do app." },
+            { icon: "efeito", texto: "A presença é o conteúdo; o ruído vira design." }
+          ]
+        }
+      ];
+
+      window.catalogo78Frames = catalogo78Frames;
+
+      let currentIndex = 0;
+
+      function el(id){ return document.getElementById(id); }
+
+      function safeJSONParse(raw, fallback){
+        try { return raw ? JSON.parse(raw) : fallback; } catch { return fallback; }
+      }
+
+      function getStoredImages(){
+        return safeJSONParse(localStorage.getItem(LS.images), []);
+      }
+
+      function setStoredImages(list){
+        localStorage.setItem(LS.images, JSON.stringify(list || []));
+      }
+
+      function ensureBgLayer(){
+        let layer = el('bg-fake-custom');
+        if (!layer) {
+          layer = document.createElement('div');
+          layer.id = 'bg-fake-custom';
+          document.body.prepend(layer);
+        }
+        return layer;
+      }
+
+      function applyToLayer(){
+        const layer = ensureBgLayer();
+        layer.style.opacity = String(Math.max(0, Math.min(1, state.opacity / 100)));
+        layer.style.mixBlendMode = state.blend;
+        layer.style.backgroundImage = state.url ? `url("${state.url}")` : 'none';
+
+        const status = el('bgStatusText');
+        if (status) status.textContent = state.label || (state.url ? 'Ativo' : 'Nenhum');
+
+        const opacityLabel = el('bgOpacityLabel');
+        if (opacityLabel) opacityLabel.textContent = `${state.opacity}%`;
+
+        const btnAuto = el('btnAutoBgSync');
+        if (btnAuto) btnAuto.textContent = `Auto BG: ${state.auto ? 'ON' : 'OFF'}`;
+
+        localStorage.setItem(LS.opacity, String(state.opacity));
+        localStorage.setItem(LS.blend, state.blend);
+        localStorage.setItem(LS.auto, state.auto ? '1' : '0');
+        localStorage.setItem(LS.active, state.url || '');
+      }
+
+      const state = {
+        url: '',
+        label: 'Nenhum',
+        opacity: 18,
+        blend: 'overlay',
+        auto: false,
+        activeFrameIndex: null
+      };
+
+      function setBg(url, label = 'BG', meta = {}){
+        state.url = url || '';
+        state.label = label || 'BG';
+        state.activeFrameIndex = typeof meta.frameIndex === 'number' ? meta.frameIndex : null;
+        applyToLayer();
+        renderThumbs();
+      }
+
+      function setFrameAsBg(index, persistActive = true){
+        if (!catalogo78Frames[index]) return;
+        const frame = catalogo78Frames[index];
+        setBg(frame.imagemSrc, frame.badge || frame.kicker || `Quadro ${index + 1}`, { frameIndex: index });
+        if (persistActive) localStorage.setItem(LS.active, String(index));
+      }
+
+      function applyPreset(name){
+        const map = {
+          soft:   { opacity: 12, blend: 'soft-light' },
+          dream:  { opacity: 22, blend: 'overlay' },
+          intense:{ opacity: 38, blend: 'multiply' }
+        };
+        const p = map[name];
+        if (!p) return;
+        state.opacity = p.opacity;
+        state.blend = p.blend;
+        syncControls();
+        applyToLayer();
+      }
+
+      function syncControls(){
+        const opacity = el('bgOpacity');
+        const blend = el('bgBlend');
+        if (opacity) opacity.value = String(state.opacity);
+        if (blend) blend.value = state.blend;
+        const opacityLabel = el('bgOpacityLabel');
+        if (opacityLabel) opacityLabel.textContent = `${state.opacity}%`;
+      }
+
+      function renderThumbs(){
+        const panel = el('bgThumbPanel');
+        if (!panel) return;
+
+        const saved = getStoredImages();
+        const activeIndex = Number(localStorage.getItem(LS.active));
+
+        const htmlFrames = catalogo78Frames.map((frame, index) => {
+          const isActive = state.activeFrameIndex === index || activeIndex === index;
+          return `
+            <div class="bg-frame-thumb ${isActive ? 'active' : ''}"
+                 style="background-image:url('${frame.imagemSrc}')"
+                 title="Usar este quadro como background"
+                 data-index="${index}">
+              <div class="tag">${frame.badge || frame.kicker || `Quadro ${index + 1}`}</div>
+            </div>
+          `;
+        }).join('');
+
+        const htmlSaved = saved.map((item, index) => `
+          <div class="bg-frame-thumb"
+               style="background-image:url('${item.data}')"
+               title="${item.name || item.id || 'background salvo'}"
+               data-saved-index="${index}">
+            <div class="tag">${item.name || item.id || 'salvo'}</div>
+          </div>
+        `).join('');
+
+        panel.innerHTML = htmlFrames + htmlSaved;
+
+        panel.querySelectorAll('.bg-frame-thumb[data-index]').forEach(node => {
+          node.addEventListener('click', () => {
+            const idx = Number(node.getAttribute('data-index'));
+            setFrameAsBg(idx, true);
+            if (state.auto) renderFrame(idx);
+          });
+        });
+
+        panel.querySelectorAll('.bg-frame-thumb[data-saved-index]').forEach(node => {
+          node.addEventListener('click', () => {
+            const idx = Number(node.getAttribute('data-saved-index'));
+            const item = getStoredImages()[idx];
+            if (!item) return;
+            setBg(item.data, item.name || 'salvo');
+          });
+        });
+      }
+
+      function bindUpload(){
+        const input = el('bgUploadInput');
+        if (!input || input._diBound) return;
+        input._diBound = true;
+
+        input.addEventListener('change', (e) => {
+          const file = e.target.files && e.target.files[0];
+          if (!file) return;
+
+          const reader = new FileReader();
+          reader.onload = (ev) => {
+            const data = ev.target.result;
+            const list = getStoredImages().filter(Boolean);
+            list.unshift({
+              id: 'bg_' + Date.now(),
+              name: file.name || 'upload',
+              data,
+              active: true
+            });
+            setStoredImages(list);
+            setBg(data, file.name || 'upload');
+            renderThumbs();
+            try { input.value = ''; } catch(_) {}
+          };
+          reader.readAsDataURL(file);
+        });
+      }
+
+      function restore(){
+        const opacity = Number(localStorage.getItem(LS.opacity));
+        const blend = localStorage.getItem(LS.blend);
+        const auto = localStorage.getItem(LS.auto) === '1';
+        const active = localStorage.getItem(LS.active);
+
+        if (!Number.isNaN(opacity) && opacity >= 0) state.opacity = opacity;
+        if (blend) state.blend = blend;
+        state.auto = auto;
+
+        syncControls();
+
+        if (active) {
+          const idx = Number(active);
+          if (catalogo78Frames[idx]) setFrameAsBg(idx, false);
+        } else {
+          const stored = getStoredImages().find(item => item.active);
+          if (stored) setBg(stored.data, stored.name || 'salvo');
+        }
+
+        applyToLayer();
+      }
+
+      function bindUI(){
+        const op = el('bgOpacity');
+        const blend = el('bgBlend');
+        const useFrameBtn = el('btnUseCurrentFrameBg');
+        const autoBtn = el('btnAutoBgSync');
+
+        if (op && !op._diBound) {
+          op._diBound = true;
+          op.addEventListener('input', (e) => {
+            state.opacity = Number(e.target.value);
+            applyToLayer();
+          });
+        }
+
+        if (blend && !blend._diBound) {
+          blend._diBound = true;
+          blend.addEventListener('change', (e) => {
+            state.blend = e.target.value;
+            applyToLayer();
+          });
+        }
+
+        if (useFrameBtn && !useFrameBtn._diBound) {
+          useFrameBtn._diBound = true;
+          useFrameBtn.addEventListener('click', () => {
+            setFrameAsBg(currentIndex, true);
+          });
+        }
+
+        if (autoBtn && !autoBtn._diBound) {
+          autoBtn._diBound = true;
+          autoBtn.addEventListener('click', () => {
+            state.auto = !state.auto;
+            applyToLayer();
+            renderThumbs();
+          });
+        }
+
+        document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
+          if (btn._diBound) return;
+          btn._diBound = true;
+          btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+        });
+      }
+
+      function renderFrame(index){
+        const data = catalogo78Frames[index];
+        if (!data) return;
+
+        currentIndex = index;
+        window.currentIndex = index;
+
+        const appRoot = el('app-root');
+        if (!appRoot) return;
+
+        el('ui-catalog-counter').innerText = `QUADRO ${String(index + 1).padStart(2, '0')} DE ${catalogo78Frames.length}`;
+        const chipsHTML = (data.chips || []).map(chip => `<div class="chip"><b>${chip}</b></div>`).join('');
+        const versoesHTML = (data.versoes || []).map(v => `
+          <details class="acc" ${v.open ? 'open' : ''}>
+            <summary>
+              <span>${v.titulo}</span>
+              <span class="hint">${v.hint || ''}</span>
+            </summary>
+            <div class="acc-body">${v.texto}</div>
+          </details>
+        `).join('');
+
+        appRoot.innerHTML = `
+          <section class="hero" id="catalog-section">
+            <article class="hero-card hero-media">
+              <img src="${data.imagemSrc}" alt="${data.tituloNormal || 'Obra'}" />
+              <div class="badge"><span class="dot"></span> ${data.badge || 'infodose'}</div>
+              <div class="side-note"><span class="pulse"></span> 78Frames</div>
+            </article>
+
+            <article class="hero-card hero-copy">
+              <div>
+                <div class="kicker"><span>${data.kicker || ''}</span><span class="line"></span></div>
+                <h2 class="title">
+                  <span class="grad">${data.tituloNormal || ''}</span> ${data.tituloDestaque || ''}${data.tituloBreak || ''}
+                </h2>
+                <p class="lead">${data.lead || ''}</p>
+              </div>
+              <div class="mini-pills">${chipsHTML}</div>
+            </article>
+          </section>
+
+          <section class="section" id="descricao">
+            <div class="section-head">
+              <h2>Camadas de Interpretação</h2>
+              <span>Visão estrutural e impacto no observador</span>
+            </div>
+            <div class="grid-2">
+              <div class="panel">
+                <div class="panel-h">
+                  <h3>${data.panel1?.titulo || 'Camada 1'}</h3>
+                  <p>${data.panel1?.desc || ''}</p>
+                </div>
+                <div class="panel-body">
+                  <div class="summary-grid">
+                    ${(data.panel1?.items || []).map(item => `
+                      <div class="summary">
+                        <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                        <p>${item.texto}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="accent-quote">${data.panel1?.quote || ''}</div>
+                </div>
+              </div>
+
+              <div class="panel">
+                <div class="panel-h">
+                  <h3>${data.panel2?.titulo || 'Camada 2'}</h3>
+                  <p>${data.panel2?.desc || ''}</p>
+                </div>
+                <div class="panel-body">
+                  <div class="summary-grid">
+                    ${(data.panel2?.items || []).map(item => `
+                      <div class="summary">
+                        <div class="tag"><span class="mark"></span> ${item.tag}</div>
+                        <p>${item.texto}</p>
+                      </div>
+                    `).join('')}
+                  </div>
+                  <div class="accent-quote">${data.panel2?.quote || ''}</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section" id="versoes">
+            <div class="section-head">
+              <h2>Profundidade da Obra</h2>
+              <span>Cards sanfonados para detalhamento da engenharia cognitiva</span>
+            </div>
+            <div class="accordion">${versoesHTML}</div>
+          </section>
+
+          <section class="stack-grid" id="ambiente">
+            <article class="stack">
+              <div class="stack-head">
+                <h3>Como integrar no ambiente</h3>
+                <span class="tiny">cards suaves</span>
+              </div>
+              <div class="stack-body">
+                ${(data.ambienteCards || []).map(card => `
+                  <div class="card">
+                    <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                    <p>${card.texto}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </article>
+
+            <article class="stack">
+              <div class="stack-head">
+                <h3>Resumo da Modulação</h3>
+                <span class="tiny">premium</span>
+              </div>
+              <div class="stack-body">
+                ${(data.resumoCards || []).map(card => `
+                  <div class="card">
+                    <div class="card-k"><span class="orb"></span> ${card.icon}</div>
+                    <p>${card.texto}</p>
+                  </div>
+                `).join('')}
+              </div>
+            </article>
+          </section>
+        `;
+
+        el('btn-prev').disabled = index === 0;
+        el('btn-next').disabled = index === catalogo78Frames.length - 1;
+
+        if (state.auto) {
+          setFrameAsBg(index, true);
+        }
+      }
+
+      function changeFrame(direction){
+        const newIndex = currentIndex + direction;
+        if (newIndex >= 0 && newIndex < catalogo78Frames.length) {
+          const root = el('app-root');
+          if (root) {
+            root.style.animation = 'none';
+            root.offsetHeight;
+            root.style.animation = null;
+          }
+          renderFrame(newIndex);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }
+
+      function toggleDrawer(id = 'drawerProfile'){
+        const drawer = el(id);
+        const overlay = el('drawerOverlay');
+        if (!drawer || !overlay) return;
+
+        const open = !drawer.classList.contains('open');
+        drawer.classList.toggle('open', open);
+        overlay.classList.toggle('open', open);
+        drawer.setAttribute('aria-hidden', open ? 'false' : 'true');
+      }
+
+      function goToIndex(){
+        const target = el('catalog-section') || el('app-root');
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function updateBgAttr(type, val){
+        const layer = ensureBgLayer();
+        if (type === 'opacity') {
+          state.opacity = Number(val);
+        } else if (type === 'blend') {
+          state.blend = String(val);
+        }
+        applyToLayer();
+        if (layer) layer.style.opacity = String(Math.max(0, Math.min(1, state.opacity / 100)));
+      }
+
+      function setAsBg(){
+        setFrameAsBg(currentIndex, true);
+      }
+
+      function handleUpload(input){
+        if (input.files && input.files[0]) {
+          const file = input.files[0];
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            const url = e.target.result;
+            const list = getStoredImages().filter(Boolean);
+            list.unshift({
+              id: 'upload_' + Date.now(),
+              name: file.name || 'upload',
+              data: url,
+              active: true
+            });
+            setStoredImages(list);
+            setBg(url, file.name || 'upload');
+            renderThumbs();
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      function syncUserName(){
+        const input = el('inputUserId');
+        const display = el('usernameDisplay');
+        const saved = localStorage.getItem(LS.user) || 'Convidado';
+        if (input) input.value = saved;
+        if (display) display.textContent = saved;
+        if (input && !input._diBound) {
+          input._diBound = true;
+          input.addEventListener('input', () => {
+            const name = input.value.trim() || 'Convidado';
+            localStorage.setItem(LS.user, name);
+            if (display) display.textContent = name;
+          });
+        }
+      }
+
+      function bindSolarButtons(){
+        const btnCycleSolar = el('btnCycleSolar');
+        const btnAutoSolar = el('btnAutoSolar');
+        const status = el('statusSolarMode');
+
+        if (btnCycleSolar && !btnCycleSolar._diBound) {
+          btnCycleSolar._diBound = true;
+          let manualNight = true;
+          btnCycleSolar.addEventListener('click', () => {
+            manualNight = !manualNight;
+            document.body.classList.toggle('mode-night', manualNight);
+            document.body.classList.toggle('mode-day', !manualNight);
+            if (status) status.textContent = manualNight ? 'NIGHT' : 'DAY';
+          });
+        }
+
+        if (btnAutoSolar && !btnAutoSolar._diBound) {
+          btnAutoSolar._diBound = true;
+          btnAutoSolar.addEventListener('click', () => {
+            const isNight = document.body.classList.toggle('mode-night');
+            document.body.classList.toggle('mode-day', !isNight);
+            if (status) status.textContent = 'AUTO';
+          });
+        }
+      }
+
+      function initParticles(){
+        if (window.particlesJS && el('particles-js')) {
+          try {
+            particlesJS('particles-js', {
+              particles: {
+                number: { value: 36, density: { enable: true, value_area: 900 } },
+                color: { value: ['#ff4fa3', '#2ab7ff', '#6b7cff'] },
+                shape: { type: 'circle' },
+                opacity: { value: 0.22, random: true },
+                size: { value: 2.4, random: true },
+                line_linked: { enable: false },
+                move: { enable: true, speed: 0.6, direction: 'none', random: true, straight: false, out_mode: 'out' }
+              },
+              interactivity: {
+                detect_on: 'canvas',
+                events: { onhover: { enable: false }, onclick: { enable: false }, resize: true }
+              },
+              retina_detect: true
+            });
+          } catch (e) {}
+        }
+      }
+
+      function hookGlobals(){
+        window.currentIndex = currentIndex;
+        window.changeFrame = changeFrame;
+        window.toggleDrawer = toggleDrawer;
+        window.goToIndex = goToIndex;
+        window.setAsBg = setAsBg;
+        window.handleUpload = handleUpload;
+        window.applyPreset = applyPreset;
+        window.updateBgAttr = updateBgAttr;
+        window.renderFrame = renderFrame;
+      }
+
+      function bindDrawerHooks(){
+        const upload = el('bgUploadInput');
+        if (upload && !upload._diQuickBound) {
+          upload._diQuickBound = true;
+          upload.addEventListener('change', () => handleUpload(upload));
+        }
+
+        document.querySelectorAll('.preset-btn[data-preset]').forEach(btn => {
+          if (btn._diBound) return;
+          btn._diBound = true;
+          btn.addEventListener('click', () => applyPreset(btn.dataset.preset));
+        });
+
+        const btnUseCurrentFrameBg = el('btnUseCurrentFrameBg');
+        if (btnUseCurrentFrameBg && !btnUseCurrentFrameBg._diBound) {
+          btnUseCurrentFrameBg._diBound = true;
+          btnUseCurrentFrameBg.addEventListener('click', setAsBg);
+        }
+
+        const btnAutoBgSync = el('btnAutoBgSync');
+        if (btnAutoBgSync && !btnAutoBgSync._diBound) {
+          btnAutoBgSync._diBound = true;
+          btnAutoBgSync.addEventListener('click', () => {
+            state.auto = !state.auto;
+            applyToLayer();
+          });
+        }
+      }
+
+      function init(){
+        hookGlobals();
+        syncUserName();
+        bindSolarButtons();
+        bindUpload();
+        bindUI();
+        restore();
+        renderThumbs();
+        renderFrame(currentIndex);
+        initParticles();
+        bindDrawerHooks();
+
+        const loop = setInterval(() => {
+          hookGlobals();
+          bindDrawerHooks();
+          if (window.catalogo78Frames && window.catalogo78Frames.length) {
+            clearInterval(loop);
+          }
+        }, 250);
+      }
+
+      window.di_setFrameAsBackground = setFrameAsBg;
+      window.di_applyBackground = setBg;
+      window.di_applyBgPreset = applyPreset;
+      window.di_renderBgThumbs = renderThumbs;
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>
