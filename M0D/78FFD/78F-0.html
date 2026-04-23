@@ -295,6 +295,9 @@
           <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
         </label>
       </div>
+              <div class="panel-section">
+  <label class="section-label"><span>FX Lab</span><span>di_fxLab</span></label>
+  <div id="fxLabHost"></div>
     </div>
   </aside>
 
@@ -598,6 +601,551 @@
       applyPreset('vivid'); // Começa com uma opacidade um pouco mais notável (Vívido)
     });
   </script>
+  
+  <script>
+(() => {
+  if (window.di_fxLab) return;
+
+  const di_fxLab = {
+    _mounted: false,
+    _host: null,
+    _img: null,
+    _mode: 'texture',
+    _name: 'image',
+    _loaded: false,
+    _ctx: null,
+    _src: null,
+    _srcCtx: null,
+    _refs: {},
+    _getFrame: null,
+    _applyBg: null,
+
+    mount(host, opts = {}) {
+      if (this._mounted) return this;
+
+      this._host = typeof host === 'string' ? document.querySelector(host) : host;
+      if (!this._host) throw new Error('[di_fxLab] host não encontrado');
+
+      this._getFrame = typeof opts.getCurrentFrame === 'function' ? opts.getCurrentFrame : null;
+      this._applyBg = typeof opts.applyBg === 'function' ? opts.applyBg : null;
+      this._initialSrc = opts.initialSrc || '';
+      this._initialName = opts.initialName || 'image';
+
+      this._injectStyles();
+      this._render();
+      this._bind();
+      this._mounted = true;
+
+      if (this._initialSrc) {
+        this.loadUrl(this._initialSrc, this._initialName);
+      } else {
+        this._drawEmpty();
+      }
+
+      return this;
+    },
+
+    _injectStyles() {
+      if (document.getElementById('di_fxLabStyles')) return;
+
+      const style = document.createElement('style');
+      style.id = 'di_fxLabStyles';
+      style.textContent = `
+        .di-fxlab {
+          display: grid;
+          gap: 14px;
+          background: rgba(255,255,255,.72);
+          border: 1px solid rgba(20,24,36,.09);
+          border-radius: 22px;
+          padding: 16px;
+          box-shadow: 0 10px 30px rgba(20,24,36,.06);
+          backdrop-filter: blur(16px) saturate(170%);
+        }
+        .di-fxlab__top {
+          display: flex;
+          justify-content: space-between;
+          gap: 10px;
+          align-items: center;
+          flex-wrap: wrap;
+        }
+        .di-fxlab__title {
+          font-size: 12px;
+          font-weight: 900;
+          letter-spacing: .14em;
+          text-transform: uppercase;
+          color: #64708a;
+        }
+        .di-fxlab__name {
+          font-size: 13px;
+          font-weight: 800;
+          color: #1f2430;
+        }
+        .di-fxlab__footer {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+        }
+        .di-fxlab__pill {
+          padding: 10px 12px;
+          border-radius: 999px;
+          border: 1px solid rgba(20,24,36,.09);
+          background: #fff;
+          font-size: 12px;
+          font-weight: 800;
+        }
+        .di-fxlab__actions {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+        }
+        .di-fxlab__btn,
+        .di-fxlab__file {
+          border: 1px solid rgba(20,24,36,.09);
+          background: #fff;
+          border-radius: 999px;
+          padding: 11px 14px;
+          font-size: 12px;
+          font-weight: 800;
+          color: #1f2430;
+          cursor: pointer;
+          transition: .2s;
+          text-align: center;
+        }
+        .di-fxlab__btn:hover,
+        .di-fxlab__file:hover {
+          transform: translateY(-1px);
+          border-color: #ff4fa3;
+          color: #ff4fa3;
+        }
+        .di-fxlab__file input { display: none; }
+        .di-fxlab__canvasWrap {
+          border-radius: 18px;
+          overflow: hidden;
+          border: 1px solid rgba(20,24,36,.09);
+          background: linear-gradient(180deg, #fff, #f7f9fd);
+        }
+        .di-fxlab__canvas {
+          display: block;
+          width: 100%;
+          height: auto;
+          background: #e9edf5;
+          max-height: 320px;
+        }
+        .di-fxlab__modes {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 8px;
+        }
+        .di-fxlab__mode {
+          padding: 12px 8px;
+          font-size: 11px;
+          border: 1px solid rgba(20,24,36,.09);
+          border-radius: 12px;
+          background: #fff;
+          cursor: pointer;
+          font-weight: 800;
+          transition: .2s;
+          text-align: center;
+        }
+        .di-fxlab__mode.is-active {
+          border-color: #ff4fa3;
+          color: #ff4fa3;
+          transform: translateY(-1px);
+        }
+        .di-fxlab__field {
+          display: grid;
+          gap: 6px;
+          background: rgba(255,255,255,.68);
+          border: 1px solid rgba(20,24,36,.09);
+          border-radius: 16px;
+          padding: 14px;
+        }
+        .di-fxlab__label {
+          display: flex;
+          justify-content: space-between;
+          gap: 8px;
+          font-size: 11px;
+          text-transform: uppercase;
+          font-weight: 800;
+          letter-spacing: .12em;
+          color: #7c88a0;
+        }
+        .di-fxlab__label span:last-child { color: #1f2430; }
+        .di-fxlab__field input[type="range"] {
+          width: 100%;
+          accent-color: #ff4fa3;
+        }
+        .di-fxlab__note {
+          font-size: 12px;
+          line-height: 1.45;
+          color: #64708a;
+        }
+      `;
+      document.head.appendChild(style);
+    },
+
+    _render() {
+      this._host.innerHTML = `
+        <section class="di-fxlab">
+          <div class="di-fxlab__top">
+            <div>
+              <div class="di-fxlab__title">FX Lab</div>
+              <div class="di-fxlab__name" data-di-fx-name>Sem imagem</div>
+            </div>
+            <div class="di-fxlab__footer">
+              <span class="di-fxlab__pill" data-di-fx-mode-pill>texture</span>
+              <span class="di-fxlab__pill" data-di-fx-size-pill>0×0</span>
+            </div>
+          </div>
+
+          <div class="di-fxlab__actions">
+            <button class="di-fxlab__btn" data-di-fx-load-frame>Carregar quadro atual</button>
+            <label class="di-fxlab__file">
+              Upload imagem
+              <input type="file" accept="image/*" data-di-fx-upload>
+            </label>
+            <button class="di-fxlab__btn" data-di-fx-download>Download PNG</button>
+          </div>
+
+          <div class="di-fxlab__canvasWrap">
+            <canvas class="di-fxlab__canvas" data-di-fx-canvas width="1200" height="800"></canvas>
+          </div>
+
+          <div class="di-fxlab__modes">
+            <button class="di-fxlab__mode is-active" data-di-fx-mode="texture">Textura</button>
+            <button class="di-fxlab__mode" data-di-fx-mode="liquid">Líquido</button>
+            <button class="di-fxlab__mode" data-di-fx-mode="paint">Tinta</button>
+          </div>
+
+          <div class="di-fxlab__field">
+            <div class="di-fxlab__label"><span>Blur gaussiano</span><span data-di-fx-val="blur">4</span></div>
+            <input data-di-fx-control="blur" type="range" min="0" max="24" value="4">
+          </div>
+
+          <div class="di-fxlab__field">
+            <div class="di-fxlab__label"><span>Intensidade</span><span data-di-fx-val="intensity">55</span></div>
+            <input data-di-fx-control="intensity" type="range" min="0" max="100" value="55">
+          </div>
+
+          <div class="di-fxlab__field">
+            <div class="di-fxlab__label"><span>Liquify</span><span data-di-fx-val="liquify">0</span></div>
+            <input data-di-fx-control="liquify" type="range" min="0" max="100" value="0">
+          </div>
+
+          <div class="di-fxlab__field">
+            <div class="di-fxlab__label"><span>Grain / textura</span><span data-di-fx-val="grain">35</span></div>
+            <input data-di-fx-control="grain" type="range" min="0" max="100" value="35">
+          </div>
+
+          <div class="di-fxlab__field">
+            <div class="di-fxlab__label"><span>Contraste</span><span data-di-fx-val="contrast">108</span></div>
+            <input data-di-fx-control="contrast" type="range" min="80" max="140" value="108">
+          </div>
+
+          <div class="di-fxlab__field">
+            <div class="di-fxlab__label"><span>Saturação</span><span data-di-fx-val="saturation">102</span></div>
+            <input data-di-fx-control="saturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <div class="di-fxlab__note">
+            O motor roda no drawer e aplica direto no <b>fake-bg</b> sem duplicar controles no app.
+          </div>
+        </section>
+      `;
+
+      this._refs = {
+        name: this._host.querySelector('[data-di-fx-name]'),
+        canvas: this._host.querySelector('[data-di-fx-canvas]'),
+        modePill: this._host.querySelector('[data-di-fx-mode-pill]'),
+        sizePill: this._host.querySelector('[data-di-fx-size-pill]'),
+        upload: this._host.querySelector('[data-di-fx-upload]'),
+        download: this._host.querySelector('[data-di-fx-download]'),
+        loadFrame: this._host.querySelector('[data-di-fx-load-frame]'),
+        controls: {
+          blur: this._host.querySelector('[data-di-fx-control="blur"]'),
+          intensity: this._host.querySelector('[data-di-fx-control="intensity"]'),
+          liquify: this._host.querySelector('[data-di-fx-control="liquify"]'),
+          grain: this._host.querySelector('[data-di-fx-control="grain"]'),
+          contrast: this._host.querySelector('[data-di-fx-control="contrast"]'),
+          saturation: this._host.querySelector('[data-di-fx-control="saturation"]')
+        },
+        values: {
+          blur: this._host.querySelector('[data-di-fx-val="blur"]'),
+          intensity: this._host.querySelector('[data-di-fx-val="intensity"]'),
+          liquify: this._host.querySelector('[data-di-fx-val="liquify"]'),
+          grain: this._host.querySelector('[data-di-fx-val="grain"]'),
+          contrast: this._host.querySelector('[data-di-fx-val="contrast"]'),
+          saturation: this._host.querySelector('[data-di-fx-val="saturation"]')
+        },
+        modes: Array.from(this._host.querySelectorAll('[data-di-fx-mode]'))
+      };
+
+      this._ctx = this._refs.canvas.getContext('2d', { willReadFrequently: true });
+      this._src = document.createElement('canvas');
+      this._srcCtx = this._src.getContext('2d', { willReadFrequently: true });
+      this._syncLabels();
+      this._drawEmpty();
+    },
+
+    _bind() {
+      Object.values(this._refs.controls).forEach(input => {
+        input.addEventListener('input', () => {
+          this._syncLabels();
+          this.render();
+        });
+      });
+
+      this._refs.modes.forEach(btn => {
+        btn.addEventListener('click', () => this.setMode(btn.dataset.diFxMode));
+      });
+
+      this._refs.upload.addEventListener('change', e => {
+        const file = e.target.files?.[0];
+        if (file) this.loadFile(file);
+      });
+
+      this._refs.download.addEventListener('click', () => this.download());
+      this._refs.loadFrame.addEventListener('click', () => this.syncFromFrame());
+    },
+
+    _syncLabels() {
+      const c = this._refs.controls;
+      const v = this._refs.values;
+
+      v.blur.textContent = c.blur.value;
+      v.intensity.textContent = c.intensity.value;
+      v.liquify.textContent = c.liquify.value;
+      v.grain.textContent = c.grain.value;
+      v.contrast.textContent = c.contrast.value;
+      v.saturation.textContent = c.saturation.value;
+
+      this._refs.modePill.textContent = this._mode;
+    },
+
+    _setSizeLabel() {
+      if (!this._refs?.canvas) return;
+      this._refs.sizePill.textContent = `${this._refs.canvas.width}×${this._refs.canvas.height}`;
+    },
+
+    _drawEmpty() {
+      const canvas = this._refs.canvas;
+      const ctx = this._ctx;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#edf2fb';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#64708a';
+      ctx.font = '700 24px Inter, system-ui, sans-serif';
+      ctx.fillText('Carregue um quadro ou uma imagem', 32, 56);
+      this._refs.sizePill.textContent = '0×0';
+    },
+
+    clamp(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    },
+
+    setMode(mode) {
+      this._mode = mode || 'texture';
+      this._refs.modes.forEach(btn => {
+        btn.classList.toggle('is-active', btn.dataset.diFxMode === this._mode);
+      });
+      this._syncLabels();
+      this.render();
+      return this;
+    },
+
+    loadUrl(url, name = 'image') {
+      if (!url) return this;
+
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      img.onload = () => {
+        this._img = img;
+        this._loaded = true;
+        this._name = name || 'image';
+        this._refs.name.textContent = this._name;
+        this._resizeToImage();
+        this.render();
+      };
+      img.src = url;
+      return this;
+    },
+
+    loadFile(file) {
+      if (!file || !file.type?.startsWith('image/')) return this;
+      const reader = new FileReader();
+      reader.onload = e => this.loadUrl(e.target.result, file.name || 'upload');
+      reader.readAsDataURL(file);
+      return this;
+    },
+
+    setFrameLoader(fn) {
+      this._getFrame = typeof fn === 'function' ? fn : null;
+      return this;
+    },
+
+    syncFromFrame() {
+      if (!this._getFrame) return this;
+      const frame = this._getFrame();
+      if (!frame || !frame.imagemSrc) return this;
+      this.loadUrl(frame.imagemSrc, frame.tituloNormal.trim() + frame.tituloDestaque);
+      return this;
+    },
+
+    _resizeToImage(maxW = 1200) {
+      if (!this._img?.naturalWidth || !this._img?.naturalHeight) return;
+
+      const ratio = this._img.naturalHeight / this._img.naturalWidth;
+      const w = Math.min(this._img.naturalWidth, maxW);
+      const h = Math.max(1, Math.round(w * ratio));
+
+      this._refs.canvas.width = w;
+      this._refs.canvas.height = h;
+      this._src.width = w;
+      this._src.height = h;
+      this._setSizeLabel();
+    },
+
+    render() {
+      if (!this._loaded || !this._img) {
+        this._drawEmpty();
+        return this;
+      }
+
+      const w = this._refs.canvas.width;
+      const h = this._refs.canvas.height;
+
+      this._srcCtx.clearRect(0, 0, w, h);
+      this._srcCtx.drawImage(this._img, 0, 0, w, h);
+
+      const blur = Number(this._refs.controls.blur.value);
+      const ctx = this._ctx;
+
+      ctx.clearRect(0, 0, w, h);
+      ctx.filter = `blur(${blur}px)`;
+      ctx.drawImage(this._src, 0, 0, w, h);
+      ctx.filter = 'none';
+
+      const imageData = ctx.getImageData(0, 0, w, h);
+      const srcData = this._srcCtx.getImageData(0, 0, w, h).data;
+      const out = new Uint8ClampedArray(imageData.data.length);
+
+      const intensity = Number(this._refs.controls.intensity.value) / 100;
+      const liquify = Number(this._refs.controls.liquify.value) / 100;
+      const grain = Number(this._refs.controls.grain.value) / 100;
+      const contrast = Number(this._refs.controls.contrast.value) / 100;
+      const saturation = Number(this._refs.controls.saturation.value) / 100;
+
+      const cx = w * 0.5;
+      const cy = h * 0.5;
+      const maxDist = Math.sqrt(cx * cx + cy * cy) || 1;
+
+      const sampleNearest = (x, y) => {
+        const ix = this.clamp(Math.round(x), 0, w - 1);
+        const iy = this.clamp(Math.round(y), 0, h - 1);
+        const idx = (iy * w + ix) * 4;
+        return [srcData[idx], srcData[idx + 1], srcData[idx + 2], srcData[idx + 3]];
+      };
+
+      const posterize = (v, levels) => {
+        const step = 255 / (levels - 1);
+        return Math.round(v / step) * step;
+      };
+
+      for (let y = 0; y < h; y++) {
+        for (let x = 0; x < w; x++) {
+          const i = (y * w + x) * 4;
+          let dx = x;
+          let dy = y;
+
+          if (this._mode === 'liquid' || liquify > 0) {
+            const nx = x / w;
+            const ny = y / h;
+            const waveX = Math.sin((ny * 10.0) + (nx * 6.0)) * 18 * liquify;
+            const waveY = Math.cos((nx * 8.0) - (ny * 5.0)) * 14 * liquify;
+            const swirl = ((x - cx) / maxDist) * ((y - cy) / maxDist);
+            dx = x + waveX + swirl * 10 * liquify;
+            dy = y + waveY - swirl * 8 * liquify;
+          }
+
+          const px = sampleNearest(dx, dy);
+          let r = px[0], g = px[1], b = px[2], a = px[3];
+
+          if (this._mode === 'texture') {
+            const grainStrength = 24 * grain * intensity;
+            const n = (Math.random() - 0.5) * grainStrength;
+            r += n; g += n; b += n;
+          }
+
+          if (this._mode === 'liquid') {
+            const edge = Math.sin((x + y) * 0.03) * 10 * intensity;
+            r += edge;
+            g += edge * 0.8;
+            b += edge * 1.05;
+          }
+
+          if (this._mode === 'paint') {
+            const levels = 7 - Math.floor(intensity * 3);
+            const safeLevels = this.clamp(levels, 3, 9);
+            r = posterize(r, safeLevels);
+            g = posterize(g, safeLevels);
+            b = posterize(b, safeLevels);
+          }
+
+          r = (r - 128) * contrast + 128;
+          g = (g - 128) * contrast + 128;
+          b = (b - 128) * contrast + 128;
+
+          const avg = (r + g + b) / 3;
+          r = avg + (r - avg) * saturation;
+          g = avg + (g - avg) * saturation;
+          b = avg + (b - avg) * saturation;
+
+          out[i] = this.clamp(r, 0, 255);
+          out[i + 1] = this.clamp(g, 0, 255);
+          out[i + 2] = this.clamp(b, 0, 255);
+          out[i + 3] = a;
+        }
+      }
+
+      imageData.data.set(out);
+      ctx.putImageData(imageData, 0, 0);
+
+      ctx.save();
+      ctx.globalAlpha = 0.10 * intensity;
+      ctx.globalCompositeOperation = 'screen';
+      ctx.filter = 'blur(8px)';
+      ctx.drawImage(this._src, 0, 0, w, h);
+      ctx.restore();
+
+      return this;
+    },
+
+    download(filename) {
+      if (!this._loaded) return this;
+      const a = document.createElement('a');
+      a.download = filename || `di-fx-${this._mode}.png`;
+      a.href = this._refs.canvas.toDataURL('image/png');
+      a.click();
+      return this;
+    },
+
+    applyToBackground() {
+      if (!this._loaded) return this;
+      const url = this._refs.canvas.toDataURL('image/png');
+
+      if (typeof this._applyBg === 'function') {
+        this._applyBg(url, `fx-${this._mode}`, true);
+      }
+
+      window.dispatchEvent(new Event('di:bg:requestSync'));
+      return this;
+    }
+  };
+
+  window.di_fxLab = di_fxLab;
+})();
+</script>
+  
 </body>
 </html>
 
