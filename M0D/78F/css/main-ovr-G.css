@@ -1,0 +1,102 @@
+/* =========================================
+   OVERRIDES E NOVAS FEATURES (INFODOSE)
+   ========================================= */
+
+/* --- 1. Modo Zen (Ativado pelo Topbar) --- */
+body.zen-mode .hero-content > *:not(.action-container),
+body.zen-mode .infodose-reveal,
+body.zen-mode .catalog-nav,
+body.zen-mode .footer-quote {
+  display: none !important;
+}
+
+/* Garante que o container do botão "Ativar" fique visível */
+.action-container {
+  margin-top: 20px;
+}
+
+/* --- 2. Elementos Colapsáveis --- */
+.colapsavel {
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.colapsavel.is-collapsed {
+  opacity: 0.4;
+  max-height: 40px !important;
+  overflow: hidden;
+  filter: grayscale(1);
+}
+
+/* --- 3. Revelação Progressiva (Infodose) --- */
+.infodose-reveal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 24px;
+}
+.btn-infodose {
+  padding: 14px 32px;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #fff;
+  border: none;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: 0.3s;
+  box-shadow: var(--shadow-soft);
+}
+.btn-infodose:hover {
+  background: var(--kob-voice-primary);
+  transform: translateY(-2px);
+}
+.hidden-section {
+  display: none;
+  width: 100%;
+  animation: fadeIn 0.4s ease-out;
+  text-align: center;
+}
+.hidden-section.active {
+  display: block;
+}
+.btn-subtle {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.3s;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+.btn-subtle:hover, .btn-subtle.revealed {
+  opacity: 1;
+  color: var(--kob-voice-secondary);
+}
+
+/* --- 4. Botão Bolinha (Speech Synthesis) --- */
+.btn-speech {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--bg-panel);
+  border: 1px solid var(--line);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin-left: 10px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: 0.2s;
+  font-size: 12px;
+}
+.btn-speech:hover {
+  transform: scale(1.1);
+  border-color: var(--kob-voice-primary);
+  color: var(--kob-voice-primary);
+}
