@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Texture / Liquify / Paint Engine</title>
+<style>
+  :root{
+    --bg: #f4f6fa;
+    --panel: rgba(255,255,255,.82);
+    --panel-solid: #ffffff;
+    --text: #121826;
+    --muted: #667085;
+    --accent: #6d5efc;
+    --accent-2: #2dd4bf;
+    --line: rgba(18,24,38,.10);
+    --shadow: 0 18px 50px rgba(18,24,38,.12);
+    --radius: 22px;
+    --radius-sm: 14px;
+    --pad: 18px;
+  }
+
+  * { box-sizing: border-box; }
+  body{
+    margin:0;
+    min-height:100vh;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+    background:
+      radial-gradient(circle at top, rgba(109,94,252,.10), transparent 35%),
+      radial-gradient(circle at bottom right, rgba(45,212,191,.10), transparent 30%),
+      var(--bg);
+    color: var(--text);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:24px;
+  }
+
+  .card{
+    width:min(980px, 100%);
+    background: var(--panel);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow:hidden;
+  }
+
+  .topbar{
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:16px;
+    background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.40));
+  }
+
+  .brand{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+  }
+
+  .brand strong{
+    font-size: 16px;
+    letter-spacing:.2px;
+  }
+
+  .brand span{
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .actions{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .btn, .mode-btn, .file-btn{
+    border: 1px solid var(--line);
+    background: var(--panel-solid);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 10px 14px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease, background .15s ease;
+    box-shadow: 0 6px 18px rgba(18,24,38,.05);
+  }
+
+  .btn:hover, .mode-btn:hover, .file-btn:hover{
+    transform: translateY(-1px);
+    border-color: rgba(109,94,252,.35);
+    box-shadow: 0 10px 24px rgba(18,24,38,.08);
+  }
+
+  .btn.primary{
+    background: linear-gradient(135deg, var(--accent), #8b7dff);
+    color:white;
+    border-color: transparent;
+  }
+
+  .content{
+    display:grid;
+    grid-template-columns: 1.35fr .9fr;
+    gap: 0;
+  }
+
+  .preview{
+    padding: 18px;
+    border-right: 1px solid var(--line);
+  }
+
+  .dropzone{
+    border: 1.5px dashed rgba(109,94,252,.28);
+    border-radius: calc(var(--radius) - 6px);
+    background: rgba(255,255,255,.55);
+    min-height: 560px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    overflow:hidden;
+  }
+
+  canvas{
+    width:100%;
+    height:auto;
+    display:block;
+    max-height: 760px;
+    object-fit: contain;
+    border-radius: 18px;
+    background: #e9edf5;
+  }
+
+  .placeholder{
+    position:absolute;
+    inset:0;
+    display:grid;
+    place-items:center;
+    text-align:center;
+    padding:30px;
+    color: var(--muted);
+    pointer-events:none;
+  }
+
+  .placeholder .pill{
+    width:68px;
+    height:68px;
+    border-radius:999px;
+    margin:0 auto 14px;
+    background: radial-gradient(circle at 30% 30%, #ffffff, #c8d1ff 45%, #6d5efc 100%);
+    box-shadow: 0 14px 26px rgba(109,94,252,.28);
+  }
+
+  .placeholder strong{
+    display:block;
+    color: var(--text);
+    font-size: 18px;
+    margin-bottom: 6px;
+  }
+
+  .panel{
+    padding: 18px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+
+  .section{
+    background: rgba(255,255,255,.58);
+    border:1px solid var(--line);
+    border-radius: calc(var(--radius) - 6px);
+    padding: 14px;
+  }
+
+  .section h3{
+    margin: 0 0 12px;
+    font-size: 14px;
+    letter-spacing: .2px;
+    color: var(--text);
+  }
+
+  .row{
+    display:grid;
+    gap: 10px;
+  }
+
+  .modes{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap:10px;
+  }
+
+  .mode-btn.active{
+    border-color: rgba(109,94,252,.55);
+    background: rgba(109,94,252,.10);
+    color: #3d2fe6;
+  }
+
+  .field{
+    display:grid;
+    gap: 6px;
+  }
+
+  .field label{
+    font-size: 13px;
+    color: var(--muted);
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+  }
+
+  .field label span{
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  input[type="range"]{
+    width:100%;
+    accent-color: var(--accent);
+  }
+
+  .file-wrap{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+
+  input[type="file"]{
+    display:none;
+  }
+
+  .small{
+    font-size: 12px;
+    color: var(--muted);
+    line-height:1.45;
+  }
+
+  @media (max-width: 900px){
+    .content{ grid-template-columns: 1fr; }
+    .preview{ border-right: none; border-bottom: 1px solid var(--line); }
+    .dropzone{ min-height: 380px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="topbar">
+    <div class="brand">
+      <strong>Texture / Liquify / Paint Engine</strong>
+      <span>Upload de imagem + presets + download em PNG</span>
+    </div>
+
+    <div class="actions">
+      <label class="file-btn" for="upload">Escolher imagem</label>
+      <button class="btn primary" id="downloadBtn">Download PNG</button>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="preview">
+      <div class="dropzone" id="dropzone">
+        <canvas id="canvas"></canvas>
+        <div class="placeholder" id="placeholder">
+          <div>
+            <div class="pill"></div>
+            <strong>Arraste ou escolha uma imagem</strong>
+            <div>Depois aplique textura, liquify ou tinta no painel ao lado.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="section">
+        <h3>Imagem</h3>
+        <div class="file-wrap">
+          <input type="file" id="upload" accept="image/*" />
+          <button class="btn" id="fitBtn">Redimensionar preview</button>
+        </div>
+        <div class="small">
+          O render fica no canvas final. O download sai na resolução do preview atual.
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Preset</h3>
+        <div class="modes">
+          <button class="mode-btn active" data-mode="texture">Textura</button>
+          <button class="mode-btn" data-mode="liquid">Líquido</button>
+          <button class="mode-btn" data-mode="paint">Tinta</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Controles</h3>
+        <div class="row">
+          <div class="field">
+            <label>Blur gaussiano <span id="blurVal">4</span></label>
+            <input type="range" id="blur" min="0" max="24" value="4">
+          </div>
+
+          <div class="field">
+            <label>Intensidade <span id="intensityVal">55</span></label>
+            <input type="range" id="intensity" min="0" max="100" value="55">
+          </div>
+
+          <div class="field">
+            <label>Liquify <span id="liquifyVal">0</span></label>
+            <input type="range" id="liquify" min="0" max="100" value="0">
+          </div>
+
+          <div class="field">
+            <label>Grain / textura <span id="grainVal">35</span></label>
+            <input type="range" id="grain" min="0" max="100" value="35">
+          </div>
+
+          <div class="field">
+            <label>Contraste <span id="contrastVal">108</span></label>
+            <input type="range" id="contrast" min="80" max="140" value="108">
+          </div>
+
+          <div class="field">
+            <label>Saturação <span id="saturationVal">102</span></label>
+            <input type="range" id="saturation" min="60" max="150" value="102">
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <h3>Atalhos</h3>
+        <div class="small">
+          Preset <b>Textura</b> dá aquele upgrade sutil. <b>Líquido</b> cria distorção orgânica. <b>Tinta</b> posteriza e suaviza.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  const canvas = document.getElementById("canvas");
+  const ctx = canvas.getContext("2d", { willReadFrequently: true });
+
+  const upload = document.getElementById("upload");
+  const placeholder = document.getElementById("placeholder");
+  const dropzone = document.getElementById("dropzone");
+  const downloadBtn = document.getElementById("downloadBtn");
+  const fitBtn = document.getElementById("fitBtn");
+
+  const controls = {
+    blur: document.getElementById("blur"),
+    intensity: document.getElementById("intensity"),
+    liquify: document.getElementById("liquify"),
+    grain: document.getElementById("grain"),
+    contrast: document.getElementById("contrast"),
+    saturation: document.getElementById("saturation"),
+  };
+
+  const values = {
+    blurVal: document.getElementById("blurVal"),
+    intensityVal: document.getElementById("intensityVal"),
+    liquifyVal: document.getElementById("liquifyVal"),
+    grainVal: document.getElementById("grainVal"),
+    contrastVal: document.getElementById("contrastVal"),
+    saturationVal: document.getElementById("saturationVal"),
+  };
+
+  let mode = "texture";
+  let img = new Image();
+  let hasImage = false;
+
+  const src = document.createElement("canvas");
+  const sctx = src.getContext("2d", { willReadFrequently: true });
+
+  function updateLabels() {
+    values.blurVal.textContent = controls.blur.value;
+    values.intensityVal.textContent = controls.intensity.value;
+    values.liquifyVal.textContent = controls.liquify.value;
+    values.grainVal.textContent = controls.grain.value;
+    values.contrastVal.textContent = controls.contrast.value;
+    values.saturationVal.textContent = controls.saturation.value;
+  }
+
+  function setMode(next) {
+    mode = next;
+    document.querySelectorAll(".mode-btn").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mode === next);
+    });
+    render();
+  }
+
+  function fitCanvasToImage(maxW = 1400) {
+    if (!img.naturalWidth || !img.naturalHeight) return;
+    const ratio = img.naturalHeight / img.naturalWidth;
+    const w = Math.min(img.naturalWidth, maxW);
+    const h = Math.round(w * ratio);
+    canvas.width = w;
+    canvas.height = h;
+    src.width = w;
+    src.height = h;
+    render();
+  }
+
+  function loadFile(file) {
+    if (!file || !file.type.startsWith("image/")) return;
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      img = new Image();
+      img.onload = () => {
+        hasImage = true;
+        placeholder.style.display = "none";
+        fitCanvasToImage();
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+
+  upload.addEventListener("change", (e) => loadFile(e.target.files[0]));
+
+  dropzone.addEventListener("dragover", (e) => {
+    e.preventDefault();
+    dropzone.style.borderColor = "rgba(109,94,252,.55)";
+  });
+
+  dropzone.addEventListener("dragleave", () => {
+    dropzone.style.borderColor = "rgba(109,94,252,.28)";
+  });
+
+  dropzone.addEventListener("drop", (e) => {
+    e.preventDefault();
+    dropzone.style.borderColor = "rgba(109,94,252,.28)";
+    const file = e.dataTransfer.files?.[0];
+    loadFile(file);
+  });
+
+  document.querySelectorAll(".mode-btn").forEach(btn => {
+    btn.addEventListener("click", () => setMode(btn.dataset.mode));
+  });
+
+  Object.values(controls).forEach(el => {
+    el.addEventListener("input", () => {
+      updateLabels();
+      render();
+    });
+  });
+
+  fitBtn.addEventListener("click", () => fitCanvasToImage());
+
+  downloadBtn.addEventListener("click", () => {
+    if (!hasImage) return;
+
+    const link = document.createElement("a");
+    link.download = `texture-engine-${mode}.png`;
+    link.href = canvas.toDataURL("image/png");
+    link.click();
+  });
+
+  function clamp(v, min, max) {
+    return Math.max(min, Math.min(max, v));
+  }
+
+  function applyFilterPipeline() {
+    if (!hasImage) return;
+
+    const w = canvas.width;
+    const h = canvas.height;
+
+    sctx.clearRect(0, 0, w, h);
+    sctx.drawImage(img, 0, 0, w, h);
+
+    // Base blur
+    const blur = Number(controls.blur.value);
+    ctx.clearRect(0, 0, w, h);
+    ctx.filter = `blur(${blur}px)`;
+    ctx.drawImage(src, 0, 0, w, h);
+    ctx.filter = "none";
+
+    let imageData = ctx.getImageData(0, 0, w, h);
+    let data = imageData.data;
+
+    const intensity = Number(controls.intensity.value) / 100;
+    const liquify = Number(controls.liquify.value) / 100;
+    const grain = Number(controls.grain.value) / 100;
+    const contrast = Number(controls.contrast.value) / 100;
+    const saturation = Number(controls.saturation.value) / 100;
+
+    const srcData = sctx.getImageData(0, 0, w, h).data;
+    const out = new Uint8ClampedArray(data.length);
+
+    // helpers
+    const cx = w * 0.5;
+    const cy = h * 0.5;
+    const maxDist = Math.sqrt(cx * cx + cy * cy) || 1;
+
+    function sampleNearest(x, y) {
+      const ix = clamp(Math.round(x), 0, w - 1);
+      const iy = clamp(Math.round(y), 0, h - 1);
+      const idx = (iy * w + ix) * 4;
+      return [
+        srcData[idx],
+        srcData[idx + 1],
+        srcData[idx + 2],
+        srcData[idx + 3]
+      ];
+    }
+
+    function posterize(v, levels) {
+      const step = 255 / (levels - 1);
+      return Math.round(v / step) * step;
+    }
+
+    // render
+    for (let y = 0; y < h; y++) {
+      for (let x = 0; x < w; x++) {
+        const i = (y * w + x) * 4;
+
+        let dx = x;
+        let dy = y;
+
+        // Liquify = displacement orgânico
+        if (mode === "liquid" || liquify > 0) {
+          const nx = x / w;
+          const ny = y / h;
+          const waveX = Math.sin((ny * 10.0) + (nx * 6.0)) * 18 * liquify;
+          const waveY = Math.cos((nx * 8.0) - (ny * 5.0)) * 14 * liquify;
+          const swirl = ((x - cx) / maxDist) * ((y - cy) / maxDist);
+          dx = x + waveX + swirl * 10 * liquify;
+          dy = y + waveY - swirl * 8 * liquify;
+        }
+
+        const px = sampleNearest(dx, dy);
+        let r = px[0], g = px[1], b = px[2], a = px[3];
+
+        // Preset: texture
+        if (mode === "texture") {
+          const grainStrength = 24 * grain * intensity;
+          const n = (Math.random() - 0.5) * grainStrength;
+          r += n;
+          g += n;
+          b += n;
+        }
+
+        // Preset: liquid
+        if (mode === "liquid") {
+          const edge = Math.sin((x + y) * 0.03) * 10 * intensity;
+          r += edge;
+          g += edge * 0.8;
+          b += edge * 1.05;
+        }
+
+        // Preset: paint
+        if (mode === "paint") {
+          const levels = 7 - Math.floor(intensity * 3);
+          r = posterize(r, clamp(levels, 3, 9));
+          g = posterize(g, clamp(levels, 3, 9));
+          b = posterize(b, clamp(levels, 3, 9));
+        }
+
+        // Contrast
+        r = (r - 128) * contrast + 128;
+        g = (g - 128) * contrast + 128;
+        b = (b - 128) * contrast + 128;
+
+        // Saturation
+        const avg = (r + g + b) / 3;
+        r = avg + (r - avg) * saturation;
+        g = avg + (g - avg) * saturation;
+        b = avg + (b - avg) * saturation;
+
+        out[i]   = clamp(r, 0, 255);
+        out[i+1] = clamp(g, 0, 255);
+        out[i+2] = clamp(b, 0, 255);
+        out[i+3] = a;
+      }
+    }
+
+    imageData.data.set(out);
+    ctx.putImageData(imageData, 0, 0);
+
+    // brilho suave no final
+    ctx.save();
+    ctx.globalAlpha = 0.10 * intensity;
+    ctx.globalCompositeOperation = "screen";
+    ctx.filter = "blur(8px)";
+    ctx.drawImage(canvas, 0, 0);
+    ctx.restore();
+  }
+
+  function render() {
+    updateLabels();
+    if (!hasImage) return;
+    applyFilterPipeline();
+  }
+
+  updateLabels();
+
+  // estado inicial do canvas
+  canvas.width = 900;
+  canvas.height = 600;
+})();
+</script>
+</body>
+</html>
