@@ -1,0 +1,216 @@
+<script>
+(() => {
+  if (window.__diBgBridgeReady) return;
+  window.__diBgBridgeReady = true;
+
+  const KEYS = {
+    images: 'di_bgImages',
+    opacity: 'di_bg_opacity',
+    blend: 'di_bg_blend',
+    active: 'di_bg_active',
+    auto: 'di_bg_auto'
+  };
+
+  const IS_IFRAME = window.top !== window;
+  const TARGET_ORIGIN = location.origin && location.origin !== 'null' ? location.origin : '*';
+
+  function el(id) {
+    return document.getElementById(id);
+  }
+
+  function safeParse(raw, fallback) {
+    try {
+      return raw ? JSON.parse(raw) : fallback;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function getBgLayer() {
+    return el('bg-fake-custom');
+  }
+
+  function getStoredState() {
+    const list = safeParse(localStorage.getItem(KEYS.images), []);
+    const activeIndexRaw = localStorage.getItem(KEYS.active);
+    const opacityRaw = localStorage.getItem(KEYS.opacity);
+    const blendRaw = localStorage.getItem(KEYS.blend);
+    const autoRaw = localStorage.getItem(KEYS.auto);
+
+    let url = '';
+    let label = 'Nenhum';
+    let activeIndex = null;
+
+    if (activeIndexRaw !== null && activeIndexRaw !== '') {
+      const idx = Number(activeIndexRaw);
+      if (Number.isFinite(idx) && list[idx]?.data) {
+        url = list[idx].data;
+        label = list[idx].name || list[idx].id || 'background';
+        activeIndex = idx;
+      }
+    }
+
+    if (!url) {
+      const activeItem = list.find(item => item && item.active && item.data);
+      if (activeItem) {
+        url = activeItem.data;
+        label = activeItem.name || activeItem.id || 'background';
+      }
+    }
+
+    return {
+      url,
+      label,
+      opacity: opacityRaw !== null && opacityRaw !== '' ? Number(opacityRaw) : 18,
+      blend: blendRaw || 'overlay',
+      auto: autoRaw === '1',
+      activeIndex
+    };
+  }
+
+  function applyStateToUI(state) {
+    const layer = getBgLayer();
+    if (layer) {
+      layer.style.opacity = String(Math.max(0, Math.min(1, state.opacity / 100)));
+      layer.style.mixBlendMode = state.blend || 'overlay';
+      layer.style.backgroundImage = state.url ? `url("${state.url}")` : 'none';
+    }
+
+    const status = el('bgStatusText');
+    if (status) status.textContent = state.label || (state.url ? 'Ativo' : 'Nenhum');
+
+    const opacityLabel = el('val-op') || el('bgOpacityLabel');
+    if (opacityLabel) opacityLabel.textContent = `${state.opacity}%`;
+
+    const opacityInput = el('bgOpacity');
+    if (opacityInput && String(opacityInput.value) !== String(state.opacity)) {
+      opacityInput.value = String(state.opacity);
+    }
+
+    const blendSelect = el('bgBlend') || el('select-blend');
+    if (blendSelect && blendSelect.value !== state.blend) {
+      blendSelect.value = state.blend;
+    }
+
+    const autoBtn = el('btnAutoBgSync');
+    if (autoBtn) autoBtn.textContent = `Auto BG: ${state.auto ? 'ON' : 'OFF'}`;
+
+    const counter = el('ui-catalog-counter');
+    if (counter && state.activeIndex !== null) {
+      counter.dataset.bgActive = String(state.activeIndex);
+    }
+
+    if (typeof window.di_renderBgThumbs === 'function') {
+      window.di_renderBgThumbs();
+    } else if (typeof window.renderLibrary === 'function') {
+      window.renderLibrary();
+    } else if (typeof window.di_renderBgPanel === 'function') {
+      window.di_renderBgPanel();
+    }
+  }
+
+  function syncFromStorage() {
+    const state = getStoredState();
+    applyStateToUI(state);
+    window.dispatchEvent(new CustomEvent('di:bg:sync', { detail: state }));
+
+    if (IS_IFRAME && window.parent && window.parent !== window) {
+      window.parent.postMessage(
+        { type: 'DI_BG_SYNC', payload: state },
+        TARGET_ORIGIN
+      );
+    }
+  }
+
+  function patchLocalStorage() {
+    const _setItem = localStorage.setItem.bind(localStorage);
+    const _removeItem = localStorage.removeItem.bind(localStorage);
+    const _clear = localStorage.clear.bind(localStorage);
+
+    localStorage.setItem = function(key, value) {
+      const oldValue = localStorage.getItem(key);
+      _setItem(key, value);
+      window.dispatchEvent(new CustomEvent('di:storage', {
+        detail: { key, oldValue, newValue: String(value) }
+      }));
+    };
+
+    localStorage.removeItem = function(key) {
+      const oldValue = localStorage.getItem(key);
+      _removeItem(key);
+      window.dispatchEvent(new CustomEvent('di:storage', {
+        detail: { key, oldValue, newValue: null }
+      }));
+    };
+
+    localStorage.clear = function() {
+      _clear();
+      window.dispatchEvent(new CustomEvent('di:storage', {
+        detail: { key: null, oldValue: null, newValue: null, clear: true }
+      }));
+    };
+  }
+
+  function bindEvents() {
+    window.addEventListener('storage', (e) => {
+      if (!e || !Object.values(KEYS).includes(e.key)) return;
+      syncFromStorage();
+    });
+
+    window.addEventListener('di:storage', (e) => {
+      const key = e?.detail?.key;
+      if (key && !Object.values(KEYS).includes(key)) return;
+      syncFromStorage();
+    });
+
+    window.addEventListener('di:bg:requestSync', syncFromStorage);
+
+    window.addEventListener('message', (e) => {
+      const data = e?.data;
+      if (!data || data.type !== 'DI_BG_SYNC') return;
+      syncFromStorage();
+    });
+  }
+
+  function startPollingFallback() {
+    let last = JSON.stringify([
+      localStorage.getItem(KEYS.images) || '',
+      localStorage.getItem(KEYS.opacity) || '',
+      localStorage.getItem(KEYS.blend) || '',
+      localStorage.getItem(KEYS.active) || '',
+      localStorage.getItem(KEYS.auto) || ''
+    ]);
+
+    setInterval(() => {
+      const now = JSON.stringify([
+        localStorage.getItem(KEYS.images) || '',
+        localStorage.getItem(KEYS.opacity) || '',
+        localStorage.getItem(KEYS.blend) || '',
+        localStorage.getItem(KEYS.active) || '',
+        localStorage.getItem(KEYS.auto) || ''
+      ]);
+
+      if (now !== last) {
+        last = now;
+        syncFromStorage();
+      }
+    }, 800);
+  }
+
+  function init() {
+    patchLocalStorage();
+    bindEvents();
+    syncFromStorage();
+    startPollingFallback();
+  }
+
+  window.di_syncBgFromStorage = syncFromStorage;
+  window.di_requestBgSync = syncFromStorage;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>

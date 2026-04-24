@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Infodose • Espelho Vivo</title>
+  <meta name="color-scheme" content="light" />
+  <style>
+    :root{
+      --kob-voice-primary:#ff4fa3;
+      --kob-voice-secondary:#2ab7ff;
+      --kob-voice-accent:#6b7cff;
+      --bg-page:#f6f8fc;
+      --bg-panel:#ffffff;
+      --bg-panel-soft:rgba(255,255,255,.78);
+      --bg-panel-strong:#ffffff;
+      --ink:#141824;
+      --text:#1f2430;
+      --text-soft:#64708a;
+      --line:rgba(20,24,36,.09);
+      --line-strong:rgba(42,183,255,.22);
+      --shadow:0 18px 50px rgba(20,24,36,.08);
+      --shadow-soft:0 10px 30px rgba(20,24,36,.06);
+      --radius:24px;
+      --radius-sm:16px;
+      --pill:#eef3ff;
+      --pill-ink:#2d3550;
+      --chip:#f3f6fb;
+      --chip-ink:#42506c;
+      --max:1260px;
+      --hero-grad: linear-gradient(135deg, rgba(255,79,163,.16), rgba(42,183,255,.12), rgba(107,124,255,.10));
+      --glass: blur(16px) saturate(170%);
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.09), transparent 28%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.09), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--bg-page) 100%);
+      color:var(--text);
+      min-height:100vh;
+      overflow-x:hidden;
+    }
+    a{color:inherit}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 64px;}
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+      position:sticky; top:10px; z-index:30;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:14px;
+      background:rgba(255,255,255,.72);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      border-radius:999px;
+      padding:12px 16px;
+    }
+    .pill-logo{
+      width:44px; height:44px; flex:none;
+      border-radius:999px;
+      position:relative;
+      background:linear-gradient(180deg, #fefefe, #f1f5ff);
+      border:1px solid rgba(20,24,36,.08);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.8);
+      overflow:hidden;
+    }
+    .pill-logo:before,
+    .pill-logo:after{
+      content:"";
+      position:absolute;
+      inset:7px;
+      border-radius:999px;
+      transform:rotate(-45deg);
+    }
+    .pill-logo:before{
+      background:linear-gradient(135deg, var(--kob-voice-primary), #ffb1d1 50%, #ffffff 50%, var(--kob-voice-secondary));
+      clip-path:polygon(0 0, 56% 0, 100% 44%, 100% 100%, 44% 100%, 0 56%);
+      opacity:.95;
+    }
+    .pill-logo:after{
+      inset:14px;
+      border-radius:999px;
+      background:linear-gradient(135deg, rgba(255,255,255,.92), rgba(255,255,255,.2));
+      mix-blend-mode:screen;
+      opacity:.7;
+    }
+    .brand h1{
+      margin:0;
+      font-size:13px;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:#111827;
+      font-weight:800;
+    }
+    .brand p{
+      margin:3px 0 0;
+      font-size:12px;
+      color:var(--text-soft);
+      letter-spacing:.08em;
+    }
+    .nav{
+      display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end;
+    }
+    .nav a, .ghost-btn, .mode-btn{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.78);
+      color:var(--pill-ink);
+      border-radius:999px;
+      padding:10px 14px;
+      text-decoration:none;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.02em;
+      box-shadow:0 6px 18px rgba(20,24,36,.05);
+      cursor:pointer;
+      transition:.22s ease;
+      backdrop-filter:var(--glass);
+    }
+    .nav a:hover, .ghost-btn:hover, .mode-btn:hover{
+      transform:translateY(-1px);
+      border-color:rgba(42,183,255,.24);
+      box-shadow:0 10px 24px rgba(20,24,36,.08);
+    }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1.04fr .96fr;
+      gap:20px;
+      align-items:stretch;
+      margin-top:18px;
+    }
+    .hero-card{
+      background:rgba(255,255,255,.82);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      position:relative;
+    }
+    .hero-media{
+      min-height:720px;
+      background:#f3f6fb;
+      position:relative;
+    }
+    .hero-media img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      filter:saturate(.95) contrast(1.02);
+    }
+    .hero-media .badge{
+      position:absolute;
+      left:18px; top:18px;
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:rgba(255,255,255,.8);
+      border:1px solid rgba(20,24,36,.08);
+      color:var(--text);
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      backdrop-filter:var(--glass);
+    }
+    .badge .dot{
+      width:9px; height:9px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(255,79,163,.1);
+    }
+    .hero-copy{
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+      gap:18px;
+      justify-content:space-between;
+    }
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      color:var(--text-soft);
+      text-transform:uppercase;
+      letter-spacing:.22em;
+      font-weight:800;
+      font-size:12px;
+    }
+    .kicker .line{height:1px; flex:1; background:linear-gradient(90deg, rgba(20,24,36,.12), transparent);}
+    .title{
+      margin:4px 0 0;
+      font-size:clamp(34px, 4vw, 68px);
+      line-height:.96;
+      letter-spacing:-.05em;
+      color:#151a26;
+      text-wrap:balance;
+    }
+    .title .grad{
+      background:linear-gradient(90deg, var(--kob-voice-primary), #ffb15c 35%, var(--kob-voice-secondary) 68%, var(--kob-voice-accent));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .lead{
+      margin:0;
+      font-size:17px;
+      line-height:1.7;
+      color:var(--text-soft);
+      max-width:60ch;
+    }
+    .mini-pills{
+      display:flex; flex-wrap:wrap; gap:10px;
+    }
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:999px;
+      background:var(--chip);
+      border:1px solid var(--line);
+      color:var(--chip-ink);
+      font-size:13px;
+      font-weight:700;
+    }
+    .chip b{color:#111827}
+    .section{
+      margin-top:20px;
+      background:rgba(255,255,255,.78);
+      backdrop-filter:var(--glass);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .section-head{
+      padding:18px 20px;
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid var(--line);
+      background:linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,255,255,.70));
+    }
+    .section-head h2{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#182033;
+    }
+    .section-head span{color:var(--text-soft); font-size:13px}
+    .grid-2{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:18px;
+      padding:18px;
+    }
+
+    .panel{
+      background:var(--bg-panel);
+      border:1px solid var(--line);
+      border-radius:22px;
+      box-shadow:0 12px 34px rgba(20,24,36,.05);
+      overflow:hidden;
+    }
+    .panel .panel-h{
+      padding:18px 18px 0;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+    }
+    .panel .panel-h h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:#1a2131;
+    }
+    .panel .panel-h p{
+      margin:6px 0 0;
+      font-size:13px;
+      color:var(--text-soft);
+    }
+    .panel .panel-body{padding:18px;}
+    .summary-grid{
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
+    }
+    .summary{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background:linear-gradient(180deg, #fff, #fbfcff);
+      min-height:140px;
+    }
+    .summary .tag{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:12px;
+      margin-bottom:10px;
+    }
+    .tag .mark{
+      width:12px; height:12px;
+      border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(42,183,255,.10);
+    }
+    .summary p{
+      margin:0;
+      line-height:1.72;
+      color:#273042;
+      font-size:15px;
+    }
+    .formula{
+      display:grid;
+      gap:12px;
+    }
+    .formula-bar{
+      display:grid;
+      grid-template-columns:repeat(5, minmax(0,1fr));
+      gap:10px;
+    }
+    .formula-item{
+      background:linear-gradient(180deg, #fff, #fbfcff);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 12px;
+      text-align:center;
+    }
+    .formula-icon{
+      width:38px; height:38px; margin:0 auto 10px;
+      border-radius:50%;
+      display:grid; place-items:center;
+      border:1px solid rgba(20,24,36,.08);
+      background:linear-gradient(180deg, #fff, #f6f9ff);
+      font-size:18px;
+    }
+    .formula-item b{
+      display:block;
+      font-size:12px;
+      letter-spacing:.11em;
+      text-transform:uppercase;
+      margin-bottom:6px;
+      color:#1a2131;
+    }
+    .formula-item small{
+      color:var(--text-soft);
+      line-height:1.4;
+      display:block;
+      font-size:12px;
+    }
+
+    .switcher{
+      display:flex;
+      flex-wrap:wrap;
+      gap:10px;
+    }
+    .switcher button{
+      border:1px solid var(--line);
+      background:linear-gradient(180deg, #fff, #f4f7ff);
+      color:var(--pill-ink);
+      border-radius:999px;
+      padding:11px 14px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.2s ease;
+      font-size:13px;
+    }
+    .switcher button.active{
+      color:#fff;
+      border-color:transparent;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 10px 24px rgba(42,183,255,.22);
+    }
+    .switcher button:hover{transform:translateY(-1px)}
+    .tab-panels{
+      padding:18px;
+    }
+    .tab-panel{display:none}
+    .tab-panel.active{display:block}
+    .accordion{
+      display:grid;
+      gap:12px;
+    }
+    details.acc{
+      background:#fff;
+      border:1px solid var(--line);
+      border-radius:18px;
+      overflow:hidden;
+      box-shadow:0 8px 24px rgba(20,24,36,.04);
+    }
+    details.acc[open]{
+      border-color:rgba(42,183,255,.24);
+      box-shadow:0 16px 36px rgba(42,183,255,.09);
+    }
+    details.acc summary{
+      list-style:none;
+      cursor:pointer;
+      padding:16px 18px;
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      align-items:center;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#1a2131;
+    }
+    details.acc summary::-webkit-details-marker{display:none}
+    .acc .hint{
+      color:var(--text-soft);
+      font-size:12px;
+      font-weight:700;
+      letter-spacing:.02em;
+      text-transform:none;
+    }
+    .acc-body{
+      padding:0 18px 18px;
+      color:#273042;
+      line-height:1.8;
+      font-size:15px;
+    }
+    .acc-body ul{margin:10px 0 0 18px; padding:0}
+    .acc-body li{margin:5px 0}
+    .accent-quote{
+      margin-top:16px;
+      border-left:3px solid rgba(255,79,163,.48);
+      padding:12px 14px;
+      background:linear-gradient(90deg, rgba(255,79,163,.06), rgba(42,183,255,.05), transparent);
+      border-radius:12px;
+      color:#23304a;
+      font-style:italic;
+    }
+
+    .stack-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:18px;
+      margin-top:18px;
+    }
+    .stack{
+      background:rgba(255,255,255,.8);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow-soft);
+      overflow:hidden;
+    }
+    .stack .stack-head{
+      padding:16px 18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      border-bottom:1px solid var(--line);
+    }
+    .stack .stack-head h3{
+      margin:0;
+      font-size:16px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .stack .stack-head .tiny{
+      color:var(--text-soft);
+      font-size:12px;
+      font-weight:700;
+    }
+    .stack .stack-body{padding:16px 18px 18px}
+    .stack .stack-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px;
+    }
+    .stack .card{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      background:#fff;
+      min-height:160px;
+    }
+    .card .card-k{
+      display:flex; align-items:center; gap:10px;
+      margin-bottom:10px;
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#273042;
+      font-weight:800;
+    }
+    .card .orb{
+      width:12px; height:12px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 4px rgba(255,79,163,.09);
+    }
+    .card p{
+      margin:0;
+      color:#2a3242;
+      line-height:1.75;
+      font-size:15px;
+    }
+    .footer-quote{
+      margin-top:18px;
+      border:1px solid rgba(42,183,255,.18);
+      border-radius:24px;
+      padding:18px 20px;
+      text-align:center;
+      background:linear-gradient(180deg, #fff, #f8fbff);
+      box-shadow:0 10px 30px rgba(20,24,36,.04);
+      color:#20283b;
+      font-size:16px;
+      line-height:1.7;
+    }
+    .footer-quote b{
+      background:linear-gradient(90deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+
+    .side-note{
+      position:absolute;
+      right:18px;
+      bottom:18px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+      border:1px solid var(--line);
+      box-shadow:var(--shadow-soft);
+      font-size:12px;
+      color:var(--text-soft);
+      backdrop-filter:var(--glass);
+    }
+    .side-note .pulse{
+      width:10px; height:10px; border-radius:50%;
+      background:linear-gradient(135deg, var(--kob-voice-primary), var(--kob-voice-secondary));
+      box-shadow:0 0 0 0 rgba(42,183,255,.35);
+      animation:pulse 2.2s ease-in-out infinite;
+    }
+    @keyframes pulse{
+      0%{box-shadow:0 0 0 0 rgba(42,183,255,.25)}
+      70%{box-shadow:0 0 0 12px rgba(42,183,255,0)}
+      100%{box-shadow:0 0 0 0 rgba(42,183,255,0)}
+    }
+    @media (max-width: 1020px){
+      .hero,.grid-2,.stack-grid{grid-template-columns:1fr}
+      .hero-media{min-height:520px}
+      .formula-bar{grid-template-columns:1fr 1fr}
+    }
+    @media (max-width: 680px){
+      .wrap{padding:14px 12px 46px}
+      .topbar{position:relative; top:auto; flex-direction:column; align-items:stretch}
+      .brand{justify-content:flex-start}
+      .nav{justify-content:flex-start}
+      .hero-copy{padding:20px}
+      .section-head,.panel .panel-h,.stack .stack-head{padding:16px}
+      .section-head{align-items:flex-start; flex-direction:column}
+      .summary-grid,.stack .stack-row{grid-template-columns:1fr}
+      .formula-bar{grid-template-columns:1fr}
+      .hero-media{min-height:390px}
+      .lead{font-size:15px}
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand" aria-label="Infodose">
+        <div class="pill-logo" aria-hidden="true"></div>
+        <div>
+          <h1>INFODOSE</h1>
+          <p>Espelho vivo • UI white hitech</p>
+        </div>
+      </div>
+      <div class="nav">
+        <a href="#descricao">Descrição</a>
+        <a href="#formula">Fórmula</a>
+        <a href="#ambiente">Ambiente</a>
+        <a href="#versoes">Versões</a>
+      </div>
+    </div>
+
+    <section class="hero">
+      <article class="hero-card hero-media">
+        <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero3.jpg" alt="Infodose • quadro espelho vivo" />
+        <div class="badge"><span class="dot"></span> infodose • obra viva</div>
+        <div class="side-note"><span class="pulse"></span> pílula-logo ativa</div>
+      </article>
+
+      <article class="hero-card hero-copy">
+        <div>
+          <div class="kicker"><span>Desenho cognitivo</span><span class="line"></span></div>
+          <h2 class="title">
+            <span class="grad">Espelho</span> vivo<br/>da mente
+          </h2>
+          <p class="lead">
+            Uma página interativa em tema claro, mais limpa e premium, para apresentar a obra com leitura visual leve,
+            cards sanfonados e uma narrativa de atenção suave: ruído vira ritmo, glitch vira padrão, padrão vira presença.
+          </p>
+        </div>
+
+        <div class="mini-pills">
+          <div class="chip">💊 <b>logo</b> em pílula</div>
+          <div class="chip">🧠 mente</div>
+          <div class="chip">✨ presença</div>
+          <div class="chip">🔄 loop</div>
+          <div class="chip">🌊 flow</div>
+        </div>
+
+        <div>
+          <div class="switcher" role="tablist" aria-label="Versões do texto">
+            <button class="active" data-tab="curta" role="tab">Curta</button>
+            <button data-tab="media" role="tab">Média</button>
+            <button data-tab="longa" role="tab">Longa</button>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="section" id="descricao">
+      <div class="section-head">
+        <div>
+          <h2>Nome da obra</h2>
+          <span>Primeiro corte: minimalista, infodose, com leitura elegante e leve.</span>
+        </div>
+        <div>
+          <button class="ghost-btn" type="button" id="nameBtn">Sugerir nome</button>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-h">
+            <div>
+              <h3>Eco Código do Silêncio</h3>
+              <p>Nome-base com atmosfera de espelho mental e leitura sutil.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="summary-grid">
+              <div class="summary">
+                <div class="tag"><span class="mark"></span> essência</div>
+                <p>Espelho vivo da mente. Ruído que vira ritmo. Tensão que vira presença. Dopamina sutil que convida o olhar a permanecer.</p>
+              </div>
+              <div class="summary">
+                <div class="tag"><span class="mark"></span> síntese</div>
+                <p>Glitch tipográfico, padrões semi-revelados e micro-recompensas cognitivas. A imagem não se fecha de uma vez — ela chama o próximo nível.</p>
+              </div>
+            </div>
+            <div class="accent-quote">“A mente toca a si mesma, e a obra responde com silêncio luminoso.”</div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-h">
+            <div>
+              <h3>Paleta e linguagem</h3>
+              <p>UI branca, tecnologia suave, contraste baixo e detalhes neon discretos.</p>
+            </div>
+          </div>
+          <div class="panel-body formula">
+            <div class="formula-bar">
+              <div class="formula-item">
+                <div class="formula-icon">💊</div>
+                <b>pill logo</b>
+                <small>Identidade Infodose</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">🪞</div>
+                <b>espelho</b>
+                <small>Leitura introspectiva</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">✨</div>
+                <b>presença</b>
+                <small>Campo calmo e vivo</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">🧩</div>
+                <b>padrão</b>
+                <small>Busca de sentido</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">🚀</div>
+                <b>próx nível</b>
+                <small>Convite ao loop</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="formula">
+      <div class="section-head">
+        <div>
+          <h2>Fórmula da dopamina sexy</h2>
+          <span>Uma leitura visual que sustenta atenção sem pesar.</span>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <div class="panel-h">
+            <div>
+              <h3>Sequência</h3>
+              <p>Do estímulo à continuidade perceptiva.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="formula-bar">
+              <div class="formula-item">
+                <div class="formula-icon">❔</div>
+                <b>curiosidade</b>
+                <small>abre o campo</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">🌀</div>
+                <b>ambiguidade</b>
+                <small>cria busca</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">⭐</div>
+                <b>recompensa parcial</b>
+                <small>micro-pico</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">∞</div>
+                <b>continuidade</b>
+                <small>mantém o flow</small>
+              </div>
+              <div class="formula-item">
+                <div class="formula-icon">🧠</div>
+                <b>engajamento</b>
+                <small>fecha sem fechar</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-h">
+            <div>
+              <h3>Impacto no observador</h3>
+              <p>Minimalismo + cor + ruído controlado.</p>
+            </div>
+          </div>
+          <div class="panel-body">
+            <div class="summary-grid" style="grid-template-columns:1fr;">
+              <div class="summary">
+                <div class="tag"><span class="mark"></span> efeitos</div>
+                <p>Redução de tensão, conexão social suave, foco em presença, bem-estar visual e um fluxo contemplativo que não cansa.</p>
+              </div>
+            </div>
+            <div class="accent-quote">“Quase completo… e por isso mesmo o olhar quer ficar.”</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="versoes">
+      <div class="section-head">
+        <div>
+          <h2>Versões explicadas</h2>
+          <span>Cards sanfonados para leitura rápida, média e longa.</span>
+        </div>
+      </div>
+      <div class="tab-panels">
+        <div class="tab-panel active" data-panel="curta">
+          <div class="accordion">
+            <details class="acc" open>
+              <summary>
+                <span>Atlas — curta</span>
+                <span class="hint">espelho vivo / dopamina sutil</span>
+              </summary>
+              <div class="acc-body">
+                A obra é um espelho vivo onde a mente toca a si mesma, transformando ruído em ritmo e tensão em presença,
+                ativando uma dopamina sutil — não explosiva, mas envolvente — que convida o olhar a permanecer,
+                explorar e se reorganizar em silêncio.
+              </div>
+            </details>
+            <details class="acc">
+              <summary>
+                <span>Dual — síntese</span>
+                <span class="hint">KODUX + Bllue</span>
+              </summary>
+              <div class="acc-body">
+                <b>DualInfodose:</b> Síntese KODUX → estímulo + curiosidade + resolução parcial = engajamento contínuo;
+                Expansão Bllue → a estética em glitch tipográfico cria micro-recompensas cognitivas (pattern recognition),
+                liberando dopamina de forma progressiva e elegante, mantendo o usuário em estado de flow perceptivo.
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-panel="media">
+          <div class="accordion">
+            <details class="acc" open>
+              <summary><span>Atlas • Serena • Lumine</span><span class="hint">grande eixo</span></summary>
+              <div class="acc-body">
+                O rosto fechado em introspecção atua como eixo de gravidade psíquica, puxando o observador para dentro de si,
+                enquanto a composição em caracteres fragmentados simula o próprio código do pensamento em execução.
+                A suavidade da expressão dissolve defesas, criando um campo emocional seguro onde o sistema nervoso reduz alerta
+                e abre espaço para contemplação. As cores vibrantes emergem como pulsos de consciência atravessando o inconsciente
+                escuro, evocando clareza dentro do caos.
+              </div>
+            </details>
+            <details class="acc">
+              <summary><span>Pulse • Kaos • Uno</span><span class="hint">loop perceptivo</span></summary>
+              <div class="acc-body">
+                Cada letra funciona como unidade mínima de sentido, acionando micro-descobertas visuais que recompensam o cérebro
+                com pequenas doses de prazer cognitivo. A imperfeição do arranjo impede saturação, mantendo a mente ativa na
+                tentativa de organizar o que nunca se fixa completamente. Isso gera um loop perceptivo: ver → interpretar → sentir → rever.
+              </div>
+            </details>
+            <details class="acc">
+              <summary><span>Dual — expansão</span><span class="hint">interface neural passiva</span></summary>
+              <div class="acc-body">
+                <b>DualInfodose:</b> Síntese KODUX → dopamina sexy = antecipação + fragmento + completude parcial;
+                Expansão Bllue → a obra opera como interface neural passiva, onde o cérebro “renderiza” significado em tempo real,
+                sustentando atenção sem fadiga através de estímulos variáveis e não-lineares.
+              </div>
+            </details>
+          </div>
+        </div>
+
+        <div class="tab-panel" data-panel="longa">
+          <div class="accordion">
+            <details class="acc" open>
+              <summary><span>núcleo simbólico</span><span class="hint">governante interno</span></summary>
+              <div class="acc-body">
+                <ul>
+                  <li>Atlas: núcleo de ordenação simbólica; governante interno em equilíbrio.</li>
+                  <li>Serena: resolução silenciosa; o sistema nervoso entende que não há ameaça.</li>
+                  <li>Lumine: luz cromática como linguagem do despertar e do insight.</li>
+                  <li>Pulse: tipografia como matéria visual, pensamento em textura.</li>
+                  <li>Kaos: fragmentação proposital mantém a mente em busca.</li>
+                </ul>
+              </div>
+            </details>
+            <details class="acc">
+              <summary><span>campos e efeitos</span><span class="hint">presença aumenta</span></summary>
+              <div class="acc-body">
+                <ul>
+                  <li>Genus: padrão semi-reconhecível ativa reconhecimento sem resolução total.</li>
+                  <li>Uno: tensão que não incomoda — convida.</li>
+                  <li>Horus: olhar fechado leva a experiência para dentro.</li>
+                  <li>Artemis: toque lúdico, quase infantil, reduz resistência psicológica.</li>
+                  <li>Rhea: sentir, pensar e perceber em um fluxo único.</li>
+                  <li>Aion: o tempo desacelera e o observador entra em loop contemplativo.</li>
+                </ul>
+              </div>
+            </details>
+            <details class="acc">
+              <summary><span>DualInfodose</span><span class="hint">78FDS formula</span></summary>
+              <div class="acc-body">
+                <b>DualInfodose:</b> Síntese KODUX → 78FDS Formula dda dopamina sexy =
+                (curiosidade + ambiguidade + recompensa parcial) × continuidade perceptiva;
+                Expansão Bllue → arquitetura visual baseada em “incomplete loops” mantém o cérebro iterando interpretações,
+                liberando dopamina em micro-picos sustentados, semelhante a interfaces digitais bem projetadas — transformando arte
+                em engine cognitiva de engajamento e regulação emocional.
+              </div>
+            </details>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="stack-grid" id="ambiente">
+      <article class="stack">
+        <div class="stack-head">
+          <h3>Como integrar no ambiente</h3>
+          <span class="tiny">cards suaves</span>
+        </div>
+        <div class="stack-body">
+          <div class="stack-row">
+            <div class="card">
+              <div class="card-k"><span class="orb"></span> salas de contemplação</div>
+              <p>Instalação que funciona como pausa visual, útil para leitura lenta e respiração do espaço.</p>
+            </div>
+            <div class="card">
+              <div class="card-k"><span class="orb"></span> áreas gourmet</div>
+              <p>Reduz peso e deixa a conversa circular com menos atrito, sem invadir o clima do encontro.</p>
+            </div>
+            <div class="card">
+              <div class="card-k"><span class="orb"></span> escritórios criativos</div>
+              <p>Ativa curiosidade e mantém presença sem saturar a atenção do time.</p>
+            </div>
+            <div class="card">
+              <div class="card-k"><span class="orb"></span> estudos e flow</div>
+              <p>Ajuda a sustentar foco contemplativo com uma estética limpa e tecnológica.</p>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="stack">
+        <div class="stack-head">
+          <h3>Resumo visual</h3>
+          <span class="tiny">curto + premium</span>
+        </div>
+        <div class="stack-body">
+          <div class="card" style="min-height:auto;">
+            <div class="card-k"><span class="orb"></span> conceito</div>
+            <p>
+              Espelho vivo da mente, com glitch controlado, cores suaves, leitura sem pressa e um logo em pílula
+              para marcar a identidade Infodose de forma limpa, sofisticada e memorável.
+            </p>
+          </div>
+          <div class="card" style="margin-top:12px; min-height:auto;">
+            <div class="card-k"><span class="orb"></span> nome sugerido</div>
+            <p>
+              <b>Eco Código do Silêncio</b> é o nome-base. Também podem funcionar:
+              <i>Espelho Vivo • Infodose</i>, <i>Silêncio em Loop</i> ou <i>Pulse Code</i>.
+            </p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const buttons = document.querySelectorAll('.switcher button');
+      const panels = document.querySelectorAll('.tab-panel');
+      buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          buttons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const tab = btn.dataset.tab;
+          panels.forEach(p => p.classList.toggle('active', p.dataset.panel === tab));
+        });
+      });
+
+      const nameBtn = document.getElementById('nameBtn');
+      const names = [
+        'Eco Código do Silêncio',
+        'Espelho Vivo Infodose',
+        'Silêncio em Loop',
+        'Código que Sente',
+        'Próximo Nível da Mente'
+      ];
+      let idx = 0;
+      nameBtn?.addEventListener('click', () => {
+        idx = (idx + 1) % names.length;
+        const title = document.querySelector('.panel h3');
+        if (title) title.textContent = names[idx];
+        nameBtn.textContent = 'Nome: ' + names[idx];
+      });
+    })();
+  </script>
+</body>
+</html>
