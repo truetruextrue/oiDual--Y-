@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ZPRP · Gerador de Realidades</title>
+  <meta name="theme-color" content="#06080d" />
+  <meta name="color-scheme" content="dark" />
+  <style>
+    :root{
+      --bg:#06080d;
+      --bg2:#0a1018;
+      --panel:rgba(12,18,28,.84);
+      --panel2:rgba(12,18,28,.95);
+      --line:rgba(255,255,255,.08);
+      --text:#eaf4ff;
+      --muted:rgba(234,244,255,.66);
+      --accent:#66ecff;
+      --accent2:#a68cff;
+      --good:#3ef0ae;
+      --warn:#ffd86a;
+      --bad:#ff728f;
+      --shadow:0 24px 80px rgba(0,0,0,.42);
+      --radius:22px;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      --sans: "Montserrat", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--sans);
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 20%, rgba(102,236,255,.08), transparent 28%),
+        radial-gradient(circle at 80% 10%, rgba(166,140,255,.07), transparent 24%),
+        linear-gradient(180deg, #05070b 0%, #070c14 50%, #05070b 100%);
+      overflow-x:hidden;
+    }
+    .ambient{
+      position:fixed; inset:0; pointer-events:none; overflow:hidden; z-index:0;
+    }
+    .blob{
+      position:absolute; border-radius:50%; filter:blur(38px); opacity:.22;
+      width:32vw; height:32vw; mix-blend-mode:screen;
+      animation: float 18s ease-in-out infinite;
+    }
+    .blob.b1{left:-8vw; top:-6vw; background:radial-gradient(circle, rgba(102,236,255,.9), transparent 68%)}
+    .blob.b2{right:-10vw; top:14vh; background:radial-gradient(circle, rgba(166,140,255,.85), transparent 68%); animation-delay:-7s}
+    @keyframes float {50%{transform:translate3d(0,18px,0) scale(1.06)}}
+
+    .app{
+      position:relative;
+      z-index:1;
+      min-height:100%;
+      display:grid;
+      grid-template-rows:auto 1fr;
+    }
+    .topbar{
+      position:sticky; top:0; z-index:4;
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      padding:16px 18px;
+      background:linear-gradient(180deg, rgba(6,8,13,.92), rgba(6,8,13,.64));
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .brand{
+      display:flex; align-items:center; gap:12px; min-width:0;
+    }
+    .pill{
+      width:42px; height:42px; border-radius:16px;
+      background:linear-gradient(180deg, rgba(102,236,255,.18), rgba(166,140,255,.16));
+      border:1px solid rgba(255,255,255,.1);
+      box-shadow:0 0 0 1px rgba(255,255,255,.02), 0 16px 30px rgba(0,0,0,.22);
+      display:grid; place-items:center;
+      font-size:18px;
+    }
+    .brand h1{margin:0;font-size:15px;letter-spacing:1.8px}
+    .brand p{margin:3px 0 0;color:var(--muted);font-size:12px}
+    .status{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+      color:var(--muted); font-size:12px;
+    }
+    .led{color:var(--good); font-weight:800; letter-spacing:1.8px}
+    .grid{
+      display:grid;
+      grid-template-columns:minmax(320px, 420px) minmax(0, 1fr) minmax(320px, 360px);
+      gap:16px;
+      padding:16px;
+      min-height:0;
+    }
+    .panel{
+      background:var(--panel);
+      border:1px solid var(--line);
+      border-radius:26px;
+      box-shadow:var(--shadow);
+      backdrop-filter:blur(16px);
+      min-width:0;
+      overflow:hidden;
+    }
+    .panel .head{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), transparent);
+    }
+    .head strong{font-size:13px; letter-spacing:1.6px; text-transform:uppercase}
+    .head span{font-size:12px; color:var(--muted)}
+    .body{padding:16px; display:grid; gap:14px}
+    .section{display:grid; gap:8px}
+    .section label{font-size:11px; text-transform:uppercase; letter-spacing:1.8px; color:var(--muted)}
+    textarea, input, select, button{
+      font:inherit;
+    }
+    textarea, input, select{
+      width:100%;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(0,0,0,.24);
+      color:var(--text);
+      border-radius:16px;
+      padding:12px 14px;
+      outline:none;
+      box-shadow:none;
+    }
+    textarea{
+      min-height:160px;
+      resize:vertical;
+      line-height:1.45;
+      font-family:var(--mono);
+      font-size:12px;
+    }
+    .mini{min-height:90px}
+    .row{display:grid; gap:10px}
+    .row.two{grid-template-columns:1fr 1fr}
+    .toolbar{display:flex; flex-wrap:wrap; gap:8px}
+    .btn{
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:11px 13px;
+      border-radius:14px;
+      font-weight:800;
+      cursor:pointer;
+      letter-spacing:.3px;
+    }
+    .btn.primary{background:linear-gradient(90deg, rgba(102,236,255,.18), rgba(166,140,255,.18))}
+    .btn.good{background:rgba(62,240,174,.14)}
+    .btn.bad{background:rgba(255,114,143,.14)}
+    .btn:active{transform:translateY(1px)}
+    .tabs{display:flex; gap:8px; flex-wrap:wrap}
+    .tab{
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      cursor:pointer;
+      font-weight:800;
+      font-size:12px;
+    }
+    .tab.active{background:rgba(102,236,255,.14); border-color:rgba(102,236,255,.25)}
+    .pane{display:none}
+    .pane.active{display:grid; gap:12px}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{
+      display:inline-flex; align-items:center; gap:6px;
+      padding:8px 10px; border-radius:999px;
+      background:rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.08);
+      font-size:12px; color:var(--muted)
+    }
+    .list{
+      display:grid; gap:8px; max-height:220px; overflow:auto; padding-right:4px;
+    }
+    .item{
+      display:flex; gap:10px; align-items:flex-start;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:10px 12px;
+      background:rgba(255,255,255,.03);
+    }
+    .item code{
+      font-family:var(--mono);
+      color:var(--accent);
+      font-size:12px;
+      word-break:break-all;
+    }
+    .item small{display:block;color:var(--muted);margin-top:3px;line-height:1.35}
+    .preview-wrap{
+      display:grid;
+      grid-template-rows:auto 1fr;
+      min-height:0;
+    }
+    .preview-head{
+      padding:14px 16px;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+    }
+    .preview-head strong{font-size:13px; letter-spacing:1.5px; text-transform:uppercase}
+    iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      background:#fff;
+      min-height:calc(100vh - 166px);
+    }
+    .preview-meta{
+      display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+      color:var(--muted); font-size:12px;
+    }
+    .preview-box{
+      padding:0;
+      min-height:0;
+      overflow:hidden;
+      display:grid;
+    }
+    .foot{
+      padding:0 16px 16px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.5;
+    }
+    .tree{
+      display:grid; gap:8px; max-height:240px; overflow:auto; padding-right:4px;
+      font-family:var(--mono);
+      font-size:12px;
+    }
+    .tree .node{
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.03);
+    }
+    .tree .node b{color:var(--accent)}
+    .tree .node em{color:var(--muted); font-style:normal}
+    @media (max-width: 1180px){
+      .grid{grid-template-columns:1fr; }
+      iframe{min-height:56vh}
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient">
+    <div class="blob b1"></div>
+    <div class="blob b2"></div>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <div class="pill">💊</div>
+        <div>
+          <h1>ZPRP · Gerador de Realidades</h1>
+          <p>Transforma HTML colado/importado em uma ZPR montável, previewável e fundível.</p>
+        </div>
+      </div>
+      <div class="status">
+        <span class="led">ONLINE</span>
+        <span id="statText">pronto</span>
+      </div>
+    </header>
+
+    <main class="grid">
+      <section class="panel">
+        <div class="head">
+          <strong>Entrada</strong><span>HTML / CSS / JS</span>
+        </div>
+        <div class="body">
+          <div class="tabs">
+            <button class="tab active" data-tab="html">HTML</button>
+            <button class="tab" data-tab="css">CSS</button>
+            <button class="tab" data-tab="js">JS</button>
+            <button class="tab" data-tab="extra">Fusão</button>
+          </div>
+
+          <div class="pane active" data-pane="html">
+            <div class="section">
+              <label>HTML base</label>
+              <textarea id="htmlInput" placeholder="Cole seu HTML aqui..."></textarea>
+            </div>
+            <div class="row two">
+              <div class="section">
+                <label>Importar arquivo</label>
+                <input id="fileInput" type="file" accept=".html,.htm,text/html" />
+              </div>
+              <div class="section">
+                <label>Carregar por URL</label>
+                <input id="urlInput" type="url" placeholder="https://..." />
+              </div>
+            </div>
+            <div class="toolbar">
+              <button class="btn primary" id="loadUrlBtn">Carregar URL</button>
+              <button class="btn" id="scanBtn">Achar IDs</button>
+              <button class="btn" id="extractBtn">Extrair assets</button>
+            </div>
+          </div>
+
+          <div class="pane" data-pane="css">
+            <div class="section">
+              <label>CSS detectado / editável</label>
+              <textarea id="cssInput" class="mini" placeholder="Cole links CSS ou CSS inline..."></textarea>
+            </div>
+            <div class="chips">
+              <span class="chip">1 link por linha</span>
+              <span class="chip">ou CSS inline</span>
+            </div>
+          </div>
+
+          <div class="pane" data-pane="js">
+            <div class="section">
+              <label>JS detectado / editável</label>
+              <textarea id="jsInput" class="mini" placeholder="Cole links JS ou JS inline..."></textarea>
+            </div>
+            <div class="chips">
+              <span class="chip">scripts externos</span>
+              <span class="chip">inlineJs também</span>
+            </div>
+          </div>
+
+          <div class="pane" data-pane="extra">
+            <div class="section">
+              <label>Fundir apps</label>
+              <textarea id="extraInput" placeholder="Cole outro HTML para fundir na mesma ZPR..."></textarea>
+            </div>
+            <div class="section">
+              <label>Tree filter</label>
+              <input id="treeFilter" type="text" placeholder="#id, .class, tag..." />
+            </div>
+          </div>
+
+          <div class="section">
+            <label>Config da ZPR</label>
+            <div class="row two">
+              <input id="targetInput" type="text" placeholder="#app-root" value="#app-root" />
+              <select id="modeSelect">
+                <option value="replace">replace</option>
+                <option value="append">append</option>
+              </select>
+            </div>
+            <div class="row two">
+              <input id="nameInput" type="text" placeholder="Nome do preset / ZPR" value="slot01" />
+              <input id="sourceNameInput" type="text" placeholder="Nome da origem" value="base" />
+            </div>
+          </div>
+
+          <div class="toolbar">
+            <button class="btn good" id="previewBtn">Atualizar preview</button>
+            <button class="btn primary" id="exportBtn">Exportar HTML</button>
+            <button class="btn" id="copyJsonBtn">Copiar JSON</button>
+            <button class="btn bad" id="clearBtn">Limpar</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel preview-wrap preview-box">
+        <div class="preview-head">
+          <strong>Preview</strong>
+          <div class="preview-meta">
+            <span id="countMeta">0 IDs</span>
+            <span id="assetMeta">0 CSS · 0 JS</span>
+          </div>
+        </div>
+        <iframe id="previewFrame" sandbox="allow-scripts allow-forms allow-modals allow-popups"></iframe>
+        <div class="foot">
+          O preview usa um documento completo gerado a partir da entrada. A aba de fusão adiciona um segundo HTML à mesma montagem, mantendo target, CSS e JS editáveis.
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="head">
+          <strong>Saída</strong><span>IDs / Assets / Zonas</span>
+        </div>
+        <div class="body">
+          <div class="section">
+            <label>IDs detectados</label>
+            <div id="idList" class="list"></div>
+          </div>
+
+          <div class="section">
+            <label>Assets detectados</label>
+            <div id="assetList" class="list"></div>
+          </div>
+
+          <div class="section">
+            <label>Árvore de componentes</label>
+            <div id="treeList" class="tree"></div>
+          </div>
+
+          <div class="section">
+            <label>ZPR JSON</label>
+            <textarea id="jsonOut" class="mini" readonly></textarea>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+  (function(){
+    const $ = (sel, root=document) => root.querySelector(sel);
+    const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
+    const state = {
+      html: '',
+      css: '',
+      js: '',
+      extra: '',
+      ids: [],
+      assets: { css: [], js: [] },
+      tree: []
+    };
+
+    const fallbackHTML = `<!DOCTYPE html><html lang="pt-BR"><head><meta charset="utf-8"><title>ZPR Base</title></head><body><div id="app-root"></div></body></html>`;
+
+    function setStat(msg){ $('#statText').textContent = msg; }
+
+    function splitLines(text){
+      return String(text || '').split(/\\n+/).map(s=>s.trim()).filter(Boolean);
+    }
+
+    function isURL(v){
+      return /^(https?:)?\\/\\//i.test(String(v||'')) || /^\\//.test(String(v||''));
+    }
+
+    function parseHTML(html){
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html || fallbackHTML, 'text/html');
+      return doc;
+    }
+
+    function extractAssets(doc){
+      const css = [];
+      const js = [];
+
+      doc.querySelectorAll('link[rel="stylesheet"]').forEach(l => {
+        const href = l.getAttribute('href');
+        if (href) css.push(href);
+      });
+
+      doc.querySelectorAll('script').forEach(s => {
+        const src = s.getAttribute('src');
+        if (src) js.push(src);
+      });
+
+      return {
+        css: [...new Set(css)],
+        js: [...new Set(js)]
+      };
+    }
+
+    function extractIDs(doc){
+      return [...new Set([...doc.querySelectorAll('[id]')].map(el => el.id).filter(Boolean))];
+    }
+
+    function buildTree(doc, filterText=''){
+      const filter = String(filterText || '').trim().toLowerCase();
+      const rootNodes = [];
+      const walker = (node, depth=0) => {
+        if (!node || depth > 7) return [];
+        const children = [...node.children || []];
+        const out = [];
+        for (const child of children) {
+          const tag = child.tagName.toLowerCase();
+          const id = child.id ? `#${child.id}` : '';
+          const cls = child.className && typeof child.className === 'string' ? '.' + child.className.trim().split(/\\s+/).filter(Boolean).join('.') : '';
+          const label = `${tag}${id}${cls}`;
+          if (!filter || label.toLowerCase().includes(filter) || child.id?.toLowerCase().includes(filter) || child.className?.toLowerCase?.().includes(filter)) {
+            out.push({ label, depth, tag, id: child.id || '', cls: child.className || '' });
+          }
+          out.push(...walker(child, depth+1));
+        }
+        return out;
+      };
+      return walker(doc.body, 0);
+    }
+
+    function renderIDs(ids){
+      const el = $('#idList');
+      el.innerHTML = '';
+      if (!ids.length) {
+        el.innerHTML = '<div class="item"><small>Sem IDs detectados.</small></div>';
+        return;
+      }
+      ids.forEach(id => {
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `<input type="radio" name="targetPick" value="#${id}" style="margin-top:3px"><div><code>#${escapeHTML(id)}</code><small>Target sugerido</small></div>`;
+        row.querySelector('input').addEventListener('change', e => {
+          if (e.target.checked) $('#targetInput').value = e.target.value;
+        });
+        el.appendChild(row);
+      });
+    }
+
+    function renderAssets(assets){
+      const el = $('#assetList');
+      el.innerHTML = '';
+      const items = [
+        ...assets.css.map(v => ({type:'CSS', value:v})),
+        ...assets.js.map(v => ({type:'JS', value:v}))
+      ];
+      if (!items.length) {
+        el.innerHTML = '<div class="item"><small>Sem assets detectados.</small></div>';
+        return;
+      }
+      items.forEach(x => {
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `<div><code>${x.type}: ${escapeHTML(x.value)}</code><small>Detectado no HTML base</small></div>`;
+        el.appendChild(row);
+      });
+    }
+
+    function renderTree(tree){
+      const el = $('#treeList');
+      el.innerHTML = '';
+      if (!tree.length) {
+        el.innerHTML = '<div class="node"><em>Sem árvore detectada.</em></div>';
+        return;
+      }
+      tree.slice(0, 180).forEach(node => {
+        const row = document.createElement('div');
+        row.className = 'node';
+        row.style.marginLeft = `${Math.min(node.depth, 6) * 12}px`;
+        row.innerHTML = `<b>${escapeHTML(node.label)}</b>`;
+        el.appendChild(row);
+      });
+    }
+
+    function escapeHTML(str){
+      return String(str || '')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;');
+    }
+
+    function gatherSourceHTML(){
+      const main = $('#htmlInput').value.trim();
+      const extra = $('#extraInput').value.trim();
+      const parts = [];
+      if (main) parts.push(main);
+      if (extra) parts.push(extra);
+      if (!parts.length) return fallbackHTML;
+      if (parts.length === 1) return parts[0];
+      return parts.map((p, idx) => `<!-- ZPR SOURCE ${idx+1} -->\n${p}`).join('\n');
+    }
+
+    function parseInputs(){
+      state.html = $('#htmlInput').value;
+      state.css = $('#cssInput').value;
+      state.js = $('#jsInput').value;
+      state.extra = $('#extraInput').value;
+      const doc = parseHTML(gatherSourceHTML());
+      state.ids = extractIDs(doc);
+      state.assets = extractAssets(doc);
+      state.tree = buildTree(doc, $('#treeFilter').value);
+      $('#countMeta').textContent = `${state.ids.length} IDs`;
+      $('#assetMeta').textContent = `${state.assets.css.length} CSS · ${state.assets.js.length} JS`;
+      renderIDs(state.ids);
+      renderAssets(state.assets);
+      renderTree(state.tree);
+      $('#jsonOut').value = JSON.stringify(buildConfig(), null, 2);
+      return doc;
+    }
+
+    function collectManualAssets(text){
+      return splitLines(text).filter(Boolean);
+    }
+
+    function buildConfig(){
+      return {
+        version: 1,
+        type: 'zprp',
+        name: $('#nameInput').value.trim() || 'slot01',
+        sourceName: $('#sourceNameInput').value.trim() || 'base',
+        target: $('#targetInput').value.trim() || '#app-root',
+        mode: $('#modeSelect').value,
+        html: state.html,
+        extra: state.extra,
+        css: collectManualAssets($('#cssInput').value),
+        js: collectManualAssets($('#jsInput').value),
+        ids: state.ids,
+        assets: state.assets,
+        createdAt: new Date().toISOString()
+      };
+    }
+
+    function buildFullHTML(){
+      const cfg = buildConfig();
+      const html = cfg.html || fallbackHTML;
+      const cssList = cfg.css || [];
+      const jsList = cfg.js || [];
+      const doc = parseHTML(html);
+      const head = doc.head || doc.documentElement.appendChild(doc.createElement('head'));
+      const body = doc.body || doc.documentElement.appendChild(doc.createElement('body'));
+
+      // inject config as data script
+      const cfgScript = doc.createElement('script');
+      cfgScript.type = 'application/json';
+      cfgScript.id = 'di-zpr-config';
+      cfgScript.textContent = JSON.stringify(cfg, null, 2);
+
+      const helperScript = doc.createElement('script');
+      helperScript.textContent = `
+(function(){
+  window.ZPRP = window.ZPRP || {};
+  ZPRP.config = JSON.parse(document.getElementById('di-zpr-config')?.textContent || '{}');
+  ZPRP.mount = function(){
+    console.log('ZPRP mounted', ZPRP.config);
+  };
+})();`;
+
+      const extraHTML = cfg.extra ? parseHTML(cfg.extra).body.innerHTML : '';
+      if (extraHTML) {
+        const wrapper = doc.createElement('div');
+        wrapper.innerHTML = extraHTML;
+        while (wrapper.firstChild) body.appendChild(wrapper.firstChild);
+      }
+
+      cssList.forEach(href => {
+        const link = doc.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = href;
+        head.appendChild(link);
+      });
+
+      jsList.forEach(src => {
+        const s = doc.createElement('script');
+        s.src = src;
+        s.defer = true;
+        body.appendChild(s);
+      });
+
+      head.appendChild(cfgScript);
+      body.appendChild(helperScript);
+
+      if (!doc.querySelector(cfg.target)) {
+        const targetEl = doc.createElement('div');
+        targetEl.id = cfg.target.replace(/^#/, '') || 'app-root';
+        body.appendChild(targetEl);
+      }
+
+      return '<!DOCTYPE html>\n' + doc.documentElement.outerHTML;
+    }
+
+    function updatePreview(){
+      const full = buildFullHTML();
+      $('#previewFrame').srcdoc = full;
+      $('#jsonOut').value = JSON.stringify(buildConfig(), null, 2);
+      setStat('preview atualizado');
+      return full;
+    }
+
+    function downloadHTML(filename, content){
+      const blob = new Blob([content], {type:'text/html;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 800);
+    }
+
+    function downloadJSON(filename, content){
+      const blob = new Blob([content], {type:'application/json;charset=utf-8'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(url), 800);
+    }
+
+    // Tabs
+    $$('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        $$('.tab').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        $$('.pane').forEach(p => p.classList.toggle('active', p.dataset.pane === tab));
+      });
+    });
+
+    // File input
+    $('#fileInput').addEventListener('change', async (e) => {
+      const f = e.target.files?.[0];
+      if (!f) return;
+      const text = await f.text();
+      $('#htmlInput').value = text;
+      setStat(`arquivo carregado: ${f.name}`);
+      parseInputs();
+      updatePreview();
+    });
+
+    $('#loadUrlBtn').addEventListener('click', async () => {
+      const url = $('#urlInput').value.trim();
+      if (!url) return;
+      setStat('carregando URL...');
+      try {
+        const res = await fetch(url, {credentials:'same-origin'});
+        const text = await res.text();
+        $('#htmlInput').value = text;
+        setStat('URL carregada');
+        parseInputs();
+        updatePreview();
+      } catch (err) {
+        setStat('falha ao carregar URL');
+        console.error(err);
+      }
+    });
+
+    $('#scanBtn').addEventListener('click', () => {
+      parseInputs();
+      setStat('IDs analisados');
+    });
+
+    $('#extractBtn').addEventListener('click', () => {
+      const doc = parseInputs();
+      const assets = extractAssets(doc);
+      $('#cssInput').value = assets.css.join('\n');
+      $('#jsInput').value = assets.js.join('\n');
+      setStat('assets extraídos');
+      updatePreview();
+    });
+
+    $('#previewBtn').addEventListener('click', () => {
+      parseInputs();
+      updatePreview();
+    });
+
+    $('#exportBtn').addEventListener('click', () => {
+      const out = buildFullHTML();
+      downloadHTML(`zprp-${$('#nameInput').value.trim() || 'slot01'}.html`, out);
+      setStat('HTML exportado');
+    });
+
+    $('#copyJsonBtn').addEventListener('click', async () => {
+      const json = JSON.stringify(buildConfig(), null, 2);
+      try {
+        await navigator.clipboard.writeText(json);
+        setStat('JSON copiado');
+      } catch {
+        downloadJSON(`zprp-${$('#nameInput').value.trim() || 'slot01'}.json`, json);
+        setStat('JSON baixado');
+      }
+    });
+
+    $('#clearBtn').addEventListener('click', () => {
+      $('#htmlInput').value = '';
+      $('#cssInput').value = '';
+      $('#jsInput').value = '';
+      $('#extraInput').value = '';
+      $('#jsonOut').value = '';
+      $('#idList').innerHTML = '';
+      $('#assetList').innerHTML = '';
+      $('#treeList').innerHTML = '';
+      $('#previewFrame').srcdoc = fallbackHTML;
+      setStat('limpo');
+    });
+
+    const debounce = (fn, wait=350) => {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), wait);
+      };
+    };
+
+    const liveUpdate = debounce(() => { parseInputs(); updatePreview(); }, 400);
+    ['htmlInput','cssInput','jsInput','extraInput','treeFilter','targetInput','modeSelect','nameInput','sourceNameInput'].forEach(id => {
+      const el = $('#'+id);
+      if (!el) return;
+      el.addEventListener('input', liveUpdate);
+      el.addEventListener('change', liveUpdate);
+    });
+
+    // seed example from the previously created ZPR base
+    $('#htmlInput').value = `<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <title>ZPR Base · Fusion Card</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+</head>
+<body>
+  <div id="app-root"></div>
+</body>
+</html>`;
+    $('#cssInput').value = `https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css
+https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css
+https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css`;
+    $('#jsInput').value = `https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/di_loadApp.core.js
+https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/di_loader_panel.v3.js`;
+    parseInputs();
+    updatePreview();
+  })();
+  </script>
+</body>
+</html>

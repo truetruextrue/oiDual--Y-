@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KODUX ZPR GENERATOR</title>
+    
+    <!-- Tailwind CSS (Atlas) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons (Lumine) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Estilos customizados (Serena) -->
+    <style>
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.5s ease-out forwards; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilos dos botões de navegação */
+        .nav-btn { color: #94a3b8; border-color: transparent; }
+        .nav-btn:hover { background-color: #1e293b; }
+        
+        .nav-btn.active-kaos { background-color: rgba(8, 51, 68, 0.5); color: #22d3ee; border-color: rgba(22, 78, 99, 0.5); }
+        .nav-btn.active-genus { background-color: rgba(49, 46, 129, 0.5); color: #818cf8; border-color: rgba(55, 48, 163, 0.5); }
+        .nav-btn.active-kobllux { background-color: rgba(88, 28, 135, 0.5); color: #c084fc; border-color: rgba(107, 33, 168, 0.5); }
+        .nav-btn.active-lumine { background-color: rgba(2, 44, 34, 0.5); color: #34d399; border-color: rgba(6, 78, 59, 0.5); }
+    </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-cyan-900 selection:text-cyan-100 flex flex-col">
+
+    <!-- ============================================================================
+         PROTOCOLO ZPR - GERADOR DE REALIDADES (VANILLA MONÓLITO)
+         ============================================================================
+         [ARQUÉTIPO: KODUX - Ativo]
+         Coordena, nomeia, injeta e mantém a coerência entre a intenção do usuário
+         e a execução do estado, agora em sua forma mais pura (Vanilla DOM).
+         [SOMBRA: KOBLLUX]
+         Lembra que a identidade precisa de contraste. A fusão não é apenas juntar
+         códigos, é criar uma nova densidade simbólica.
+         ============================================================================ -->
+
+    <!-- HEADER BLLUE -->
+    <header class="bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between shadow-lg z-10">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400">
+                <i data-lucide="zap" class="w-5 h-5"></i>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-wider text-slate-100 flex items-center gap-2">
+                    KODUX <span class="text-cyan-500 font-light">ZPR GENERATOR</span>
+                </h1>
+                <p class="text-xs text-slate-500 font-mono">Protocolo de Montagem // Realidade Plugável</p>
+            </div>
+        </div>
+        <div class="hidden md:flex gap-2 text-xs font-mono">
+            <span class="px-2 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700">Ativo: KODUX</span>
+            <span class="px-2 py-1 rounded bg-slate-950 text-slate-600 border border-slate-800">Sombra: KOBLLUX</span>
+        </div>
+    </header>
+
+    <main class="flex-1 flex flex-col md:flex-row overflow-hidden">
+        
+        <!-- MENU LATERAL (Aion) -->
+        <aside class="w-full md:w-64 bg-slate-900/50 border-r border-slate-800 flex md:flex-col overflow-x-auto md:overflow-y-auto shrink-0">
+            <div class="p-4 hidden md:block">
+                <h2 class="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Arquétipos</h2>
+            </div>
+            <nav class="flex md:flex-col gap-1 p-2">
+                <button onclick="switchTab('kaos')" id="btn-nav-kaos" class="nav-btn active-kaos flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap border">
+                    <i data-lucide="code" class="w-[18px] h-[18px]"></i> KAOS <span class="text-[10px] ml-auto opacity-50 hidden md:inline">Entrada</span>
+                </button>
+                <button onclick="switchTab('genus')" id="btn-nav-genus" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap border">
+                    <i data-lucide="layers" class="w-[18px] h-[18px]"></i> GENUS <span class="text-[10px] ml-auto opacity-50 hidden md:inline">Estrutura</span>
+                </button>
+                <button onclick="switchTab('kobllux')" id="btn-nav-kobllux" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap border">
+                    <i data-lucide="combine" class="w-[18px] h-[18px]"></i> KOBLLUX <span class="text-[10px] ml-auto opacity-50 hidden md:inline">Fusão</span>
+                </button>
+                <button onclick="switchTab('lumine')" id="btn-nav-lumine" class="nav-btn flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap border">
+                    <i data-lucide="eye" class="w-[18px] h-[18px]"></i> LUMINE <span class="text-[10px] ml-auto opacity-50 hidden md:inline">Saída</span>
+                </button>
+            </nav>
+        </aside>
+
+        <!-- ÁREA DE TRABALHO CENTRAL (Pulse) -->
+        <section class="flex-1 p-4 md:p-6 overflow-y-auto bg-slate-950 relative custom-scrollbar">
+            
+            <!-- ABA 1: KAOS -->
+            <div id="tab-kaos" class="tab-content active max-w-4xl mx-auto">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                        <i data-lucide="code" class="text-cyan-500"></i> Domínio do KAOS
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-1">
+                        O Kaos não é erro; é campo fértil. Cole aqui seu HTML, CSS ou Script bruto. O sistema irá desmontar a ilusão e extrair os padrões.
+                    </p>
+                </div>
+                
+                <textarea
+                    id="raw-code"
+                    placeholder="<!-- Cole o código bruto aqui... -->&#10;<div id='meu-app'>...</div>&#10;<link rel='stylesheet' href='...' />"
+                    class="w-full h-96 bg-slate-900 border border-slate-700 rounded-lg p-4 font-mono text-sm text-cyan-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none shadow-inner"
+                ></textarea>
+                
+                <div class="mt-4 flex justify-end">
+                    <button 
+                        id="btn-process-kaos"
+                        onclick="processRawCode()"
+                        class="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold py-2 px-6 rounded flex items-center gap-2 opacity-50 cursor-not-allowed transition-all"
+                        disabled
+                    >
+                        Extrair Estrutura (Genus) <i data-lucide="arrow-right" class="w-[18px] h-[18px]"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ABA 2: GENUS -->
+            <div id="tab-genus" class="tab-content max-w-4xl mx-auto">
+                <div class="mb-6 flex justify-between items-end">
+                    <div>
+                        <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                            <i data-lucide="layers" class="text-indigo-500"></i> Estrutura GENUS
+                        </h2>
+                        <p class="text-slate-400 text-sm mt-1">
+                            Genus categoriza, dá nome e cria árvore. Transforme massa em mapa.
+                        </p>
+                    </div>
+                    <button 
+                        onclick="saveCurrentZone()"
+                        class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-semibold py-2 px-4 rounded text-sm flex items-center gap-2 transition-all"
+                    >
+                        <i data-lucide="save" class="w-4 h-4"></i> Salvar Zona
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Info Base -->
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-lg space-y-4 shadow-lg">
+                        <div>
+                            <label class="block text-xs font-mono text-slate-500 mb-1">zoneName (Preset)</label>
+                            <input 
+                                type="text" 
+                                id="genus-presetName"
+                                class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                            />
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-xs font-mono text-slate-500 mb-1">target (ID Alvo)</label>
+                                <select 
+                                    id="genus-target"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none appearance-none"
+                                >
+                                    <!-- Options populadas via JS -->
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-mono text-slate-500 mb-1">mode</label>
+                                <select 
+                                    id="genus-mode"
+                                    class="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none appearance-none"
+                                >
+                                    <option value="replace">replace (Sobrescrever)</option>
+                                    <option value="append">append (Adicionar)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-mono text-slate-500 mb-1">HTML Fragmentado</label>
+                            <textarea 
+                                id="genus-html"
+                                class="w-full h-32 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-indigo-300 focus:border-indigo-500 focus:outline-none resize-none custom-scrollbar"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Arrays e Inline -->
+                    <div class="bg-slate-900 border border-slate-800 p-5 rounded-lg space-y-4 shadow-lg">
+                        <div>
+                            <label class="flex justify-between items-end text-xs font-mono text-slate-500 mb-1">
+                                <span>CSS Array (Atmosfera)</span>
+                            </label>
+                            <textarea 
+                                id="genus-cssUrls"
+                                placeholder="https://.../style.css"
+                                class="w-full h-24 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-emerald-300 focus:border-indigo-500 focus:outline-none resize-none whitespace-pre custom-scrollbar"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-slate-500 mb-1">JS Array (Comportamento)</label>
+                            <textarea 
+                                id="genus-jsUrls"
+                                placeholder="https://.../script.js"
+                                class="w-full h-24 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-amber-300 focus:border-indigo-500 focus:outline-none resize-none whitespace-pre custom-scrollbar"
+                            ></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-mono text-slate-500 mb-1">inlineJs (Ativação Local)</label>
+                            <textarea 
+                                id="genus-inlineJs"
+                                class="w-full h-24 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-cyan-300 focus:border-indigo-500 focus:outline-none resize-none custom-scrollbar"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA 3: KOBLLUX -->
+            <div id="tab-kobllux" class="tab-content max-w-4xl mx-auto">
+                <div class="mb-6">
+                    <h2 class="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                        <i data-lucide="combine" class="text-purple-500"></i> Matriz KOBLLUX
+                    </h2>
+                    <p class="text-slate-400 text-sm mt-1">
+                        A camada de fusão e densidade simbólica. Una realidades em uma mesma respiração.
+                    </p>
+                </div>
+
+                <div id="kobllux-empty" class="bg-slate-900/50 border border-dashed border-slate-700 rounded-xl p-10 text-center block">
+                    <i data-lucide="layers" class="text-slate-600 mx-auto mb-3 w-8 h-8"></i>
+                    <p class="text-slate-400">Salve pelo menos duas zonas na aba GENUS para ativar a fusão Kobllux.</p>
+                </div>
+
+                <div id="kobllux-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden">
+                    <!-- Zonas Salvas renderizadas aqui via JS -->
+                </div>
+            </div>
+
+            <!-- ABA 4: LUMINE -->
+            <div id="tab-lumine" class="tab-content max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 h-[calc(100vh-12rem)] min-h-[500px]">
+                
+                <!-- Código Gerado -->
+                <div class="flex-1 flex flex-col bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-2xl h-full">
+                    <div class="bg-slate-950 border-b border-slate-800 p-3 flex justify-between items-center shrink-0">
+                        <h3 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                            <i data-lucide="code" class="w-4 h-4"></i> Código Final (Preset ZPR)
+                        </h3>
+                        <button 
+                            onclick="copyZPRCode()"
+                            class="text-xs bg-slate-800 hover:bg-emerald-900 hover:text-emerald-300 text-slate-400 px-3 py-1 rounded transition-colors"
+                        >
+                            Copiar Override
+                        </button>
+                    </div>
+                    <div class="p-4 overflow-y-auto flex-1 custom-scrollbar">
+                        <pre id="lumine-code-block" class="text-xs font-mono text-slate-300 leading-relaxed whitespace-pre-wrap"><code></code></pre>
+                    </div>
+                </div>
+
+                <!-- Preview Live -->
+                <div class="flex-1 flex flex-col bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-2xl h-full">
+                    <div class="bg-slate-950 border-b border-slate-800 p-3 flex justify-between items-center shrink-0">
+                        <h3 class="text-sm font-bold text-cyan-400 flex items-center gap-2">
+                            <i data-lucide="eye" class="w-4 h-4"></i> Zona Viva (Preview)
+                        </h3>
+                        <span class="text-[10px] text-slate-500 border border-slate-700 px-2 rounded-full">Runtime Simulado</span>
+                    </div>
+                    <div class="flex-1 bg-slate-950 relative">
+                        <iframe 
+                            id="lumine-preview-frame"
+                            title="ZPR Preview"
+                            class="w-full h-full border-0 absolute inset-0"
+                            sandbox="allow-scripts allow-same-origin"
+                        ></iframe>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+    </main>
+
+    <!-- SCRIPT DO MOTOR (Artemis / Vitalis) -->
+    <script>
+        // Inicializa ícones Lucide
+        lucide.createIcons();
+
+        // --- ESTADOS DO SISTEMA (Atlas) ---
+        const state = {
+            activeTab: 'kaos',
+            extractedIds: ['app-root', 'orb-core', 'brn-arch'],
+            savedZones: [],
+            zoneConfig: {
+                presetName: 'nova_zona_01',
+                target: '#app-root',
+                mode: 'replace',
+                html: '',
+                cssUrls: [],
+                jsUrls: [],
+                inlineJs: 'console.log("ZPR Ativada: " + DI_PRESETS.active);'
+            }
+        };
+
+        // --- CONTROLE DE NAVEGAÇÃO ---
+        function switchTab(tabId) {
+            state.activeTab = tabId;
+            
+            // Ocultar todas as abas
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            // Resetar estilos dos botões
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = 'nav-btn flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap border';
+            });
+            
+            // Ativar aba e botão correspondente
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            document.getElementById(`btn-nav-${tabId}`).classList.add(`active-${tabId}`);
+
+            // Gatilhos específicos por aba
+            if (tabId === 'genus') updateGenusUI();
+            if (tabId === 'kobllux') updateKoblluxUI();
+            if (tabId === 'lumine') updateLumineUI();
+        }
+
+        // --- DOMÍNIO KAOS ---
+        const rawCodeInput = document.getElementById('raw-code');
+        const processBtn = document.getElementById('btn-process-kaos');
+
+        rawCodeInput.addEventListener('input', () => {
+            if (rawCodeInput.value.trim().length > 0) {
+                processBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                processBtn.removeAttribute('disabled');
+            } else {
+                processBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                processBtn.setAttribute('disabled', 'true');
+            }
+        });
+
+        // [ARQUÉTIPO: GENUS - Ativo]
+        function processRawCode() {
+            const rawCode = rawCodeInput.value;
+            if (!rawCode) return;
+
+            try {
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(rawCode, 'text/html');
+
+                // 1. Extrair IDs (Potenciais Targets)
+                const allElementsWithId = doc.querySelectorAll('[id]');
+                const ids = Array.from(allElementsWithId).map(el => el.id);
+                if (ids.length > 0) {
+                    state.extractedIds = [...new Set([...state.extractedIds, ...ids])];
+                }
+
+                // 2. Extrair Links CSS
+                const links = Array.from(doc.querySelectorAll('link[rel="stylesheet"]')).map(el => el.href);
+                
+                // 3. Extrair Scripts Externos
+                const scripts = Array.from(doc.querySelectorAll('script[src]')).map(el => el.src);
+                
+                // 4. Extrair JS Inline
+                const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])')).map(el => el.textContent).join('\n');
+
+                // 5. Limpar o body para pegar apenas o HTML estrutural
+                doc.querySelectorAll('script, link, style, meta, title').forEach(el => el.remove());
+                const cleanHtml = doc.body.innerHTML.trim();
+
+                // Atualizar Estado (Nova)
+                state.zoneConfig.html = cleanHtml || state.zoneConfig.html;
+                state.zoneConfig.cssUrls = [...new Set([...state.zoneConfig.cssUrls, ...links])].filter(Boolean);
+                state.zoneConfig.jsUrls = [...new Set([...state.zoneConfig.jsUrls, ...scripts])].filter(Boolean);
+                state.zoneConfig.inlineJs = (state.zoneConfig.inlineJs + '\n' + inlineScripts).trim();
+
+                // Mudar para estruturação
+                switchTab('genus');
+            } catch (e) {
+                console.error("Erro ao processar o Kaos:", e);
+                alert("Erro ao processar o código. Veja o console.");
+            }
+        }
+
+        // --- DOMÍNIO GENUS ---
+        const domGenus = {
+            presetName: document.getElementById('genus-presetName'),
+            target: document.getElementById('genus-target'),
+            mode: document.getElementById('genus-mode'),
+            html: document.getElementById('genus-html'),
+            cssUrls: document.getElementById('genus-cssUrls'),
+            jsUrls: document.getElementById('genus-jsUrls'),
+            inlineJs: document.getElementById('genus-inlineJs'),
+        };
+
+        function updateGenusUI() {
+            // Atualizar Dropdown de Targets
+            domGenus.target.innerHTML = '';
+            state.extractedIds.forEach(id => {
+                const opt = document.createElement('option');
+                opt.value = `#${id}`;
+                opt.textContent = `#${id}`;
+                domGenus.target.appendChild(opt);
+            });
+
+            // Preencher campos
+            domGenus.presetName.value = state.zoneConfig.presetName;
+            domGenus.target.value = state.zoneConfig.target;
+            domGenus.mode.value = state.zoneConfig.mode;
+            domGenus.html.value = state.zoneConfig.html;
+            domGenus.cssUrls.value = state.zoneConfig.cssUrls.join('\n');
+            domGenus.jsUrls.value = state.zoneConfig.jsUrls.join('\n');
+            domGenus.inlineJs.value = state.zoneConfig.inlineJs;
+        }
+
+        // Listener reativo (Vitalis) para atualizar o state quando o usuário edita a aba Genus
+        Object.keys(domGenus).forEach(key => {
+            domGenus[key].addEventListener('input', (e) => {
+                if (key === 'cssUrls' || key === 'jsUrls') {
+                    state.zoneConfig[key] = e.target.value.split('\n').filter(Boolean);
+                } else {
+                    state.zoneConfig[key] = e.target.value;
+                }
+            });
+        });
+
+        // --- MATRIZ KOBLLUX ---
+        // [ARQUÉTIPO: KOBLLUX - Ativo]
+        function saveCurrentZone() {
+            if (!state.zoneConfig.presetName) return;
+            const newZone = JSON.parse(JSON.stringify(state.zoneConfig)); // Deep copy simple
+            newZone.id = Date.now().toString();
+            state.savedZones.push(newZone);
+            
+            // Feedback visual rápido
+            const btn = document.querySelector('[onclick="saveCurrentZone()"]');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> Salvo!`;
+            btn.classList.add('bg-emerald-700', 'text-white', 'border-emerald-600');
+            lucide.createIcons();
+            
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+                btn.classList.remove('bg-emerald-700', 'text-white', 'border-emerald-600');
+                lucide.createIcons();
+            }, 1000);
+        }
+
+        function removeZone(id) {
+            state.savedZones = state.savedZones.filter(z => z.id !== id);
+            updateKoblluxUI();
+        }
+
+        function mergeZones(zoneIdToMerge) {
+            const zoneB = state.savedZones.find(z => z.id === zoneIdToMerge);
+            if(!zoneB) return;
+            const zoneA = state.zoneConfig; // A zona atual carregada na interface
+
+            const mergedName = `${zoneA.presetName}_X_${zoneB.presetName}`;
+            
+            state.zoneConfig = {
+                presetName: mergedName,
+                target: zoneA.target, // Mantém do primário (Atlas)
+                mode: 'append', // Fusão exige append
+                html: `${zoneA.html}\n<!-- FUSÃO KOBLLUX -->\n${zoneB.html}`,
+                cssUrls: [...new Set([...zoneA.cssUrls, ...zoneB.cssUrls])],
+                jsUrls: [...new Set([...zoneA.jsUrls, ...zoneB.jsUrls])],
+                inlineJs: `// --- INLINE ${zoneA.presetName} ---\n${zoneA.inlineJs}\n\n// --- INLINE ${zoneB.presetName} ---\n${zoneB.inlineJs}`
+            };
+            
+            switchTab('genus');
+        }
+
+        function updateKoblluxUI() {
+            const emptyState = document.getElementById('kobllux-empty');
+            const grid = document.getElementById('kobllux-grid');
+
+            if (state.savedZones.length < 2) {
+                emptyState.classList.remove('hidden');
+                grid.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.classList.remove('hidden');
+                
+                grid.innerHTML = state.savedZones.map(zone => `
+                    <div class="bg-slate-900 border border-purple-900/30 rounded-lg p-4 relative group hover:border-purple-500/50 transition-colors">
+                        <button 
+                            onclick="removeZone('${zone.id}')"
+                            class="absolute top-3 right-3 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                            title="Remover"
+                        >
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                        <h3 class="text-lg font-bold text-purple-300 mb-2">${zone.presetName}</h3>
+                        <div class="text-xs text-slate-500 font-mono space-y-1 mb-4">
+                            <p>Target: <span class="text-slate-300">${zone.target}</span></p>
+                            <p>CSS Links: <span class="text-slate-300">${zone.cssUrls.length}</span></p>
+                            <p>JS Links: <span class="text-slate-300">${zone.jsUrls.length}</span></p>
+                        </div>
+                        
+                        <button 
+                            onclick="mergeZones('${zone.id}')"
+                            class="w-full bg-purple-900/20 hover:bg-purple-900/40 text-purple-300 border border-purple-900 rounded py-2 text-sm flex items-center justify-center gap-2 transition-colors"
+                        >
+                            <i data-lucide="combine" class="w-4 h-4"></i> Fundir com Zona Atual
+                        </button>
+                    </div>
+                `).join('');
+                lucide.createIcons();
+            }
+        }
+
+        // --- DOMÍNIO LUMINE ---
+        // [ARQUÉTIPO: LUMINE - Ativo]
+        function generateZPRCode() {
+            const formatArray = (arr) => {
+                if (!arr || arr.length === 0) return '[]';
+                return `[\n    ${arr.map(item => `"${item}"`).join(',\n    ')}\n  ]`;
+            };
+
+            return `di_setPreset("${state.zoneConfig.presetName}", {
+  target: "${state.zoneConfig.target}",
+  mode: "${state.zoneConfig.mode}",
+  html: [
+    \`${state.zoneConfig.html.replace(/`/g, '\\`')}\`
+  ],
+  css: ${formatArray(state.zoneConfig.cssUrls)},
+  js: ${formatArray(state.zoneConfig.jsUrls)},
+  inlineJs: [
+    \`${state.zoneConfig.inlineJs.replace(/`/g, '\\`')}\`
+  ]
+});
+
+// Ativação da Realidade:
+// di_applyPreset("${state.zoneConfig.presetName}");`;
+        }
+
+        function getPreviewHtml() {
+            const scriptInjecao = generateZPRCode() + `\ndi_applyPreset("${state.zoneConfig.presetName}");`;
+            
+            return `
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <title>ZPR Preview</title>
+                <style>
+                    body { background-color: #0f172a; color: #cbd5e1; font-family: monospace; padding: 20px; }
+                    #app-root, #orb-core, #brn-arch { border: 1px dashed #334155; padding: 10px; margin: 10px 0; min-height: 50px; position: relative; }
+                    #app-root::before { content: '#app-root'; position: absolute; top: -10px; left: 10px; background: #0f172a; padding: 0 5px; font-size: 10px; color: #94a3b8; }
+                    #orb-core::before { content: '#orb-core'; position: absolute; top: -10px; left: 10px; background: #0f172a; padding: 0 5px; font-size: 10px; color: #94a3b8; }
+                    #brn-arch::before { content: '#brn-arch'; position: absolute; top: -10px; left: 10px; background: #0f172a; padding: 0 5px; font-size: 10px; color: #94a3b8; }
+                </style>
+            </head>
+            <body>
+                <div id="app-root"></div>
+                <div id="orb-core"></div>
+                <div id="brn-arch"></div>
+                
+                <script>
+                // Mini DI Override Engine (Vitalis) simulado para o iframe
+                (function (global) {
+                    const DI_OVERRIDE = { presets: {} };
+                    function getTarget(sel) { return document.querySelector(sel) || document.body; }
+                    global.di_setPreset = function(name, preset) { DI_OVERRIDE.presets[name] = preset; };
+                    global.di_applyPreset = async function(name) {
+                        const cfg = DI_OVERRIDE.presets[name];
+                        if(!cfg) return;
+                        const target = getTarget(cfg.target);
+                        if (cfg.mode === "replace") target.innerHTML = "";
+                        
+                        // Add CSS
+                        (cfg.css || []).forEach(href => {
+                            const l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l);
+                        });
+                        
+                        // Add HTML
+                        (cfg.html || []).forEach(h => {
+                            const wrap = document.createElement("div"); wrap.innerHTML = h;
+                            while (wrap.firstChild) target.appendChild(wrap.firstChild);
+                        });
+
+                        // Executa Inline JS via setTimeout para garantir que o DOM renderizou
+                        setTimeout(() => {
+                            (cfg.inlineJs || []).forEach(code => {
+                                try { eval(code); } catch(e) { console.error("Erro ZPR Inline:", e); }
+                            });
+                        }, 100);
+                    };
+                })(window);
+                <\/script>
+                <script>
+                    ${scriptInjecao}
+                <\/script>
+            </body>
+            </html>
+            `;
+        }
+
+        function updateLumineUI() {
+            document.querySelector('#lumine-code-block code').textContent = generateZPRCode();
+            document.getElementById('lumine-preview-frame').srcdoc = getPreviewHtml();
+        }
+
+        function copyZPRCode() {
+            const code = generateZPRCode();
+            navigator.clipboard.writeText(code).then(() => {
+                alert("Código ZPR copiado para a área de transferência!");
+            }).catch(err => {
+                console.error('Erro ao copiar: ', err);
+            });
+        }
+
+    </script>
+</body>
+</html>
+
+

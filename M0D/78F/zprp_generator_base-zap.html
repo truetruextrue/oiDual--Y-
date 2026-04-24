@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KODUX ZPR GENERATOR</title>
+
+  <!-- Tailwind via CDN pra não perder os styles -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React + ReactDOM + Babel pra rodar JSX no navegador -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Lucide Icons via CDN -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    /* Scrollbar customizada do teu código original */
+   .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+   .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+   .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
+   .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #475569; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useRef } = React;
+
+    // Pega os ícones do Lucide global
+    const { Layers, Zap, Combine, Eye, Code, Save, Trash2, Plus, ArrowRight } = lucide;
+
+    // ============================================================================
+    // PROTOCOLO ZPR - GERADOR DE REALIDADES - HTML STANDALONE
+    // ============================================================================
+
+    const App = () => {
+      // --- ESTADOS DO SISTEMA (Atlas) ---
+      const [activeTab, setActiveTab] = useState('kaos');
+      const [rawCode, setRawCode] = useState('');
+
+      const [zoneConfig, setZoneConfig] = useState({
+        presetName: 'nova_zona_01',
+        target: '#app-root',
+        mode: 'replace',
+        html: '',
+        cssUrls: [],
+        jsUrls: [],
+        inlineJs: 'console.log("ZPR Ativada: " + DI_PRESETS.active);'
+      });
+
+      const [extractedIds, setExtractedIds] = useState(['app-root', 'orb-core', 'brn-arch']);
+      const [savedZones, setSavedZones] = useState([]);
+
+      // --- MÉTODOS DE PROCESSAMENTO (Artemis / Genus) ---
+      const processRawCode = () => {
+        if (!rawCode) return;
+
+        try {
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(rawCode, 'text/html');
+
+          const allElementsWithId = doc.querySelectorAll('[id]');
+          const ids = Array.from(allElementsWithId).map(el => el.id);
+          if (ids.length > 0) {
+            setExtractedIds([...new Set([...extractedIds,...ids])]);
+          }
+
+          const links = Array.from(doc.querySelectorAll('link[rel="stylesheet"]')).map(el => el.href);
+          const scripts = Array.from(doc.querySelectorAll('script[src]')).map(el => el.src);
+          const inlineScripts = Array.from(doc.querySelectorAll('script:not([src])')).map(el => el.textContent).join('\n');
+
+          doc.querySelectorAll('script, link, style, meta, title').forEach(el => el.remove());
+          const cleanHtml = doc.body.innerHTML.trim();
+
+          setZoneConfig(prev => ({
+           ...prev,
+            html: cleanHtml || prev.html,
+            cssUrls: [...new Set([...prev.cssUrls,...links])].filter(Boolean),
+            jsUrls: [...new Set([...prev.jsUrls,...scripts])].filter(Boolean),
+            inlineJs: (prev.inlineJs + '\n' + inlineScripts).trim()
+          }));
+
+          setActiveTab('genus');
+        } catch (e) {
+          console.error("Erro ao processar o Kaos:", e);
+        }
+      };
+
+      // --- MÉTODOS DE FUSÃO (Kobllux) ---
+      const saveCurrentZone = () => {
+        if (!zoneConfig.presetName) return;
+        const newZone = {...zoneConfig, id: Date.now() };
+        setSavedZones([...savedZones, newZone]);
+      };
+
+      const mergeZones = (zoneA, zoneB) => {
+        const mergedName = `${zoneA.presetName}_X_${zoneB.presetName}`;
+
+        setZoneConfig({
+          presetName: mergedName,
+          target: zoneA.target,
+          mode: 'append',
+          html: `${zoneA.html}\n<!-- FUSÃO -->\n${zoneB.html}`,
+          cssUrls: [...new Set([...zoneA.cssUrls,...zoneB.cssUrls])],
+          jsUrls: [...new Set([...zoneA.jsUrls,...zoneB.jsUrls])],
+          inlineJs: `// --- INLINE ${zoneA.presetName} ---\n${zoneA.inlineJs}\n\n// --- INLINE ${zoneB.presetName} ---\n${zoneB.inlineJs}`
+        });
+
+        setActiveTab('genus');
+      };
+
+      const removeZone = (id) => {
+        setSavedZones(savedZones.filter(z => z.id!== id));
+      };
+
+      // --- GERAÇÃO DE SAÍDA (Lumine) ---
+      const generateZPRCode = () => {
+        const formatArray = (arr) => {
+          if (!arr || arr.length === 0) return '[]';
+          return `[\n ${arr.map(item => `"${item}"`).join(',\n ')}\n ]`;
+        };
+
+        return `di_setPreset("${zoneConfig.presetName}", {
+  target: "${zoneConfig.target}",
+  mode: "${zoneConfig.mode}",
+  html: [
+    \`${zoneConfig.html.replace(/`/g, '\\`')}\`
+  ],
+  css: ${formatArray(zoneConfig.cssUrls)},
+  js: ${formatArray(zoneConfig.jsUrls)},
+  inlineJs: [
+    \`${zoneConfig.inlineJs.replace(/`/g, '\\`')}\`
+  ]
+});
+
+// Ativação da Realidade:
+// di_applyPreset("${zoneConfig.presetName}");`;
+      };
+
+      const getPreviewHtml = () => {
+        const scriptInjecao = generateZPRCode() + `\ndi_applyPreset("${zoneConfig.presetName}");`;
+
+        return `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <title>ZPR Preview</title>
+            <style>
+              body { background-color: #0f172a; color: #cbd5e1; font-family: monospace; padding: 20px; }
+              #app-root, #orb-core, #brn-arch { border: 1px dashed #334155; padding: 10px; margin: 10px 0; min-height: 50px; position: relative; }
+              #app-root::before { content: '#app-root'; position: absolute; top: -10px; left: 10px; background: #0f172a; padding: 0 5px; font-size: 10px; color: #94a3b8; }
+              #orb-core::before { content: '#orb-core'; position: absolute; top: -10px; left: 10px; background: #0f172a; padding: 0 5px; font-size: 10px; color: #94a3b8; }
+              #brn-arch::before { content: '#brn-arch'; position: absolute; top: -10px; left: 10px; background: #0f172a; padding: 0 5px; font-size: 10px; color: #94a3b8; }
+            </style>
+          </head>
+          <body>
+            <div id="app-root"></div>
+            <div id="orb-core"></div>
+            <div id="brn-arch"></div>
+
+            <script>
+              (function (global) {
+                const DI_OVERRIDE = { presets: {} };
+                function getTarget(sel) { return document.querySelector(sel) || document.body; }
+                global.di_setPreset = function(name, preset) { DI_OVERRIDE.presets[name] = preset; };
+                global.di_applyPreset = async function(name) {
+                  const cfg = DI_OVERRIDE.presets[name];
+                  if(!cfg) return;
+                  const target = getTarget(cfg.target);
+                  if (cfg.mode === "replace") target.innerHTML = "";
+
+                  (cfg.css || []).forEach(href => {
+                    const l = document.createElement("link"); l.rel = "stylesheet"; l.href = href; document.head.appendChild(l);
+                  });
+
+                  (cfg.html || []).forEach(h => {
+                    const wrap = document.createElement("div"); wrap.innerHTML = h;
+                    while (wrap.firstChild) target.appendChild(wrap.firstChild);
+                  });
+
+                  setTimeout(() => {
+                     (cfg.inlineJs || []).forEach(code => {
+                       try { eval(code); } catch(e) { console.error("Erro ZPR Inline:", e); }
+                     });
+                  }, 100);
+                };
+              })(window);
+            </script>
+            <script>
+              ${scriptInjecao}
+            </script>
+          </body>
+          </html>
+        `;
+      };
+
+      // Helper pra renderizar ícones Lucide
+      const Icon = ({ icon: IconComponent, size = 18, className = "" }) => {
+        const ref = useRef(null);
+        useEffect(() => {
+          if (ref.current) {
+            ref.current.innerHTML = '';
+            const svg = lucide.createElement(IconComponent);
+            svg.setAttribute('width', size);
+            svg.setAttribute('height', size);
+            if (className) svg.setAttribute('class', className);
+            ref.current.appendChild(svg);
+          }
+        }, [IconComponent, size, className]);
+        return <span ref={ref}></span>;
+      };
+
+      // --- RENDERIZAÇÃO DA UI ---
+      return (
+        <div className="min-h-screen bg-slate-950 text-slate-300 font-sans selection:bg-cyan-900 selection:text-cyan-100 flex flex-col">
+          <header className="bg-slate-900 border-b border-slate-800 p-4 flex items-center justify-between shadow-lg z-10">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400">
+                <Icon icon={Zap} size={20} />
+              </div>
+              <div>
+                <h1 className="text-xl font-bold tracking-wider text-slate-100 flex items-center gap-2">
+                  KODUX <span className="text-cyan-500 font-light">ZPR GENERATOR</span>
+                </h1>
+                <p className="text-xs text-slate-500 font-mono">Protocolo de Montagem // Realidade Plugável</p>
+              </div>
+            </div>
+            <div className="hidden md:flex gap-2 text-xs font-mono">
+              <span className="px-2 py-1 rounded bg-slate-800 text-slate-400 border border-slate-700">Ativo: KODUX</span>
+              <span className="px-2 py-1 rounded bg-slate-950 text-slate-600 border border-slate-800">Sombra: KOBLLUX</span>
+            </div>
+          </header>
+
+          <main className="flex-1 flex flex-col md:flex-row overflow-hidden">
+            <aside className="w-full md:w-64 bg-slate-900/50 border-r border-slate-800 flex md:flex-col overflow-x-auto md:overflow-y-auto">
+              <div className="p-4 hidden md:block">
+                <h2 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4">Arquétipos</h2>
+              </div>
+              <nav className="flex md:flex-col gap-1 p-2">
+                <button onClick={() => setActiveTab('kaos')} className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'kaos'? 'bg-cyan-950/50 text-cyan-400 border border-cyan-900/50' : 'hover:bg-slate-800 text-slate-400'}`}>
+                  <Icon icon={Code} size={18} /> KAOS <span className="text-[10px] ml-auto opacity-50 hidden md:inline">Entrada</span>
+                </button>
+                <button onClick={() => setActiveTab('genus')} className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'genus'? 'bg-indigo-950/50 text-indigo-400 border border-indigo-900/50' : 'hover:bg-slate-800 text-slate-400'}`}>
+                  <Icon icon={Layers} size={18} /> GENUS <span className="text-[10px] ml-auto opacity-50 hidden md:inline">Estrutura</span>
+                </button>
+                <button onClick={() => setActiveTab('kobllux')} className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'kobllux'? 'bg-purple-950/50 text-purple-400 border border-purple-900/50' : 'hover:bg-slate-800 text-slate-400'}`}>
+                  <Icon icon={Combine} size={18} /> KOBLLUX <span className="text-[10px] ml-auto opacity-50 hidden md:inline">Fusão</span>
+                </button>
+                <button onClick={() => setActiveTab('lumine')} className={`flex items-center gap-3 px-4 py-3 rounded-md text-sm font-medium transition-colors whitespace-nowrap ${activeTab === 'lumine'? 'bg-emerald-950/50 text-emerald-400 border border-emerald-900/50' : 'hover:bg-slate-800 text-slate-400'}`}>
+                  <Icon icon={Eye} size={18} /> LUMINE <span className="text-[10px] ml-auto opacity-50 hidden md:inline">Saída</span>
+                </button>
+              </nav>
+            </aside>
+
+            <section className="flex-1 p-4 md:p-6 overflow-y-auto bg-slate-950 relative">
+              {activeTab === 'kaos' && (
+                <div className="max-w-4xl mx-auto">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                      <Icon icon={Code} className="text-cyan-500" /> Domínio do KAOS
+                    </h2>
+                    <p className="text-slate-400 text-sm mt-1">
+                      O Kaos não é erro; é campo fértil. Cole aqui seu HTML, CSS ou Script bruto. O sistema irá desmontar a ilusão e extrair os padrões.
+                    </p>
+                  </div>
+
+                  <textarea
+                    value={rawCode}
+                    onChange={(e) => setRawCode(e.target.value)}
+                    placeholder={`<!-- Cole o código bruto aqui... -->\n<div id='meu-app'>...</div>\n<link rel='stylesheet' href='...' />`}
+                    className="w-full h-96 bg-slate-900 border border-slate-700 rounded-lg p-4 font-mono text-sm text-cyan-200 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 resize-none shadow-inner"
+                  />
+
+                  <div className="mt-4 flex justify-end">
+                    <button
+                      onClick={processRawCode}
+                      disabled={!rawCode}
+                      className="bg-cyan-600 hover:bg-cyan-500 text-slate-950 font-bold py-2 px-6 rounded flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+                    >
+                      Extrair Estrutura (Genus) <Icon icon={ArrowRight} size={18} />
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'genus' && (
+                <div className="max-w-4xl mx-auto">
+                   <div className="mb-6 flex justify-between items-end">
+                    <div>
+                      <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                        <Icon icon={Layers} className="text-indigo-500" /> Estrutura GENUS
+                      </h2>
+                      <p className="text-slate-400 text-sm mt-1">
+                        Genus categoriza, dá nome e cria árvore. Transforme massa em mapa.
+                      </p>
+                    </div>
+                    <button
+                      onClick={saveCurrentZone}
+                      className="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-600 font-semibold py-2 px-4 rounded text-sm flex items-center gap-2 transition-all"
+                    >
+                      <Icon icon={Save} size={16} /> Salvar Zona
+                    </button>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-lg space-y-4">
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 mb-1">zoneName (Preset)</label>
+                        <input
+                          type="text"
+                          value={zoneConfig.presetName}
+                          onChange={(e) => setZoneConfig({...zoneConfig, presetName: e.target.value})}
+                          className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none"
+                        />
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-xs font-mono text-slate-500 mb-1">target (ID Alvo)</label>
+                          <select
+                            value={zoneConfig.target}
+                            onChange={(e) => setZoneConfig({...zoneConfig, target: e.target.value})}
+                            className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none appearance-none"
+                          >
+                            {extractedIds.map(id => (
+                              <option key={id} value={`#${id}`}>#{id}</option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs font-mono text-slate-500 mb-1">mode</label>
+                          <select
+                            value={zoneConfig.mode}
+                            onChange={(e) => setZoneConfig({...zoneConfig, mode: e.target.value})}
+                            className="w-full bg-slate-950 border border-slate-700 rounded p-2 text-sm text-slate-200 focus:border-indigo-500 focus:outline-none appearance-none"
+                          >
+                            <option value="replace">replace (Sobrescrever)</option>
+                            <option value="append">append (Adicionar)</option>
+                          </select>
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 mb-1">HTML Fragmentado</label>
+                        <textarea
+                          value={zoneConfig.html}
+                          onChange={(e) => setZoneConfig({...zoneConfig, html: e.target.value})}
+                          className="w-full h-32 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-indigo-300 focus:border-indigo-500 focus:outline-none resize-none"
+                        />
+                      </div>
+                    </div>
+
+                    <div className="bg-slate-900 border border-slate-800 p-5 rounded-lg space-y-4">
+                      <div>
+                        <label className="flex justify-between items-end text-xs font-mono text-slate-500 mb-1">
+                          <span>CSS Array (Atmosfera)</span>
+                        </label>
+                        <textarea
+                          value={zoneConfig.cssUrls.join('\n')}
+                          onChange={(e) => setZoneConfig({...zoneConfig, cssUrls: e.target.value.split('\n').filter(Boolean)})}
+                          placeholder="https://.../style.css"
+                          className="w-full h-24 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-emerald-300 focus:border-indigo-500 focus:outline-none resize-none whitespace-pre"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 mb-1">JS Array (Comportamento)</label>
+                        <textarea
+                          value={zoneConfig.jsUrls.join('\n')}
+                          onChange={(e) => setZoneConfig({...zoneConfig, jsUrls: e.target.value.split('\n').filter(Boolean)})}
+                          placeholder="https://.../script.js"
+                          className="w-full h-24 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-amber-300 focus:border-indigo-500 focus:outline-none resize-none whitespace-pre"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-xs font-mono text-slate-500 mb-1">inlineJs (Ativação Local)</label>
+                        <textarea
+                          value={zoneConfig.inlineJs}
+                          onChange={(e) => setZoneConfig({...zoneConfig, inlineJs: e.target.value})}
+                          className="w-full h-24 bg-slate-950 border border-slate-700 rounded p-2 text-xs font-mono text-cyan-300 focus:border-indigo-500 focus:outline-none resize-none"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {activeTab === 'kobllux' && (
+                <div className="max-w-4xl mx-auto">
+                  <div className="mb-6">
+                    <h2 className="text-2xl font-bold text-slate-100 flex items-center gap-2">
+                      <Icon icon={Combine} className="text-purple-500" /> Matriz KOBLLUX
+                    </h2>
+                    <p className="text-slate-400 text-sm mt-1">
+                      A camada de fusão e densidade simbólica. Una realidades em uma mesma respiração.
+                    </p>
+                  </div>
+
+                  {savedZones.length < 2? (
+                    <div className="bg-slate-900/50 border border-dashed border-slate-700 rounded-xl p-10 text-center">
+                      <Icon icon={Layers} className="text-slate-600 mx-auto mb-3" size={32} />
+                      <p className="text-slate-400">Salve pelo menos duas zonas na aba GENUS para ativar a fusão Kobllux.</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      {savedZones.map((zone, idx) => (
+                        <div key={zone.id} className="bg-slate-900 border border-purple-900/30 rounded-lg p-4 relative group hover:border-purple-500/50 transition-colors">
+                          <button
+                            onClick={() => removeZone(zone.id)}
+                            className="absolute top-3 right-3 text-slate-600 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity"
+                          >
+                            <Icon icon={Trash2} size={16} />
+                          </button>
+                          <h3 className="text-lg font-bold text-purple-300 mb-2">{zone.presetName}</h3>
+                          <div className="text-xs text-slate-500 font-mono space-y-1 mb-4">
+                            <p>Target: <span className="text-slate-300">{zone.target}</span></p>
+                            <p>CSS Links: <span className="text-slate-300">{zone.cssUrls.length}</span></p>
+                            <p>JS Links: <span className="text-slate-300">{zone.jsUrls.length}</span></p>
+                          </div>
+
+                          <button
+                            onClick={() => mergeZones(zoneConfig, zone)}
+                            className="w-full bg-purple-900/20 hover:bg-purple-900/40 text-purple-300 border border-purple-900 rounded py-2 text-sm flex items-center justify-center gap-2 transition-colors"
+                          >
+                            <Icon icon={Combine} size={16} /> Fundir com Zona Atual
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {activeTab === 'lumine' && (
+                <div className="max-w-6xl mx-auto flex flex-col lg:flex-row gap-6 h-[calc(100vh-12rem)]">
+                  <div className="flex-1 flex flex-col bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-2xl">
+                    <div className="bg-slate-950 border-b border-slate-800 p-3 flex justify-between items-center">
+                      <h3 className="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                        <Icon icon={Code} size={16} /> Código Final (Preset ZPR)
+                      </h3>
+                      <button
+                        onClick={() => {
+                          navigator.clipboard.writeText(generateZPRCode());
+                          alert("Código ZPR copiado para a área de transferência!");
+                        }}
+                        className="text-xs bg-slate-800 hover:bg-emerald-900 hover:text-emerald-300 text-slate-400 px-3 py-1 rounded transition-colors"
+                      >
+                        Copiar Override
+                      </button>
+                    </div>
+                    <div className="p-4 overflow-y-auto flex-1 custom-scrollbar">
+                      <pre className="text-xs font-mono text-slate-300 leading-relaxed whitespace-pre-wrap">
+                        <code>{generateZPRCode()}</code>
+                      </pre>
+                    </div>
+                  </div>
+
+                  <div className="flex-1 flex flex-col bg-slate-900 border border-slate-800 rounded-lg overflow-hidden shadow-2xl">
+                    <div className="bg-slate-950 border-b border-slate-800 p-3 flex justify-between items-center">
+                      <h3 className="text-sm font-bold text-cyan-400 flex items-center gap-2">
+                        <Icon icon={Eye} size={16} /> Zona Viva (Preview)
+                      </h3>
+                      <span className="text-[10px] text-slate-500 border border-slate-700 px-2 rounded-full">Runtime Simulado</span>
+                    </div>
+                    <div className="flex-1 bg-slate-950 relative">
+                      <iframe
+                        title="ZPR Preview"
+                        srcDoc={getPreviewHtml()}
+                        className="w-full h-full border-0 absolute inset-0"
+                        sandbox="allow-scripts allow-same-origin"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+            </section>
+          </main>
+        </div>
+      );
+    };
+
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
