@@ -3,7 +3,7 @@ function loadBackgroundFromStorage() {
   const opacity = localStorage.getItem('di_bg_opacity');
   const blend = localStorage.getItem('di_bg_blend');
   if (url && url !== 'null') {
-    applyBackgroundToDOM(url, opacity || 18, blend || 'multiply');
+    applyBackgroundToDOM(url, opacity || 15, blend || 'overlay');
     // sincroniza UI da drawer
   }
 }
