@@ -176,3 +176,12 @@ details.collapsavel.is-collapsed .acc-content {
     font-size: 12px;
   }
 }
+.hero-card { max-width: 360px; transition: all 0.5s cubic-bezier(0.2,0.9,0.4,1.1); }
+.hero-card.is-expanded { max-width: 100%; cursor: default; }
+.hero-card__frame { border-radius: 28px; box-shadow: 0 20px 40px -12px rgba(0,0,0,0.6); }
+.hero-card__frame img { aspect-ratio: 1/1; object-fit: cover; }
+.hero-card.is-expanded .hero-card__frame img { aspect-ratio: auto; max-height: 70vh; object-fit: contain; }
+.infodose-layer { display: none; backdrop-filter: blur(16px); }
+.infodose-layer.is-active { display: block; }
+.catalog-nav, .footer-quote { 
+  display: none !important; }
