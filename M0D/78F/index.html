@@ -126,14 +126,14 @@
       <div class="brand">
         <div class="pill-logo"></div>
         <div>
-          <h1>INFODOSE</h1>
-          <p>Catálogo Premium • 78Frames</p>
+          <h1></h1>
+          <p>•</p>
         </div>
-      </div>
+     
       <div class="nav-group">
         <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
         <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
-      </div>
+      </div> </div>
     </header>
 
     <div id="app-root"></div>
@@ -167,20 +167,129 @@
 
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0-ovr.js"></script>
-<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/hero-card-light.js"></script>
 
+
+<!-- HERO CARD INJECTOR + PERSISTÊNCIA CORRIGIDA (híbrido) -->
 <script>
-function loadBackgroundFromStorage() {
-  const url = localStorage.getItem('di_bg_url');
-  const opacity = localStorage.getItem('di_bg_opacity');
-  const blend = localStorage.getItem('di_bg_blend');
-  if (url && url !== 'null') {
-    applyBackgroundToDOM(url, opacity || 15, blend || 'overlay');
-    // sincroniza UI da drawer
-  }
-}
-// Executado no DOMContentLoaded e no message do iframe
+(function(){
+  // --------------------------------------------------------------
+  // 1. Aguarda o catálogo original (inline-0.js) carregar
+  // --------------------------------------------------------------
+  let catalogLoaded = false;
+  let retries = 0;
+  const maxRetries = 30; // 3 segundos
 
-</script>
+  function waitForCatalog(callback) {
+    if (window.catalogo78Frames && Array.isArray(window.catalogo78Frames) && window.catalogo78Frames.length) {
+      catalogLoaded = true;
+      callback(window.catalogo78Frames);
+      return;
+    }
+    if (retries++ >= maxRetries) {
+      console.warn('Catálogo não encontrado, usando fallback');
+      callback(null);
+      return;
+    }
+    setTimeout(() => waitForCatalog(callback), 100);
+  }
+
+  // --------------------------------------------------------------
+  // 2. CORREÇÃO DEFINITIVA DO BACKGROUND (FIM DO BUG)
+  // --------------------------------------------------------------
+  function fixBackgroundPersistence() {
+    // Função que lê do localStorage e aplica na camada fixa
+    function loadAndApplyBackground() {
+      const bgUrl = localStorage.getItem('di_bg_url');
+      const opacity = localStorage.getItem('di_bg_opacity');
+      const blend = localStorage.getItem('di_bg_blend') || 'multiply';
+      const bgLayer = document.getElementById('bg-layer-fixed');
+      if (!bgLayer) return;
+      
+      if (bgUrl && bgUrl !== 'null' && bgUrl !== '') {
+        bgLayer.style.backgroundImage = `url(${bgUrl})`;
+        bgLayer.style.backgroundSize = 'cover';
+        bgLayer.style.backgroundPosition = 'center';
+        const parsedOp = opacity ? parseFloat(opacity) / 100 : 0.15;
+        bgLayer.style.opacity = parsedOp;
+        bgLayer.style.mixBlendMode = blend;
+        document.body.classList.add('di-bg-active');
+        document.body.style.setProperty('--di-bg-opacity', parsedOp);
+      } else {
+        bgLayer.style.backgroundImage = '';
+        document.body.classList.remove('di-bg-active');
+      }
+    }
+
+    // Sobrescreve as funções da drawer original para salvar também no localStorage
+    // (caso a drawer use métodos próprios – garantia extra)
+    if (window.updateBgAttr) {
+      const originalUpdateBgAttr = window.updateBgAttr;
+      window.updateBgAttr = function(attr, val) {
+        originalUpdateBgAttr(attr, val);
+        if (attr === 'opacity') {
+          localStorage.setItem('di_bg_opacity', val);
+        } else if (attr === 'blend') {
+          localStorage.setItem('di_bg_blend', val);
+        }
+        loadAndApplyBackground(); // reaplica
+      };
+    }
+
+    // Hook para upload de imagem (se existir handleUpload)
+    if (window.handleUpload) {
+      const originalHandleUpload = window.handleUpload;
+      window.handleUpload = function(input) {
+        originalHandleUpload(input);
+        // Após o upload, o localStorage já foi salvo? Depende da implementação.
+        // Forçamos leitura novamente após 200ms
+        setTimeout(loadAndApplyBackground, 200);
+      };
+    }
+
+    // Aplica imediatamente ao carregar a página
+    loadAndApplyBackground();
+
+    // Sincroniza com iframe, se existir
+    const iframe = document.querySelector('iframe');
+    if (iframe) {
+      iframe.addEventListener('load', () => {
+        iframe.contentWindow.postMessage({ type: 'DI_BG_SYNC' }, '*');
+      });
+    }
+
+    // Listener global para sincronia
+    window.addEventListener('message', (e) => {
+      if (e.data?.type === 'DI_BG_SYNC') {
+        loadAndApplyBackground();
+      }
+    });
+  }
+
+ 
+  // --------------------------------------------------------------
+  // 4. ESCONDER ELEMENTOS INDESEJADOS (footer, next/prev)
+  // --------------------------------------------------------------
+  function hideLegacyUI() {
+    const style = document.createElement('style');
+    style.textContent = `
+     /* .catalog-nav, .footer-quote, .nav-group .nav-count { display: none !important; }*/
+      /* Opcional: se quiser esconder os botões originais de next/prev caso existam fora do .catalog-nav */
+      #btn-prev, #btn-next, { display: none !important; }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // --------------------------------------------------------------
+  // 5. INICIALIZAÇÃO
+  // --------------------------------------------------------------
+  waitForCatalog((frames) => {
+    // createHeroCard(frames);
+    fixBackgroundPersistence();
+    hideLegacyUI();
+  });
+})();
+</script> 
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/hero-card-light.js"></script>
 
 </body></html>
