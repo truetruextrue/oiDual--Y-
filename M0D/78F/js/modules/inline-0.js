@@ -290,16 +290,16 @@
       const bgOpacity = el('bgOpacity');
       const bgBlend = el('bgBlend');
 
-      let newOp = 15;
-      let newBlend = 'overlay';
+      let newOp = 50;
+      let newBlend = 'multiply';
 
-      if (mode === 'ghost') {
+      if (mode === 'Espiritual') {
         newOp = 10;
         newBlend = 'luminosity';
-      } else if (mode === 'vivid') {
+      } else if (mode === 'Vivasce') {
         newOp = 35;
         newBlend = 'overlay';
-      } else if (mode === 'deep') {
+      } else if (mode === 'Subconsciente') {
         newOp = 50;
         newBlend = 'multiply';
       }
