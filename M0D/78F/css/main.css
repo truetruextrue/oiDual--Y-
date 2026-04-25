@@ -183,7 +183,7 @@
     .hero { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
     .hero-media {
       position: relative; background: #000; border-radius: var(--radius); overflow: hidden;
-      min-height: 600px; border: 1px solid var(--line); box-shadow: var(--shadow);
+      min-height: 478px; border: 1px solid var(--line); box-shadow: var(--shadow);
       cursor: grab; user-select: none;
     }
     .hero-media:active { cursor: grabbing; }
