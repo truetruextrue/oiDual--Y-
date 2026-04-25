@@ -168,4 +168,19 @@
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0-ovr.js"></script>
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/hero-card-light.js"></script>
+
+<script>
+function loadBackgroundFromStorage() {
+  const url = localStorage.getItem('di_bg_url');
+  const opacity = localStorage.getItem('di_bg_opacity');
+  const blend = localStorage.getItem('di_bg_blend');
+  if (url && url !== 'null') {
+    applyBackgroundToDOM(url, opacity || 15, blend || 'overlay');
+    // sincroniza UI da drawer
+  }
+}
+// Executado no DOMContentLoaded e no message do iframe
+
+</script>
+
 </body></html>
