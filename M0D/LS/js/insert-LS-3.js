@@ -2,7 +2,7 @@
   'use strict';
 
   // ========== CONFIGURAÇÃO ==========
-  const LS_KEYS = {
+  /* const LS_KEYS = {
     HTML: 'lastHTML',
     COLL: 'nebula_collapsed',
     USER_SYMBOL: 'userSymbol',
@@ -20,8 +20,26 @@
     { key: 'uno:bg', label: 'Fundo Custom' },
     { key: 'infodose:cssCustom', label: 'CSS Custom' },
     { key: 'infodose:voices', label: 'Vozes Arquetípicas' }
-  ];
+  ];*/
+  
+const LS_KEYS = {
+      HTML:'lastHTML',
+      USER_SYMBOL:'userSymbol',
+      SKS:'di_apiKey',
+      SK_ACTIVE:'openrouter_active'
+    };
 
+    const DISABLED_KEY = 'infodose:presets.disabled';
+    const PRESETS = [
+      { key:'di_userName', label:'Usuário' },
+      { key:'di_assistantName', label:'Assistente' },
+      { key:'di_apiKey', label:'Chave OpenRouter (legacy)' },
+      { key:'di_modelName', label:'Modelo IA' },
+      { key:'uno:theme', label:'Tema' },
+      { key:'uno:bg', label:'Fundo Custom' },
+      { key:'infodose:cssCustom', label:'CSS Custom' },
+      { key:'infodose:voices', label:'Vozes Arquetípicas' }
+    ];
   // ========== VERIFICA SE JÁ EXISTE ==========
   if (document.getElementById('baulite-root')) return;
 
