@@ -6,7 +6,7 @@
 
       --bg-page: #f6f8fc;
       --bg-panel: #ffffff;
-      --bg-panel-soft: rgba(255, 255, 255, 0.78);
+      --bg-panel-soft: rgba(239, 239, 239, 0.39);
 
       --ink: #141824;
       --text: #1f2430;
@@ -23,10 +23,10 @@
       --chip-ink: #42506c;
       --max: 1260px;
       --glass: blur(16px) saturate(170%);
-      --drawer-width: 420px;
+      --drawer-width: 390px;
 
-      --bg-opacity: 0.15;
-      --bg-blend: overlay;
+      --bg-opacity: 0.18;
+      --bg-blend: multiply;
 
       --z-base: 0;
       --z-content: 100;
