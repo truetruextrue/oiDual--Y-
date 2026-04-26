@@ -2,18 +2,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Feeling Decor | Viviani Costa</title>
-  <!-- PWA METADATA & VIEWPORT FIX -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#05070a">
-
-<!-- iOS Support -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<link rel="apple-touch-icon" href="./icon-192.png">
-
-<!-- Manifest -->
-<link rel="manifest" href="./manifest.json">
-    
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -37,7 +26,189 @@
     .font-serif { font-family: 'Playfair Display', serif; }
     .font-tech { font-family: 'Space Mono', monospace; }
 
- .hero{
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5vw;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 12vw, 15rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+    }
+
+    .sub-title {
+      font-size: clamp(1.5rem, 4vw, 4rem);
+      line-height: 1.1;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.8);
+    }
+
+    .mandala {
+      position: absolute;
+      width: 40vw;
+      opacity: 0.05;
+      animation: rotate 100s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-lux {
+      background: black;
+      color: white;
+      padding: 1.5rem 3rem;
+      border-radius: 99px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+
+    .btn-lux:hover {
+      background: var(--brand-gold);
+      transform: scale(1.05);
+    }
+  </style>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+    :root{
+      --brand-gold:#c5a059;
+      --brand-dark:#05070a;
+      --bg:#ffffff;
+      --text:#101318;
+      --muted:#5f6572;
+      --soft:#f6f4ef;
+      --line:rgba(16,19,24,.10);
+      --glass:rgba(255,255,255,.72);
+      --glass-border:rgba(255,255,255,.35);
+      --container:1280px;
+    }
+
+    *{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{
+      font-family:'Inter',sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.5;
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased;
+      text-rendering:optimizeLegibility;
+    }
+
+    img, video, iframe{display:block;max-width:100%}
+
+    .font-serif{font-family:'Playfair Display',serif}
+    .font-tech{font-family:'Space Mono',monospace}
+
+    .container{
+      width:min(var(--container), calc(100% - 40px));
+      margin:0 auto;
+    }
+
+    .header{
+      position:fixed;
+      top:0;left:0;right:0;
+      z-index:1000;
+      background:rgba(255,255,255,.84);
+      backdrop-filter:blur(18px);
+      border-bottom:1px solid var(--line);
+    }
+
+    .header-inner{
+      min-height:84px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:24px;
+    }
+
+    .brand{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      font-weight:900;
+      font-size:1.08rem;
+      letter-spacing:-.05em;
+      text-decoration:none;
+      color:var(--text);
+      white-space:nowrap;
+    }
+
+    .brand-mark{
+      width:40px;height:40px;
+      display:grid;
+      place-items:center;
+      border-radius:14px;
+      background:#111;
+      color:#fff;
+      font-family:'Playfair Display',serif;
+      font-size:1.1rem;
+      box-shadow:0 10px 24px rgba(0,0,0,.12);
+    }
+
+    .nav{
+      display:flex;
+      gap:28px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    .nav a{
+      text-decoration:none;
+      color:var(--text);
+      font-weight:600;
+      font-size:.82rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      opacity:.82;
+      transition:opacity .2s ease,color .2s ease, transform .2s ease;
+    }
+    .nav a:hover{opacity:1;color:var(--brand-gold);transform:translateY(-1px)}
+
+    main{padding-top:84px}
+
+    section{
+      padding:104px 0;
+      position:relative;
+    }
+
+    .hero{
       min-height:calc(100vh - 84px);
       display:flex;
       align-items:center;
@@ -111,7 +282,7 @@
       letter-spacing:.08em;
       text-transform:uppercase;
       font-size:.78rem;
-      transition:transform .22s ease,background .22s ease,border-color .22s ease,color .22s ease;
+      transition:transform .22s ease,background .22s ease,border-color .22s ease,color .22s ease, box-shadow .22s ease;
       white-space:nowrap;
     }
 
@@ -125,6 +296,7 @@
       transform:translateY(-2px);
       background:var(--brand-gold);
       border-color:var(--brand-gold);
+      box-shadow:0 18px 40px rgba(197,160,89,.18);
     }
 
     .btn-line{
@@ -156,7 +328,7 @@
       display:block;
     }
 
- .hero-badge{
+    .hero-badge{
       position:absolute;
       left:18px;
       bottom:18px;
@@ -295,6 +467,20 @@
       font-size:.96rem;
     }
 
+    .divider-band{
+      background:
+        linear-gradient(180deg, rgba(5,7,10,.92), rgba(5,7,10,.92)),
+        url('https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/bg.jpg') center/cover fixed;
+      color:#fff;
+    }
+
+    .glass-card{
+      background:var(--glass);
+      backdrop-filter:blur(16px);
+      border:1px solid var(--glass-border);
+      border-radius:24px;
+    }
+
     .gallery{
       display:grid;
       grid-template-columns:repeat(2,1fr);
@@ -424,7 +610,41 @@
       transform:translateY(0);
     }
 
-    @media (max-width:980px){
+    .bg-fixed-custom{
+      background-image:url('https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/bg.jpg');
+      background-attachment:fixed;
+      background-size:cover;
+      background-position:center;
+    }
+
+    .mandala{
+      position:absolute;
+      width:40vw;
+      opacity:.05;
+      animation:rotate 100s linear infinite;
+      pointer-events:none;
+    }
+
+    .mandala-spin{
+      animation:rotateSlow 60s linear infinite;
+      opacity:.07;
+    }
+
+    @keyframes rotate{
+      from{transform:rotate(0deg)}
+      to{transform:rotate(360deg)}
+    }
+
+    @keyframes rotateSlow{
+      from{transform:rotate(0deg)}
+      to{transform:rotate(360deg)}
+    }
+
+    ::-webkit-scrollbar{width:6px}
+    ::-webkit-scrollbar-track{background:#f1f1f1}
+    ::-webkit-scrollbar-thumb{background:var(--brand-gold);border-radius:10px}
+
+    @media (max-width: 980px){
       .hero-grid,
       .split{grid-template-columns:1fr}
       .services-grid{grid-template-columns:1fr 1fr}
@@ -437,7 +657,7 @@
       }
     }
 
-    @media (max-width:640px){
+    @media (max-width: 640px){
       .container{width:min(var(--container), calc(100% - 24px))}
       section{padding:78px 0}
       .header-inner{min-height:74px}
@@ -446,165 +666,9 @@
       .hero-actions{flex-direction:column;align-items:stretch}
       .btn-lux,.btn-line{width:100%}
       .gallery-item{min-height:420px}
+      .contact-section{padding-top:90px}
     }
-
-    section {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 5vw;
-      position: relative;
-    }
-
-    .hero-title {
-      font-size: clamp(3rem, 12vw, 15rem);
-      line-height: 0.85;
-      letter-spacing: -0.04em;
-    }
-
-    .sub-title {
-      font-size: clamp(1.5rem, 4vw, 4rem);
-      line-height: 1.1;
-    }
-
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    .reveal.active {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .parallax-bg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      z-index: -1;
-      object-fit: cover;
-      filter: brightness(0.8);
-    }
-
-    .mandala {
-      position: absolute;
-      width: 40vw;
-      opacity: 0.05;
-      animation: rotate 100s linear infinite;
-      pointer-events: none;
-    }
-
-    @keyframes rotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .btn-lux {
-      background: black;
-      color: white;
-      padding: 1.5rem 3rem;
-      border-radius: 99px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      transition: all 0.3s;
-    }
-
-    .btn-lux:hover {
-      background: var(--brand-gold);
-      transform: scale(1.05);
-    }
-  </style>
-<style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
-    :root {
-      --brand-gold: #c5a059;
-      --brand-dark: #05070a;
-      --glass: rgba(255, 255, 255, 0.7);
-      --glass-border: rgba(255, 255, 255, 0.3);
-    }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: #fff;
-      color: var(--brand-dark);
-      overflow-x: hidden;
-    }
-
-    .font-serif { font-family: 'Playfair Display', serif; }
-    .font-tech { font-family: 'Space Mono', monospace; }
-
-    .bg-fixed-custom {
-      background-image: url('https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/bg.jpg');
-      background-attachment: fixed;
-      background-size: cover;
-      background-position: center;
-    }
-
-    .glass-card {
-      background: var(--glass);
-      backdrop-filter: blur(15px);
-      border: 1px solid var(--glass-border);
-      border-radius: 24px;
-    }
-
-    .btn-feeling {
-      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-      position: relative;
-      overflow: hidden;
-    }
-
-    .btn-feeling:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
-    }
-
-    @keyframes rotateSlow {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    .mandala-spin {
-      animation: rotateSlow 60s linear infinite;
-      opacity: 0.07;
-    }
-
-    .hero-media-container {
-        position: relative;
-        border-radius: 32px;
-        overflow: hidden;
-        height: 650px;
-    }
-
-    .hero-img-main {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-    }
-
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: #f1f1f1; }
-    ::-webkit-scrollbar-thumb { background: var(--brand-gold); border-radius: 10px; }
-  </style><style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style></head>
+  </style></head>
 <body>
 
   <nav class="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
@@ -667,76 +731,25 @@
 </script>  
 
 
-
-  <nav class="fixed top-0 w-full z-50 px-6 py-4">
-    <div class="max-w-6xl mx-auto flex justify-between items-center glass-card px-6 py-3">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center font-serif text-xl">F</div>
-        <div class="leading-tight">
-          <span class="block font-bold tracking-tighter text-lg">Feeling Decor</span>
-          <span class="block text-[10px] uppercase tracking-widest opacity-60 font-tech">by Viviani Costa</span>
-        </div>
-      </div>
-      <div class="hidden md:flex gap-8 text-sm font-medium">
-        <a href="#marca" class="hover:text-brand-gold transition-colors">A Marca</a>
-        <a href="#curadoria" class="hover:text-brand-gold transition-colors">Curadoria</a>
-        <a href="#portfolio" class="hover:text-brand-gold transition-colors">Projetos</a>
-        <a href="#contato" class="bg-black text-white px-5 py-2 rounded-full hover:bg-brand-gold transition-all">Contato</a>
-      </div>
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#home" class="brand">
+        <span class="brand-mark">F</span>
+        <span>FEELING DECOR.</span>
+      </a>
+      <nav class="nav">
+        <a href="#home">Início</a>
+        <a href="#filosofia">Filosofia</a>
+        <a href="#curadoria">Curadoria</a>
+        <a href="#portfolio">Projetos</a>
+        <a href="#videos">Vídeos</a>
+        <a href="#contato">Contato</a>
+      </nav>
     </div>
-  </nav>
+  </header>
 
   <main>
-    <section id="home" class="pt-32 pb-16 px-6">
-      <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
-        
-        <div class="relative">
-          <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="absolute -top-20 -left-20 w-80 mandala-spin pointer-events-none" alt="">
-          
-          <div class="relative z-10">
-            <span class="font-tech text-xs uppercase tracking-[0.3em] text-brand-gold mb-4 block">Frequência Decorativa</span>
-            <h1 class="font-serif text-7xl md:text-8xl leading-[0.85] tracking-tighter mb-8">
-              Design que <br><span class="italic opacity-60">respira.</span>
-            </h1>
-            <p class="text-xl text-gray-500 max-w-md leading-relaxed mb-10">
-              Transformamos espaços comuns em refúgios sensoriais através de cortinas fluidas, mobiliário orgânico e curadoria intencional.
-            </p>
-            <div class="flex flex-wrap gap-4">
-              <a href="#curadoria" class="btn-feeling bg-black text-white px-8 py-4 rounded-full font-semibold">Explorar Curadoria</a>
-              <a href="#portfolio" class="btn-feeling border border-gray-200 px-8 py-4 rounded-full font-semibold hover:bg-gray-50">Ver Projetos</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="hero-media-container shadow-2xl">
-          <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/destaque/apt.mp4" class="hero-img-main shadow-inner" alt="Ambiente Feeling Decor">
-          
-          <div class="absolute bottom-8 left-8 right-8 glass-card p-8">
-            <div class="flex justify-between items-end">
-              <div>
-                <h3 class="font-serif text-2xl">Harmonia Orgânica</h3>
-                <p class="text-sm opacity-70 font-tech uppercase tracking-tighter">Projeto Residencial 024</p>
-              </div>
-              <div class="text-right">
-                <span class="text-xs font-bold text-brand-gold uppercase">Feeling Tip:</span>
-                <p class="text-[10px] max-w-[150px] leading-tight">A luz filtrada por linho reduz o cortisol e amplia o foco.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="bg-fixed-custom py-32 px-6">
-        <div class="max-w-4xl mx-auto text-center glass-card p-16">
-            <h2 class="font-serif text-4xl md:text-6xl mb-6">Onde o invisível se torna <span class="italic">sensação.</span></h2>
-            <p class="text-lg opacity-80 leading-relaxed">
-                Nossa metodologia une neuroarquitetura e design afetivo. Não entregamos apenas móveis, calibramos a energia do seu lar para que ele seja seu maior aliado.
-            </p>
-        </div>
-    </section>
-
-     <section id="home" class="hero">
+    <section id="home" class="hero">
       <div class="container hero-grid">
         <div class="reveal">
           <div class="eyebrow">Feeling Decor · Viviani Costa · Curadoria sensorial</div>
@@ -809,24 +822,34 @@
           </p>
         </div>
 
- <div class="reveal">
-          <div class="card" style="border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.03);">
-            <div class="card-media" style="background:#111;">
-              <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" autoplay="" muted="" loop="" playsinline=""></video>
-            </div>
-            <div class="card-body" style="background:rgba(255,255,255,.02);">
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <span class="service-subtitle">01 · Cortinas</span>
+            <h3>Criam a luz certa.</h3>
+            <p>Tecidos que suavizam a entrada de luz e definem o clima do espaço com delicadeza.</p>
+          </article>
 
+          <article class="service-card reveal">
+            <span class="service-subtitle">02 · Móveis</span>
+            <h3>Estrutura com intenção.</h3>
+            <p>Peças escolhidas pela proporção, ergonomia e linguagem atemporal para ocupar sem pesar.</p>
+          </article>
 
-              <div class="card-title" style="color:#fff;">Menos ruído, mais presença</div>
-              <div class="card-text" style="color:rgba(255,255,255,.72);">
-                A experiência de um ambiente bem curado está no que ele faz você sentir ao entrar.
-                É isso que a Feeling Decor busca: uma beleza que acolhe, dura e conversa com a vida real.
-              </div>
-            </div>
-          </div>
+          <article class="service-card reveal">
+            <span class="service-subtitle">03 · Quadros</span>
+            <h3>Assinatura visual.</h3>
+            <p>Obras e composições que trazem identidade para a parede sem roubar a cena do espaço.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <span class="service-subtitle">04 · Aromas</span>
+            <h3>Camada invisível.</h3>
+            <p>A memória olfativa amarra a experiência do ambiente e completa a presença do lugar.</p>
+          </article>
         </div>
+      </div>
+    </section>
 
-       
     <section id="portfolio">
       <div class="container">
         <div class="reveal" style="margin-bottom:26px;">
@@ -884,74 +907,19 @@
           <div class="video-frame reveal">
             <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4" autoplay="" muted="" loop="" playsinline=""></video>
           </div>
+
+          <div class="video-frame reveal">
+            <iframe src="https://www.youtube.com/embed/KrtOVrk8aDk?rel=0&amp;modestbranding=1" allowfullscreen=""></iframe>
+          </div>
+
+          <div class="video-frame reveal">
+            <iframe src="https://www.youtube.com/embed/koKhjQKGJSc?rel=0&amp;modestbranding=1" allowfullscreen=""></iframe>
+          </div>
         </div>
       </div>
     </section>
-<style>
 
-   .contact-section{
-      background:#0b0c10;
-      color:#fff;
-      border-radius:48px 48px 0 0;
-      padding:110px 0 80px;
-    }
-
-    .contact-copy{
-      max-width:720px;
-      color:rgba(255,255,255,.76);
-      line-height:1.8;
-      font-size:1.06rem;
-      margin-bottom:28px;
-    }
-
-    .contact-links{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
-      margin-top:22px;
-    }
-
-    .contact-links a{
-      color:#fff;
-      text-decoration:none;
-      border-bottom:2px solid rgba(255,255,255,.25);
-      padding-bottom:4px;
-      font-weight:700;
-      font-size:1rem;
-      transition:border-color .2s ease,color .2s ease;
-    }
-    .contact-links a:hover{
-      color:var(--brand-gold);
-      border-color:var(--brand-gold);
-    }
-
- @media (max-width: 980px){
-      .hero-grid,
-      .split{grid-template-columns:1fr}
-      .services-grid{grid-template-columns:1fr 1fr}
-      .gallery{grid-template-columns:1fr}
-      .nav{display:none}
-      .hero{
-        min-height:auto;
-        padding-top:70px;
-        padding-bottom:90px;
-      }
-    }
-
-    @media (max-width: 640px){
-      .container{width:min(var(--container), calc(100% - 24px))}
-      section{padding:78px 18px}
-      .header-inner{min-height:74px}
-      .hero-title{font-size:clamp(3rem, 16vw, 5.4rem)}
-      .services-grid{grid-template-columns:1fr}
-      .hero-actions{flex-direction:column;align-items:stretch}
-      .btn-lux,.btn-line{width:100%}
-      .gallery-item{min-height:420px}
-      .contact-section{padding-top:90px}
-    }
-
-</style>
-<section id="contato" class="contact-section">
+    <section id="contato" class="contact-section">
       <div class="container split">
         <div class="reveal">
           <span class="section-label" style="color:rgba(255,255,255,.62);">Vamos começar?</span>
@@ -974,32 +942,83 @@
           </div>
         </div>
 
-       
+        <div class="reveal">
+          <div class="card" style="border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.03);">
+            <div class="card-media" style="background:#111;">
+              <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" autoplay="" muted="" loop="" playsinline=""></video>
+            </div>
+            <div class="card-body" style="background:rgba(255,255,255,.02);">
+              <div class="card-subtitle">Encerramento</div>
+              <div class="card-title" style="color:#fff;">Menos ruído, mais presença</div>
+              <div class="card-text" style="color:rgba(255,255,255,.72);">
+                A experiência de um ambiente bem curado está no que ele faz você sentir ao entrar.
+                É isso que a Feeling Decor busca: uma beleza que acolhe, dura e conversa com a vida real.
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
-
   </main>
 
+  <footer class="footer">
+    <div class="container">
+      © 2026 Feeling Decor — Por Viviani Costa. Mínimo, essencial e sensorial.
+    </div>
+  </footer>
+
   <script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+    function setupReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
         });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    function setupSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupReveal();
+      setupSmoothScroll();
     });
   </script>
 
-
-
 <script src="https://cdn.tailwindcss.com"></script><script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
+    function setupReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
         });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    function setupSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupReveal();
+      setupSmoothScroll();
     });
   </script></body></html>

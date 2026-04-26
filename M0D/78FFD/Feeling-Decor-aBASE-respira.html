@@ -1,0 +1,456 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Feeling Decor | Viviani Costa</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&amp;family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&amp;family=Space+Mono:wght@400&amp;display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --brand-gold: #c5a059;
+      --brand-dark: #05070a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: var(--brand-dark);
+      scroll-snap-type: y proximity;
+      overflow-x: hidden;
+    }
+
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-tech { font-family: 'Space Mono', monospace; }
+
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5vw;
+      position: relative;
+    }
+
+    .hero-title {
+      font-size: clamp(3rem, 12vw, 15rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+    }
+
+    .sub-title {
+      font-size: clamp(1.5rem, 4vw, 4rem);
+      line-height: 1.1;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.8);
+    }
+
+    .mandala {
+      position: absolute;
+      width: 40vw;
+      opacity: 0.05;
+      animation: rotate 100s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-lux {
+      background: black;
+      color: white;
+      padding: 1.5rem 3rem;
+      border-radius: 99px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+
+    .btn-lux:hover {
+      background: var(--brand-gold);
+      transform: scale(1.05);
+    }
+  </style>
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"><style>
+    :root {
+      --brand-gold: #c5a059;
+      --brand-dark: #05070a;
+      --glass: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.3);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: var(--brand-dark);
+      overflow-x: hidden;
+    }
+
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-tech { font-family: 'Space Mono', monospace; }
+
+    .bg-fixed-custom {
+      background-image: url('https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/bg.jpg');
+      background-attachment: fixed;
+      background-size: cover;
+      background-position: center;
+    }
+
+    .glass-card {
+      background: var(--glass);
+      backdrop-filter: blur(15px);
+      border: 1px solid var(--glass-border);
+      border-radius: 24px;
+    }
+
+    .btn-feeling {
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-feeling:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 24px rgba(0,0,0,0.1);
+    }
+
+    @keyframes rotateSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .mandala-spin {
+      animation: rotateSlow 60s linear infinite;
+      opacity: 0.07;
+    }
+
+    .hero-media-container {
+        position: relative;
+        border-radius: 32px;
+        overflow: hidden;
+        height: 650px;
+    }
+
+    .hero-img-main {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #f1f1f1; }
+    ::-webkit-scrollbar-thumb { background: var(--brand-gold); border-radius: 10px; }
+  </style></head>
+<body>
+
+  <nav class="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
+    <div class="font-serif text-3xl font-black italic tracking-tighter">Feeling.</div>
+    <div class="hidden md:flex gap-12 font-tech text-xs uppercase tracking-widest">
+      <a href="#home" class="hover:text-brand-gold">Início</a>
+      <a href="#concept" class="hover:text-brand-gold">Conceito</a>
+      <a href="#curadoria" class="hover:text-brand-gold">Curadoria</a>
+    </div>
+  </nav>
+
+  <!-- SEÇÃO 1: HERO -->
+  <section id="home" class="overflow-hidden">
+    <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg" class="parallax-bg" alt="">
+    <div class="text-center text-white z-10 reveal">
+      <h1 class="hero-title font-serif font-black">
+        Design <br> 
+        <span class="italic font-normal">Sensorial.</span>
+      </h1>
+      <p class="font-tech text-sm mt-8 uppercase tracking-[0.5em]">Frequência • Harmonia • Fluidez</p>
+    </div>
+    <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="mandala right-[-10vw]" alt="">
+  </section>
+
+  
+<script>
+  const CONFIG = {
+    instagram: {
+      reel2: "https://www.instagram.com/feeling.decor_/reel/DCbZPpNxk0L/"
+    },
+    images: {
+      img3: "https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img3.jpg"
+    }
+  };
+
+  window.addEventListener('load', () => {
+    const link3 = document.getElementById('ig-link-3');
+    const img3 = document.getElementById('ig-img-3');
+
+    if (link3) link3.href = CONFIG.instagram.reel2;
+    if (img3) img3.src = CONFIG.images.img3;
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('active');
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  });
+
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      const target = document.querySelector(this.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>  
+
+
+
+  <nav class="fixed top-0 w-full z-50 px-6 py-4">
+    <div class="max-w-6xl mx-auto flex justify-between items-center glass-card px-6 py-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center font-serif text-xl">F</div>
+        <div class="leading-tight">
+          <span class="block font-bold tracking-tighter text-lg">Feeling Decor</span>
+          <span class="block text-[10px] uppercase tracking-widest opacity-60 font-tech">by Viviani Costa</span>
+        </div>
+      </div>
+      <div class="hidden md:flex gap-8 text-sm font-medium">
+        <a href="#marca" class="hover:text-brand-gold transition-colors">A Marca</a>
+        <a href="#curadoria" class="hover:text-brand-gold transition-colors">Curadoria</a>
+        <a href="#portfolio" class="hover:text-brand-gold transition-colors">Projetos</a>
+        <a href="#contato" class="bg-black text-white px-5 py-2 rounded-full hover:bg-brand-gold transition-all">Contato</a>
+      </div>
+    </div>
+  </nav>
+
+  <main>
+    <section id="home" class="pt-32 pb-16 px-6">
+      <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-8 items-center">
+        
+        <div class="relative">
+          <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="absolute -top-20 -left-20 w-80 mandala-spin pointer-events-none" alt="">
+          
+          <div class="relative z-10">
+            <span class="font-tech text-xs uppercase tracking-[0.3em] text-brand-gold mb-4 block">Frequência Decorativa</span>
+            <h1 class="font-serif text-7xl md:text-8xl leading-[0.85] tracking-tighter mb-8">
+              Design que <br><span class="italic opacity-60">respira.</span>
+            </h1>
+            <p class="text-xl text-gray-500 max-w-md leading-relaxed mb-10">
+              Transformamos espaços comuns em refúgios sensoriais através de cortinas fluidas, mobiliário orgânico e curadoria intencional.
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#curadoria" class="btn-feeling bg-black text-white px-8 py-4 rounded-full font-semibold">Explorar Curadoria</a>
+              <a href="#portfolio" class="btn-feeling border border-gray-200 px-8 py-4 rounded-full font-semibold hover:bg-gray-50">Ver Projetos</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-media-container shadow-2xl">
+          <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg" class="hero-img-main shadow-inner" alt="Ambiente Feeling Decor">
+          
+          <div class="absolute bottom-8 left-8 right-8 glass-card p-8">
+            <div class="flex justify-between items-end">
+              <div>
+                <h3 class="font-serif text-2xl">Harmonia Orgânica</h3>
+                <p class="text-sm opacity-70 font-tech uppercase tracking-tighter">Projeto Residencial 024</p>
+              </div>
+              <div class="text-right">
+                <span class="text-xs font-bold text-brand-gold uppercase">Feeling Tip:</span>
+                <p class="text-[10px] max-w-[150px] leading-tight">A luz filtrada por linho reduz o cortisol e amplia o foco.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="bg-fixed-custom py-32 px-6">
+        <div class="max-w-4xl mx-auto text-center glass-card p-16">
+            <h2 class="font-serif text-4xl md:text-6xl mb-6">Onde o invisível se torna <span class="italic">sensação.</span></h2>
+            <p class="text-lg opacity-80 leading-relaxed">
+                Nossa metodologia une neuroarquitetura e design afetivo. Não entregamos apenas móveis, calibramos a energia do seu lar para que ele seja seu maior aliado.
+            </p>
+        </div>
+    </section>
+
+    <section id="curadoria" class="py-24 px-6 bg-white">
+      <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
+            <div>
+                <h2 class="font-serif text-5xl md:text-7xl tracking-tighter">Curadoria.</h2>
+                <p class="font-tech text-sm uppercase text-gray-400 mt-2">Inspirações do nosso Instagram</p>
+            </div>
+            <p class="max-w-sm text-gray-500">Selecionamos fornecedores que respeitam o tempo da natureza e a excelência do fazer manual.</p>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+          <a href="https://www.instagram.com/feeling.decor_/reel/DCbYsZHRIYZ/" target="_blank" class="group cursor-pointer block">
+            <div class="aspect-[3/4] rounded-3xl overflow-hidden bg-gray-100 mb-6 relative">
+              <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Cortinas Fluidez">
+              <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm flex items-center gap-2">
+                    <i class="fa-brands fa-instagram"></i> Ver Reel
+                  </span>
+              </div>
+            </div>
+            <h3 class="font-serif text-2xl mb-2">Cortinas Fluidez</h3>
+            <p class="text-gray-500 text-sm">Tecidos inteligentes que abraçam a luz natural.</p>
+          </a>
+
+          <a href="https://www.instagram.com/feeling.decor_/p/DCvJ1wwxFQ2/" target="_blank" class="group cursor-pointer block">
+            <div class="aspect-[3/4] rounded-3xl overflow-hidden bg-gray-100 mb-6 relative">
+              <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img2.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Linha Aroma">
+              <div class="absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white p-8 text-center transition-opacity group-hover:bg-black/60">
+                  <h4 class="font-tech text-xs uppercase mb-4 tracking-widest">Postagem</h4>
+                  <p class="font-serif text-3xl mb-4">Experiência Integrada</p>
+                  <span class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <i class="fa-brands fa-instagram"></i> Ver Post
+                  </span>
+              </div>
+            </div>
+            <h3 class="font-serif text-2xl mb-2">Detalhes que Importam</h3>
+            <p class="text-gray-500 text-sm">Acompanhe nossas atualizações e referências.</p>
+          </a>
+
+          <a href="https://www.instagram.com/feeling.decor_/reel/DCbZPpNxk0L/" target="_blank" class="group cursor-pointer block">
+            <div class="aspect-[3/4] rounded-3xl overflow-hidden bg-gray-100 mb-6 relative">
+              <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img3.jpg" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt="Mobiliário Autoral">
+              <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                  <span class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm flex items-center gap-2">
+                    <i class="fa-brands fa-instagram"></i> Ver Reel
+                  </span>
+              </div>
+            </div>
+            <h3 class="font-serif text-2xl mb-2">Mobiliário Autoral</h3>
+            <p class="text-gray-500 text-sm">Design assinado focado em conforto e durabilidade.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="portfolio" class="py-24 px-6 bg-gray-50">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-16 text-center">
+          <h2 class="font-serif text-5xl md:text-6xl tracking-tighter mb-4">Projetos em Detalhes.</h2>
+          <p class="text-gray-500 max-w-2xl mx-auto">Acompanhe de perto as transformações que realizamos, focadas no acabamento impecável de pisos e na fluidez das nossas cortinas.</p>
+        </div>
+
+        <div class="grid lg:grid-cols-2 gap-12">
+          <div class="flex flex-col gap-4">
+            <div class="aspect-video rounded-3xl overflow-hidden shadow-xl bg-gray-200">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/koKhjQKGJSc" title="Cortinas Feeling Decor" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+            </div>
+            <h3 class="font-serif text-2xl px-2">Especialidade em Cortinas</h3>
+          </div>
+
+          <div class="flex flex-col gap-4">
+            <div class="aspect-video rounded-3xl overflow-hidden shadow-xl bg-gray-200">
+              <iframe class="w-full h-full" src="https://www.youtube.com/embed/KrtOVrk8aDk" title="Pisos Feeling Decor" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe>
+            </div>
+            <h3 class="font-serif text-2xl px-2">Pisos e Revestimentos</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer id="contato" class="bg-black text-white pt-24 pb-12 px-6 relative overflow-hidden">
+        <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="absolute -bottom-1/2 -right-1/4 w-[800px] opacity-10 pointer-events-none" alt="">
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-start mb-24">
+                <div>
+                    <h2 class="font-serif text-6xl md:text-8xl leading-none mb-12 italic">Sinta a mudança.</h2>
+                    <div class="space-y-6">
+                        <a href="https://wa.me/5500000000000" class="flex items-center justify-between p-8 border border-white/20 rounded-3xl hover:bg-white hover:text-black transition-all group">
+                            <span class="text-2xl font-serif">Agendar Consultoria</span>
+                            <i class="fa-brands fa-whatsapp fa-2xl"></i>
+                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="https://www.instagram.com/feeling.decor_/" target="_blank" class="p-6 border border-white/10 rounded-2xl text-center hover:border-brand-gold transition-colors">Instagram</a>
+                            <a href="#" class="p-6 border border-white/10 rounded-2xl text-center hover:border-brand-gold transition-colors">Pinterest</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:pt-12">
+                    <p class="text-white/60 font-tech text-xs uppercase mb-8 tracking-[0.2em]">Escritório Central</p>
+                    <address class="not-italic font-serif text-3xl mb-8 leading-tight">
+                        Rua das Orquídeas, 1024 <br>
+                        Edifício Sense, Sala 78 <br>
+                        São Paulo - SP
+                    </address>
+                    <div class="text-white/40 text-sm space-y-2">
+                        <p>contato@feelingdecor.com.br</p>
+                        <p>+55 11 98877-6655</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-white/30 uppercase tracking-widest font-tech">
+                <p>© 2024 Feeling Decor. Todos os direitos reservados.</p>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-white transition-colors">Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos</a>
+                    <a href="#" class="hover:text-white transition-colors">Haski Intelligence</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+  </main>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+  </script>
+
+
+
+<script src="https://cdn.tailwindcss.com"></script><script>
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+  </script></body></html>

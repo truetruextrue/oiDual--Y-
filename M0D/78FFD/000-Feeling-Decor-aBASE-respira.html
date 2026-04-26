@@ -2,18 +2,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <title>Feeling Decor | Viviani Costa</title>
-  <!-- PWA METADATA & VIEWPORT FIX -->
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#05070a">
-
-<!-- iOS Support -->
-<meta name="apple-mobile-web-app-capable" content="yes">
-
-<link rel="apple-touch-icon" href="./icon-192.png">
-
-<!-- Manifest -->
-<link rel="manifest" href="./manifest.json">
-    
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -596,15 +585,7 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #f1f1f1; }
     ::-webkit-scrollbar-thumb { background: var(--brand-gold); border-radius: 10px; }
-  </style><style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-      </style></head>
+  </style></head>
 <body>
 
   <nav class="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
@@ -736,66 +717,7 @@
         </div>
     </section>
 
-     <section id="home" class="hero">
-      <div class="container hero-grid">
-        <div class="reveal">
-          <div class="eyebrow">Feeling Decor · Viviani Costa · Curadoria sensorial</div>
-          <h1 class="hero-title font-serif">
-            Design <br>
-            <span class="italic">Sensorial.</span>
-          </h1>
-          <p class="hero-description">
-            A Feeling Decor cria ambientes que respiram com intenção. Cada escolha — da cortina ao aroma, do móvel ao quadro —
-            compõe uma atmosfera elegante, funcional e emocionalmente presente. Aqui, decorar não é preencher: é revelar.
-          </p>
-          <div class="hero-actions">
-            <a href="#contato" class="btn-lux"><i class="fa-solid fa-paper-plane"></i> Falar com Viviani</a>
-            <a href="#filosofia" class="btn-line">Ver conceito</a>
-          </div>
-        </div>
-
-        <div class="reveal">
-          <div class="hero-visual">
-            <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4" autoplay="" muted="" loop="" playsinline=""></video>
-            <div class="hero-badge">Design sensorial · fluidez · harmonia</div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="filosofia">
-      <div class="container split">
-        <div class="reveal">
-          <span class="section-label">Nossa filosofia</span>
-          <h2 class="section-title font-serif">
-            Onde o invisível <br>
-            se torna <span class="italic">emoção.</span>
-          </h2>
-          <p class="section-copy">
-            Não trabalhamos apenas com decoração. Trabalhamos com ritmo, proporção e sensação. O ambiente certo não grita;
-            ele acolhe, organiza e faz o espaço conversar com quem vive nele. A curadoria valoriza luz natural,
-            texturas honestas, equilíbrio visual e presença afetiva.
-          </p>
-        </div>
-
-        <div class="reveal">
-          <div class="card">
-            <div class="card-media">
-              <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/destaque/apt.mp4" autoplay="" muted="" loop="" playsinline=""></video>
-            </div>
-            <div class="card-body">
-              <div class="card-subtitle">Leitura de ambiente</div>
-              <div class="card-title">Clareza que dá forma ao cotidiano</div>
-              <div class="card-text">
-                A proposta nasce da observação do espaço, das rotinas e do que o ambiente precisa transmitir. O resultado é uma
-                composição leve, refinada e funcional, com atenção ao silêncio visual e ao conforto sensorial.
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+    <!-- CURADORIA -->
     <section id="curadoria">
       <div class="container">
         <div class="reveal" style="margin-bottom:34px;">
@@ -809,25 +731,36 @@
           </p>
         </div>
 
- <div class="reveal">
-          <div class="card" style="border-color:rgba(255,255,255,.08);background:rgba(255,255,255,.03);">
-            <div class="card-media" style="background:#111;">
-              <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" autoplay="" muted="" loop="" playsinline=""></video>
-            </div>
-            <div class="card-body" style="background:rgba(255,255,255,.02);">
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <span class="service-subtitle">01 · Cortinas</span>
+            <h3>Criam a luz certa.</h3>
+            <p>Tecidos que suavizam a entrada de luz e definem o clima do espaço com delicadeza.</p>
+          </article>
 
+          <article class="service-card reveal">
+            <span class="service-subtitle">02 · Móveis</span>
+            <h3>Estrutura com intenção.</h3>
+            <p>Peças escolhidas pela proporção, ergonomia e linguagem atemporal para ocupar sem pesar.</p>
+          </article>
 
-              <div class="card-title" style="color:#fff;">Menos ruído, mais presença</div>
-              <div class="card-text" style="color:rgba(255,255,255,.72);">
-                A experiência de um ambiente bem curado está no que ele faz você sentir ao entrar.
-                É isso que a Feeling Decor busca: uma beleza que acolhe, dura e conversa com a vida real.
-              </div>
-            </div>
-          </div>
+          <article class="service-card reveal">
+            <span class="service-subtitle">03 · Quadros</span>
+            <h3>Assinatura visual.</h3>
+            <p>Obras e composições que trazem identidade para a parede sem roubar a cena do espaço.</p>
+          </article>
+
+          <article class="service-card reveal">
+            <span class="service-subtitle">04 · Aromas</span>
+            <h3>Camada invisível.</h3>
+            <p>A memória olfativa amarra a experiência do ambiente e completa a presença do lugar.</p>
+          </article>
         </div>
+      </div>
+    </section>
 
-       
-    <section id="portfolio">
+    <!-- PROJETOS -->
+    <section id="projetos">
       <div class="container">
         <div class="reveal" style="margin-bottom:26px;">
           <span class="section-label">Projetos</span>
@@ -867,117 +800,61 @@
       </div>
     </section>
 
-    <section id="videos" class="divider-band">
-      <div class="container">
-        <div class="reveal" style="margin-bottom:28px;">
-          <span class="section-label" style="color:var(--brand-gold);">Bastidores</span>
-          <h2 class="section-title font-serif">
-            O gesto por trás da <span class="italic">perfeição</span>
-          </h2>
-          <p class="section-copy" style="color:rgba(255,255,255,.72);max-width:860px;">
-            Os vídeos revelam a matéria viva do processo: acabamento, textura, movimento, luz e escala.
-            É na imagem em movimento que a atmosfera ganha corpo.
-          </p>
-        </div>
-
-        <div class="videos-grid">
-          <div class="video-frame reveal">
-            <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4" autoplay="" muted="" loop="" playsinline=""></video>
-          </div>
-        </div>
-      </div>
-    </section>
-<style>
-
-   .contact-section{
-      background:#0b0c10;
-      color:#fff;
-      border-radius:48px 48px 0 0;
-      padding:110px 0 80px;
-    }
-
-    .contact-copy{
-      max-width:720px;
-      color:rgba(255,255,255,.76);
-      line-height:1.8;
-      font-size:1.06rem;
-      margin-bottom:28px;
-    }
-
-    .contact-links{
-      display:flex;
-      gap:16px;
-      flex-wrap:wrap;
-      margin-top:22px;
-    }
-
-    .contact-links a{
-      color:#fff;
-      text-decoration:none;
-      border-bottom:2px solid rgba(255,255,255,.25);
-      padding-bottom:4px;
-      font-weight:700;
-      font-size:1rem;
-      transition:border-color .2s ease,color .2s ease;
-    }
-    .contact-links a:hover{
-      color:var(--brand-gold);
-      border-color:var(--brand-gold);
-    }
-
- @media (max-width: 980px){
-      .hero-grid,
-      .split{grid-template-columns:1fr}
-      .services-grid{grid-template-columns:1fr 1fr}
-      .gallery{grid-template-columns:1fr}
-      .nav{display:none}
-      .hero{
-        min-height:auto;
-        padding-top:70px;
-        padding-bottom:90px;
-      }
-    }
-
-    @media (max-width: 640px){
-      .container{width:min(var(--container), calc(100% - 24px))}
-      section{padding:78px 18px}
-      .header-inner{min-height:74px}
-      .hero-title{font-size:clamp(3rem, 16vw, 5.4rem)}
-      .services-grid{grid-template-columns:1fr}
-      .hero-actions{flex-direction:column;align-items:stretch}
-      .btn-lux,.btn-line{width:100%}
-      .gallery-item{min-height:420px}
-      .contact-section{padding-top:90px}
-    }
-
-</style>
-<section id="contato" class="contact-section">
-      <div class="container split">
-        <div class="reveal">
-          <span class="section-label" style="color:rgba(255,255,255,.62);">Vamos começar?</span>
-          <h2 class="section-title font-serif" style="color:#fff;">
-            Pronta para um <br>
-            espaço <span class="italic">vivo?</span>
-          </h2>
-          <p class="contact-copy">
-            Se a sua casa, loja ou projeto pede mais identidade, a Feeling Decor pode transformar a atmosfera em algo
-            mais claro, mais confortável e mais memorável. Cada decisão visual entra para servir a experiência do espaço,
-            e não para competir com ela.
-          </p>
-          <p class="contact-copy">
-            Fale com a Viviani para construir uma curadoria que traduza seu estilo em forma, presença e sensação.
-          </p>
-
-          <div class="contact-links">
-            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener">WhatsApp Direto</a>
-            <a href="https://instagram.com/feelingdecor" target="_blank" rel="noopener">Instagram @feelingdecor</a>
-          </div>
+    <section id="portfolio" class="py-24 px-6 bg-gray-50">
+      <div class="max-w-7xl mx-auto">
+        <div class="mb-16 text-center">
+          <h2 class="font-serif text-5xl md:text-6xl tracking-tighter mb-4">Projetos em Detalhes.</h2>
+          <p class="text-gray-500 max-w-2xl mx-auto">Acompanhe de perto as transformações que realizamos, focadas no acabamento impecável de pisos e na fluidez das nossas cortinas.</p>
         </div>
 
        
+        </div>
       </div>
     </section>
 
+    <footer id="contato" class="bg-black text-white pt-24 pb-12 px-6 relative overflow-hidden">
+        <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="absolute -bottom-1/2 -right-1/4 w-[800px] opacity-10 pointer-events-none" alt="">
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid lg:grid-cols-2 gap-20 items-start mb-24">
+                <div>
+                    <h2 class="font-serif text-6xl md:text-8xl leading-none mb-12 italic">Sinta a mudança.</h2>
+                    <div class="space-y-6">
+                        <a href="https://wa.me/5500000000000" class="flex items-center justify-between p-8 border border-white/20 rounded-3xl hover:bg-white hover:text-black transition-all group">
+                            <span class="text-2xl font-serif">Agendar Consultoria</span>
+                            <i class="fa-brands fa-whatsapp fa-2xl"></i>
+                        </a>
+                        <div class="grid grid-cols-2 gap-4">
+                            <a href="https://www.instagram.com/feeling.decor_/" target="_blank" class="p-6 border border-white/10 rounded-2xl text-center hover:border-brand-gold transition-colors">Instagram</a>
+                            <a href="#" class="p-6 border border-white/10 rounded-2xl text-center hover:border-brand-gold transition-colors">Pinterest</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="lg:pt-12">
+                    <p class="text-white/60 font-tech text-xs uppercase mb-8 tracking-[0.2em]">Escritório Central</p>
+                    <address class="not-italic font-serif text-3xl mb-8 leading-tight">
+                        Rua das Orquídeas, 1024 <br>
+                        Edifício Sense, Sala 78 <br>
+                        São Paulo - SP
+                    </address>
+                    <div class="text-white/40 text-sm space-y-2">
+                        <p>contato@feelingdecor.com.br</p>
+                        <p>+55 11 98877-6655</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="pt-12 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-white/30 uppercase tracking-widest font-tech">
+                <p>© 2024 Feeling Decor. Todos os direitos reservados.</p>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-white transition-colors">Privacidade</a>
+                    <a href="#" class="hover:text-white transition-colors">Termos</a>
+                    <a href="#" class="hover:text-white transition-colors">Haski Intelligence</a>
+                </div>
+            </div>
+        </div>
+    </footer>
   </main>
 
   <script>

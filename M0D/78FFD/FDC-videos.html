@@ -1,0 +1,304 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Feeling Decor | Viviani Costa</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --brand-gold: #c5a059;
+      --brand-dark: #05070a;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: var(--brand-dark);
+      scroll-snap-type: y proximity;
+      overflow-x: hidden;
+    }
+
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-tech { font-family: 'Space Mono', monospace; }
+
+    /* Seções Gigantes */
+    section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 5vw;
+      position: relative;
+      /* scroll-snap-align: start; */
+    }
+
+    /* Tipografia Gigante */
+    .hero-title {
+      font-size: clamp(3rem, 12vw, 15rem);
+      line-height: 0.85;
+      letter-spacing: -0.04em;
+    }
+
+    .sub-title {
+      font-size: clamp(1.5rem, 4vw, 4rem);
+      line-height: 1.1;
+    }
+
+    /* Animação de Entrada */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .parallax-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      object-fit: cover;
+      filter: brightness(0.8);
+    }
+
+    /* Mandala Giratória Chique */
+    .mandala {
+      position: absolute;
+      width: 40vw;
+      opacity: 0.05;
+      animation: rotate 100s linear infinite;
+      pointer-events: none;
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .btn-lux {
+      background: black;
+      color: white;
+      padding: 1.5rem 3rem;
+      border-radius: 99px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: all 0.3s;
+    }
+
+    .btn-lux:hover {
+      background: var(--brand-gold);
+      transform: scale(1.05);
+    }
+
+    /* Ajuste de Vídeos */
+    .video-container {
+        width: 100%;
+        max-width: 1200px;
+        aspect-ratio: 16/9;
+        border-radius: 40px;
+        overflow: hidden;
+        box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Menu Minimalista -->
+  <nav class="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
+    <div class="font-serif text-3xl font-black italic tracking-tighter">Feeling.</div>
+    <div class="hidden md:flex gap-12 font-tech text-xs uppercase tracking-widest">
+      <a href="#home" class="hover:text-brand-gold">Início</a>
+      <a href="#concept" class="hover:text-brand-gold">Conceito</a>
+      <a href="#curadoria" class="hover:text-brand-gold">Curadoria</a>
+      <a href="#videos" class="hover:text-brand-gold">Projetos</a>
+      <a href="#contato" class="hover:text-brand-gold">Contato</a>
+    </div>
+  </nav>
+
+  <!-- SEÇÃO 1: HERO -->
+  <section id="home" class="overflow-hidden">
+    <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg" class="parallax-bg" alt="">
+    <div class="text-center text-white z-10 reveal">
+        <h1 class="hero-title font-serif font-black">
+            Design <br> 
+            <span class="italic font-normal">Sensorial.</span>
+        </h1>
+        <p class="font-tech text-sm mt-8 uppercase tracking-[0.5em]">Frequência • Harmonia • Fluidez</p>
+    </div>
+    <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="mandala right-[-10vw]" alt="">
+  </section>
+
+  <!-- SEÇÃO 2: CONCEITO GIGANTE -->
+  <section id="concept" class="bg-[#05070a] text-white">
+    <div class="max-w-7xl mx-auto grid md:grid-cols-2 gap-12 items-center">
+        <div class="reveal">
+            <h2 class="sub-title font-serif italic mb-8">
+                Onde o <span class="font-black not-italic">invisível</span> <br> 
+                se torna <span class="text-brand-gold">emoção.</span>
+            </h2>
+            <p class="text-xl text-white/50 leading-relaxed mb-12">
+                A Feeling Decor não apenas decora; nós calibramos a alma do seu ambiente através de texturas, luz e aromas.
+            </p>
+            <a href="#contato" class="btn-lux inline-block">Sinta agora</a>
+        </div>
+        <div class="reveal delay-200">
+            <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/destaque/apt.mp4" 
+                 class="rounded-[3rem] w-full shadow-2xl" alt="Conceito">
+        </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 3: CURADORIA (INSTAGRAM ENGINE) -->
+  <section id="curadoria" class="bg-white">
+    <div class="max-w-[1400px] w-full">
+        <div class="mb-20 reveal">
+            <h2 class="hero-title font-serif font-black leading-none">Curadoria <br><span class="italic font-normal text-brand-gold">Exclusiva.</span></h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+            <!-- Card 1 -->
+            <a id="ig-link-1" target="_blank" class="reveal group block">
+                <div class="aspect-[4/5] rounded-[2.5rem] overflow-hidden mb-6 relative">
+                    <img id="ig-img-1" src="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <span class="font-tech text-xs uppercase tracking-widest border border-white px-6 py-2 rounded-full">Ver no Instagram</span>
+                    </div>
+                </div>
+                <h3 class="font-serif text-3xl font-black italic">Fluidez Intencional</h3>
+            </a>
+            <!-- Card 2 -->
+            <a id="ig-link-2" target="_blank" class="reveal delay-150 group block">
+                <div class="aspect-[4/5] rounded-[2.5rem] overflow-hidden mb-6 relative">
+                    <img id="ig-img-2" src="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <span class="font-tech text-xs uppercase tracking-widest border border-white px-6 py-2 rounded-full">Explorar Post</span>
+                    </div>
+                </div>
+                <h3 class="font-serif text-3xl font-black italic">Essência Viva</h3>
+            </a>
+            <!-- Card 3 -->
+            <a id="ig-link-3" target="_blank" class="reveal delay-300 group block">
+                <div class="aspect-[4/5] rounded-[2.5rem] overflow-hidden mb-6 relative">
+                    <img id="ig-img-3" src="" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-1000" alt="">
+                    <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <span class="font-tech text-xs uppercase tracking-widest border border-white px-6 py-2 rounded-full">Ver Movimento</span>
+                    </div>
+                </div>
+                <h3 class="font-serif text-3xl font-black italic">Curadoria Orgânica</h3>
+            </a>
+        </div>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 4: VÍDEOS GIGANTES (YOUTUBE) -->
+  <section id="videos" class="bg-[#0a0a0a] flex-col gap-12">
+    <div class="reveal text-center">
+        <h2 class="sub-title font-serif text-white italic">Bastidores da <span class="font-black not-italic text-brand-gold">Perfeição.</span></h2>
+    </div>
+    
+    <div class="video-container reveal">
+        <iframe id="video-piso" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+
+    <div class="video-container reveal">
+        <iframe id="video-cortina" class="w-full h-full" src="" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <!-- SEÇÃO 5: FOOTER / FINAL -->
+  <section id="contato" class="bg-white">
+    <div class="grid md:grid-cols-2 w-full max-w-7xl gap-20">
+        <div class="reveal">
+            <h2 class="hero-title font-serif font-black italic mb-10 text-brand-gold">Fale conosco.</h2>
+            <address class="not-italic text-4xl font-serif mb-12 leading-tight">
+                São Paulo, SP <br>
+                Brasil.
+            </address>
+            <div class="flex flex-col gap-4 items-start">
+                <a href="#" class="text-2xl font-bold border-b-4 border-black hover:text-brand-gold hover:border-brand-gold transition-all">WhatsApp Oficial</a>
+                <a href="#" class="text-2xl font-bold border-b-4 border-black hover:text-brand-gold hover:border-brand-gold transition-all">Instagram Feed</a>
+            </div>
+        </div>
+        <div class="reveal delay-200">
+            <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" class="rounded-[4rem] w-full" alt="Final">
+        </div>
+    </div>
+  </section>
+
+  <script>
+    // MOTOR DE CONFIGURAÇÃO (Fácil de editar)
+    const CONFIG = {
+        instagram: {
+            reel1: "https://www.instagram.com/feeling.decor_/reel/DCbYsZHRIYZ/",
+            post1: "https://www.instagram.com/feeling.decor_/p/DCvJ1wwxFQ2/",
+            reel2: "https://www.instagram.com/feeling.decor_/reel/DCbZPpNxk0L/"
+        },
+        images: {
+            img1: "https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4",
+            img2: "https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg",
+            img3: "https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img3.jpg",
+            mandala: "https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg",
+            bg: "https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/Feeling-respira-0.MP4"
+        },
+        videos: {
+            cortinas: "https://www.youtube.com/embed/koKhjQKGJSc",
+            pisos: "https://www.youtube.com/embed/KrtOVrk8aDk"
+        }
+    };
+
+    // Aplicar Configurações no DOM
+    window.onload = () => {
+        // Vídeos YouTube
+        document.getElementById('video-piso').src = CONFIG.videos.pisos;
+        document.getElementById('video-cortina').src = CONFIG.videos.cortinas;
+
+        // Links e Imagens Curadoria
+        document.getElementById('ig-link-1').href = CONFIG.instagram.reel1;
+        document.getElementById('ig-img-1').src = CONFIG.images.img1;
+
+        document.getElementById('ig-link-2').href = CONFIG.instagram.post1;
+        document.getElementById('ig-img-2').src = CONFIG.images.img2;
+
+        document.getElementById('ig-link-3').href = CONFIG.instagram.reel2;
+        document.getElementById('ig-img-3').src = CONFIG.images.img3;
+
+        // Iniciar Observador de Animação
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    };
+
+    // Smooth Scroll para o menu
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+  </script>
+</body>
+</html>
+

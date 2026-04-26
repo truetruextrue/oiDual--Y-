@@ -1,0 +1,849 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Feeling Decor | Viviani Costa</title>
+  <meta name="description" content="Feeling Decor, por Viviani Costa: curadoria de interiores com cortinas, móveis, quadros e aromas para criar ambientes com identidade, leveza e presença.">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --brand-gold: #c5a059;
+      --brand-dark: #05070a;
+      --bg: #ffffff;
+      --text: #101318;
+      --muted: #5f6572;
+      --soft: #f6f4ef;
+      --line: rgba(16, 19, 24, 0.10);
+      --container: 1280px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-tech { font-family: 'Space Mono', monospace; }
+
+    .container {
+      width: min(var(--container), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      background: rgba(255,255,255,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      min-height: 84px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      font-weight: 900;
+      font-size: 1.15rem;
+      letter-spacing: -0.05em;
+      text-decoration: none;
+      color: var(--text);
+      white-space: nowrap;
+    }
+
+    .nav {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.82rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      opacity: 0.82;
+      transition: opacity .2s ease, color .2s ease;
+    }
+
+    .nav a:hover { opacity: 1; color: var(--brand-gold); }
+
+    main { padding-top: 84px; }
+
+    section {
+      padding: 104px 0;
+      position: relative;
+    }
+
+    .hero {
+      min-height: calc(100vh - 84px);
+      display: flex;
+      align-items: center;
+      background:
+        radial-gradient(circle at top left, rgba(197,160,89,0.10), transparent 35%),
+        linear-gradient(180deg, #fff 0%, #fafafa 100%);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.76);
+      font-family: 'Space Mono', monospace;
+      font-size: 0.72rem;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      margin-bottom: 26px;
+    }
+
+    .hero-title {
+      font-size: clamp(4.2rem, 10vw, 9.6rem);
+      line-height: 0.86;
+      letter-spacing: -0.07em;
+      font-weight: 900;
+      margin-bottom: 24px;
+    }
+
+    .hero-title .italic {
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .hero-description {
+      font-size: clamp(1.12rem, 1.6vw, 1.42rem);
+      color: var(--muted);
+      max-width: 620px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .btn-lux,
+    .btn-line {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 0 24px;
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-size: 0.78rem;
+      transition: transform .22s ease, background .22s ease, border-color .22s ease, color .22s ease;
+      white-space: nowrap;
+    }
+
+    .btn-lux {
+      background: #111;
+      color: #fff;
+      border: 1px solid #111;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.12);
+    }
+
+    .btn-lux:hover {
+      transform: translateY(-2px);
+      background: var(--brand-gold);
+      border-color: var(--brand-gold);
+    }
+
+    .btn-line {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .btn-line:hover {
+      transform: translateY(-2px);
+      border-color: rgba(16,19,24,0.25);
+      background: rgba(16,19,24,0.03);
+    }
+
+    .hero-visual {
+      position: relative;
+      border-radius: 34px;
+      overflow: hidden;
+      aspect-ratio: 4/5;
+      background: var(--soft);
+      box-shadow: 0 26px 80px rgba(0,0,0,0.14);
+    }
+
+    .hero-visual img,
+    .hero-visual video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .hero-badge {
+      position: absolute;
+      left: 18px;
+      bottom: 18px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.84);
+      backdrop-filter: blur(10px);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      border: 1px solid rgba(255,255,255,0.55);
+    }
+
+    .section-label {
+      display: inline-flex;
+      margin-bottom: 18px;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      font-size: 0.76rem;
+      font-weight: 800;
+      color: var(--brand-gold);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .section-title {
+      font-size: clamp(2.6rem, 5.4vw, 6rem);
+      line-height: 0.92;
+      letter-spacing: -0.06em;
+      font-weight: 900;
+      margin-bottom: 20px;
+    }
+
+    .section-title .italic {
+      font-style: italic;
+      font-weight: 500;
+    }
+
+    .section-copy {
+      font-size: 1.08rem;
+      line-height: 1.85;
+      color: var(--muted);
+      max-width: 740px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 34px;
+      align-items: center;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.04);
+    }
+
+    .card-media {
+      aspect-ratio: 4/3;
+      background: var(--soft);
+      overflow: hidden;
+    }
+
+    .card-media img,
+    .card-media video,
+    .card-media iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-body {
+      padding: 24px;
+    }
+
+    .card-title {
+      font-size: 1.45rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+
+    .card-subtitle {
+      font-size: 0.75rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+      color: var(--brand-gold);
+      margin-bottom: 14px;
+    }
+
+    .card-text {
+      color: var(--muted);
+      line-height: 1.78;
+      font-size: 0.98rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      overflow: hidden;
+    }
+
+    .service-card {
+      background: #fff;
+      padding: 34px 28px;
+      min-height: 250px;
+      transition: background .25s ease, transform .25s ease;
+    }
+
+    .service-card:hover {
+      background: #fcfbf7;
+      transform: translateY(-2px);
+    }
+
+    .service-card h3 {
+      font-size: 1.35rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 14px;
+    }
+
+    .service-card .service-subtitle {
+      display: inline-block;
+      margin-bottom: 16px;
+      font-size: 0.72rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--brand-gold);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .service-card p {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: 0.96rem;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 22px;
+      margin-top: 36px;
+    }
+
+    .gallery-item {
+      border-radius: 30px;
+      overflow: hidden;
+      background: var(--soft);
+      min-height: 520px;
+      position: relative;
+      border: 1px solid var(--line);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .8s cubic-bezier(.16,1,.3,1);
+      display: block;
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .gallery-caption {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      bottom: 18px;
+      padding: 14px 16px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.86);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+
+    .gallery-caption strong {
+      display: block;
+      font-size: 1rem;
+      margin-bottom: 4px;
+    }
+
+    .gallery-caption span {
+      font-size: 0.92rem;
+      color: var(--muted);
+    }
+
+    .videos-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 24px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .video-frame {
+      border-radius: 34px;
+      overflow: hidden;
+      background: #000;
+      aspect-ratio: 16/9;
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: 0 28px 90px rgba(0,0,0,0.18);
+    }
+
+    .video-frame iframe,
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border: 0;
+      object-fit: cover;
+    }
+
+    .contact-section {
+      background: #0b0c10;
+      color: #fff;
+      border-radius: 48px 48px 0 0;
+      padding: 110px 0 80px;
+    }
+
+    .contact-copy {
+      max-width: 720px;
+      color: rgba(255,255,255,0.76);
+      line-height: 1.8;
+      font-size: 1.08rem;
+      margin-bottom: 28px;
+    }
+
+    .contact-links {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 22px;
+    }
+
+    .contact-links a {
+      color: #fff;
+      text-decoration: none;
+      border-bottom: 2px solid rgba(255,255,255,0.25);
+      padding-bottom: 4px;
+      font-weight: 700;
+      font-size: 1rem;
+      transition: border-color .2s ease, color .2s ease;
+    }
+
+    .contact-links a:hover {
+      color: var(--brand-gold);
+      border-color: var(--brand-gold);
+    }
+
+    .footer {
+      background: #000;
+      color: rgba(255,255,255,0.55);
+      padding: 28px 0;
+      border-top: 1px solid rgba(255,255,255,0.08);
+      font-size: 0.8rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: 'Space Mono', monospace;
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity .9s ease, transform .9s cubic-bezier(.16,1,.3,1);
+    }
+
+    .reveal.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 70px;
+        padding-bottom: 90px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(var(--container), calc(100% - 24px));
+      }
+
+      section {
+        padding: 78px 0;
+      }
+
+      .header-inner {
+        min-height: 74px;
+      }
+
+      .hero-title {
+        font-size: clamp(3rem, 16vw, 5.4rem);
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .btn-lux,
+      .btn-line {
+        width: 100%;
+      }
+
+      .gallery-item {
+        min-height: 420px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="header">
+    <div class="container header-inner">
+      <a href="#home" class="brand">FEELING DECOR.</a>
+      <nav class="nav">
+        <a href="#filosofia">Filosofia</a>
+        <a href="#curadoria">Curadoria</a>
+        <a href="#projetos">Projetos</a>
+        <a href="#videos">Vídeos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section id="home" class="hero">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="eyebrow">Feeling Decor · Viviani Costa · Curadoria sensorial</div>
+          <h1 class="hero-title font-serif">
+            Menos objetos.<br>
+            <span class="italic">Mais identidade.</span>
+          </h1>
+          <p class="hero-description">
+            A Feeling Decor cria ambientes que respiram com intenção. Cada escolha — da cortina ao aroma, do móvel ao quadro —
+            compõe uma atmosfera elegante, funcional e emocionalmente presente. Aqui, decorar não é preencher: é revelar.
+          </p>
+          <div class="hero-actions">
+            <a href="#contato" class="btn-lux"><i class="fa-solid fa-paper-plane"></i> Falar com Viviani</a>
+            <a href="#filosofia" class="btn-line">Ver conceito</a>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="hero-visual">
+            <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg" alt="Ambiente Feeling Decor">
+            <div class="hero-badge">Design sensorial · fluidez · harmonia</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="filosofia">
+      <div class="container split">
+        <div class="reveal">
+          <span class="section-label">Nossa filosofia</span>
+          <h2 class="section-title font-serif">
+            Onde o invisível <br>
+            se torna <span class="italic">emoção.</span>
+          </h2>
+          <p class="section-copy">
+            Não trabalhamos apenas com decoração. Trabalhamos com ritmo, proporção e sensação. O ambiente certo não grita;
+            ele acolhe, organiza e faz o espaço conversar com quem vive nele. A nossa curadoria valoriza luz natural,
+            texturas honestas, equilíbrio visual e presença afetiva.
+          </p>
+        </div>
+
+        <div class="reveal">
+          <div class="card">
+            <div class="card-media">
+              <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/destaque/apt.mp4" autoplay muted loop playsinline></video>
+            </div>
+            <div class="card-body">
+              <div class="card-subtitle">Leitura de ambiente</div>
+              <div class="card-title">Clareza que dá forma ao cotidiano</div>
+              <div class="card-text">
+                A proposta nasce da observação do espaço, das rotinas e do que o ambiente precisa transmitir. O resultado é uma
+                composição leve, refinada e funcional, com atenção ao silêncio visual e ao conforto sensorial.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="curadoria">
+      <div class="container">
+        <div class="reveal" style="margin-bottom: 34px;">
+          <span class="section-label">Curadoria exclusiva</span>
+          <h2 class="section-title font-serif">
+            Peças que <span class="italic">organizam sensações</span>
+          </h2>
+          <p class="section-copy">
+            Cada categoria da curadoria foi pensada para contribuir com um tipo de atmosfera. Em vez de objetos soltos,
+            a composição junta função, presença e estética para construir unidade visual.
+          </p>
+        </div>
+
+        <div class="services-grid">
+          <article class="service-card reveal">
+            <span class="service-subtitle">01 · Cortinas</span>
+            <h3>Criam a luz certa.</h3>
+            <p>
+              Tecidos que suavizam a entrada de luz e definem o clima do espaço com delicadeza. A cortina é a moldura da
+              janela e, muitas vezes, a primeira camada de atmosfera do ambiente.
+            </p>
+          </article>
+
+          <article class="service-card reveal">
+            <span class="service-subtitle">02 · Móveis</span>
+            <h3>Estrutura com intenção.</h3>
+            <p>
+              Peças escolhidas pela proporção, ergonomia e linguagem atemporal. O móvel certo ocupa o lugar sem pesar e
+              transforma a circulação em um gesto natural.
+            </p>
+          </article>
+
+          <article class="service-card reveal">
+            <span class="service-subtitle">03 · Quadros</span>
+            <h3>Assinatura visual.</h3>
+            <p>
+              Obras, texturas e composições que trazem identidade para a parede. O quadro certo ativa memória, cor e ritmo
+              sem roubar a cena do espaço.
+            </p>
+          </article>
+
+          <article class="service-card reveal">
+            <span class="service-subtitle">04 · Aromas</span>
+            <h3>Camada invisível.</h3>
+            <p>
+              A memória olfativa amarra a experiência do ambiente. Quando o aroma conversa com a decoração, o espaço passa
+              a ser reconhecido pelo corpo antes mesmo do olhar.
+            </p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="projetos">
+      <div class="container">
+        <div class="reveal" style="margin-bottom: 26px;">
+          <span class="section-label">Projetos</span>
+          <h2 class="section-title font-serif">
+            Imagens que <span class="italic">respiram presença</span>
+          </h2>
+          <p class="section-copy">
+            Uma seleção de cenas e composições que mostram a linguagem da Feeling Decor em diferentes escalas:
+            acolhimento, fluidez e sofisticação discreta.
+          </p>
+        </div>
+
+        <div class="gallery">
+          <div class="gallery-item reveal">
+            <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img2.jpg" alt="Projeto Feeling Decor 1">
+            <div class="gallery-caption">
+              <strong>Atmosfera com profundidade</strong>
+              <span>Um espaço pensado para equilibrar textura, luz e leitura visual.</span>
+            </div>
+          </div>
+
+          <div class="gallery-item reveal">
+            <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg" alt="Projeto Feeling Decor 2">
+            <div class="gallery-caption">
+              <strong>Curadoria em movimento</strong>
+              <span>Materialidade leve, composição limpa e sensação de continuidade.</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-top: 26px;">
+          <p class="section-copy" style="max-width: 900px;">
+            O objetivo não é impressionar pelo excesso. É criar uma experiência silenciosa, onde tudo parece estar no
+            lugar certo. Esse é o tipo de beleza que permanece.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="videos" style="background:#0a0a0a; color:#fff;">
+      <div class="container">
+        <div class="reveal" style="margin-bottom: 28px;">
+          <span class="section-label" style="color: var(--brand-gold);">Bastidores</span>
+          <h2 class="section-title font-serif">
+            O gesto por trás da <span class="italic">perfeição</span>
+          </h2>
+          <p class="section-copy" style="color: rgba(255,255,255,0.72); max-width: 860px;">
+            Os vídeos revelam a matéria viva do processo: acabamento, textura, movimento, luz e escala.
+            É na imagem em movimento que a atmosfera ganha corpo.
+          </p>
+        </div>
+
+        <div class="videos-grid">
+          <div class="video-frame reveal">
+            <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4" autoplay muted loop playsinline></video>
+          </div>
+
+          <div class="video-frame reveal">
+            <iframe src="https://www.youtube.com/embed/KrtOVrk8aDk?rel=0&modestbranding=1" allowfullscreen></iframe>
+          </div>
+
+          <div class="video-frame reveal">
+            <iframe src="https://www.youtube.com/embed/koKhjQKGJSc?rel=0&modestbranding=1" allowfullscreen></iframe>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contato" class="contact-section">
+      <div class="container split">
+        <div class="reveal">
+          <span class="section-label" style="color: rgba(255,255,255,0.62);">Vamos começar?</span>
+          <h2 class="section-title font-serif" style="color:#fff;">
+            Pronta para um <br>
+            espaço <span class="italic">vivo?</span>
+          </h2>
+          <p class="contact-copy">
+            Se a sua casa, loja ou projeto pede mais identidade, a Feeling Decor pode transformar a atmosfera em algo
+            mais claro, mais confortável e mais memorável. Cada decisão visual entra para servir a experiência do espaço,
+            e não para competir com ela.
+          </p>
+          <p class="contact-copy">
+            Fale com a Viviani para construir uma curadoria que traduza seu estilo em forma, presença e sensação.
+          </p>
+
+          <div class="contact-links">
+            <a href="https://wa.me/5500000000000" target="_blank" rel="noopener">WhatsApp Direto</a>
+            <a href="https://instagram.com/feelingdecor" target="_blank" rel="noopener">Instagram @feelingdecor</a>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <div class="card" style="border-color: rgba(255,255,255,0.08); background: rgba(255,255,255,0.03);">
+            <div class="card-media" style="background:#111;">
+              <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" autoplay muted loop playsinline></video>
+            </div>
+            <div class="card-body" style="background: rgba(255,255,255,0.02);">
+              <div class="card-subtitle">Encerramento</div>
+              <div class="card-title" style="color:#fff;">Menos ruído, mais presença</div>
+              <div class="card-text" style="color: rgba(255,255,255,0.72);">
+                A experiência de um ambiente bem curado está no que ele faz você sentir ao entrar.
+                É isso que a Feeling Decor busca: uma beleza que acolhe, dura e conversa com a vida real.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container">
+      © 2026 Feeling Decor — Por Viviani Costa. Mínimo, essencial e sensorial.
+    </div>
+  </footer>
+
+  <script>
+    const CONFIG = {
+      instagram: {
+        reel1: "https://www.instagram.com/feeling.decor_/reel/DCbYsZHRIYZ/",
+        post1: "https://www.instagram.com/feeling.decor_/p/DCvJ1wwxFQ2/",
+        reel2: "https://www.instagram.com/feeling.decor_/reel/DCbZPpNxk0L/"
+      },
+      videos: {
+        piso: "https://www.youtube.com/embed/KrtOVrk8aDk?rel=0&modestbranding=1",
+        cortina: "https://www.youtube.com/embed/koKhjQKGJSc?rel=0&modestbranding=1"
+      }
+    };
+
+    function setupReveal() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) entry.target.classList.add('active');
+        });
+      }, { threshold: 0.12 });
+
+      document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    }
+
+    function setupSmoothScroll() {
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (!target) return;
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+      });
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      setupReveal();
+      setupSmoothScroll();
+    });
+  </script>
+</body>
+</html>
