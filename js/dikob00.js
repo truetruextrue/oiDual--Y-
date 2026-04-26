@@ -421,7 +421,7 @@
       }
       .symbol-button.di-managed-button{
   font-size: 9px;        /* 🔻 menor texto */
-  padding: 5px 5px;       /* 🔻 menos espaço interno */
+  padding: 6px 8px;       /* 🔻 menos espaço interno */
   border-radius: 10px;    /* mais compacto */
   min-width: 32px;
   min-height: 32px;
