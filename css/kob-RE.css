@@ -1,0 +1,524 @@
+/* =====================================================================
+   KOBLLUX HUD v2 — CLEAN HUD / SYMBOL BAR
+   column / row / floating / top / side / collapsed / orb sync
+   pronto para colar depois do CSS base
+   ===================================================================== */
+
+/* ---------- BASE / TOKENS ---------- */
+:root{
+  --hud-gap: 8px;
+  --hud-pad: 10px;
+  --hud-radius: 24px;
+  --hud-radius-top: 0 0 20px 20px;
+  --hud-radius-side-left: 0 20px 20px 0;
+  --hud-radius-side-right: 20px 0 0 20px;
+  --hud-border-alpha: 0.32;
+  --hud-shadow: 0 10px 36px rgba(0,0,0,.55);
+  --hud-shadow-strong: 0 18px 60px rgba(0,0,0,.72);
+  --hud-trans: 0.28s cubic-bezier(.23,1,.32,1);
+  --hud-trans-soft: 0.45s ease;
+}
+
+/* ---------- PAGE / APP SHELL ---------- */
+html, body{
+  height:100%;
+  min-height:100%;
+  margin:0;
+  padding:0;
+  color:var(--text);
+  background:transparent;
+  font-family:-apple-system, BlinkMacSystemFont, sans-serif;
+  overflow:auto;
+}
+
+.wrap{
+  width:100%;
+  min-height:100vh;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+}
+
+iframe#frame,
+iframe#content-frame{
+  width:100%;
+  min-height:100vh;
+  height:100%;
+  border:0;
+  border-radius:8px;
+  transition: opacity .3s ease;
+}
+
+/* ---------- HUD BASE (supports .symbol-bar / .symbol-dock / .kob-tts-dock) ---------- */
+:where(.symbol-bar, .symbol-dock, .kob-tts-dock){
+  position:fixed;
+  z-index:9999;
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:var(--hud-gap);
+
+  padding:var(--hud-pad);
+
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)),
+    var(--bg-blur, rgba(8,10,18,.66));
+
+  backdrop-filter:blur(15px) saturate(160%);
+  -webkit-backdrop-filter:blur(15px) saturate(160%);
+
+  border:1px solid color-mix(in srgb, var(--kob-voice-primary) 30%, transparent);
+  box-shadow:
+    var(--hud-shadow),
+    inset 0 0 12px rgba(255,255,255,.03);
+
+  color:#fff;
+
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:none;
+
+  transition:
+    opacity var(--hud-trans-soft),
+    left var(--hud-trans),
+    top var(--hud-trans),
+    right var(--hud-trans),
+    bottom var(--hud-trans),
+    transform var(--hud-trans),
+    border-radius .3s ease,
+    padding .3s ease,
+    box-shadow .28s ease,
+    background .35s ease,
+    border-color .35s ease;
+}
+
+/* ---------- DEFAULT ORIENTATION ---------- */
+.symbol-bar,
+.symbol-dock,
+.kob-tts-dock{
+  flex-direction:column;
+  border-radius:var(--hud-radius);
+}
+
+/* ---------- FLOATING ---------- */
+.symbol-bar.floating,
+.symbol-dock.floating,
+.kob-tts-dock.floating{
+  flex-direction:column;
+  border-radius:24px;
+}
+
+/* ---------- ROW / TOP ---------- */
+.symbol-bar.snap-top,
+.symbol-bar.horizontal,
+.symbol-dock.snap-top,
+.symbol-dock.horizontal,
+.kob-tts-dock.snap-top,
+.kob-tts-dock.horizontal{
+  flex-direction:row;
+  align-items:center;
+  justify-content:center;
+  border-radius:var(--hud-radius-top);
+}
+
+/* ---------- SIDE LEFT ---------- */
+.symbol-bar.snap-side,
+.symbol-dock.snap-side,
+.kob-tts-dock.snap-side{
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:var(--hud-radius-side-left);
+  border-left:0;
+}
+
+/* ---------- SIDE RIGHT ---------- */
+.symbol-bar.snap-side-right,
+.symbol-dock.snap-side-right,
+.kob-tts-dock.snap-side-right{
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  border-radius:var(--hud-radius-side-right);
+  border-right:0;
+}
+
+/* ---------- IDLE ---------- */
+.symbol-bar.idle,
+.symbol-dock.idle,
+.kob-tts-dock.idle{
+  opacity:.18;
+  filter:saturate(.95) brightness(.92);
+}
+
+.symbol-bar.idle:hover,
+.symbol-dock.idle:hover,
+.kob-tts-dock.idle:hover{
+  opacity:.96;
+}
+
+/* ---------- DRAGGING ---------- */
+.symbol-bar.dragging,
+.symbol-dock.dragging,
+.kob-tts-dock.dragging,
+.symbol-bar.is-dragging,
+.symbol-dock.is-dragging,
+.kob-tts-dock.is-dragging{
+  transition:none !important;
+  transform:none !important;
+  cursor:grabbing;
+  z-index:10001 !important;
+  box-shadow:
+    var(--hud-shadow-strong),
+    inset 0 0 18px rgba(255,255,255,.04),
+    0 0 40px color-mix(in srgb, var(--kob-voice-primary) 40%, transparent);
+}
+
+/* ---------- CONNECTED / MAGNET / SNAP HELPERS ---------- */
+.symbol-bar.connected,
+.symbol-dock.connected,
+.kob-tts-dock.connected{
+  outline:1px dashed color-mix(in srgb, var(--kob-voice-primary) 35%, transparent);
+  outline-offset:6px;
+}
+
+.symbol-bar.magnet-preview,
+.symbol-dock.magnet-preview,
+.kob-tts-dock.magnet-preview{
+  box-shadow:
+    0 14px 46px rgba(0,0,0,.68),
+    0 0 24px color-mix(in srgb, var(--kob-voice-primary) 22%, transparent);
+}
+
+.symbol-bar.magnet-preview .magnet-halo,
+.symbol-dock.magnet-preview .magnet-halo,
+.kob-tts-dock.magnet-preview .magnet-halo{
+  opacity:1;
+}
+
+/* ---------- COLLAPSED ---------- */
+.symbol-bar.collapsed,
+.symbol-dock.collapsed,
+.kob-tts-dock.collapsed{
+  gap:6px;
+  padding:10px;
+  width:fit-content;
+  height:fit-content;
+}
+
+.symbol-bar.collapsed .symbol-wrap,
+.symbol-dock.collapsed .symbol-wrap,
+.kob-tts-dock.collapsed .symbol-wrap{
+  width:0;
+  height:0;
+  margin:0;
+  opacity:0;
+  pointer-events:none;
+  transform:scale(0);
+}
+
+.symbol-bar.collapsed.snap-side,
+.symbol-bar.collapsed.snap-side-right,
+.symbol-dock.collapsed.snap-side,
+.symbol-dock.collapsed.snap-side-right,
+.kob-tts-dock.collapsed.snap-side,
+.kob-tts-dock.collapsed.snap-side-right{
+  padding:10px 6px;
+}
+
+.symbol-bar.collapsed.snap-top,
+.symbol-dock.collapsed.snap-top,
+.kob-tts-dock.collapsed.snap-top{
+  padding:6px 10px;
+}
+
+/* ---------- WARP / CONTENT / ROOT HELPERS ---------- */
+#root,
+#bg-fake-custom,
+#arch-overlay{
+  position:relative;
+}
+
+#bg-fake-custom{
+  pointer-events:none;
+}
+
+#kob-tts-outline{
+  position:absolute;
+  z-index:9998;
+  pointer-events:none;
+  border:2px solid var(--kob-voice-primary);
+  border-radius:8px;
+  background:var(--kob-voice-bg-soft);
+  box-shadow:0 0 15px var(--kob-voice-primary);
+  transition:all .3s cubic-bezier(.175,.885,.32,1.275);
+  display:none;
+}
+
+/* ---------- WRAP ---------- */
+.symbol-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  flex:0 0 auto;
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+}
+
+/* ---------- BUTTONS ---------- */
+.symbol-button{
+  width:48px;
+  height:48px;
+  min-width:48px;
+  min-height:48px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:var(--card-bg, rgba(255,255,255,.05));
+  color:var(--text);
+  cursor:pointer;
+  flex-shrink:0;
+  position:relative;
+  font-size:18px;
+  transition:transform .2s ease, background .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+
+.symbol-button:hover{
+  background:rgba(255,255,255,.12);
+  border-color:var(--kob-voice-primary);
+  color:var(--kob-voice-primary);
+}
+
+.symbol-button:active{
+  transform:scale(.92);
+}
+
+.symbol-button.toggle,
+.symbol-button.main-toggle,
+.symbol-button#btn-arch{
+  background:linear-gradient(135deg, #1a1d29, #0f111a);
+  color:var(--kob-voice-primary);
+  border-color:color-mix(in srgb, var(--kob-voice-primary) 55%, transparent);
+  font-weight:700;
+  box-shadow:0 0 10px rgba(0,0,0,.45);
+}
+
+/* types */
+.symbol-button--managed,
+.di-managed-button{
+  user-select:none;
+  -webkit-user-select:none;
+  touch-action:manipulation;
+}
+
+.di-managed-button.is-dragging{
+  opacity:.5;
+  transform:scale(.96);
+}
+
+.di-managed-button.is-drop-target{
+  outline:2px dashed rgba(255,255,255,.42);
+  outline-offset:4px;
+}
+
+/* ---------- LAYOUT MODES ---------- */
+.symbol-bar.snap-top .symbol-wrap,
+.symbol-bar.horizontal .symbol-wrap,
+.symbol-dock.snap-top .symbol-wrap,
+.symbol-dock.horizontal .symbol-wrap,
+.kob-tts-dock.snap-top .symbol-wrap,
+.kob-tts-dock.horizontal .symbol-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.symbol-bar.snap-side .symbol-wrap,
+.symbol-bar.snap-side-right .symbol-wrap,
+.symbol-dock.snap-side .symbol-wrap,
+.symbol-dock.snap-side-right .symbol-wrap,
+.kob-tts-dock.snap-side .symbol-wrap,
+.kob-tts-dock.snap-side-right .symbol-wrap{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+/* ---------- ORB ---------- */
+#main-orb,
+.orb-container{
+  display:grid;
+  place-items:center;
+  width:100%;
+  height:100%;
+  margin:0;
+  position:relative;
+}
+
+#main-orb{
+  padding:0;
+}
+
+#main-orb svg{
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+#btn-arch #main-orb,
+.symbol-button#btn-arch #main-orb{
+  display:flex !important;
+  padding:0;
+  width:56px;
+  height:56px;
+}
+
+.symbol-bar .orb-mini,
+.symbol-bar .orb-micro,
+.symbol-bar .tts-orb-mini{
+  display:grid;
+  place-items:center;
+}
+
+.symbol-bar .orb-mini{
+  width:26px;
+  height:26px;
+}
+
+/* ---------- HUD INFO ---------- */
+.hud-info{
+  font-size:10px;
+  color:var(--kob-voice-primary);
+  text-transform:uppercase;
+  letter-spacing:1px;
+  font-weight:600;
+  display:flex;
+  align-items:center;
+  padding:0 10px;
+  border-left:1px solid var(--border);
+  pointer-events:none;
+  flex-shrink:0;
+}
+
+.symbol-bar.snap-top .hud-info,
+.symbol-dock.snap-top .hud-info,
+.kob-tts-dock.snap-top .hud-info{
+  display:none;
+}
+
+/* ---------- VOICE / PULSE FEEDBACK ---------- */
+.voice-indicator{
+  position:absolute;
+  bottom:-2px;
+  right:-2px;
+  width:10px;
+  height:10px;
+  border-radius:50%;
+  background:var(--kob-voice-primary);
+  border:2px solid #000;
+  box-shadow:0 0 5px var(--kob-voice-primary);
+  transition:background .5s ease, box-shadow .5s ease;
+}
+
+.symbol-bar:hover,
+.symbol-dock:hover,
+.kob-tts-dock:hover,
+.symbol-bar:focus-within,
+.symbol-dock:focus-within,
+.kob-tts-dock:focus-within{
+  box-shadow:
+    var(--hud-shadow),
+    0 0 24px color-mix(in srgb, var(--kob-voice-primary) 18%, transparent),
+    inset 0 0 10px rgba(255,255,255,.03);
+}
+
+/* ---------- BUTTON ROW / COLUMN ADJUSTS ---------- */
+.symbol-bar.snap-top .symbol-button,
+.symbol-dock.snap-top .symbol-button,
+.kob-tts-dock.snap-top .symbol-button{
+  width:44px;
+  height:44px;
+  min-width:44px;
+  min-height:44px;
+  border-radius:12px;
+}
+
+.symbol-bar.snap-side .symbol-button,
+.symbol-bar.snap-side-right .symbol-button,
+.symbol-dock.snap-side .symbol-button,
+.symbol-dock.snap-side-right .symbol-button,
+.kob-tts-dock.snap-side .symbol-button,
+.kob-tts-dock.snap-side-right .symbol-button,
+.symbol-bar.floating .symbol-button,
+.symbol-dock.floating .symbol-button,
+.kob-tts-dock.floating .symbol-button{
+  width:48px;
+  height:48px;
+}
+
+/* ---------- SPECIAL CASES ---------- */
+.symbol-bar[data-keep-inside="true"],
+.symbol-dock[data-keep-inside="true"],
+.kob-tts-dock[data-keep-inside="true"]{
+  max-width:calc(100vw - 12px);
+  max-height:calc(100vh - 12px);
+}
+
+.symbol-bar .magnet-halo,
+.symbol-dock .magnet-halo,
+.kob-tts-dock .magnet-halo{
+  position:absolute;
+  inset:-8px;
+  border-radius:inherit;
+  pointer-events:none;
+  opacity:0;
+  transition:opacity .16s ease;
+  background:linear-gradient(90deg, transparent, color-mix(in srgb, var(--kob-voice-primary) 20%, transparent));
+  filter:blur(8px);
+}
+
+/* ---------- TEXT / CONTENT HIGHLIGHT ---------- */
+[data-tts-current="true"]{
+  background:var(--kob-voice-bg-soft);
+  border-radius:8px;
+  border-color:var(--kob-voice-primary) !important;
+  box-shadow:
+    0 0 15px var(--kob-voice-bg-soft),
+    inset 0 0 10px var(--kob-voice-bg-soft);
+  transform:scale(1.02);
+  transition:all .3s ease;
+}
+
+#reader-content p{
+  padding:12px 16px;
+  margin-bottom:10px;
+  border-radius:8px;
+  border:1px solid transparent;
+  transition:all .3s ease;
+}
+
+#reader-content p strong{
+  color:var(--kob-voice-primary);
+  transition:color .5s ease;
+}
+
+/* ---------- CLEANUP FIXES FOR INVALID/OLD RULES ---------- */
+.symbol-bar.collapsed,
+.symbol-dock.collapsed,
+.kob-tts-dock.collapsed{
+  min-width:fit-content;
+  min-height:fit-content;
+}
+
+/* keep KOBLLUX voice palette alive */
+.symbol-bar,
+.symbol-dock,
+.kob-tts-dock{
+  background:var(--kob-voice-bg-soft);
+  border-color:var(--kob-voice-primary);
+  color:#fff;
+}
