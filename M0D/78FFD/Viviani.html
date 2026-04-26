@@ -1,0 +1,764 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Fin Decor | Espaços com identidade</title>
+  <meta name="description" content="Fin Decor: cortinas, móveis, quadros e aromas para criar ambientes com identidade, leveza e experiência sensorial." />
+
+  <style>
+    :root{
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-2: #f1f4f8;
+      --text: #172033;
+      --muted: #5f6b84;
+      --line: rgba(23,32,51,.10);
+      --accent: #6b7cff;
+      --accent-2: #2bb8a3;
+      --shadow: 0 18px 45px rgba(17, 24, 39, .08);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --container: 1180px;
+      --pad: clamp(20px, 3vw, 32px);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(107,124,255,.10), transparent 32%),
+        radial-gradient(circle at top right, rgba(43,184,163,.08), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img { max-width: 100%; display: block; }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(14px);
+      background: rgba(247,248,251,.78);
+      border-bottom: 1px solid rgba(23,32,51,.06);
+    }
+
+    .topbar-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background:
+        linear-gradient(135deg, rgba(107,124,255,1), rgba(43,184,163,1));
+      box-shadow: 0 12px 24px rgba(107,124,255,.22);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+    }
+
+    .brand span {
+      display: block;
+    }
+
+    .brand small {
+      display: block;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 1px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 999px;
+      transition: .2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.8);
+    }
+
+    .hero {
+      padding: 58px 0 22px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .panel {
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(23,32,51,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .hero-copy {
+      padding: clamp(28px, 4vw, 44px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 560px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(107,124,255,.10);
+      color: #5666e8;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2.4rem, 5vw, 4.6rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy p {
+      margin: 18px 0 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid transparent;
+      transition: .22s ease;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #7d89ff);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(107,124,255,.22);
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(107,124,255,.28);
+      background: rgba(107,124,255,.05);
+    }
+
+    .hero-visual {
+      overflow: hidden;
+      position: relative;
+      min-height: 560px;
+      display: grid;
+      align-items: end;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(7,13,25,.05), rgba(7,13,25,.38)),
+        url("https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-card {
+      position: relative;
+      margin: 20px;
+      padding: 22px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(255,255,255,.45);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .hero-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .section {
+      padding: 20px 0 0;
+    }
+
+    .section-card {
+      padding: clamp(22px, 3vw, 32px);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .info-box {
+      padding: 22px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff, #f9fbff);
+      border: 1px solid var(--line);
+      min-height: 160px;
+    }
+
+    .info-box h3 {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .product {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .product .thumb {
+      aspect-ratio: 16 / 10;
+      background: #dde3ec center/cover no-repeat;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .product .content {
+      padding: 18px;
+    }
+
+    .product h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .video-card {
+      overflow: hidden;
+      border-radius: 20px;
+      background: #fff;
+      border: 1px solid var(--line);
+    }
+
+    .video-preview {
+      aspect-ratio: 16 / 9;
+      background:
+        linear-gradient(135deg, rgba(107,124,255,.22), rgba(43,184,163,.16)),
+        url("https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80") center/cover no-repeat;
+    }
+
+    .video-card .content {
+      padding: 18px;
+    }
+
+    .video-card h3 {
+      margin: 0 0 8px;
+    }
+
+    .video-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .contact-box {
+      padding: 24px;
+    }
+
+    .contact-box h2 {
+      margin: 0 0 10px;
+      font-size: 1.8rem;
+    }
+
+    .contact-box p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 55ch;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contact-item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .contact-item span {
+      color: var(--muted);
+      font-size: .93rem;
+    }
+
+    .footer {
+      padding: 36px 0 46px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      padding-top: 20px;
+      border-top: 1px solid rgba(23,32,51,.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .contact-wrap,
+      .grid-4,
+      .video-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        justify-content: flex-start;
+        gap: 8px;
+      }
+
+      .hero {
+        padding-top: 20px;
+      }
+
+      .hero-grid,
+      .grid-2,
+      .grid-4,
+      .video-grid,
+      .contact-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .hero-copy {
+        padding: 24px;
+      }
+
+      .hero-visual {
+        min-height: 420px;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 10vw, 3.4rem);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#home" aria-label="Fin Decor">
+        <div class="brand-mark">F</div>
+        <div>
+          <span>Fin Decor</span>
+          <small>Espaços com identidade</small>
+        </div>
+      </a>
+
+      <nav class="nav" aria-label="Navegação principal">
+        <a href="#quem-somos">Quem somos</a>
+        <a href="#produtos">Produtos</a>
+        <a href="#conceito">Conceito</a>
+        <a href="#videos">Vídeos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <section class="hero">
+      <div class="container hero-grid">
+        <article class="panel hero-copy">
+          <div class="eyebrow">Design leve · comunicação clara · experiência sensorial</div>
+          <h1>Transformamos ambientes em experiências com identidade.</h1>
+          <p>
+            Uma marca de decoração pensada para organizar o espaço, valorizar cada produto e
+            apresentar a proposta da Fin Decor de forma simples, elegante e objetiva.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#produtos">Conheça os produtos</a>
+            <a class="btn btn-secondary" href="#quem-somos">Entenda a proposta</a>
+          </div>
+        </article>
+
+        <aside class="panel hero-visual" aria-label="Imagem principal">
+          <div class="hero-image"></div>
+          <div class="hero-card">
+            <h2>Uma primeira página mais leve</h2>
+            <p>
+              Menos ruído, mais clareza. A home apresenta a essência da marca antes de mergulhar
+              nos detalhes.
+            </p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="section" id="quem-somos">
+      <div class="container panel section-card">
+        <div class="section-head">
+          <div>
+            <span class="tag">Quem somos</span>
+            <h2>Uma marca que organiza, acolhe e comunica melhor.</h2>
+          </div>
+          <p>
+            Aqui entra a explicação da Fin Decor de maneira simples: o que é, qual é o diferencial
+            e por que a marca existe.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="info-box">
+            <h3>O que é a Fin Decor</h3>
+            <p>
+              Uma marca de decoração com foco em criar ambientes bonitos, funcionais e com presença.
+              A comunicação precisa ser clara desde o primeiro contato.
+            </p>
+          </div>
+
+          <div class="info-box">
+            <h3>Qual é o diferencial</h3>
+            <p>
+              Organizar produtos e ideias em uma experiência única, evitando excesso de informação e
+              reforçando a identidade visual da marca.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="produtos">
+      <div class="container panel section-card">
+        <div class="section-head">
+          <div>
+            <span class="tag">Produtos</span>
+            <h2>Subprodutos apresentados um por um, com clareza.</h2>
+          </div>
+          <p>
+            Cada categoria ganha seu espaço próprio, sem misturar tudo na mesma mensagem.
+          </p>
+        </div>
+
+        <div class="grid-4">
+          <article class="panel product">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="content">
+              <h3>Cortinas</h3>
+              <p>Leveza, controle de luz e acabamento elegante para o ambiente.</p>
+            </div>
+          </article>
+
+          <article class="panel product">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="content">
+              <h3>Móveis</h3>
+              <p>Peças que ajudam a compor o espaço com funcionalidade e estética.</p>
+            </div>
+          </article>
+
+          <article class="panel product">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="content">
+              <h3>Quadros</h3>
+              <p>Elementos visuais para dar personalidade e ritmo ao ambiente.</p>
+            </div>
+          </article>
+
+          <article class="panel product">
+            <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1602872029708-84f3f8d1c1f8?auto=format&fit=crop&w=1200&q=80');"></div>
+            <div class="content">
+              <h3>Aromas</h3>
+              <p>Camada sensorial que completa a experiência do espaço vivo.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="conceito">
+      <div class="container panel section-card">
+        <div class="section-head">
+          <div>
+            <span class="tag">Conceito base</span>
+            <h2>O conceito une tudo: ambiente, sensação e identidade.</h2>
+          </div>
+          <p>
+            Esta seção pode receber o nome do conceito central da marca, como “Vivi Concept”,
+            “Espaço Vivo” ou outro eixo que amarre todos os produtos.
+          </p>
+        </div>
+
+        <div class="grid-2">
+          <div class="info-box">
+            <h3>Base conceitual</h3>
+            <p>
+              A marca não precisa falar tudo ao mesmo tempo. Primeiro explica a proposta central,
+              depois apresenta as categorias e os detalhes.
+            </p>
+          </div>
+          <div class="info-box">
+            <h3>Leitura simples</h3>
+            <p>
+              O usuário entende rapidamente o que a Fin Decor faz, quais soluções oferece e como os
+              produtos se conectam dentro de uma mesma identidade.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="videos">
+      <div class="container panel section-card">
+        <div class="section-head">
+          <div>
+            <span class="tag">Vídeos</span>
+            <h2>Conteúdo curto, direto e sem repetição.</h2>
+          </div>
+          <p>
+            Em vez de vídeos longos e confusos, a ideia aqui é trabalhar peças curtas com uma
+            mensagem por vez.
+          </p>
+        </div>
+
+        <div class="video-grid">
+          <article class="video-card">
+            <div class="video-preview"></div>
+            <div class="content">
+              <h3>Vídeo 01 — Apresentação da marca</h3>
+              <p>Uma explicação clara do que a Fin Decor é e qual problema ela resolve.</p>
+            </div>
+          </article>
+
+          <article class="video-card">
+            <div class="video-preview"></div>
+            <div class="content">
+              <h3>Vídeo 02 — Produtos e soluções</h3>
+              <p>Mostra cortinas, móveis, quadros e aromas de forma organizada.</p>
+            </div>
+          </article>
+
+          <article class="video-card">
+            <div class="video-preview"></div>
+            <div class="content">
+              <h3>Vídeo 03 — Experiência no ambiente</h3>
+              <p>Fala sobre sensação, composição e transformação do espaço.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="contato">
+      <div class="container panel section-card">
+        <div class="contact-wrap">
+          <div class="panel contact-box">
+            <span class="tag">Contato</span>
+            <h2>Pronta para uma comunicação mais clara e elegante.</h2>
+            <p>
+              Essa estrutura deixa o site mais leve, com leitura rápida e visual mais sofisticado.
+              A identidade aparece com mais força e menos confusão.
+            </p>
+
+            <div class="hero-actions" style="margin-top: 22px;">
+              <a class="btn btn-primary" href="mailto:contato@findecor.com.br">Falar com a Fin Decor</a>
+              <a class="btn btn-secondary" href="#home">Voltar ao topo</a>
+            </div>
+          </div>
+
+          <div class="panel contact-box">
+            <div class="contact-list">
+              <div class="contact-item">
+                <div>
+                  <strong>WhatsApp</strong>
+                  <span>(00) 00000-0000</span>
+                </div>
+                <span>Atendimento rápido</span>
+              </div>
+
+              <div class="contact-item">
+                <div>
+                  <strong>E-mail</strong>
+                  <span>contato@findecor.com.br</span>
+                </div>
+                <span>Contato institucional</span>
+              </div>
+
+              <div class="contact-item">
+                <div>
+                  <strong>Instagram</strong>
+                  <span>@findecor</span>
+                </div>
+                <span>Portfólio e novidades</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>Fin Decor · Layout clean/light</div>
+      <div>Estrutura pensada para clareza, leveza e identidade.</div>
+    </div>
+  </footer>
+</body>
+</html>

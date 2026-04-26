@@ -1,0 +1,491 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Feeling Decor | Viviani Costa</title>
+  <meta name="description" content="Feeling Decor cria ambientes leves, organizados e sensoriais com cortinas, móveis, quadros e aromas.">
+
+  <style>
+    :root{
+      --bg:#ffffff;
+      --text:#05070a;
+      --muted:#5b6475;
+      --line:#e8edf3;
+      --soft:#f7f9fc;
+      --accent:#111827;
+      --accent2:#6b7280;
+      --gold:#c5a059;
+      --radius:28px;
+      --container:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+      line-height:1.55;
+    }
+
+    a{color:inherit;text-decoration:none}
+    img{max-width:100%;display:block}
+
+    .container{
+      width:min(var(--container),calc(100% - 32px));
+      margin:0 auto;
+    }
+
+    /* Topbar */
+    .topbar{
+      position:sticky;
+      top:0;
+      z-index:100;
+      background:rgba(255,255,255,.85);
+      backdrop-filter:blur(12px);
+      border-bottom:1px solid rgba(0,0,0,.05);
+    }
+
+    .topbar-inner{
+      min-height:80px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:20px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      font-weight:800;
+      letter-spacing:-.03em;
+      font-size: 1.2rem;
+    }
+
+    .brand-mark{
+      width:40px;
+      height:40px;
+      border-radius:12px;
+      background:var(--accent);
+      color:#fff;
+      display:grid;
+      place-items:center;
+      font-family: "Playfair Display", serif;
+      font-size:20px;
+    }
+
+    .nav{
+      display:flex;
+      align-items:center;
+      gap:8px;
+    }
+
+    .nav a{
+      padding:8px 16px;
+      border-radius:999px;
+      color:var(--muted);
+      font-size:14px;
+      font-weight: 500;
+      transition: .2s;
+    }
+
+    .nav a:hover{
+      background:var(--soft);
+      color:var(--text);
+    }
+
+    /* Hero Section with Video/Image Hybrid */
+    .hero{
+      padding:32px 0;
+    }
+
+    .hero-grid{
+      display:grid;
+      grid-template-columns:1.1fr .9fr;
+      gap:24px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:#fff;
+      overflow: hidden;
+      box-shadow: 0 10px 30px -10px rgba(0,0,0,0.05);
+    }
+
+    .hero-copy{
+      padding:clamp(32px,5vw,64px);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      position: relative;
+    }
+
+    /* Floating Mandala Decor */
+    .mandala-decor {
+      position: absolute;
+      top: -40px;
+      right: -40px;
+      width: 200px;
+      opacity: 0.04;
+      pointer-events: none;
+      transform: rotate(15deg);
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      padding:6px 14px;
+      border-radius:999px;
+      background:var(--soft);
+      color:var(--gold);
+      font-size:12px;
+      font-weight:700;
+      margin-bottom:20px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(3rem, 6.5vw, 5.5rem);
+      line-height:0.92;
+      letter-spacing:-.06em;
+      font-family: "Playfair Display", serif;
+    }
+
+    .hero-copy p{
+      margin:24px 0 0;
+      max-width:36ch;
+      color:var(--muted);
+      font-size:1.1rem;
+    }
+
+    .actions{
+      display:flex;
+      flex-wrap:wrap;
+      gap:12px;
+      margin-top:40px;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:56px;
+      padding:0 28px;
+      border-radius:999px;
+      font-weight:600;
+      font-size:15px;
+      transition:.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .btn-dark{ background:var(--accent); color:#fff; }
+    .btn-dark:hover{ background:var(--gold); transform: translateY(-2px); }
+
+    .btn-light{ background:#fff; color:var(--text); border:1px solid var(--line); }
+    .btn-light:hover{ background:var(--soft); border-color:var(--accent2); }
+
+    /* Media Area with Video Support */
+    .hero-media{
+      position:relative;
+      min-height:600px;
+      background: #000;
+    }
+
+    .hero-media video, 
+    .hero-media .main-img {
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      position: absolute;
+      top: 0; left: 0;
+    }
+
+    .hero-card{
+      position:absolute;
+      left:24px;
+      right:24px;
+      bottom:24px;
+      padding:28px;
+      border-radius:24px;
+      background:rgba(255,255,255,.8);
+      backdrop-filter:blur(20px);
+      border:1px solid rgba(255,255,255,0.3);
+      z-index: 2;
+    }
+
+    .hero-card h2{
+      margin:0;
+      font-size:1.8rem;
+      letter-spacing:-.03em;
+      font-family: "Playfair Display", serif;
+    }
+
+    /* Sections */
+    .section{ padding:24px 0; }
+    .section-card{ padding:clamp(24px, 4vw, 48px); }
+
+    .section-head{
+      display:flex;
+      justify-content:space-between;
+      gap:24px;
+      align-items: flex-end;
+      margin-bottom:32px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+        font-family: "Playfair Display", serif;
+        font-size: 3rem;
+        margin: 0;
+    }
+
+    .grid-4{
+      display:grid;
+      grid-template-columns:repeat(4, 1fr);
+      gap:20px;
+    }
+
+    .card{
+      padding:32px 24px;
+      border-radius:24px;
+      background:var(--soft);
+      border:1px solid var(--line);
+      transition: .3s;
+    }
+    .card:hover { transform: translateY(-5px); border-color: var(--gold); }
+
+    .card h3{ margin:0 0 12px; font-size:1.3rem; letter-spacing:-.02em; }
+    .card p{ margin:0; color:var(--muted); font-size: 0.95rem; }
+
+    /* Portfolio Grid */
+    .media-grid{
+      display:grid;
+      grid-template-columns:repeat(3, 1fr);
+      gap:20px;
+    }
+
+    .media-item{
+      aspect-ratio: 4/5;
+      border-radius:20px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      position: relative;
+    }
+
+    .media-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: 0.6s ease;
+    }
+
+    .media-item:hover img { transform: scale(1.1); }
+
+    /* Contact Area */
+    .cta-grid {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 24px;
+    }
+
+    .link-item{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:24px;
+      border-radius:20px;
+      background:#fff;
+      border:1px solid var(--line);
+      margin-bottom: 12px;
+      transition: .2s;
+    }
+    .link-item:hover { border-color: var(--gold); background: var(--soft); }
+
+    .footer{ padding:64px 0; border-top: 1px solid var(--line); margin-top: 64px; }
+    .footer-inner { display: flex; justify-content: space-between; color: var(--muted); font-size: 14px; }
+
+    /* Mobile */
+    @media (max-width: 980px){
+      .hero-grid, .cta-grid { grid-template-columns: 1fr; }
+      .grid-4 { grid-template-columns: 1fr 1fr; }
+      .media-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 600px) {
+        .grid-4, .media-grid { grid-template-columns: 1fr; }
+        .nav { display: none; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="#home">
+        <div class="brand-mark">F</div>
+        <div>
+          <div>Feeling Decor</div>
+          <small style="font-weight: 500; font-size: 11px; opacity: 0.6; text-transform: uppercase; letter-spacing: 0.05em;">Viviani Costa</small>
+        </div>
+      </a>
+
+      <nav class="nav">
+        <a href="#quem-somos">A Marca</a>
+        <a href="#produtos">Curadoria</a>
+        <a href="#portfolio">Projetos</a>
+        <a href="#contato">Contato</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="home">
+    <!-- HERO COM MÍDIA REAL -->
+    <section class="hero">
+      <div class="container hero-grid">
+        <article class="panel hero-copy">
+          <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/mandala.png" class="mandala-decor" alt="Mandala Decor">
+          <div class="eyebrow">Espaço Vivo</div>
+          <h1>Beleza que<br>cura a alma.</h1>
+          <p>
+            Curadoria intencional de cortinas, móveis e aromas para criar ambientes que vibram em harmonia com você.
+          </p>
+          <div class="actions">
+            <a class="btn btn-dark" href="#produtos">Conhecer Curadoria</a>
+            <a class="btn btn-light" href="#contato">Solicitar Orçamento</a>
+          </div>
+        </article>
+
+        <aside class="panel hero-media">
+          <!-- Tentativa de Vídeo de fundo, fallback para imagem do repositório -->
+          <img class="main-img" src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg" alt="Ambiente Feeling Decor">
+          
+          <!-- Se houver um vídeo de ambiência no repo, ele pode ser injetado aqui -->
+          <!-- <video autoplay muted loop playsinline poster="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg">
+              <source src="URL_DO_SEU_VIDEO_REAL.mp4" type="video/mp4">
+          </video> -->
+
+          <div class="hero-card">
+            <h2>Sinta o seu lar.</h2>
+            <p>Onde o design minimalista encontra a frequência magnética do bem-estar.</p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PRODUTOS / CURADORIA -->
+    <section class="section" id="produtos">
+      <div class="container panel section-card">
+        <div class="section-head">
+          <div>
+            <h2>Curadoria.</h2>
+            <p>Peças selecionadas para transformar metros quadrados em experiências.</p>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="card">
+            <div style="color:var(--gold); margin-bottom:15px;"><i class="fa-solid fa-wind fa-xl"></i></div>
+            <h3>Cortinas</h3>
+            <p>Fluidez e controle de luz com tecidos de alta gramatura e caimento impecável.</p>
+          </div>
+          <div class="card">
+             <div style="color:var(--gold); margin-bottom:15px;"><i class="fa-solid fa-couch fa-xl"></i></div>
+            <h3>Móveis</h3>
+            <p>Design assinado e ergonomia. O equilíbrio entre funcionalidade e presença estética.</p>
+          </div>
+          <div class="card">
+             <div style="color:var(--gold); margin-bottom:15px;"><i class="fa-solid fa-leaf fa-xl"></i></div>
+            <h3>Aromas</h3>
+            <p>A camada invisível da decoração. Memória olfativa que acolhe e acalma.</p>
+          </div>
+          <div class="card">
+             <div style="color:var(--gold); margin-bottom:15px;"><i class="fa-solid fa-frame fa-xl"></i></div>
+            <h3>78 Frames</h3>
+            <p>Quadros e arte personalizada para dar voz às suas paredes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PORTFOLIO COM IMAGENS REAIS -->
+    <section class="section" id="portfolio">
+      <div class="container panel section-card" style="background: var(--soft);">
+        <div class="section-head">
+          <h2>Portfólio.</h2>
+          <p>Resultados reais de quem escolheu viver com identidade.</p>
+        </div>
+
+        <div class="media-grid">
+          <div class="media-item">
+            <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg" alt="Projeto Feeling 1">
+          </div>
+          <div class="media-item">
+            <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/bg.jpeg" alt="Projeto Feeling 2">
+          </div>
+          <div class="media-item">
+            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80" alt="Projeto Feeling 3">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTATO E LINKS -->
+    <section class="section" id="contato">
+      <div class="container">
+        <div class="cta-grid">
+          <div class="panel section-card">
+              <h2 style="font-family:'Playfair Display'; font-size:3.5rem; margin:0; line-height:1;">Vamos criar seu refúgio?</h2>
+              <p style="color:var(--muted); font-size:1.2rem; margin-top:20px;">
+                  Viviani Costa está pronta para guiar sua jornada de transformação residencial.
+              </p>
+              <div class="actions">
+                <a class="btn btn-dark" href="https://wa.me/5500000000000">Chamar no WhatsApp</a>
+              </div>
+          </div>
+
+          <div class="links-column">
+            <a class="link-item" href="https://instagram.com/feelingdecor">
+              <div>
+                <strong>Instagram</strong>
+                <span>@feelingdecor</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square" style="opacity:0.3;"></i>
+            </a>
+            <a class="link-item" href="#">
+              <div>
+                <strong>Pinterest</strong>
+                <span>Nossas referências</span>
+              </div>
+              <i class="fa-solid fa-arrow-up-right-from-square" style="opacity:0.3;"></i>
+            </a>
+            <a class="link-item" href="#">
+              <div>
+                <strong>Catálogo Completo</strong>
+                <span>PDF Curadoria 2024</span>
+              </div>
+              <i class="fa-solid fa-download" style="opacity:0.3;"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <div>© 2024 Feeling Decor por Viviani Costa</div>
+      <div style="display:flex; gap:20px;">
+          <span>Privacidade</span>
+          <span>Termos</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- FontAwesome para os ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</body>
+</html>

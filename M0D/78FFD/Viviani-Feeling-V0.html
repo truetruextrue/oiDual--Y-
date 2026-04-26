@@ -1,0 +1,1453 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#05070a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+
+  <title>Feeling Decor | Ambientes com Identidade</title>
+  <meta name="description" content="Feeling Decor: cortinas, móveis, quadros e aromas para criar ambientes com identidade, leveza e experiência sensorial." />
+
+  <link rel="apple-touch-icon" href="./icon-192.png" />
+  <link rel="manifest" href="./manifest.json" />
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              dark: '#0f1115',
+              gold: '#f0c775',
+              goldHover: '#e0b560',
+              cream: '#fcfaf6',
+              creamDark: '#f3ece1',
+              text: '#2c2c2c',
+              textMuted: '#666666'
+            },
+            vivivi: {
+              tiffany: '#0ABAB5'
+            }
+          },
+          fontFamily: {
+            serif: ['"Playfair Display"', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+            tech: ['"Space Mono"', 'monospace']
+          },
+          boxShadow: {
+            'neon-gold': '0 0 20px rgba(240, 199, 117, 0.4)'
+          }
+        }
+      }
+    };
+  </script>
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css" />
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css" />
+
+  <style>
+    :root{
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface-2: #f1f4f8;
+      --text: #172033;
+      --muted: #5f6b84;
+      --line: rgba(23,32,51,.10);
+      --accent: #6b7cff;
+      --accent-2: #2bb8a3;
+      --shadow: 0 18px 45px rgba(17, 24, 39, .08);
+      --radius: 24px;
+      --radius-sm: 16px;
+      --container: 1180px;
+    }
+
+    html { scroll-behavior: smooth; }
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(107,124,255,.10), transparent 32%),
+        radial-gradient(circle at top right, rgba(43,184,163,.08), transparent 28%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    img, video { max-width: 100%; display: block; }
+
+    .container {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: rgba(255,255,255,.80);
+      border: 1px solid rgba(23,32,51,.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      backdrop-filter: blur(14px);
+      background: rgba(247,248,251,.82);
+      border-bottom: 1px solid rgba(23,32,51,.06);
+    }
+
+    .topbar-inner {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: .2px;
+    }
+
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(107,124,255,1), rgba(43,184,163,1));
+      box-shadow: 0 12px 24px rgba(107,124,255,.22);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-weight: 900;
+      flex: 0 0 auto;
+    }
+
+    .brand span {
+      display: block;
+      line-height: 1.1;
+    }
+
+    .brand small {
+      display: block;
+      font-weight: 600;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav a {
+      font-size: 14px;
+      color: var(--muted);
+      padding: 10px 12px;
+      border-radius: 999px;
+      transition: .2s ease;
+    }
+
+    .nav a:hover {
+      color: var(--text);
+      background: rgba(255,255,255,.9);
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 14px;
+      border: 1px solid transparent;
+      transition: .22s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      user-select: none;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent), #7d89ff);
+      color: #fff;
+      box-shadow: 0 14px 28px rgba(107,124,255,.22);
+    }
+
+    .btn-primary:hover { transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border-color: var(--line);
+    }
+
+    .btn-secondary:hover {
+      border-color: rgba(107,124,255,.28);
+      background: rgba(107,124,255,.05);
+    }
+
+    .hero {
+      padding: 36px 0 18px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 24px;
+      align-items: stretch;
+    }
+
+    .hero-copy {
+      padding: clamp(28px, 4vw, 44px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      min-height: 560px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(107,124,255,.10);
+      color: #5666e8;
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(2.4rem, 5vw, 4.7rem);
+      line-height: 1.02;
+      letter-spacing: -0.04em;
+    }
+
+    .hero-copy p {
+      margin: 18px 0 0;
+      max-width: 60ch;
+      color: var(--muted);
+      font-size: 1.04rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .hero-visual {
+      overflow: hidden;
+      position: relative;
+      min-height: 560px;
+      display: grid;
+      align-items: end;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(180deg, rgba(7,13,25,.08), rgba(7,13,25,.42)),
+        url("https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg") center/cover no-repeat;
+      transform: scale(1.02);
+    }
+
+    .hero-card {
+      position: relative;
+      margin: 20px;
+      padding: 22px;
+      border-radius: 20px;
+      background: rgba(255,255,255,.88);
+      border: 1px solid rgba(255,255,255,.45);
+      backdrop-filter: blur(16px);
+    }
+
+    .hero-card h2 {
+      margin: 0 0 10px;
+      font-size: 1.15rem;
+    }
+
+    .hero-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .section {
+      padding: 18px 0 0;
+    }
+
+    .section-card {
+      padding: clamp(22px, 3vw, 32px);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: end;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-family: "Playfair Display", serif;
+      font-size: clamp(1.5rem, 2.6vw, 2.3rem);
+      letter-spacing: -0.03em;
+    }
+
+    .section-head p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 62ch;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .info-box {
+      padding: 22px;
+      border-radius: 20px;
+      background: linear-gradient(180deg, #fff, #f9fbff);
+      border: 1px solid var(--line);
+      min-height: 160px;
+    }
+
+    .info-box h3 {
+      margin: 0 0 10px;
+      font-size: 1.08rem;
+    }
+
+    .info-box p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    .tag {
+      display: inline-flex;
+      align-items: center;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--surface-2);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+
+    .product {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100%;
+    }
+
+    .product .thumb {
+      aspect-ratio: 16 / 10;
+      background: #dde3ec center/cover no-repeat;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .product .content {
+      padding: 18px;
+    }
+
+    .product h3 {
+      margin: 0 0 8px;
+      font-size: 1.02rem;
+    }
+
+    .product p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .video-shell {
+      border-radius: 22px;
+      overflow: hidden;
+      border: 1px solid rgba(23,32,51,.08);
+      background: #fff;
+      box-shadow: 0 12px 30px rgba(17,24,39,.07);
+    }
+
+    .video-shell .content {
+      padding: 18px;
+    }
+
+    .video-shell h3 {
+      margin: 0 0 6px;
+      font-size: 1.02rem;
+    }
+
+    .video-shell p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: 1fr .9fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .contact-box {
+      padding: 24px;
+    }
+
+    .contact-box h2 {
+      margin: 0 0 10px;
+      font-family: "Playfair Display", serif;
+      font-size: 1.8rem;
+    }
+
+    .contact-box p {
+      margin: 0;
+      color: var(--muted);
+      max-width: 55ch;
+    }
+
+    .contact-list {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .contact-item {
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: #fff;
+      border: 1px solid var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .contact-item strong {
+      display: block;
+      margin-bottom: 2px;
+    }
+
+    .contact-item span {
+      color: var(--muted);
+      font-size: .93rem;
+    }
+
+    .footer {
+      padding: 36px 0 46px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .footer-inner {
+      padding-top: 20px;
+      border-top: 1px solid rgba(23,32,51,.08);
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .gallery-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 18px;
+    }
+
+    .gallery-img {
+      aspect-ratio: 4 / 5;
+      width: 100%;
+      object-fit: cover;
+      border-radius: 18px;
+      box-shadow: 0 14px 30px rgba(17, 24, 39, .08);
+    }
+
+    .section-note {
+      color: var(--muted);
+      font-size: .96rem;
+    }
+
+    @media (max-width: 1024px) {
+      .hero-grid,
+      .contact-wrap,
+      .grid-4,
+      .grid-3 {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .gallery-strip {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .topbar-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav {
+        justify-content: flex-start;
+        gap: 8px;
+      }
+
+      .hero {
+        padding-top: 18px;
+      }
+
+      .hero-grid,
+      .grid-2,
+      .grid-3,
+      .grid-4,
+      .gallery-strip,
+      .contact-wrap {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-copy,
+      .hero-visual {
+        min-height: auto;
+      }
+
+      .hero-copy {
+        padding: 24px;
+      }
+
+      .hero-visual {
+        min-height: 420px;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 10vw, 3.4rem);
+      }
+
+      .footer-inner {
+        flex-direction: column;
+      }
+    }
+
+    .bg-gradient-base {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,.55), transparent 45%);
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+    #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: .15;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+    #drawerOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,17,21,.42);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease;
+      z-index: var(--z-overlay);
+    }
+
+    #drawerOverlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(420px, 92vw);
+      height: 100vh;
+      background: rgba(9, 11, 16, .96);
+      color: #fff;
+      border-left: 1px solid rgba(255,255,255,.08);
+      transform: translateX(102%);
+      transition: transform .26s ease;
+      z-index: var(--z-system);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(16px);
+    }
+
+    .drawer.is-open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .drawer-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .drawer-close {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: #fff;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .drawer-body {
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .panel-section {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.78);
+      margin-bottom: 10px;
+    }
+
+    .tiny-note {
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .panel-section input[type="range"],
+    .panel-section select,
+    .btn-mini,
+    .btn-download,
+    .btn-action,
+    .btn-upload,
+    .preset-btn {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .panel-section select {
+      appearance: none;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .preset-btn {
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      padding: 12px 10px;
+    }
+
+    .preset-btn.active {
+      background: rgba(240,199,117,.18);
+      border-color: rgba(240,199,117,.35);
+      color: #f0c775;
+    }
+
+    .btn-upload,
+    .btn-mini,
+    .btn-download,
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      min-height: 42px;
+    }
+
+    .fx-stage {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fx-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .fx-canvas-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+
+    #fxCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #0f1115;
+    }
+
+    .bg-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .bg-thumb {
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255,255,255,.08);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg-thumb::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      right: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 1px 4px rgba(0,0,0,.55);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: var(--z-content);
+    }
+
+    .nav-count {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 10px 12px;
+      border-radius: 999px;
+    }
+
+    .drawer-toggle {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .catalog-nav {
+      position: sticky;
+      bottom: 16px;
+      z-index: 40;
+      width: min(var(--container), calc(100% - 32px));
+      margin: 18px auto 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      pointer-events: auto;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(23,32,51,.08);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, .08);
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-quote {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 16px auto 0;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(23,32,51,.08);
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+</head>
+
+<body class="font-sans text-brand-text antialiased selection:bg-brand-gold selection:text-brand-dark">
+
+  <div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+  <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+
+  <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+        <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-bg-preset="ghost" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" data-bg-preset="deep" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+        <div class="fx-stage">
+          <div class="fx-actions">
+            <button class="btn-mini" onclick="loadCurrentFrameToFX()">Carregar quadro atual</button>
+            <label class="btn-mini" style="justify-content:center;">
+              Upload imagem
+              <input type="file" id="fx-upload" accept="image/*" hidden>
+            </label>
+            <button class="btn-download" onclick="downloadFX()">Download PNG</button>
+          </div>
+
+          <div class="fx-canvas-wrap">
+            <canvas id="fxCanvas" width="1200" height="800"></canvas>
+          </div>
+
+          <div class="preset-grid">
+            <button class="preset-btn active" data-fx-mode="texture" onclick="setFXMode('texture')">Textura</button>
+            <button class="preset-btn" data-fx-mode="liquid" onclick="setFXMode('liquid')">Líquido</button>
+            <button class="preset-btn" data-fx-mode="paint" onclick="setFXMode('paint')">Tinta</button>
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+            <input id="fxBlur" type="range" min="0" max="24" value="4">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+            <input id="fxIntensity" type="range" min="0" max="100" value="55">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+            <input id="fxLiquify" type="range" min="0" max="100" value="0">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+            <input id="fxGrain" type="range" min="0" max="100" value="35">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+            <input id="fxContrast" type="range" min="80" max="140" value="108">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+            <input id="fxSaturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+          <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="wrap">
+    <header class="topbar">
+      <div class="container topbar-inner">
+        <a class="brand" href="#home" aria-label="Feeling Decor">
+          <div class="brand-mark">F</div>
+          <div>
+            <span class="font-serif font-semibold text-xl tracking-wide">Feeling Decor</span>
+            <small>Ambientes com Identidade</small>
+          </div>
+        </a>
+
+        <div class="nav-group">
+          <div class="nav-count" id="ui-catalog-counter">CARREGANDO...</div>
+          <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
+        </div>
+      </div>
+    </header>
+
+    <main id="home">
+      <section class="hero">
+        <div class="container hero-grid">
+          <article class="panel hero-copy">
+            <div class="eyebrow">Design leve · comunicação clara · experiência sensorial</div>
+            <h1 class="font-serif text-5xl md:text-7xl lg:text-8xl text-brand-dark leading-tight mb-4">
+              Espaços com<br>
+              identidade e<br>
+              presença
+            </h1>
+            <p class="text-brand-textMuted text-lg md:text-xl font-light mb-8 max-w-lg leading-relaxed">
+              Cortinas, móveis, quadros e aromas organizados em uma experiência sensorial clara.
+            </p>
+
+            <div class="hero-actions">
+              <a class="btn btn-primary" href="#portfolio">Ver Projetos</a>
+              <a class="btn btn-secondary" href="#contato">Falar com a Feeling</a>
+            </div>
+          </article>
+
+          <aside class="panel hero-visual" aria-label="Imagem principal">
+            <div class="hero-image"></div>
+            <div class="hero-card">
+              <h2>Uma primeira página mais leve</h2>
+              <p>Menos ruído, mais clareza. A home apresenta a essência da marca antes de mergulhar nos detalhes.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="container panel section-card">
+          <div class="section-head">
+            <div>
+              <span class="tag">Direção</span>
+              <h2>Identidade, ordem e respiro.</h2>
+            </div>
+            <p class="section-note">
+              A página foi organizada para a marca falar primeiro, os produtos virem depois e o sistema ficar por trás, sem pesar a leitura.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <div class="info-box">
+              <h3>Mais simples</h3>
+              <p>Headline curta, botões diretos e uma imagem forte logo na entrada.</p>
+            </div>
+            <div class="info-box">
+              <h3>Mais claro</h3>
+              <p>Produtos separados por categoria, sem misturar conceito com catálogo.</p>
+            </div>
+            <div class="info-box">
+              <h3>Mais elegante</h3>
+              <p>Espaço em branco, bordas suaves, sombras leves e foco no visual.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="conceito">
+        <div class="container panel section-card">
+          <div class="section-head">
+            <div>
+              <p class="text-brand-textMuted uppercase tracking-widest text-sm font-semibold mb-3">Quem somos</p>
+              <h2 class="font-serif text-4xl md:text-5xl font-bold mb-6 text-brand-dark">Feeling Decor</h2>
+            </div>
+            <p>
+              Criamos ambientes que comunicam antes da palavra. Cada elemento tem função: cortina filtra, móvel acolhe, quadro pontua, aroma finaliza.
+            </p>
+          </div>
+
+          <div class="grid-2">
+            <div class="info-box">
+              <h3>Organizar sensação</h3>
+              <p>
+                Não decoramos por decorar. Organizamos sensação.
+              </p>
+            </div>
+            <div class="info-box">
+              <h3>Método</h3>
+              <p>
+                Pensamos luz, forma, textura e presença como partes da mesma composição.
+              </p>
+            </div>
+          </div>
+
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#portfolio">Conhecer o método</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="produtos">
+        <div class="container panel section-card">
+          <div class="section-head">
+            <div>
+              <span class="text-brand-textMuted uppercase tracking-widest text-sm font-semibold mb-3">Produtos</span>
+              <h2 class="font-serif text-4xl md:text-5xl font-bold mb-6 text-brand-dark">Produtos</h2>
+            </div>
+            <p>
+              Subprodutos apresentados um por um, com clareza.
+            </p>
+          </div>
+
+          <div class="grid-4">
+            <article class="panel product">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80');"></div>
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Cortinas</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Luz, privacidade e textura no ponto certo.</p>
+              </div>
+            </article>
+
+            <article class="panel product">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80');"></div>
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Móveis</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Forma que convida o corpo e organiza o fluxo.</p>
+              </div>
+            </article>
+
+            <article class="panel product">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1515405295579-ba7b45403062?auto=format&fit=crop&w=1200&q=80');"></div>
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Quadros</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Cor e composição que dão ritmo à parede.</p>
+              </div>
+            </article>
+
+            <article class="panel product">
+              <div class="thumb" style="background-image:url('https://images.unsplash.com/photo-1602872029708-84f3f8d1c1f8?auto=format&fit=crop&w=1200&q=80');"></div>
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Aromas</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Memória olfativa que fecha a experiência.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="portfolio">
+        <div class="container panel section-card">
+          <div class="section-head">
+            <div>
+              <h2 class="font-serif text-5xl md:text-6xl text-brand-dark font-medium">[ PORTFÓLIO ]</h2>
+              <p class="text-brand-textMuted mt-4 tracking-widest uppercase text-sm">Projetos com clareza e presença</p>
+            </div>
+            <p>
+              Portfólio limpo, com imagens grandes e leitura rápida.
+            </p>
+          </div>
+
+          <div class="grid-3">
+            <article class="video-shell">
+              <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/conceito/img1.jpeg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?q=80&w=600&auto=format&fit=crop';" alt="Casa Luz" class="w-full h-[260px] object-cover" />
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Casa Luz</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Equilíbrio & Claridade</p>
+              </div>
+            </article>
+
+            <article class="video-shell">
+              <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/conceito/img2.jpeg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=600&auto=format&fit=crop';" alt="Studio Fluxo" class="w-full h-[260px] object-cover" />
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Studio Fluxo</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Energia & Movimento</p>
+              </div>
+            </article>
+
+            <article class="video-shell">
+              <img src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/conceito/img3.jpeg" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?q=80&w=600&auto=format&fit=crop';" alt="Apto Aroma" class="w-full h-[260px] object-cover" />
+              <div class="content">
+                <h3 class="font-serif text-xl font-bold text-brand-dark">Apto Aroma</h3>
+                <p class="text-sm text-brand-textMuted mt-1">Sensorial Completo</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="videos">
+        <div class="container panel section-card">
+          <div class="section-head">
+            <div>
+              <span class="tag">Vídeos</span>
+              <h2>Conteúdo curto, direto e sem repetição.</h2>
+            </div>
+            <p>
+              Em vez de vídeos longos e confusos, a ideia aqui é trabalhar peças curtas com uma mensagem por vez.
+            </p>
+          </div>
+
+          <div class="grid-2">
+            <article class="video-shell">
+              <div class="aspect-video">
+                <iframe
+                  class="w-full h-full"
+                  src="https://www.youtube.com/embed/JBjFhAutIVk"
+                  title="Como o espaço influencia seu estado"
+                  loading="lazy"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowfullscreen
+                ></iframe>
+              </div>
+              <div class="content">
+                <h3 class="font-serif text-2xl md:text-3xl mb-2">Como o espaço influencia seu estado</h3>
+                <p class="text-gray-300">3 minutos sobre luz, cor e percepção.</p>
+              </div>
+            </article>
+
+            <article class="video-shell">
+              <div class="aspect-video">
+                <video
+                  class="w-full h-full object-cover"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  poster="https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1200&auto=format&fit=crop"
+                  onerror="this.outerHTML=`<img src='https://images.unsplash.com/photo-1616137466211-f939a420be84?q=80&w=1200&auto=format&fit=crop' class='w-full h-full object-cover'>`"
+                >
+                  <source src="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/destaque/apt.mp4" type="video/mp4">
+                  Seu navegador não suporta vídeo.
+                </video>
+              </div>
+              <div class="content">
+                <h3 class="font-serif text-2xl text-brand-dark mb-2">O poder da cortina</h3>
+                <p class="text-brand-textMuted">Energia, privacidade e temperatura em 1 peça.</p>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="contato">
+        <div class="container panel section-card">
+          <div class="contact-wrap">
+            <div class="panel contact-box">
+              <h2 class="font-serif text-4xl md:text-5xl mb-6">Vamos criar seu Espaço Vivo</h2>
+              <p class="text-gray-400 mb-10 max-w-xl mx-auto font-light">
+                Conte sua necessidade. A gente organiza em cortina, móvel, quadro e aroma.
+              </p>
+
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="mailto:contato@findecor.com.br">Iniciar Projeto</a>
+                <a class="btn btn-secondary" href="#home">Voltar ao topo</a>
+              </div>
+            </div>
+
+            <div class="panel contact-box">
+              <div class="contact-list">
+                <div class="contact-item">
+                  <div>
+                    <strong>WhatsApp</strong>
+                    <span>(00) 00000-0000</span>
+                  </div>
+                  <span>Atendimento rápido</span>
+                </div>
+
+                <div class="contact-item">
+                  <div>
+                    <strong>E-mail</strong>
+                    <span>contato@findecor.com.br</span>
+                  </div>
+                  <span>Contato institucional</span>
+                </div>
+
+                <div class="contact-item">
+                  <div>
+                    <strong>Instagram</strong>
+                    <span>@findecor</span>
+                  </div>
+                  <span>Portfólio e novidades</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <div class="container footer-inner">
+        <div class="flex items-center space-x-2 mb-4 md:mb-0">
+          <span class="font-serif text-white/80">Feeling Decor</span>
+        </div>
+        <div class="text-sm">© 2026 · Design Sensorial</div>
+      </div>
+    </footer>
+
+    <div id="app-root"></div>
+
+    <div class="catalog-nav">
+      <button class="nav-btn" id="btn-prev" onclick="changeFrame(-1)">← Quadro Anterior</button>
+      <button class="nav-btn" id="btn-next" onclick="changeFrame(1)">Próximo Quadro →</button>
+    </div>
+
+    <div class="footer-quote">
+      <b>Infodose</b> • “A arte é um código. O silêncio é o sistema. E você é a obra.”
+    </div>
+  </div>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0-ovr.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script>
+
+  <script>
+    (function () {
+      const bgLayer = document.getElementById('bg-layer-fixed');
+      const drawer = document.getElementById('drawerPanel');
+      const overlay = document.getElementById('drawerOverlay');
+
+      const bgImg = "https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/bg.jpeg";
+      const fallbackImg = "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2070&auto=format&fit=crop";
+
+      if (bgLayer) {
+        bgLayer.style.backgroundImage = `url('${bgImg}')`;
+      }
+
+      const probe = new Image();
+      probe.src = bgImg;
+      probe.onerror = function () {
+        if (bgLayer) bgLayer.style.backgroundImage = `url('${fallbackImg}')`;
+      };
+
+      window.toggleDrawer = window.toggleDrawer || function () {
+        const isOpen = drawer.classList.toggle('is-open');
+        overlay.classList.toggle('is-open', isOpen);
+      };
+
+      window.updateBgAttr = window.updateBgAttr || function (type, value) {
+        if (!bgLayer) return;
+        if (type === 'opacity') {
+          const n = Number(value) / 100;
+          bgLayer.style.opacity = String(n);
+          const op = document.getElementById('val-op');
+          if (op) op.textContent = `${value}%`;
+        }
+        if (type === 'blend') {
+          bgLayer.style.mixBlendMode = value;
+        }
+      };
+
+      window.applyPreset = window.applyPreset || function (preset) {
+        if (!bgLayer) return;
+        const op = document.getElementById('bgOpacity');
+        const blend = document.getElementById('bgBlend');
+        const status = document.getElementById('bgStatusText');
+
+        if (preset === 'ghost') {
+          bgLayer.style.opacity = '0.08';
+          bgLayer.style.mixBlendMode = 'luminosity';
+          if (op) op.value = 8;
+          if (blend) blend.value = 'luminosity';
+          if (status) status.textContent = 'Fantasma';
+        } else if (preset === 'deep') {
+          bgLayer.style.opacity = '0.22';
+          bgLayer.style.mixBlendMode = 'multiply';
+          if (op) op.value = 22;
+          if (blend) blend.value = 'multiply';
+          if (status) status.textContent = 'Profundo';
+        } else {
+          bgLayer.style.opacity = '0.15';
+          bgLayer.style.mixBlendMode = 'overlay';
+          if (op) op.value = 15;
+          if (blend) blend.value = 'overlay';
+          if (status) status.textContent = 'Vívido';
+        }
+      };
+
+      window.handleUpload = window.handleUpload || function (input) {
+        const file = input && input.files && input.files[0];
+        if (!file) return;
+        const url = URL.createObjectURL(file);
+        if (bgLayer) bgLayer.style.backgroundImage = `url('${url}')`;
+      };
+
+      window.loadCurrentFrameToFX = window.loadCurrentFrameToFX || function () {
+        const canvas = document.getElementById('fxCanvas');
+        const ctx = canvas && canvas.getContext && canvas.getContext('2d');
+        if (!canvas || !ctx) return;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#111';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#fff';
+        ctx.font = '28px Inter, sans-serif';
+        ctx.fillText('FX Lab pronto para receber frame', 40, 80);
+      };
+
+      window.downloadFX = window.downloadFX || function () {
+        const canvas = document.getElementById('fxCanvas');
+        if (!canvas) return;
+        const link = document.createElement('a');
+        link.download = 'fx-lab.png';
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+      };
+
+      window.setFXMode = window.setFXMode || function (mode) {
+        document.querySelectorAll('[data-fx-mode]').forEach(btn => btn.classList.remove('active'));
+        const active = document.querySelector(`[data-fx-mode="${mode}"]`);
+        if (active) active.classList.add('active');
+      };
+
+      window.applyFXToBackground = window.applyFXToBackground || function () {
+        const canvas = document.getElementById('fxCanvas');
+        if (!canvas) return;
+        const dataUrl = canvas.toDataURL('image/png');
+        if (bgLayer) bgLayer.style.backgroundImage = `url('${dataUrl}')`;
+      };
+
+      window.changeFrame = window.changeFrame || function () {
+        console.log('changeFrame fallback');
+      };
+
+      const thumbs = document.getElementById('thumb-list');
+      const library = [
+        { label: 'hero', src: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/hero2.jpg' },
+        { label: 'bg', src: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/bg.jpeg' },
+        { label: 'mandala', src: 'https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/media/hero/mandala.png' }
+      ];
+
+      if (thumbs) {
+        thumbs.innerHTML = library.map(item => `
+          <button class="bg-thumb" style="background-image:url('${item.src}')" data-label="${item.label}" onclick="document.getElementById('bg-layer-fixed').style.backgroundImage='url(${item.src})'; document.getElementById('bgStatusText').textContent='${item.label}'"></button>
+        `).join('');
+      }
+
+      const libCount = document.getElementById('libCount');
+      if (libCount) libCount.textContent = String(library.length);
+
+      window.addEventListener('load', function () {
+        if (window.applyPreset) window.applyPreset('vivid');
+        const counter = document.getElementById('ui-catalog-counter');
+        if (counter) counter.textContent = 'FEELING DECOR · READY';
+      });
+    })();
+  </script>
+</body>
+</html>
