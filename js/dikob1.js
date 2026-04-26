@@ -1166,7 +1166,7 @@
       toggle.dataset.diShortcutBound = "1";
       toggle.addEventListener("pointerdown", () => {
         clearTimeout(DI.pressTimer);
-        DI.pressTimer = setTimeout(() => openPanel(), 900);
+        DI.pressTimer = setTimeout(() => openPanel(), 2900);
       });
       toggle.addEventListener("pointerup", () => clearTimeout(DI.pressTimer));
       toggle.addEventListener("pointerleave", () => clearTimeout(DI.pressTimer));
