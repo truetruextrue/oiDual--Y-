@@ -1285,7 +1285,7 @@
         clearTimeout(DI.pressTimer);
         DI.pressTimer = setTimeout(() => {
           openPanel();
-        }, 900);
+        }, 2900);
       });
       toggle.addEventListener("pointerup", () => clearTimeout(DI.pressTimer));
       toggle.addEventListener("pointerleave", () => clearTimeout(DI.pressTimer));
