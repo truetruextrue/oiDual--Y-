@@ -1,0 +1,406 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Feeling Decor | Viviani - Curadoria Sensorial</title>
+  
+  <!-- Tipografia de Impacto -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #000000;
+      --muted: #6b7280;
+      --line: #e5e7eb;
+      --soft: #f9fafb;
+      --container: 1200px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.2;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: min(var(--container), calc(100% - 60px));
+      margin: 0 auto;
+    }
+
+    /* Header Minimalista */
+    header {
+      position: fixed;
+      top: 0; width: 100%;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      border-bottom: 1px solid var(--line);
+    }
+    .header-content {
+      height: 80px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.05em; text-transform: uppercase; }
+    .nav-links { display: flex; gap: 40px; font-weight: 700; font-size: 0.85rem; text-transform: uppercase; }
+    .nav-links a { color: var(--text); text-decoration: none; transition: opacity 0.3s; }
+    .nav-links a:hover { opacity: 0.5; }
+
+    /* Hero Section - A Fusão */
+    .hero {
+      padding: 180px 0 100px;
+    }
+    .hero-title {
+      font-size: clamp(3rem, 12vw, 9rem);
+      font-weight: 800;
+      letter-spacing: -0.07em;
+      line-height: 0.8;
+      margin-bottom: 60px;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      align-items: center;
+    }
+    .hero-text {
+      font-size: 1.5rem;
+      font-weight: 400;
+      line-height: 1.4;
+      color: var(--text);
+    }
+    .hero-text strong { font-weight: 800; }
+    .btn-hero {
+      display: inline-block;
+      margin-top: 30px;
+      padding: 16px 32px;
+      background: #000;
+      color: #fff;
+      text-decoration: none;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      transition: transform 0.3s, background 0.3s;
+    }
+    .btn-hero:hover { transform: scale(1.05); background: #222; }
+
+    /* Manifesto Unificado */
+    .manifesto {
+      padding: 100px 0;
+      border-top: 1px solid var(--line);
+    }
+    .big-statement {
+      font-size: clamp(2rem, 5vw, 5rem);
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      max-width: 90%;
+    }
+    .accent-font { font-family: 'Playfair Display', serif; font-style: italic; font-weight: 700; color: #444; }
+
+    /* Grid de Serviços - Cards Interativos */
+    .curadoria-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 100px;
+      padding: 100px 0;
+    }
+    .item-curadoria {
+      text-decoration: none;
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.4s ease;
+    }
+    .item-curadoria:hover {
+      transform: translateY(-10px);
+    }
+    .img-wrapper {
+      background: var(--line);
+      height: 450px;
+      border-radius: 20px;
+      overflow: hidden;
+      margin-bottom: 30px;
+      position: relative;
+    }
+    .img-wrapper img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .item-curadoria:hover .img-wrapper img {
+      transform: scale(1.05);
+    }
+    
+    /* Overlay e Botão de Play nas Imagens */
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .item-curadoria:hover .play-overlay {
+      opacity: 1;
+    }
+    .play-icon {
+      background: #fff;
+      color: #000;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 800;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+    .item-curadoria:hover .play-icon {
+      transform: translateY(0);
+    }
+
+    .item-curadoria h3 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 15px;
+      letter-spacing: -0.04em;
+    }
+    .item-curadoria p {
+      font-size: 1.1rem;
+      color: var(--muted);
+      line-height: 1.6;
+      max-width: 400px;
+    }
+
+    /* Call to Action - Viviani Section */
+    .viviani-cta {
+      background: #000;
+      color: #fff;
+      padding: 120px 0;
+      margin-top: 100px;
+      border-radius: 40px 40px 0 0;
+    }
+    .cta-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .cta-title { font-size: clamp(2rem, 6vw, 6rem); font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; }
+    
+    .btn-contact {
+      display: inline-block;
+      padding: 24px 48px;
+      background: #fff;
+      color: #000;
+      text-decoration: none;
+      font-weight: 800;
+      border-radius: 100px;
+      font-size: 1.1rem;
+      transition: transform 0.2s;
+    }
+    .btn-contact:hover { transform: scale(1.05); }
+
+    /* Links de Acesso */
+    .links-footer {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      margin-top: 80px;
+      border-top: 1px solid #333;
+      padding-top: 40px;
+    }
+    .link-box {
+      text-decoration: none;
+      color: #fff;
+      transition: opacity 0.3s;
+    }
+    .link-box:hover { opacity: 0.7; }
+    .link-box strong { display: block; font-size: 1.2rem; margin-bottom: 5px; }
+    .link-box span { color: #888; font-size: 0.9rem; }
+
+    @media (max-width: 768px) {
+      .hero-grid, .curadoria-grid, .cta-flex, .links-footer { grid-template-columns: 1fr; gap: 40px; }
+      .hero-title { font-size: 4rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="container header-content">
+      <div class="logo">Feeling Decor</div>
+      <nav class="nav-links">
+        <a href="#about">Filosofia</a>
+        <a href="#curadoria">Curadoria</a>
+        <a href="#contato">Falar com Viviani</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <div class="container">
+      
+      <!-- HERO -->
+      <section class="hero">
+        <h1 class="hero-title">CURADORIA<br>SENSORIAL.</h1>
+        <div class="hero-grid">
+          <div class="hero-text">
+            O design da <strong>Viviani</strong> não ocupa espaço, ele cria <strong>atmosfera</strong>. 
+            Uma abordagem que funde o essencial com o que você sente.
+            <br>
+            <a href="#" id="link-hero" target="_blank" class="btn-hero">VER PROJETO NO INSTAGRAM</a>
+          </div>
+          <div style="background: var(--soft); height: 500px; border-radius: 20px; overflow:hidden">
+            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80" style="width:100%; height:100%; object-fit:cover" alt="Interior Design">
+          </div>
+        </div>
+      </section>
+
+      <!-- MANIFESTO -->
+      <section class="manifesto" id="about">
+        <div class="big-statement">
+          Eliminamos o excesso para que a <span class="accent-font">tua identidade</span> possa finalmente respirar. 
+          Onde a estética encontra a <span class="highlight-bold">energia.</span>
+        </div>
+      </section>
+
+      <!-- CURADORIA FUNDIDA COM OS LINKS DO INSTAGRAM -->
+      <section class="curadoria-grid" id="curadoria">
+        
+        <!-- Curadoria 1: Cortinas -->
+        <a href="#" target="_blank" class="item-curadoria" data-curadoria="0">
+          <div class="img-wrapper">
+            <img src="https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=800&q=80" alt="Cortinas">
+            <div class="play-overlay"><span class="play-icon">ASSISTIR REEL</span></div>
+          </div>
+          <h3>CORTINAS FLUIDEZ</h3>
+          <p>Tecidos inteligentes que abraçam a luz natural e garantem a privacidade da alma.</p>
+        </a>
+
+        <!-- Curadoria 2: Aromas -->
+        <a href="#" target="_blank" class="item-curadoria" data-curadoria="1">
+          <div class="img-wrapper">
+            <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=800&q=80" alt="Aromas">
+            <div class="play-overlay"><span class="play-icon">VER POST</span></div>
+          </div>
+          <h3>EXPERIÊNCIA OLFATIVA</h3>
+          <p>Velas e difusores com notas naturais que transformam metros quadrados em memórias.</p>
+        </a>
+
+        <!-- Curadoria 3: Móveis -->
+        <a href="#" target="_blank" class="item-curadoria" data-curadoria="2">
+          <div class="img-wrapper">
+            <img src="https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?auto=format&fit=crop&w=800&q=80" alt="Móveis">
+            <div class="play-overlay"><span class="play-icon">VER POST</span></div>
+          </div>
+          <h3>MOBILIÁRIO AUTORAL</h3>
+          <p>Design assinado focado em conforto, durabilidade e proporção exata para o seu fluxo.</p>
+        </a>
+
+        <!-- Bloco Extra de Fechamento -->
+        <div class="item-curadoria" style="justify-content: center; transform: none; cursor: default;">
+          <h3>SINTA A MUDANÇA</h3>
+          <p style="font-size: 1.3rem;">Cada elemento é pensado para conectar a sua essência ao espaço em que você vive. Acompanhe nossos projetos e sinta a frequência do design real.</p>
+        </div>
+
+      </section>
+
+    </div>
+
+    <!-- CONTATO E LINKS -->
+    <section class="viviani-cta" id="contato">
+      <div class="container">
+        <div class="cta-flex">
+          <div>
+            <span style="text-transform: uppercase; font-weight: 800; font-size: 0.8rem; letter-spacing: 0.2em; color: #888; display: block; margin-bottom: 20px;">Viviani Feeling</span>
+            <h2 class="cta-title">VAMOS CRIAR<br>O TEU REFÚGIO?</h2>
+          </div>
+          <a href="#" class="btn-contact" id="link-whatsapp" target="_blank">WHATSAPP EXCLUSIVO</a>
+        </div>
+
+        <div class="links-footer">
+          <a href="#" class="link-box" id="link-instagram" target="_blank">
+            <strong>Instagram</strong>
+            <span>@feeling.decor_ — Inspirações Diárias</span>
+          </a>
+          <a href="#" class="link-box" id="link-pinterest" target="_blank">
+            <strong>Pinterest</strong>
+            <span>Moodboards e Curadoria</span>
+          </a>
+          <a href="mailto:contato@feelingdecor.com.br" class="link-box">
+            <strong>E-mail</strong>
+            <span>contato@feelingdecor.com.br</span>
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="padding: 60px 0; text-align: center; font-size: 0.7rem; letter-spacing: 0.1em; color: #999;">
+    FEELING DECOR &copy; 2026 — TODOS OS DIREITOS RESERVADOS.
+  </footer>
+
+  <!-- ============================================== -->
+  <!-- SCRIPT CORRIGIDO: LINKS INJETADOS NOS BOTÕES   -->
+  <!-- ============================================== -->
+  <script>
+    (() => {
+      // Seus links exatos fornecidos na solicitação
+      const DI_MEDIA = {
+        hero: "https://www.instagram.com/feeling.decor_/reel/DCbYsZHRIYZ/",
+        curadoria: [
+          "https://www.instagram.com/reel/DCbY_2rxeEV/",           // 0: Cortinas
+          "https://www.instagram.com/feeling.decor_/p/DCvJ1wwxFQ2/", // 1: Aromas
+          "https://www.instagram.com/feeling.decor_/p/DCd28w1xDfp/"  // 2: Móveis
+        ],
+        contato: {
+          whatsapp: "https://wa.me/5511999999999", // Altere para seu número real
+          instagram: "https://instagram.com/feeling.decor_",
+          pinterest: "https://pinterest.com/feelingdecor" // Altere se precisar
+        }
+      };
+
+      // 1. Aplica Link do Hero (Botão principal)
+      const btnHero = document.getElementById("link-hero");
+      if (btnHero) btnHero.href = DI_MEDIA.hero;
+
+      // 2. Aplica Links na Grade de Curadoria (Os cards inteiros viraram botões pro IG)
+      document.querySelectorAll(".item-curadoria[data-curadoria]").forEach((card) => {
+        const index = card.getAttribute("data-curadoria");
+        if (DI_MEDIA.curadoria[index]) {
+          card.href = DI_MEDIA.curadoria[index];
+        }
+      });
+
+      // 3. Aplica Links do Rodapé/Contato
+      const btnZap = document.getElementById("link-whatsapp");
+      if (btnZap) btnZap.href = DI_MEDIA.contato.whatsapp;
+
+      const linkIg = document.getElementById("link-instagram");
+      if (linkIg) linkIg.href = DI_MEDIA.contato.instagram;
+
+      const linkPin = document.getElementById("link-pinterest");
+      if (linkPin) linkPin.href = DI_MEDIA.contato.pinterest;
+    })();
+  </script>
+
+</body>
+</html>
+
+
+
