@@ -1,0 +1,261 @@
+<!--
+  ╔══════════════════════════════════════════════════════════════════╗
+  ║  KOBLLUX · PATCH v2 — Carousel CoverFlow + Tamanho Fixo        ║
+  ║  Substitui o PATCH anterior (remover o v1 antes de usar)       ║
+  ║  Inserir antes do </body>                                       ║
+  ╚══════════════════════════════════════════════════════════════════╝
+-->
+
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   TAMANHO BASE — lido do toggleBtn via JS e exposto como var CSS
+   Todos os botões do carrossel herdam esse tamanho.
+═══════════════════════════════════════════════════════════════════ */
+:root {
+  --kblx-btn-sz:   44px;   /* fallback; JS sobrescreve com o tamanho real */
+  --kblx-visible:  3;      /* máximo de botões visíveis */
+  --kblx-vp-w: calc(var(--kblx-btn-sz) * var(--kblx-visible));
+}
+
+/* Garante que os botões do carrossel tenham exatamente o mesmo
+   tamanho que o toggle / orb — independente do tamanho da barra */
+.kblx-carousel-track .symbol-wrap,
+.kblx-carousel-track .symbol-wrap .symbol-button {
+  width:  var(--kblx-btn-sz) !important;
+  height: var(--kblx-btn-sz) !important;
+  min-width:  var(--kblx-btn-sz) !important;
+  min-height: var(--kblx-btn-sz) !important;
+  flex-shrink: 0 !important;
+}
+
+/* ── VIEWPORT ─────────────────────────────────────────────────── */
+.kblx-carousel-viewport {
+  position: relative;
+  overflow: hidden;
+  width:  var(--kblx-vp-w);
+  height: var(--kblx-btn-sz);
+  flex-shrink: 0;
+
+  /* fade nas bordas para dar profundidade */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+}
+
+/* modo vertical */
+.symbol-bar.vertical .kblx-carousel-viewport {
+  width:  var(--kblx-btn-sz);
+  height: var(--kblx-vp-w);
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    #000 18%,
+    #000 82%,
+    transparent 100%
+  );
+}
+
+/* ── TRACK ────────────────────────────────────────────────────── */
+.kblx-carousel-track {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0;
+  will-change: transform;
+  transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.kblx-carousel-track.dragging {
+  transition: none;
+  cursor: grabbing;
+}
+.symbol-bar.vertical .kblx-carousel-track {
+  flex-direction: column;
+}
+
+/* ── EFEITO COVERFLOW por item ────────────────────────────────── */
+/* O JS aplica --kblx-item-scale e --kblx-item-opacity individualmente */
+.kblx-carousel-track .symbol-wrap {
+  transform-origin: center center;
+  transform: scale(var(--kblx-item-scale, 1));
+  opacity:   var(--kblx-item-opacity, 1);
+  transition:
+    transform 0.28s cubic-bezier(0.25, 0.8, 0.25, 1),
+    opacity   0.28s ease;
+  position: relative;
+  z-index:  var(--kblx-item-z, 1);
+}
+/* durante drag, escala reage mais rápido */
+.kblx-carousel-track.dragging .symbol-wrap {
+  transition:
+    transform 0.06s linear,
+    opacity   0.06s linear;
+}
+
+/* ── DOTS ─────────────────────────────────────────────────────── */
+.kblx-dots {
+  display: flex;
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  padding: 0 4px;
+  flex-shrink: 0;
+}
+.symbol-bar.vertical .kblx-dots { flex-direction: column; }
+.kblx-dot {
+  width: 4px; height: 4px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.25);
+  transition: background 0.2s, transform 0.2s;
+  cursor: pointer;
+}
+.kblx-dot.active {
+  background: rgba(201,168,76,0.9);
+  transform: scale(1.5);
+}
+
+/* ── ANEL DE PROGRESSO NO TOGGLE ──────────────────────────────── */
+#toggleBtn { position: relative; overflow: visible; }
+.kblx-toggle-ring {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 5;
+}
+.kblx-toggle-ring svg {
+  width: 110%; height: 110%;
+  transform: rotate(-90deg);
+  overflow: visible;
+}
+.kblx-toggle-ring circle {
+  fill: none;
+  stroke: #c9a84c;
+  stroke-width: 2.5;
+  stroke-dasharray: 113.1;
+  stroke-dashoffset: 113.1;
+  stroke-linecap: round;
+}
+
+/* ── MODAL: ADICIONAR BOTÃO ────────────────────────────────────── */
+#kblx-addbtn-back {
+  display: none;
+  position: fixed; inset: 0;
+  z-index: 10000;
+  background: rgba(2,2,10,0.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  align-items: center; justify-content: center;
+}
+#kblx-addbtn-back.open { display: flex; }
+
+#kblx-addbtn-panel {
+  background: linear-gradient(135deg, rgba(15,15,46,.99), rgba(6,6,21,.99));
+  border: 1px solid #c9a84c;
+  border-radius: 18px;
+  padding: 1.8rem 1.8rem 1.4rem;
+  width: min(420px, 92vw);
+  box-shadow: 0 0 60px rgba(201,168,76,.2), 0 20px 50px rgba(0,0,0,.8);
+  animation: kblx2-in .28s cubic-bezier(.34,1.56,.64,1) both;
+}
+@keyframes kblx2-in {
+  from { opacity:0; transform: translateY(-22px) scale(.94); }
+  to   { opacity:1; transform: none; }
+}
+.kblx-addbtn-chip {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: .58rem; color: #00e5ff;
+  letter-spacing: .4em; text-transform: uppercase;
+  opacity: .6; margin-bottom: .3rem;
+}
+.kblx-addbtn-title {
+  font-family: 'Cinzel Decorative', serif;
+  font-size: 1.05rem; color: #c9a84c; margin-bottom: 1.2rem;
+}
+.kblx-addbtn-row   { display:flex; gap:.75rem; margin-bottom:.85rem; }
+.kblx-addbtn-field { display:flex; flex-direction:column; gap:.3rem; flex:1; }
+.kblx-addbtn-field.sym-field { flex: 0 0 90px; }
+.kblx-addbtn-lbl   {
+  font-family:'Share Tech Mono',monospace;
+  font-size:.58rem; color:rgba(232,224,240,.5);
+  letter-spacing:.18em; text-transform:uppercase;
+}
+.kblx-addbtn-inp {
+  width:100%;
+  background:rgba(0,0,0,.55);
+  border:1px solid rgba(201,168,76,.35);
+  border-radius:8px; padding:.58rem .88rem;
+  color:#e8e0f0;
+  font-family:'Share Tech Mono',monospace; font-size:.85rem;
+  outline:none;
+  transition:border-color .2s, box-shadow .2s;
+}
+.kblx-addbtn-inp:focus { border-color:#c9a84c; box-shadow:0 0 12px rgba(201,168,76,.2); }
+#kblx-sym-preview {
+  width:90px; height:38px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.4);
+  border:1px solid rgba(201,168,76,.2); border-radius:8px;
+  font-size:1.4rem; color:#c9a84c;
+  filter:drop-shadow(0 0 8px rgba(201,168,76,.4));
+}
+.kblx-addbtn-actions { display:flex; gap:.55rem; flex-wrap:wrap; margin-top:.2rem; }
+.kblx-addbtn-btn {
+  flex:1; min-width:80px; padding:.5rem .6rem;
+  border-radius:8px; border:1px solid;
+  font-family:'Share Tech Mono',monospace;
+  font-size:.62rem; letter-spacing:.12em; text-transform:uppercase;
+  cursor:pointer; background:transparent;
+  transition:background .18s, box-shadow .18s; white-space:nowrap;
+}
+.kblx-addbtn-save   { border-color:#c9a84c; color:#c9a84c; }
+.kblx-addbtn-save:hover   { background:rgba(201,168,76,.1); box-shadow:0 0 12px rgba(201,168,76,.15); }
+.kblx-addbtn-cancel { border-color:rgba(255,255,255,.15); color:rgba(232,224,240,.5); }
+.kblx-addbtn-cancel:hover { background:rgba(255,255,255,.05); }
+
+/* TOAST */
+#kblx-toast {
+  position:fixed; bottom:80px; left:50%;
+  transform: translateX(-50%) translateY(20px);
+  background:rgba(10,10,30,.95);
+  border:1px solid rgba(201,168,76,.5);
+  border-radius:10px; padding:.6rem 1.2rem;
+  font-family:'Share Tech Mono',monospace; font-size:.72rem;
+  color:#c9a84c; letter-spacing:.2em;
+  opacity:0; pointer-events:none; z-index:10001;
+  transition:opacity .25s, transform .25s; white-space:nowrap;
+}
+#kblx-toast.show { opacity:1; transform:translateX(-50%) translateY(0); }
+
+/* anel dos botões nav (do patch-13 – declarado aqui para novos botões) */
+.kblx-ring {
+  position:absolute; inset:0; pointer-events:none;
+  display:flex; align-items:center; justify-content:center; z-index:5;
+}
+.kblx-ring svg { width:44px; height:44px; transform:rotate(-90deg); overflow:visible; }
+.kblx-ring circle {
+  fill:none; stroke:#c9a84c; stroke-width:2.5;
+  stroke-dasharray:119.38; stroke-dashoffset:119.38;
+  stroke-linecap:round;
+}
+</style>
