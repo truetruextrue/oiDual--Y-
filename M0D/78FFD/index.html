@@ -608,9 +608,428 @@
       </style></head>
 <body>
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
+
+<style>
+
+ .bg-gradient-base {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,.55), transparent 45%);
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+    #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: .15;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+    #drawerOverlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15,17,21,.42);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity .22s ease;
+      z-index: var(--z-overlay);
+    }
+
+    #drawerOverlay.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: min(420px, 92vw);
+      height: 100vh;
+      background: rgba(9, 11, 16, .96);
+      color: #fff;
+      border-left: 1px solid rgba(255,255,255,.08);
+      transform: translateX(102%);
+      transition: transform .26s ease;
+      z-index: var(--z-system);
+      display: flex;
+      flex-direction: column;
+      backdrop-filter: blur(16px);
+    }
+
+    .drawer.is-open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 18px 18px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .drawer-header h2 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+    }
+
+    .drawer-close {
+      width: 38px;
+      height: 38px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.04);
+      color: #fff;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    .drawer-body {
+      overflow: auto;
+      padding: 16px;
+    }
+
+    .panel-section {
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px;
+      padding: 14px;
+      margin-bottom: 14px;
+    }
+
+    .section-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.78);
+      margin-bottom: 10px;
+    }
+
+    .tiny-note {
+      color: rgba(255,255,255,.58);
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .panel-section input[type="range"],
+    .panel-section select,
+    .btn-mini,
+    .btn-download,
+    .btn-action,
+    .btn-upload,
+    .preset-btn {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      color: #fff;
+      padding: 11px 12px;
+      outline: none;
+    }
+
+    .panel-section select {
+      appearance: none;
+    }
+
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .preset-btn {
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      padding: 12px 10px;
+    }
+
+    .preset-btn.active {
+      background: rgba(240,199,117,.18);
+      border-color: rgba(240,199,117,.35);
+      color: #f0c775;
+    }
+
+    .btn-upload,
+    .btn-mini,
+    .btn-download,
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      text-align: center;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      min-height: 42px;
+    }
+
+    .fx-stage {
+      display: grid;
+      gap: 12px;
+    }
+
+    .fx-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+
+    .fx-canvas-wrap {
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.03);
+    }
+
+    #fxCanvas {
+      width: 100%;
+      height: auto;
+      display: block;
+      background: #0f1115;
+    }
+
+    .bg-thumbs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .bg-thumb {
+      aspect-ratio: 1 / 1;
+      border-radius: 12px;
+      background-size: cover;
+      background-position: center;
+      border: 1px solid rgba(255,255,255,.08);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bg-thumb::after {
+      content: attr(data-label);
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      right: 8px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: rgba(255,255,255,.92);
+      text-shadow: 0 1px 4px rgba(0,0,0,.55);
+    }
+
+    .wrap {
+      position: relative;
+      z-index: var(--z-content);
+    }
+
+    .nav-count {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      padding: 10px 12px;
+      border-radius: 999px;
+    }
+
+    .drawer-toggle {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.10);
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .nav-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .catalog-nav {
+      position: sticky;
+      bottom: 16px;
+      z-index: 40;
+      width: min(var(--container), calc(100% - 32px));
+      margin: 18px auto 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      pointer-events: none;
+    }
+
+    .nav-btn {
+      pointer-events: auto;
+      padding: 12px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(23,32,51,.08);
+      background: rgba(255,255,255,.88);
+      box-shadow: 0 10px 24px rgba(17, 24, 39, .08);
+      cursor: pointer;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .footer-quote {
+      width: min(var(--container), calc(100% - 32px));
+      margin: 16px auto 0;
+      padding: 16px 18px;
+      border-radius: 18px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(23,32,51,.08);
+      color: var(--muted);
+      text-align: center;
+      font-size: 14px;
+    }
+  </style>
+
+
+
+<div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+  <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+
+  <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+        <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-bg-preset="ghost" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" data-bg-preset="deep" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+        <div class="fx-stage">
+          <div class="fx-actions">
+            <button class="btn-mini" onclick="loadCurrentFrameToFX()">Carregar quadro atual</button>
+            <label class="btn-mini" style="justify-content:center;">
+              Upload imagem
+              <input type="file" id="fx-upload" accept="image/*" hidden>
+            </label>
+            <button class="btn-download" onclick="downloadFX()">Download PNG</button>
+          </div>
+
+          <div class="fx-canvas-wrap">
+            <canvas id="fxCanvas" width="1200" height="800"></canvas>
+          </div>
+
+          <div class="preset-grid">
+            <button class="preset-btn active" data-fx-mode="texture" onclick="setFXMode('texture')">Textura</button>
+            <button class="preset-btn" data-fx-mode="liquid" onclick="setFXMode('liquid')">Líquido</button>
+            <button class="preset-btn" data-fx-mode="paint" onclick="setFXMode('paint')">Tinta</button>
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+            <input id="fxBlur" type="range" min="0" max="24" value="4">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+            <input id="fxIntensity" type="range" min="0" max="100" value="55">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+            <input id="fxLiquify" type="range" min="0" max="100" value="0">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+            <input id="fxGrain" type="range" min="0" max="100" value="35">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+            <input id="fxContrast" type="range" min="80" max="140" value="108">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+            <input id="fxSaturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+          <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
   <nav class="fixed top-0 left-0 w-full z-50 p-8 flex justify-between items-center mix-blend-difference text-white">
     <div class="font-serif text-3xl font-black italic tracking-tighter">Feeling.</div>
-    <div class="hidden md:flex gap-12 font-tech text-xs uppercase tracking-widest">
+    
+<div class="hidden md:flex gap-12 font-tech text-xs uppercase tracking-widest">
       <a href="#home" class="hover:text-brand-gold">Início</a>
       <a href="#concept" class="hover:text-brand-gold">Conceito</a>
       <a href="#curadoria" class="hover:text-brand-gold">Curadoria</a>
@@ -620,12 +1039,21 @@
   <!-- SEÇÃO 1: HERO -->
   <section id="home" class="overflow-hidden">
     <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg" class="parallax-bg" alt="">
-    <div class="text-center text-white z-10 reveal">
-      <h1 class="hero-title font-serif font-black">
+ 
+
+   <div class="text-center text-white z-10 reveal">
+      
+
+<h1 class="hero-title font-serif font-black">
         Design <br> 
         <span class="italic font-normal">Sensorial.</span>
       </h1>
-      <p class="font-tech text-sm mt-8 uppercase tracking-[0.5em]">Frequência • Harmonia • Fluidez</p>
+
+<button id="btn-cortina" class="btn-lux btn-action">
+  🌙 Ativar Cortina da Paz
+</button>
+
+      <p class="hidden font-tech text-sm mt-8 uppercase tracking-[0.5em]">Frequência • Harmonia • Fluidez</p>
     </div>
     <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="mandala right-[-10vw]" alt="">
   </section>
@@ -902,15 +1330,71 @@
     });
   </script>
 
+<script>
+(function(){
+  const STORAGE_KEY = "di_cortina_paz_v1";
+  const BG_LAYER_ID = "bg-layer-fixed";
+
+  const FX_BG = "https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg"; // pode trocar
+
+  function applyCortina(state){
+    const bg = document.getElementById(BG_LAYER_ID);
+    if(!bg) return;
+
+    if(state){
+      bg.style.backgroundImage = `url('${FX_BG}')`;
+      bg.style.opacity = "0.38";
+      bg.style.mixBlendMode = "multiply";
+
+      // opcional: animação leve
+      bg.style.transition = "opacity .52s ease";
+      bg.style.filter = "blur(2px) saturate(110%)";
+    } else {
+      bg.style.backgroundImage = "none";
+      bg.style.opacity = "0";
+    }
+  }
+
+  function save(state){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function load(){
+    try{
+      return JSON.parse(localStorage.getItem(STORAGE_KEY)) || false;
+    }catch(e){
+      return false;
+    }
+  }
+
+  window.addEventListener("load", ()=>{
+    const btn = document.getElementById("btn-cortina");
+    let state = load();
+
+    applyCortina(state);
+    updateLabel(btn, state);
+
+    if(btn){
+      btn.addEventListener("click", ()=>{
+        state = !state;
+        applyCortina(state);
+        save(state);
+        updateLabel(btn, state);
+      });
+    }
+  });
+
+  function updateLabel(btn, state){
+    if(!btn) return;
+    btn.innerText = state 
+      ? "✨ Cortina da Paz Ativa" 
+      : "🌙 Ativar Cortina da Paz";
+  }
+
+})();
+</script>
 
 
-<script src="https://cdn.tailwindcss.com"></script><script>
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
-    });
-  </script></body></html>
+
+
+</body></html>
