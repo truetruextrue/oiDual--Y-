@@ -547,7 +547,7 @@
     .font-tech { font-family: 'Space Mono', monospace; }
 
     .bg-fixed-custom {
-      background-image: url('https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/bg.jpg');
+      background-image: url('https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg');
       background-attachment: fixed;
       background-size: cover;
       background-position: center;
@@ -1019,7 +1019,7 @@
             <input id="fxSaturation" type="range" min="60" max="150" value="102">
           </div>
 
-          <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+          <button class="btn-action"</button>
           <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
         </div>
       </div>
@@ -1095,7 +1095,7 @@
   });
 </script>  
 
-
+<div id="bg-ambience-layer"></div>
 
   <nav class="fixed top-0 w-full z-50 px-6 py-4">
     <div class="max-w-6xl mx-auto flex justify-between items-center glass-card px-6 py-3">
@@ -1103,15 +1103,24 @@
         <div class="w-10 h-10 bg-black text-white rounded-xl flex items-center justify-center font-serif text-xl">F</div>
         <div class="leading-tight">
           <span class="block font-bold tracking-tighter text-lg">Feeling Decor</span>
-          <span class="block text-[10px] uppercase tracking-widest opacity-60 font-tech">by Viviani Costa</span>
-        </div>
+          <span class="block text-[10px] uppercase tracking-widest opacity-60 font-tech">by Viviani Costa <!-- SLIDER CORTINA -->
+<div id="cortina-control">
+  <input type="range" min="0" max="100" value="38" id="cortina-slider">
+</div>
+ </span>
+       
+ </div>
       </div>
+
+
       <div class="hidden md:flex gap-8 text-sm font-medium">
         <a href="#marca" class="hover:text-brand-gold transition-colors">A Marca</a>
         <a href="#curadoria" class="hover:text-brand-gold transition-colors">Curadoria</a>
         <a href="#portfolio" class="hover:text-brand-gold transition-colors">Projetos</a>
         <a href="#contato" class="bg-black text-white px-5 py-2 rounded-full hover:bg-brand-gold transition-all">Contato</a>
       </div>
+
+
     </div>
   </nav>
 
@@ -1251,6 +1260,12 @@
                 A experiência de um ambiente bem curado está no que ele faz você sentir ao entrar.
                 É isso que a Feeling Decor busca: uma beleza que acolhe, dura e conversa com a vida real.
               </div>
+
+<!-- SLIDER CORTINA --
+<div id="cortina-control">
+  <input type="range" min="0" max="80" value="38" id="cortina-slider">
+</div>-->
+
             </div>
           </div>
         </div>
@@ -1394,7 +1409,112 @@
 })();
 </script>
 
+<style>
+#cortina-control {
+  position: fixed;
+  bottom: 10px;
+  right: 20px;
+  z-index: 9999;
 
+  background: rgba(0,0,0,.4);
+  backdrop-filter: blur(10px);
+  border-radius: 999px;
+  padding:8px 20px;
+
+  display: flex;
+  align-items: center;
+}
+
+#cortina-slider {
+  width: 78px;
+  appearance: none;
+  background: transparent;
+}
+
+/* trilho */
+#cortina-slider::-webkit-slider-runnable-track {
+  height: 14px;
+  background: rgba(255,255,255,.3);
+  border-radius: 999px;
+}
+
+/* bolinha */
+#cortina-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: white;
+  margin-top: -5px;
+  cursor: pointer;
+}
+
+#bg-ambience-layer{
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+mix-blend-mode:normal;
+  opacity: 0;
+  transition: opacity .6s ease;
+
+  background:
+    radial-gradient(circle at 20% 13%, rgba(64, 224, 208, 0.12), transparent 80%),
+
+    linear-gradient(180deg, #e0f7f5 0%, #000 100%);
+}
+
+#bg-ambience-layer.active {
+  opacity: 0;
+}
+
+</style>
+
+<script>
+(function(){
+  const slider = document.getElementById("cortina-slider");
+  const bg = document.getElementById("bg-layer-fixed");
+
+const ambience = document.getElementById("bg-ambience-layer");
+
+
+
+  if(!slider || !bg) return;
+
+  // carregar valor salvo
+  const saved = localStorage.getItem("di_bg_opacity");
+  if(saved){
+    slider.value = saved;
+    bg.style.opacity = saved / 100;
+  }
+
+  slider.addEventListener("input", () => {
+    const val = slider.value;
+    bg.style.opacity = val / 100;
+
+  const normalized = val / 100;
+
+bg.style.opacity = normalized;
+
+  // 🔥 gatilho de atmosfera
+  if (val >= 80) {
+    ambience.classList.add("active");
+
+    document.documentElement.style.setProperty('--brand-gold', '#40E0D0'); // Tiffany
+    document.documentElement.style.setProperty('--brand-dark', '#ffffff');
+
+  } else {
+    ambience.classList.remove("active");
+
+    document.documentElement.style.setProperty('--brand-gold', '#c5a059');
+    document.documentElement.style.setProperty('--brand-dark', '#05070a');
+  }
+
+
+    localStorage.setItem("di_bg_opacity", val);
+  });
+})();
+</script>
 
 
 </body></html>
