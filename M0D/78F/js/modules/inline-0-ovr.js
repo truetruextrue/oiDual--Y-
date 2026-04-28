@@ -126,42 +126,7 @@
     const shell = document.createElement("section");
     shell.className = "di-infodose-shell collapsavel";
     shell.innerHTML = `
-      <button class="di-infodose-btn" type="button" data-di-action="open-infodose">
-        Infodose
-      </button>
-
-      <div class="di-infodose-stage" hidden>
-        <button class="di-infodose-ghost" type="button" data-di-action="reveal-deep">
-          se você chegou até aqui, você merece saber
-        </button>
-
-        <button class="di-infodose-secondary" type="button" data-di-action="use-transform">
-          use devolva e transforme
-        </button>
-
-        <div class="di-infodose-deep" hidden>
-          <article class="di-deep-card collapsavel">
-            <h4>Leitura</h4>
-            <p>
-              Revela as camadas sem quebrar o foco do quadro. O resto vira profundidade progressiva.
-            </p>
-          </article>
-
-          <article class="di-deep-card collapsavel">
-            <h4>Uso</h4>
-            <p>
-              Mantém o quadro ativo, deixa as informações abrirem sob demanda e prepara o espaço para o speech por bloco.
-            </p>
-          </article>
-
-          <article class="di-deep-card collapsavel">
-            <h4>Próxima camada</h4>
-            <p>
-              Aqui entra depois o botão bolinha de voz, lendo apenas o conteúdo daquele bloco.
-            </p>
-          </article>
-        </div>
-      </div>
+      
     `;
     return shell;
   }
