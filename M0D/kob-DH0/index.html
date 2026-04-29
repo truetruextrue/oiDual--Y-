@@ -9,6 +9,10 @@
   <script src="https://unpkg.com/lucide@latest"></script>
 
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
+
+
 <style>
         :root {
           --z-base: 0;
@@ -17,35 +21,145 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
-      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css"><style> 
+      </style><link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet"><link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css"><style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+      </style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css"><link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css"><style>
 
-/* estado normal */
-.kob-tts-dock{
-  transition: transform .35s ease, opacity .65s ease;
+ .bg-gradient-base {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,.55), transparent 45%);
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+  .wrap {
+      position: relative;
+padding:0 0 0px;
+      z-index: var(--z-base);
+    }
+
+  #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: .15;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+ /* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: flex;
+  place-items: center;
 }
 
-/* quase invisível */
-.kob-tts-dock.idle{
-  opacity: .18;
-  transform: scale(.92);
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
 }
 
-/* quando passa o dedo ou mouse */
-.kob-tts-dock:hover{
-  opacity: 1;
-  transform: scale(1);
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
 }
 
-.kob-tts-dock{
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
 
- 
-  box-shadow:none !important;
-}</style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css"></head>
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style><style>
+
+.symbol-wrap, .symbol-bar{  background-color: rgba(0,0,0,0.0.1);}
+#toggleBtn,{
+width: 18px;
+  height: 18px;
+  background-color: rgba(0,0,0,0.0.3);
+}
+
+
+
+
+  .symbol-button.di-icon-ready{
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .symbol-button.di-icon-ready .di-btn-icon-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .symbol-button.di-icon-ready .di-btn-icon-fallback{
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .symbol-button.di-icon-ready .di-btn-icon-label{
+    display: none;
+  }
+</style><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/nxs.css"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/nxs.css"></head>
 <body>
-
- <script src="https://kodux78k.github.io/oiDual--Y-/M0D/LS/js/insert-LS-3.js"></script>
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
 
   <!-- Ambient Blobs -->
   <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
@@ -200,32 +314,35 @@
     </div>
   </div>
 
-
-
-<script src="https://kodux78k.github.io/oi-Dual/js/modules/inline-00.js"></script>
-<!--
-<script type="module" src="https://kodux78k.github.io/oi-Dual/js/main.js"></script>
--->
-
-
-
-
-
-
 <div id="root">
 
-<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
 
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kobllux-fusion.css">
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
+
+
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
 
 <div class="wrap">
   <div class="content">
-    <iframe id="frame" src="https://kodux78k.github.io/oiDual-HuD/"></iframe>
+    <iframe id="frame" src="about:blank"></iframe>
     <div id="kob-tts-outline"></div>
   </div>
 
   <!-- HUD Inteligente -->
   <div class="symbol-bar floating" id="symbolBar">
-    
+          <div class="symbol-wrap">
+
+          <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
+        </div>
+
+  
     <!-- Botão Menu -->
     <div class="toggle-wrap">
       <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
@@ -238,9 +355,9 @@
     <div class="symbol-wrap">
       <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
     </div>
-    <div class="symbol-wrap">
-      <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
-    </div>
+     <div class="symbol-wrap">
+    <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+  </div>
 
     <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
     <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
@@ -258,12 +375,14 @@
 
     <!-- Outros atalhos -->
     <div class="symbol-wrap">
-      <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual-HuD/">Φ</button>
+      <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">🌌</button>
     </div>
     <div class="symbol-wrap">
-      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">꩜</button>
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">🛋️</button>
     </div>
-    <div class="symbol-wrap">
+  
+
+ <div class="symbol-wrap">
       <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
     </div>
     <div class="symbol-wrap">
@@ -279,30 +398,7 @@
 
 </div>
 
-<style> 
 
-/* estado normal */
-.kob-tts-dock{
-  transition: transform .35s ease, opacity .65s ease;
-}
-
-/* quase invisível */
-.kob-tts-dock.idle{
-  opacity: .18;
-  transform: scale(.92);
-}
-
-/* quando passa o dedo ou mouse */
-.kob-tts-dock:hover{
-  opacity: 1;
-  transform: scale(1);
-}
-
-.kob-tts-dock{
-
- 
-  box-shadow:none !important;
-}</style>
 
 
 
@@ -331,14 +427,12 @@ resetIdle();
 </script>
 
 
-<!-- <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/kob-patch-orb.js"></script>
-
-<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/m0ds/kob-patch-orbbark.js"></script> ╔══════════════════════════════════════════╗
+<!-- ╔══════════════════════════════════════════╗
      ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
      ║  Segurar 3s → edita data-url do botão   ║
      ║  Clique curto → sistema externo cuida   ║
      ╚══════════════════════════════════════════╝ -->
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+
 
 <div id="kblx-back">
   <div id="kblx-panel">
@@ -354,6 +448,229 @@ resetIdle();
 </div>
 
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
+
+<div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+  <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+
+  <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+        <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected="">Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-bg-preset="ghost" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" data-bg-preset="deep" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden="" onchange="handleUpload(this)">
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+        <div class="fx-stage">
+          <div class="fx-actions">
+            <button class="btn-mini" onclick="loadCurrentFrameToFX()">Carregar quadro atual</button>
+            <label class="btn-mini" style="justify-content:center;">
+              Upload imagem
+              <input type="file" id="fx-upload" accept="image/*" hidden="">
+            </label>
+            <button class="btn-download" onclick="downloadFX()">Download PNG</button>
+          </div>
+
+          <div class="fx-canvas-wrap">
+            <canvas id="fxCanvas" width="1200" height="800"></canvas>
+          </div>
+
+          <div class="preset-grid">
+            <button class="preset-btn active" data-fx-mode="texture" onclick="setFXMode('texture')">Textura</button>
+            <button class="preset-btn" data-fx-mode="liquid" onclick="setFXMode('liquid')">Líquido</button>
+            <button class="preset-btn" data-fx-mode="paint" onclick="setFXMode('paint')">Tinta</button>
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+            <input id="fxBlur" type="range" min="0" max="24" value="4">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+            <input id="fxIntensity" type="range" min="0" max="100" value="55">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+            <input id="fxLiquify" type="range" min="0" max="100" value="0">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+            <input id="fxGrain" type="range" min="0" max="100" value="35">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+            <input id="fxContrast" type="range" min="80" max="140" value="108">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+            <input id="fxSaturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+          <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+     
+
+    
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script>
+
+  
+
+<style>
+
+ .bg-gradient-base {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,.55), transparent 45%);
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+  .wrap {
+      position: relative;
+padding:0 0 0px;
+      z-index: var(--z-base);
+    }
+
+  #bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      opacity: .15;
+      mix-blend-mode: multiply;
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+ /* orb */
+.orb {
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  display: flex;
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+</style>
+
+
+  <script>
+    console.log("Sistema Pronto.");
+  </script>
+
+<script>
+const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
+</script>
 
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
 
@@ -361,8 +678,326 @@ resetIdle();
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
 
 
-<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
-  <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-878.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+
+<style>
+
+.symbol-wrap, .symbol-bar{  background-color: rgba(0,0,0,0.0.1);}
+#toggleBtn,{
+width: 18px;
+  height: 18px;
+  background-color: rgba(0,0,0,0.0.3);
+}
+
+
+
+
+  .symbol-button.di-icon-ready{
+    position: relative;
+    overflow: hidden;
+    padding: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+  .symbol-button.di-icon-ready .di-btn-icon-img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+  }
+
+  .symbol-button.di-icon-ready .di-btn-icon-fallback{
+    display: inline-flex;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .symbol-button.di-icon-ready .di-btn-icon-label{
+    display: none;
+  }
+</style>
+
+<script>
+(() => {
+  const CACHE_KEY = 'di_btn_icon_cache_v2';
+  const buttons = () => Array.from(document.querySelectorAll('.symbol-button[data-url]'));
+
+  const loadCache = () => {
+    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); }
+    catch { return {}; }
+  };
+
+  const saveCache = (cache) => {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
+  };
+
+  const cache = loadCache();
+
+  const normKey = (url) => {
+    try {
+      const u = new URL(url, location.href);
+      return u.href;
+    } catch {
+      return url;
+    }
+  };
+
+  async function fetchText(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  }
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }
+
+  function pickBestIcon(icons = []) {
+    if (!Array.isArray(icons) || !icons.length) return null;
+
+    const parsed = icons
+      .map(i => ({
+        ...i,
+        sizeNum: (() => {
+          const m = String(i.sizes || '').match(/(\d+)\s*x\s*(\d+)/i);
+          return m ? Math.max(+m[1], +m[2]) : 0;
+        })()
+      }))
+      .sort((a, b) => b.sizeNum - a.sizeNum);
+
+    return (
+      parsed.find(i => String(i.sizes || '').includes('192')) ||
+      parsed.find(i => i.sizeNum >= 192) ||
+      parsed[0] ||
+      null
+    );
+  }
+
+  async function resolveIcon(url) {
+    const key = normKey(url);
+    if (cache[key]) return cache[key];
+
+    try {
+      const base = new URL(key);
+      const html = await fetchText(base.href);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const manifestLink = doc.querySelector('link[rel="manifest"]');
+      if (manifestLink) {
+        const manifestUrl = new URL(manifestLink.getAttribute('href'), base).href;
+        try {
+          const manifest = await fetchJSON(manifestUrl);
+          const icon = pickBestIcon(manifest?.icons);
+          if (icon?.src) {
+            const resolved = new URL(icon.src, manifestUrl).href;
+            cache[key] = resolved;
+            saveCache(cache);
+            return resolved;
+          }
+        } catch {}
+      }
+
+      const apple = doc.querySelector(
+        'link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]'
+      );
+      if (apple?.href) {
+        const resolved = new URL(apple.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const shortcut = doc.querySelector('link[rel="shortcut icon"], link[rel="icon"]');
+      if (shortcut?.href) {
+        const resolved = new URL(shortcut.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const fallback = new URL('/favicon.ico', base).href;
+      cache[key] = fallback;
+      saveCache(cache);
+      return fallback;
+    } catch (err) {
+      const fallback = (() => {
+        try { return new URL('/favicon.ico', new URL(key, location.href)).href; }
+        catch { return null; }
+      })();
+
+      if (fallback) {
+        cache[key] = fallback;
+        saveCache(cache);
+      }
+      return fallback;
+    }
+  }
+
+  function paintButton(btn, iconUrl) {
+    if (!btn) return;
+
+    btn.classList.add('di-icon-ready');
+    btn.innerHTML = '';
+
+    const img = document.createElement('img');
+    img.className = 'di-btn-icon-img';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.src = iconUrl;
+
+    img.onerror = () => {
+      const fallback = document.createElement('span');
+      fallback.className = 'di-btn-icon-fallback';
+      fallback.textContent = btn.dataset.fallback || '◉';
+      btn.innerHTML = '';
+      btn.appendChild(fallback);
+    };
+
+    btn.appendChild(img);
+  }
+
+  async function processButton(btn) {
+    const url = btn.dataset.url;
+    if (!url) return;
+
+    const icon = await resolveIcon(url);
+    if (icon) paintButton(btn, icon);
+  }
+
+  async function run() {
+    const list = buttons();
+    await Promise.all(list.map(processButton));
+  }
+
+  function observeDynamicButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver(() => {
+      buttons().forEach(btn => {
+        if (btn.dataset.diIconDone === '1') return;
+        btn.dataset.diIconDone = '1';
+        processButton(btn);
+      });
+    });
+
+    mo.observe(root, { childList: true, subtree: true });
+  }
+
+  window.DI_ICON_LOADER = {
+    refresh: run,
+    clearCache() {
+      Object.keys(cache).forEach(k => delete cache[k]);
+      saveCache(cache);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await run();
+    observeDynamicButtons();
+  });
+})();
+</script>
+
+<script src="https://unpkg.com/lucide@latest"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script><script>
+
+// 🔥 ===============================
+// 🔥 ORB SYSTEM · CORE UNIFICADO
+// 🔥 ===============================
+
+// 🔹 GERADOR UNIVERSAL
+function makeOrbAvatar(name, size = 36) {
+  const safe = name || 'DUAL';
+
+  // seed determinística baseada no nome
+  const seed = safe.split('').reduce((a, c) => a + c.charCodeAt(0), 0);
+
+  const h1 = seed % 360;
+  const h2 = (seed * 37) % 360;
+
+  // 🔒 evita colisão de gradient no DOM
+  const uid = Math.random().toString(36).slice(2, 6);
+  const id = 'g' + seed.toString(36) + uid;
+
+  return `
+    <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="${id}" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stop-color="hsl(${h1},100%,55%)"/>
+          <stop offset="100%" stop-color="hsl(${h2},90%,45%)"/>
+        </linearGradient>
+      </defs>
+
+      <!-- base -->
+      <rect width="32" height="32" rx="7" fill="#071018"/>
+
+      <!-- glow -->
+      <circle cx="16" cy="16" r="9" fill="url(#${id})" opacity="0.25"/>
+
+      <!-- core -->
+      <circle cx="16" cy="16" r="7" fill="url(#${id})"/>
+
+      <!-- ring -->
+      <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+    </svg>
+  `;
+}
+
+
+// 🔓 GLOBAL HOOK
+window.makeOrbAvatar = makeOrbAvatar;
+
+// 🔹 ALIAS OPCIONAL (mini semântico)
+window.makeMiniAvatar = (name) => makeOrbAvatar(name, 24);
+
+
+// 🔁 ===============================
+// 🔁 UPDATE INTERFACE
+// 🔁 ===============================
+function updateInterface(name){
+  const safe = name || 'Convidado';
+
+  // 🔹 texto
+  els.lblName.innerText = safe;
+  els.input.value = safe;
+
+  // 🔹 estado ativo
+  const activeKey = STATE.keys.find(k => k.active);
+
+  els.smallIdent.innerText = activeKey ? activeKey.name : '--';
+  els.actBadge.innerText = activeKey ? `key:${activeKey.name}` : 'v:--';
+
+  // 🔥 ORBS SINCRONIZADOS
+  const orbBig  = makeOrbAvatar(safe, 64);
+  const orbMid  = makeOrbAvatar(safe, 36);
+  const orbMini = makeOrbAvatar(safe, 24);
+
+  els.avatarTgt.innerHTML = orbBig;
+  els.smallMiniAvatar.innerHTML = orbMini;
+  els.actMiniAvatar.innerHTML = orbMid;
+
+  // 🔹 nome ativo
+  els.actName.innerText = safe;
+}
+
+</script><script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script><script>
 
 const dock = document.querySelector('.kob-tts-dock');
 
@@ -384,11 +1019,253 @@ function resetIdle(){
 });
 
 resetIdle();
-</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script><script>
+    console.log("Sistema Pronto.");
+  </script><script>
+const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
+</script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-878.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script><script>
+(() => {
+  const CACHE_KEY = 'di_btn_icon_cache_v2';
+  const buttons = () => Array.from(document.querySelectorAll('.symbol-button[data-url]'));
 
+  const loadCache = () => {
+    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}'); }
+    catch { return {}; }
+  };
 
+  const saveCache = (cache) => {
+    try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {}
+  };
 
-<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+  const cache = loadCache();
 
+  const normKey = (url) => {
+    try {
+      const u = new URL(url, location.href);
+      return u.href;
+    } catch {
+      return url;
+    }
+  };
 
-</body></html>
+  async function fetchText(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.text();
+  }
+
+  async function fetchJSON(url) {
+    const res = await fetch(url, { mode: 'cors', credentials: 'omit' });
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return await res.json();
+  }
+
+  function pickBestIcon(icons = []) {
+    if (!Array.isArray(icons) || !icons.length) return null;
+
+    const parsed = icons
+      .map(i => ({
+        ...i,
+        sizeNum: (() => {
+          const m = String(i.sizes || '').match(/(\d+)\s*x\s*(\d+)/i);
+          return m ? Math.max(+m[1], +m[2]) : 0;
+        })()
+      }))
+      .sort((a, b) => b.sizeNum - a.sizeNum);
+
+    return (
+      parsed.find(i => String(i.sizes || '').includes('192')) ||
+      parsed.find(i => i.sizeNum >= 192) ||
+      parsed[0] ||
+      null
+    );
+  }
+
+  async function resolveIcon(url) {
+    const key = normKey(url);
+    if (cache[key]) return cache[key];
+
+    try {
+      const base = new URL(key);
+      const html = await fetchText(base.href);
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+
+      const manifestLink = doc.querySelector('link[rel="manifest"]');
+      if (manifestLink) {
+        const manifestUrl = new URL(manifestLink.getAttribute('href'), base).href;
+        try {
+          const manifest = await fetchJSON(manifestUrl);
+          const icon = pickBestIcon(manifest?.icons);
+          if (icon?.src) {
+            const resolved = new URL(icon.src, manifestUrl).href;
+            cache[key] = resolved;
+            saveCache(cache);
+            return resolved;
+          }
+        } catch {}
+      }
+
+      const apple = doc.querySelector(
+        'link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]'
+      );
+      if (apple?.href) {
+        const resolved = new URL(apple.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const shortcut = doc.querySelector('link[rel="shortcut icon"], link[rel="icon"]');
+      if (shortcut?.href) {
+        const resolved = new URL(shortcut.getAttribute('href'), base).href;
+        cache[key] = resolved;
+        saveCache(cache);
+        return resolved;
+      }
+
+      const fallback = new URL('/favicon.ico', base).href;
+      cache[key] = fallback;
+      saveCache(cache);
+      return fallback;
+    } catch (err) {
+      const fallback = (() => {
+        try { return new URL('/favicon.ico', new URL(key, location.href)).href; }
+        catch { return null; }
+      })();
+
+      if (fallback) {
+        cache[key] = fallback;
+        saveCache(cache);
+      }
+      return fallback;
+    }
+  }
+
+  function paintButton(btn, iconUrl) {
+    if (!btn) return;
+
+    btn.classList.add('di-icon-ready');
+    btn.innerHTML = '';
+
+    const img = document.createElement('img');
+    img.className = 'di-btn-icon-img';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    img.src = iconUrl;
+
+    img.onerror = () => {
+      const fallback = document.createElement('span');
+      fallback.className = 'di-btn-icon-fallback';
+      fallback.textContent = btn.dataset.fallback || '◉';
+      btn.innerHTML = '';
+      btn.appendChild(fallback);
+    };
+
+    btn.appendChild(img);
+  }
+
+  async function processButton(btn) {
+    const url = btn.dataset.url;
+    if (!url) return;
+
+    const icon = await resolveIcon(url);
+    if (icon) paintButton(btn, icon);
+  }
+
+  async function run() {
+    const list = buttons();
+    await Promise.all(list.map(processButton));
+  }
+
+  function observeDynamicButtons() {
+    const root = document.body;
+    if (!root) return;
+
+    const mo = new MutationObserver(() => {
+      buttons().forEach(btn => {
+        if (btn.dataset.diIconDone === '1') return;
+        btn.dataset.diIconDone = '1';
+        processButton(btn);
+      });
+    });
+
+    mo.observe(root, { childList: true, subtree: true });
+  }
+
+  window.DI_ICON_LOADER = {
+    refresh: run,
+    clearCache() {
+      Object.keys(cache).forEach(k => delete cache[k]);
+      saveCache(cache);
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', async () => {
+    await run();
+    observeDynamicButtons();
+  });
+})();
+</script><div id="kblx-addbtn-back">
+  <div id="kblx-addbtn-panel">
+    <div class="kblx-addbtn-chip">⊙ KOBLLUX HUD · NOVO BOTÃO</div>
+    <div class="kblx-addbtn-title">Adicionar ao Symbol Bar</div>
+    <div class="kblx-addbtn-row">
+      <div class="kblx-addbtn-field sym-field">
+        <span class="kblx-addbtn-lbl">Símbolo</span>
+        <input id="kblx-sym-inp" class="kblx-addbtn-inp" maxlength="4" placeholder="☯" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="kblx-addbtn-field" style="flex:0 0 90px;align-items:center;padding-top:18px;">
+        <div id="kblx-sym-preview">☯</div>
+      </div>
+      <div class="kblx-addbtn-field">
+        <span class="kblx-addbtn-lbl">ID</span>
+        <input id="kblx-id-inp" class="kblx-addbtn-inp" placeholder="meu-link" spellcheck="false" autocomplete="off">
+      </div>
+    </div>
+    <div class="kblx-addbtn-field" style="margin-bottom:1rem;">
+      <span class="kblx-addbtn-lbl">URL / Arquivo</span>
+      <input id="kblx-url-inp" class="kblx-addbtn-inp" placeholder="pagina.html  ou  https://..." spellcheck="false" autocomplete="off">
+    </div>
+    <div class="kblx-addbtn-actions">
+      <button class="kblx-addbtn-btn kblx-addbtn-save" id="kblx-addbtn-ok">⊙ Adicionar</button>
+      <button class="kblx-addbtn-btn kblx-addbtn-cancel" id="kblx-addbtn-cancel">✕ Cancelar</button>
+    </div>
+  </div>
+</div>
+<div id="kblx-toast"></div>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/nxs.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/nxs.js"></script><div id="kblx-addbtn-back">
+  <div id="kblx-addbtn-panel">
+    <div class="kblx-addbtn-chip">⊙ KOBLLUX HUD · NOVO BOTÃO</div>
+    <div class="kblx-addbtn-title">Adicionar ao Symbol Bar</div>
+    <div class="kblx-addbtn-row">
+      <div class="kblx-addbtn-field sym-field">
+        <span class="kblx-addbtn-lbl">Símbolo</span>
+        <input id="kblx-sym-inp" class="kblx-addbtn-inp" maxlength="4" placeholder="☯" spellcheck="false" autocomplete="off">
+      </div>
+      <div class="kblx-addbtn-field" style="flex:0 0 90px;align-items:center;padding-top:18px;">
+        <div id="kblx-sym-preview">☯</div>
+      </div>
+      <div class="kblx-addbtn-field">
+        <span class="kblx-addbtn-lbl">ID</span>
+        <input id="kblx-id-inp" class="kblx-addbtn-inp" placeholder="meu-link" spellcheck="false" autocomplete="off">
+      </div>
+    </div>
+    <div class="kblx-addbtn-field" style="margin-bottom:1rem;">
+      <span class="kblx-addbtn-lbl">URL / Arquivo</span>
+      <input id="kblx-url-inp" class="kblx-addbtn-inp" placeholder="pagina.html  ou  https://..." spellcheck="false" autocomplete="off">
+    </div>
+    <div class="kblx-addbtn-actions">
+      <button class="kblx-addbtn-btn kblx-addbtn-save" id="kblx-addbtn-ok">⊙ Adicionar</button>
+      <button class="kblx-addbtn-btn kblx-addbtn-cancel" id="kblx-addbtn-cancel">✕ Cancelar</button>
+    </div>
+  </div>
+</div>
+<div id="kblx-toast"></div>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/nxs.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/nxs.js"></script></body></html>
