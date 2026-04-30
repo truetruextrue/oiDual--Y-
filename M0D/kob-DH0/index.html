@@ -12,36 +12,6 @@
 <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
 
 
-
-<style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
-        }
-        .main-toggle,
-  #toggleBtn {color: var(--grad-a);
-    width: 48px;
-    height: 48px;border:12px;box-shadow: var(--grad-b);
-    background-color: rgba(0, 0, 0, 0.1);  }  
-
-#bg-layer-fixed {
-      position: fixed;
-      inset: 0;
-      z-index: 1;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: var(--bg-opacity);
-      mix-blend-mode: var(--bg-blend);
-      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
-      filter: saturate(1.05) contrast(1.02);
-      pointer-events: none;
-    }
-      </style>
-
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
 
     <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
@@ -60,6 +30,45 @@
 
 
 <div id="root">
+
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+        .main-toggle,
+  #toggleBtn {color: var(--grad-a);
+    width: 48px;
+    height: 48px;border:12px;box-shadow: var(--grad-b);
+    background-color: rgba(0, 0, 0, 0.1);  }  
+
+#bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacityu);
+      mix-blend-mode: var(--bg-blue);
+      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
+      filter: saturate(1.05) contrast(1.02);
+      pointer-events: none;
+    }
+
+  .bg-gradient-base {
+      position: fixed; inset: 0; 
+    z-index: 1;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.06), var(--kob-voice-primary) transparent 88%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--grad-a) 100%) !impprtant;
+      pointer-events: none;
+    }
+      </style>
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
@@ -336,5 +345,6 @@ const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","ai
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
 
 <script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
+
 
 </body></html>
