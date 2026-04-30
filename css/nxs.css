@@ -1,12 +1,12 @@
-<!--
+/*
   ╔══════════════════════════════════════════════════════════════════╗
   ║  KOBLLUX · PATCH v2 — Carousel CoverFlow + Tamanho Fixo        ║
   ║  Substitui o PATCH anterior (remover o v1 antes de usar)       ║
   ║  Inserir antes do </body>                                       ║
   ╚══════════════════════════════════════════════════════════════════╝
--->
+  */
 
-<style>
+
 /* ═══════════════════════════════════════════════════════════════════
    TAMANHO BASE — lido do toggleBtn via JS e exposto como var CSS
    Todos os botões do carrossel herdam esse tamanho.
@@ -258,4 +258,4 @@
   stroke-dasharray:119.38; stroke-dashoffset:119.38;
   stroke-linecap:round;
 }
-</style>
+
