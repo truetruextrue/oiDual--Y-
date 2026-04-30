@@ -133,3 +133,36 @@ border-radius: 9999px;
   55%  { transform: scale(1.08); }
   100% { transform: scale(1); }
 }
+
+
+
+.di-hybrid-orb{
+  position: relative;
+  overflow: hidden;
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  display: grid;
+  place-items: center;
+}
+
+.di-hybrid-orb__icon{
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: .28;
+  filter: blur(.5px) saturate(1.2);
+}
+
+.di-hybrid-orb__glow{
+  position: absolute;
+  inset: -8px;
+  background: radial-gradient(circle, rgba(120,227,255,.25), transparent 60%);
+  filter: blur(10px);
+}
+
+.di-hybrid-orb .orb{
+  width: 42px;
+  height: 42px;
+}
