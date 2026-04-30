@@ -25,8 +25,21 @@
   #toggleBtn {color: var(--grad-a);
     width: 48px;
     height: 48px;border:12px;box-shadow: var(--grad-b);
-    background-color: rgba(0, 0, 0, 0.1);
-  }
+    background-color: rgba(0, 0, 0, 0.1);  }  
+
+#bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacity);
+      mix-blend-mode: var(--bg-blend);
+      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
+      filter: saturate(1.05) contrast(1.02);
+      pointer-events: none;
+    }
       </style>
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
@@ -66,7 +79,7 @@
   
     <!-- Botão Menu -->
     <div class="toggle-wrap">
-      <button class="symbol-button" id="toggleBtn" title="Menu / Iniciar">≡</button>
+      <button class="symbol-button main-toggl" id="toggleBtn" title="Menu / Iniciar">≡</button>
     </div>
 
     <!-- Controles de Navegação de Leitura -->
