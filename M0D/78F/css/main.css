@@ -72,7 +72,7 @@
 
     .wrap { max-width: var(--max); margin: 0 auto; 
         padding: 0px 0px 64px; 
-        position: relative; z-index: 0; }
+        position: relative; z-index: 1; }
 
     .topbar {
       display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
@@ -268,10 +268,11 @@
       .hero { grid-template-columns: 1fr; }
       .hero-media { min-height: 450px; }
       .catalog-nav { flex-direction: column; }
-      .drawer { width: min(94vw, 420px); }
+      .drawer { width: min(87vw, 420px); }
     }
     @media (max-width: 600px) {
-      .wrap { padding: 14px 12px 46px; }
+              /*.wrap { padding: 14px 12px 46px; }*/
+      .wrap { padding: 0px 0px 46px; }
       .topbar { flex-direction: column; align-items: stretch; }
       .nav-group { justify-content: space-between; }
       .hero-title { font-size: 32px; }
