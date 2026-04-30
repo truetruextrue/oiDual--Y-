@@ -188,3 +188,15 @@ border-color: var(--ink);
 border-radius: 9999px;
 */
 
+.bg-gradient-base {
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at top, rgba(255,255,255,.55), transparent 45%);
+      pointer-events: none;
+      z-index: var(--z-base);
+    }
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(780deg); }
+}
