@@ -1,75 +1,1346 @@
 <!DOCTYPE html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta content="width=device-width, initial-scale=1.0" name="viewport"><title>Dual.Infodose</title><link href="manifest.json" rel="manifest"><meta content="#000000" name="theme-color"><link href="assets/icons/icon-192.png" rel="icon" type="image/png"><link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DualApp/css/main.css"></head><body><div id="assistantName"></div><div class="content"><iframe class="active" id="frame" src="index.html"></iframe></div><div class="symbol-bar"><button class="symbol-button" onclick="loadPage('about:blank')">Φ</button><button class="symbol-button" onclick="loadPage('dual-decoder-13.html')">꩜</button><button class="symbol-button" onclick="loadPage('Splash_FINAL_TEMA_PULSO.html')">◌</button><button class="symbol-button" onclick="loadPage('Raros.html')">☼</button><button class="symbol-button" onclick="loadPage('Solashss.html')">◑</button><button class="symbol-button" onclick="loadPage('dual-tube-25-0.html')">◘</button></div><button class="lock-button" onclick="loadPage('index.html')"></button><input accept=".html" id="uploadHTML" style="display:none" type="file"><button id="uploadComponentBtn">⧉</button><button id="remoteComponentBtn">☍</button><button id="toggleDecoderBtn">✦</button><button id="btn-expandir-ritual">◉</button><div id="decoderBox"><input id="codeInput" placeholder="Digite o selo..." type="text"><button onclick="decodeSymbolicCode()">✦ Desbloquear</button></div><div id="pulsos-container"><div id="pulsos"></div></div><div id="koblluxPlayer" style="position:fixed;top:42px;left:20px;z-index:7;background:rgba(0,0,0,0.8);backdrop-filter:blur(9px);padding:5px;border-radius:10px;display:flex;flex-direction:column;gap:6px;transition:all 0.6s ease;max-width:199px;color:var(--text);font-family:monospace;"><button id="togglePlayer" style="font-size:20px;background:none;border:none;color:inherit;cursor:pointer;">
-≈
-</button><div class="hidden" id="playerWrapper"></div><div id="playerControls" style="display:none;flex-direction:column;gap:8px;"><button id="playPause" style="font-size:22px;background:none;">
-►
-</button><select id="trackSelect"><option value="">
-🎵 Escolha uma trilha
-</option><option value="Sono_Profundo">
-🌙 Sono Profundo
-</option><option value="Manifestação">
-✨ Manifestação
-</option><option value="Ativação_Pineal">
-🧠 Ativação Pineal
-</option><option value="Alívio_da_Ansiedade">
-🌿 Alívio da Ansiedade
-</option><option value="Meditação_Theta">
-◉ Meditação Theta
-</option><option value="Viagem_Astral">
-🌌 Viagem Astral
-</option><option value="Foco_Profundo">
-🎯 Foco Profundo
-</option><option value="Flow_State">
-🌊 Flow State
-</option><option value="Relaxamento_Rápido">
-💤 Relaxamento Rápido
-</option><option value="Concentração_Sustentada">
-📚 Concentração Sustentada
-</option><option value="Cura_Emocional">
-💖 Cura Emocional
-</option><option value="Recuperação_Física">
-🏋️ Recuperação Física
-</option><option value="matrix">
-🧪 Matrix
-</option><option value="tesseract">
-🧿 Tesseract
-</option></select><select id="binauralSelect"><option value="">
-🎶 Binaural Desativado
-</option><option value="Sono_Profundo">
-🌙 Sono Profundo
-</option><option value="Manifestação">
-✨ Manifestação
-</option><option value="Ativação_Pineal">
-🧠 Ativação Pineal
-</option><option value="Alívio_da_Ansiedade">
-🌿 Alívio da Ansiedade
-</option><option value="Meditação_Theta">
-◉ Meditação Theta
-</option><option value="Viagem_Astral">
-🌌 Viagem Astral
-</option><option value="Foco_Profundo">
-🎯 Foco Profundo
-</option><option value="Flow_State">
-🌊 Flow State
-</option><option value="Relaxamento_Rápido">
-💤 Relaxamento Rápido
-</option><option value="Concentração_Sustentada">
-📚 Concentração Sustentada
-</option><option value="Cura_Emocional">
-💖 Cura Emocional
-</option><option value="Recuperação_Física">
-🏋️ Recuperação Física
-</option><option value="matrix">
-🧪 Matrix
-</option><option value="tesseract">
-🧿 Tesseract
-</option></select><label>
-🎵 Volume Trilha
-<input id="trackVolume" max="1" min="0" step="0.01" type="range" value="1"></label><label>
-🧘 Volume Binaural
-<input id="binauralVolume" max="1" min="0" step="0.01" type="range" value="1"></label></div></div><button id="themeToggle" title="Alternar tema"></button><div id="particles-js"></div><div class="svg-container" id="logoContainer"><object data="assets/icons/3D_logo_Dual_Infodose_10.png" id="logoObj" type="image/png"></object></div><div class="response-container" id="response"><div class="pages-wrapper"><div class="page initial active"><strong>Clique no ◉ e diga “Oi, Dual”.</strong></div></div><p class="footer-text"><em>Do seu jeito. <strong>Sempre</strong> único. <strong>Sempre</strong> seu.</em></p><div class="response-controls"><div class="control-buttons"><button class="copy-button" title="Copiar"><object data="assets/icons/BW_quad_Dual_Infodose.svg" height="27" type="image/svg+xml" width="27"></object></button><button class="paste-button" title="Colar"><object data="assets/icons/BW_Dual_Infodose.svg" height="24" type="image/svg+xml" width="24"></object></button><button class="toggle-button" id="toggleBtn" title="Login Infodose"><object data="assets/icons/KBLX-pack/SuS-logo-1.PNG" height="33" type="image/png" width="33"></object></button><button class="kitty-button" id="kittyBtn" title="Estudos"><object data="assets/icons/DualKittyKard-icon-3.png" height="33" type="image/png" width="33"></object></button><button class="upload-symbolic-button" id="uploadFileBtn" title="Enviar Arquivo">
-⧉
-</button><input accept=".txt,.html,.json,.pdf,.png,.jpg,.jpeg" id="symbolicFileInput" style="display: none;" type="file"></div><div class="pagination"><button data-action="prev">⟵</button><span id="pageIndicator">1 / 1</span><button data-action="next">⟶</button></div></div></div><div class="input-container"><input id="userInput" placeholder="Diga: 'oi, Dual'..." type="text"><button id="sendBtn" title="Enviar">➤</button><button id="voiceBtn" title="Falar"><object data="assets/icons/Reset_buttom_Dual-Infodose.svg" height="36" type="image/svg+xml" width="36"></object></button></div><div class="login-container" id="loginBox"><div id="advancedToggleOptions" style="display:none;margin-top:12px;flex-direction:column;gap:10px;"><input id="skInput" placeholder="🔑 Nova chave SK..." style="padding:8px;border-radius:8px;border:1px solid #0ff;background:rgba(0,0,0,0.2);color:#0ff;" type="text"><input id="roleSystemInput" placeholder="📜 Role System..." style="padding:8px;border-radius:8px;border:1px solid #0ff;background:rgba(0,0,0,0.2);color:#0ff;" type="text"><select id="modelSelector" style="padding:8px;border-radius:8px;background:rgba(0,0,0,0.2);color:#0ff;border:1px solid #0ff;"><option value="">🤖 Selecione modelo</option><option value="deepseek/deepseek-chat-v3-0324:free">Deepseek v3</option><option value="openchat/openchat-3.5-1210:free">OpenChat 3.5</option><option value="mistralai/mixtral-8x7b:free">Mixtral</option><option value="meta-llama/llama-3-70b-instruct:free">LLaMA 3 70B</option></select><button onclick="salvarConfiguracoesAvancadas()" style="padding:8px;border-radius:8px;border:1px solid #0ff;background:#0ff;color:#000;font-weight:bold;">💾 Ativar Configurações</button></div><form id="loginForm"><input id="userName" placeholder="Nome do usuário" required="" type="text"><input id="assistantInput" placeholder="Nome dual.infodose" required="" type="text"><button type="submit">Ativar</button></form></div><button id="togglePanelBtn">⚙️</button><div id="layoutTogglePanel"><label><input onchange="toggleElement('#response', this)" type="checkbox"> Mostrar IA</label><label><input onchange="toggleElement('.svg-container', this)" type="checkbox"> Mostrar Logo</label><label><input onchange="toggleElement('#koblluxPlayer', this)" type="checkbox"> Mostrar Player</label><label><input onchange="toggleElement('#uploadComponentBtn,#remoteComponentBtn,#toggleDecoderBtn', this)" type="checkbox"> Mostrar Botões Laterais</label><label><input onchange="toggleElement('.symbol-bar', this)" type="checkbox"> Mostrar SymbolBar</label><hr><button onclick="mostrarTodos()">Mostrar Todos</button><button onclick="ocultarTodos()">Ocultar Todos</button><hr><button onclick="salvarEstadoUI()">Salvar Preferência</button></div><button id="userButton">☯ UserButton</button><div class="pages-wrapper" id="pagesWrapper"></div>
-<!-- KODUX MASTER DIAG (non-invasive) -->
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Fusion Card // Core Controller</title>
+  <meta name="theme-color" content="#05070a">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/DualApp/js/main.js"></script></body></html>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#05070a">
+  <link rel="apple-touch-icon" href="icon-192.png">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <!-- Base / core CSS -->
+  <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/nxs.css">
+
+  <style>
+    :root {
+      --z-base: 0;
+      --z-content: 100;
+      --z-widget: 500;
+      --z-overlay: 1000;
+      --z-system: 5000;
+    }
+  </style>
+
+  <style>
+  
+  </style>
+</head>
+<body>
+  <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
+  <div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+  <div id="snap-zone"></div>
+  <div class="toaster-wrap" id="toasterWrap"></div>
+
+  <div class="container">
+    <div class="fusion-card closed" id="mainCard">
+      <div class="card-header" id="cardHeader">
+        <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+        <div class="text-block">
+          <div class="greeting-row">
+            <span class="txt-thin" id="lblHello">Oi,</span>
+            <span class="txt-heavy" id="lblName">Convidado</span>
+          </div>
+          <div class="brand-dual">DUAL</div>
+        </div>
+        <div class="clock-widget">
+          <div class="time-display" id="clockTime">00:00</div>
+          <span class="status-led">ONLINE</span>
+        </div>
+        <button class="hud-menu-btn" id="hudMenuBtn" title="Menu Rápido" aria-label="Menu rápido"><i data-lucide="menu"></i></button>
+      </div>
+
+      <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido" style="display:none">●●●</div>
+      <div class="drag-handle" style="display:none"></div>
+
+      <div class="card-body" id="cardBody">
+        <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+          <div class="mini-avatar" id="smallMiniAvatar"></div>
+          <div class="small-text" id="smallText">Aguardando ativação...</div>
+          <div class="ident-badge" id="smallIdent">--</div>
+        </div>
+
+        <div class="input-wrapper stagger-item">
+          <input type="text" class="cyber-input" id="inputUser" placeholder="Identifique-se..." autocomplete="off">
+        </div>
+
+        <div class="activation-wrap stagger-item">
+          <div class="activation-toggle" data-toggle="activationCard">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-cyan)"></div>
+              <strong style="letter-spacing:1px;font-size:.9rem">Ativação ASCII</strong>
+            </div>
+            <div style="margin-left:auto;font-size:.82rem;color:rgba(255,255,255,.6)">BASE v1</div>
+          </div>
+          <div id="activationCard" class="activation-card activation-hidden">
+            <div style="display:flex;align-items:flex-start;gap:10px">
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="mini-avatar" id="actMiniAvatar"></div>
+                <div>
+                  <div style="font-weight:700">CÉREBRO</div>
+                  <div style="font-size:.78rem;opacity:.6"><span id="actName">User</span></div>
+                </div>
+              </div>
+              <div class="activation-badge" id="actBadge" style="margin-left:auto;color:var(--neon-cyan);font-size:.8em">v:--</div>
+            </div>
+            <pre id="actPre" class="activation-pre">Carregando...</pre>
+            <div class="activation-controls" style="display:flex;gap:8px;margin-top:8px">
+              <button class="trigger-btn" id="copyActBtn">COPIAR</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="activation-wrap stagger-item">
+          <div class="activation-toggle" data-toggle="systemCard">
+            <div style="display:flex;align-items:center;gap:8px">
+              <div style="width:10px;height:10px;border-radius:99px;background:var(--neon-purple)"></div>
+              <strong style="letter-spacing:1px;font-size:.9rem">SYSTEM &amp; NEURAL</strong>
+            </div>
+            <div style="margin-left:auto;font-size:.82rem;color:rgba(255,255,255,.6)">CONFIG</div>
+          </div>
+          <div id="systemCard" class="activation-card activation-hidden">
+            <div class="col">
+              <div class="section-title">IDENTIDADE DA INFODOSE</div>
+              <input type="text" id="infodoseNameInput" placeholder="Nome: World System...">
+              <div class="section-title" style="margin-top:8px">CONEXÃO NEURAL (SK)</div>
+              <input type="password" id="apiKeyInput" placeholder="sk-or-..." autocomplete="off">
+              <div class="model-toggle">
+                <select id="modelSelect" class="btn">
+                  <option value="" disabled selected>Selecione Modelo</option>
+                  <option value="nvidia/nemotron-3-nano-30b-a3b:free">NemoTron (Free)</option>
+                  <option value="allenai/molmo-2-8b:free">MolMo (Free)</option>
+                  <option value="mistralai/devstral-2512:free">DevStral</option>
+                  <option value="openai/gpt-oss-120b:free">OSS120b</option>
+                </select>
+              </div>
+              <div class="panel-divider" style="margin:10px 0;border-top:1px solid rgba(255,255,255,.05)"></div>
+              <button id="saveSystemBtn" class="trigger-btn" style="margin-top:12px;background:var(--neon-cyan);color:#000;border:none;font-weight:700">SALVAR CONFIGURAÇÃO</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="stagger-item" style="margin-top:4px">
+          <div class="stat-lbl" style="margin-bottom:6px;font-size:.6rem;color:rgba(255,255,255,.4)">INTERFACE MODE</div>
+          <div class="mode-row">
+            <button class="trigger-btn mode-btn active-mode" id="btnModeCard" data-mode="card" style="flex:1" title="Modo Padrão">CARD</button>
+            <button class="trigger-btn mode-btn" id="btnModeOrb" data-mode="orb" style="flex:1" title="Flutuante">ORB</button>
+            <button class="trigger-btn mode-btn" id="btnModeHud" data-mode="hud" style="flex:1" title="Barra de Topo">HUD</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="keysModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card" role="dialog" aria-modal="true">
+      <div class="keys-header">
+        <div>
+          <div id="keysTitle" style="font-weight:800;font-size:1.1rem;color:var(--neon-cyan)">USER KEYS MANAGER</div>
+          <div style="color:rgba(255,255,255,.6);font-size:.85rem">Gerencie suas chaves API com segurança local (Cofre).</div>
+        </div>
+        <button id="closeKeysBtn" class="small-btn" aria-label="Fechar">X</button>
+      </div>
+      <div class="key-list" id="keyList"></div>
+      <div class="form-section" style="margin-top:15px;padding-top:15px;border-top:1px solid rgba(255,255,255,.05)">
+        <div class="form-grid">
+          <input id="keyNameInput" placeholder="Nome da chave (ex: Principal)">
+          <input id="keyTokenInput" type="password" placeholder="Token / ESK (Opcional)">
+        </div>
+        <button id="addKeyBtn" class="small-btn" style="width:100%;margin-top:8px;background:rgba(255,255,255,.1)">ADICIONAR CHAVE</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:space-between;margin-top:15px;border-top:1px solid rgba(255,255,255,.05);padding-top:12px">
+        <div style="font-size:.7rem;color:rgba(255,255,255,.4);display:flex;align-items:center;gap:5px">
+          <i data-lucide="shield-check" style="width:14px"></i> <span id="vaultStatusText">Cofre Aberto</span>
+        </div>
+        <div style="display:flex;gap:8px"><button id="lockVaultBtn" class="small-btn danger">BLOQUEAR</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="vaultModal" class="modal-overlay" aria-hidden="true">
+    <div class="keys-card">
+      <div class="vault-icon"><i data-lucide="lock" style="width:24px;height:24px"></i></div>
+      <h3 style="margin:0 0 10px 0;font-weight:800">ACESSO AO COFRE</h3>
+      <p style="margin:0 0 15px 0;font-size:.9rem;color:rgba(255,255,255,.6)">Seus dados estão criptografados. Digite a senha para desbloquear.</p>
+      <input type="password" id="vaultPassInput" class="cyber-input" style="text-align:center;margin-bottom:12px" placeholder="Senha...">
+      <div style="display:flex;gap:8px;justify-content:center">
+        <button id="vaultCancelBtn" class="small-btn">Cancelar</button>
+        <button id="vaultUnlockBtn" class="small-btn active-btn">DESBLOQUEAR</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="root">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+    <div class="wrap">
+      <div class="content">
+        <iframe id="frame" src="about:blank" title="Frame de conteúdo"></iframe>
+        <div id="kob-tts-outline"></div>
+      </div>
+
+      <div class="symbol-bar floating" id="symbolBar">
+        <div class="symbol-wrap"><div class="drawer-toggle" id="drawerToggle" title="Abrir Engine de Background">🎛️</div></div>
+        <div class="toggle-wrap"><button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" id="btn-play" title="Play/Pause">▶</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" id="tts-stop" title="Parar">■</button></div>
+        <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+          <div class="orb-microphone-container"><div class="tts-orb-mini"><div class="orb" id="main-orb"><div class="orb-core"></div></div></div></div>
+        </button>
+        <div class="symbol-wrap"><button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">🌌</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">🛋️</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button></div>
+        <div class="symbol-wrap"><button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button></div>
+        <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+      </div>
+    </div>
+    <div id="arch-overlay"></div>
+  </div>
+
+  <div id="drawerOverlay"></div>
+  <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" id="drawerClose" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+        <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="15">
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+        <select id="bgBlend">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-bg-preset="ghost">Fantasma</button>
+          <button class="preset-btn active" data-bg-preset="vivid">Vívido</button>
+          <button class="preset-btn" data-bg-preset="deep">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden>
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+        <div class="fx-stage">
+          <div class="fx-actions">
+            <button class="btn-mini" id="btnLoadFrame">Carregar quadro atual</button>
+            <label class="btn-mini" style="justify-content:center;">
+              Upload imagem
+              <input type="file" id="fx-upload" accept="image/*" hidden>
+            </label>
+            <button class="btn-download" id="btnDownloadFx">Download PNG</button>
+          </div>
+
+          <div class="fx-canvas-wrap">
+            <canvas id="fxCanvas" width="1200" height="800"></canvas>
+          </div>
+
+          <div class="preset-grid" style="margin-top:8px">
+            <button class="preset-btn active" data-fx-mode="texture">Textura</button>
+            <button class="preset-btn" data-fx-mode="liquid">Líquido</button>
+            <button class="preset-btn" data-fx-mode="paint">Tinta</button>
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+            <input id="fxBlur" type="range" min="0" max="24" value="4">
+          </div>
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+            <input id="fxIntensity" type="range" min="0" max="100" value="55">
+          </div>
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+            <input id="fxLiquify" type="range" min="0" max="100" value="0">
+          </div>
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+            <input id="fxGrain" type="range" min="0" max="100" value="35">
+          </div>
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+            <input id="fxContrast" type="range" min="80" max="140" value="108">
+          </div>
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+            <input id="fxSaturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <button class="btn-action" id="btnApplyFx">Aplicar FX no Background</button>
+          <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div id="kblx-back">
+    <div id="kblx-panel">
+      <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+      <div class="p-title" id="kblx-ttl">Botão</div>
+      <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+      <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+      <div class="kblx-row">
+        <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+        <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="kblx-addbtn-back">
+    <div id="kblx-addbtn-panel">
+      <div class="kblx-addbtn-chip">⊙ KOBLLUX HUD · NOVO BOTÃO</div>
+      <div class="kblx-addbtn-title">Adicionar ao Symbol Bar</div>
+      <div class="kblx-addbtn-row">
+        <div class="kblx-addbtn-field sym-field" style="flex:1">
+          <span class="kblx-addbtn-lbl">Símbolo</span>
+          <input id="kblx-sym-inp" class="kblx-addbtn-inp" maxlength="4" placeholder="☯" spellcheck="false" autocomplete="off">
+        </div>
+        <div class="kblx-addbtn-field" style="flex:0 0 90px;align-items:center;padding-top:18px;">
+          <div id="kblx-sym-preview">☯</div>
+        </div>
+        <div class="kblx-addbtn-field" style="flex:1">
+          <span class="kblx-addbtn-lbl">ID</span>
+          <input id="kblx-id-inp" class="kblx-addbtn-inp" placeholder="meu-link" spellcheck="false" autocomplete="off">
+        </div>
+      </div>
+      <div class="kblx-addbtn-field" style="margin-bottom:1rem;">
+        <span class="kblx-addbtn-lbl">URL / Arquivo</span>
+        <input id="kblx-url-inp" class="kblx-addbtn-inp" placeholder="pagina.html  ou  https://..." spellcheck="false" autocomplete="off">
+      </div>
+      <div class="kblx-addbtn-actions">
+        <button class="kblx-addbtn-btn kblx-addbtn-save" id="kblx-addbtn-ok">⊙ Adicionar</button>
+        <button class="kblx-addbtn-btn kblx-addbtn-cancel" id="kblx-addbtn-cancel">✕ Cancelar</button>
+      </div>
+    </div>
+  </div>
+  <div id="kblx-toast"></div>
+
+  <script>
+  (() => {
+    'use strict';
+
+    const LS = {
+      user: 'di_userName',
+      arch: 'di_arch',
+      model: 'di_modelName',
+      theme: 'di_theme',
+      oracle: 'di_oracle_v2',
+      icons: 'di_btn_icon_cache_v2',
+      bg: 'di_bg_state_v1',
+      keys: 'di_vault_keys_v1'
+    };
+
+    const $ = (sel, root = document) => root.querySelector(sel);
+    const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+    const clamp = (n, min, max) => Math.min(max, Math.max(min, n));
+    const safeJSON = (val, fallback) => {
+      try { return JSON.parse(val); } catch { return fallback; }
+    };
+
+    const els = {};
+    const bindEls = () => {
+      const map = {
+        lblHello:'#lblHello', lblName:'#lblName', clockTime:'#clockTime',
+        avatarTarget:'#avatarTarget', smallMiniAvatar:'#smallMiniAvatar',
+        actMiniAvatar:'#actMiniAvatar', actName:'#actName', actBadge:'#actBadge',
+        actPre:'#actPre', inputUser:'#inputUser', infodoseNameInput:'#infodoseNameInput',
+        apiKeyInput:'#apiKeyInput', modelSelect:'#modelSelect', saveSystemBtn:'#saveSystemBtn',
+        mainCard:'#mainCard', hudMenuBtn:'#hudMenuBtn', smallText:'#smallText', smallIdent:'#smallIdent',
+        mainOrb:'#main-orb', symbolBar:'#symbolBar', toggleBtn:'#toggleBtn',
+        btnPlay:'#btn-play', btnPrev:'#btn-prev', btnStop:'#tts-stop', btnArch:'#btn-arch',
+        hudStatus:'#hudStatus', frame:'#frame', drawerPanel:'#drawerPanel', drawerOverlay:'#drawerOverlay',
+        drawerToggle:'#drawerToggle', drawerClose:'#drawerClose', bgOpacity:'#bgOpacity', bgBlend:'#bgBlend',
+        bgStatusText:'#bgStatusText', valOp:'#val-op', libCount:'#libCount', thumbList:'#thumb-list',
+        fileUpload:'#file-upload', fxUpload:'#fx-upload', fxCanvas:'#fxCanvas', fxBlur:'#fxBlur',
+        fxIntensity:'#fxIntensity', fxLiquify:'#fxLiquify', fxGrain:'#fxGrain', fxContrast:'#fxContrast',
+        fxSaturation:'#fxSaturation', fxBlurVal:'#fxBlurVal', fxIntensityVal:'#fxIntensityVal',
+        fxLiquifyVal:'#fxLiquifyVal', fxGrainVal:'#fxGrainVal', fxContrastVal:'#fxContrastVal',
+        fxSaturationVal:'#fxSaturationVal', btnLoadFrame:'#btnLoadFrame', btnDownloadFx:'#btnDownloadFx',
+        btnApplyFx:'#btnApplyFx', keysModal:'#keysModal', keyList:'#keyList', closeKeysBtn:'#closeKeysBtn',
+        addKeyBtn:'#addKeyBtn', keyNameInput:'#keyNameInput', keyTokenInput:'#keyTokenInput',
+        lockVaultBtn:'#lockVaultBtn', vaultModal:'#vaultModal', vaultPassInput:'#vaultPassInput',
+        vaultUnlockBtn:'#vaultUnlockBtn', vaultCancelBtn:'#vaultCancelBtn', vaultStatusText:'#vaultStatusText',
+        kblxBack:'#kblx-back', kblxPanel:'#kblx-panel', kblxTtl:'#kblx-ttl', kblxInp:'#kblx-inp',
+        kblxBtnSave:'#kblx-btn-save', kblxBtnClose:'#kblx-btn-close', kblxAddBack:'#kblx-addbtn-back',
+        kblxSymInp:'#kblx-sym-inp', kblxSymPreview:'#kblx-sym-preview', kblxIdInp:'#kblx-id-inp',
+        kblxUrlInp:'#kblx-url-inp', kblxAddOk:'#kblx-addbtn-ok', kblxAddCancel:'#kblx-addbtn-cancel',
+        toasterWrap:'#toasterWrap', bgLayer:'#bg-layer-fixed', oracleStatus:'#oracle-status'
+      };
+      Object.entries(map).forEach(([k, sel]) => els[k] = $(sel));
+    };
+
+    function toast(msg){
+      if (!els.toasterWrap) return;
+      const t = document.createElement('div');
+      t.textContent = msg;
+      t.style.cssText = 'margin:8px 0;padding:10px 12px;border:1px solid rgba(255,255,255,.1);border-radius:12px;background:rgba(7,10,16,.88);backdrop-filter:blur(14px);font-size:.88rem;';
+      els.toasterWrap.appendChild(t);
+      setTimeout(() => t.remove(), 2200);
+    }
+
+    function diCompute(name){
+      const safe = (name || 'DUAL').trim() || 'DUAL';
+      let seed = 0;
+      for (let i = 0; i < safe.length; i++) seed += safe.charCodeAt(i);
+      const h1 = seed % 360;
+      const h2 = (seed * 37) % 360;
+      const tone = h1 > 180 ? 'warm' : 'cool';
+      const mode = seed % 2 === 0 ? 'fusion' : 'classic';
+      return { safe, seed, h1, h2, tone, mode };
+    }
+
+    function makeOrbAvatar(name, size = 36){
+      const data = diCompute(name);
+      const gid = `g${data.seed.toString(36)}`;
+      return `
+        <svg width="${size}" height="${size}" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <linearGradient id="${gid}" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="hsl(${data.h1} 100% 55%)"/>
+              <stop offset="100%" stop-color="hsl(${data.h2} 90% 45%)"/>
+            </linearGradient>
+          </defs>
+          <rect width="32" height="32" rx="7" fill="#071018"/>
+          <circle cx="16" cy="16" r="9" fill="url(#${gid})" opacity="0.25"/>
+          <circle cx="16" cy="16" r="7" fill="url(#${gid})"/>
+          <circle cx="16" cy="16" r="13" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="1"/>
+        </svg>
+      `;
+    }
+
+    function applyRootVars(name){
+      const data = diCompute(name);
+      const root = document.documentElement;
+      root.style.setProperty('--orb-primary', `hsl(${data.h1} 100% 55%)`);
+      root.style.setProperty('--orb-secondary', `hsl(${data.h2} 90% 45%)`);
+      root.style.setProperty('--orb-accent', data.tone === 'warm' ? 'rgba(255,220,180,.8)' : 'rgba(255,255,255,.8)');
+      root.dataset.diName = data.safe;
+      root.dataset.arch = data.safe;
+      root.dataset.tone = data.tone;
+      root.dataset.mode = data.mode;
+      return data;
+    }
+
+    function renderOrb(selector, name, size){
+      const el = $(selector);
+      if (!el) return;
+      el.dataset.arch = name;
+      el.innerHTML = makeOrbAvatar(name, size);
+    }
+
+    function syncNameUI(name){
+      const data = applyRootVars(name);
+      localStorage.setItem(LS.user, data.safe);
+      localStorage.setItem('userName', data.safe);
+      if (els.lblName) els.lblName.textContent = data.safe;
+      if (els.actName) els.actName.textContent = data.safe;
+      if (els.hudStatus) els.hudStatus.textContent = `KOBLLUX · ${data.safe} · ${data.mode.toUpperCase()}`;
+      renderOrb('#avatarTarget', data.safe, 64);
+      renderOrb('#smallMiniAvatar', data.safe, 24);
+      renderOrb('#actMiniAvatar', data.safe, 24);
+      renderOrb('#main-orb', data.safe, 32);
+      if (els.inputUser && document.activeElement !== els.inputUser) els.inputUser.value = data.safe;
+      if (els.infodoseNameInput && document.activeElement !== els.infodoseNameInput) els.infodoseNameInput.value = data.safe;
+      const activeKey = ORACLE.state.keys.find(k => k.active);
+      if (els.smallIdent) els.smallIdent.textContent = activeKey ? activeKey.name : '--';
+      if (els.actBadge) els.actBadge.textContent = activeKey ? `key:${activeKey.name}` : 'v:--';
+    }
+
+    function setTime(){
+      if (!els.clockTime) return;
+      const now = new Date();
+      const hh = String(now.getHours()).padStart(2, '0');
+      const mm = String(now.getMinutes()).padStart(2, '0');
+      els.clockTime.textContent = `${hh}:${mm}`;
+    }
+
+    const ORACLE = {
+      version: 'v3-clean',
+      ready: false,
+      state: {
+        active: true,
+        floatingBar: true,
+        fusionCardOpen: true,
+        orbHeld: false,
+        voiceEnabled: true,
+        ttsPlaying: false,
+        ttsPaused: false,
+        lastEvent: null,
+        lastText: '',
+        archetype: localStorage.getItem(LS.arch) || 'Atlas',
+        user: localStorage.getItem(LS.user) || 'Convidado',
+        model: localStorage.getItem(LS.model) || 'default',
+        theme: localStorage.getItem(LS.theme) || 'system',
+        keys: [],
+        vaultLocked: false,
+        currentBg: null,
+        bgPreset: 'vivid',
+        fxMode: 'texture',
+        interfaceMode: 'card'
+      },
+      memory: {
+        runtime: {},
+        session: {},
+        persistent: {},
+        external: {}
+      },
+      hooks: {},
+      modules: {},
+      log: [],
+      init(){
+        this.load();
+        this.bind();
+        this.installDefaults();
+        this.emit('oracle:ready', { version: this.version });
+        this.ready = true;
+        this.refreshUI();
+      },
+      installDefaults(){
+        if (!this.memory.persistent.history) this.memory.persistent.history = [];
+        if (!this.memory.runtime.flags) this.memory.runtime.flags = {};
+      },
+      bind(){
+        const onReady = () => {
+          this.hookDOM();
+          this.bindUI();
+          this.bindLongPressOrb();
+          this.bindSymbolBarDrag();
+          this.bindTTS();
+          this.bindBackground();
+          this.bindVault();
+          this.bindKblxEditors();
+          this.bindInputSync();
+          this.renderStatus();
+          this.refreshIcons();
+          setTime();
+          syncNameUI(this.state.user);
+          document.documentElement.classList.add('oracle-ready');
+        };
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', onReady, { once:true });
+        else onReady();
+        window.addEventListener('beforeunload', () => this.save());
+      },
+      hookDOM(){
+        this.hooks.orb = $('#btn-arch');
+        this.hooks.symbolBar = $('#symbolBar');
+        this.hooks.fusionCard = $('#mainCard');
+        this.hooks.status = $('#oracle-status');
+        this.hooks.ttsPlay = $('#btn-play');
+        this.hooks.ttsPrev = $('#btn-prev');
+        this.hooks.ttsStop = $('#tts-stop');
+        this.hooks.ttsText = $('#kob-tts-outline');
+      },
+      bindUI(){
+        if (els.hudMenuBtn) els.hudMenuBtn.addEventListener('click', () => this.dispatch('keys:open'));
+        const toggleMap = [['#toggleBtn', 'symbol:toggle'], ['#btnModeCard', 'mode:set', 'card'], ['#btnModeOrb', 'mode:set', 'orb'], ['#btnModeHud', 'mode:set', 'hud']];
+        toggleMap.forEach(item => {
+          const el = $(item[0]);
+          if (!el) return;
+          if (item[1] === 'mode:set') {
+            el.addEventListener('click', () => this.dispatch('state:set', { key:'interfaceMode', value:item[2] }));
+          } else {
+            el.addEventListener('click', () => this.dispatch(item[1]));
+          }
+        });
+        document.addEventListener('click', (ev) => {
+          const t = ev.target.closest('[data-oracle-event]');
+          if (t) {
+            const type = t.getAttribute('data-oracle-event');
+            const payload = safeJSON(t.getAttribute('data-payload') || '{}', {});
+            this.dispatch(type, payload);
+            return;
+          }
+          const btn = ev.target.closest('.symbol-button[data-url]');
+          if (btn) this.openUrlButton(btn);
+        });
+        document.addEventListener('keydown', (ev) => {
+          if (ev.key === 'Escape') {
+            this.dispatch('tts:stop');
+            this.dispatch('fusion:close');
+            this.closeDrawer();
+            this.closeEditors();
+          }
+        });
+        if (els.copyActBtn) els.copyActBtn.addEventListener('click', () => {
+          const text = els.actPre?.textContent || '';
+          navigator.clipboard?.writeText(text).then(() => toast('Ativação copiada.'));
+        });
+        if (els.saveSystemBtn) els.saveSystemBtn.addEventListener('click', () => this.saveSystem());
+        if (els.drawerToggle) els.drawerToggle.addEventListener('click', () => this.toggleDrawer());
+        if (els.drawerClose) els.drawerClose.addEventListener('click', () => this.closeDrawer());
+        if (els.drawerOverlay) els.drawerOverlay.addEventListener('click', () => this.closeDrawer());
+      },
+      bindInputSync(){
+        const nameInput = els.inputUser || els.infodoseNameInput;
+        if (!nameInput) return;
+        const initial = (nameInput.value || this.state.user || localStorage.getItem(LS.user) || 'DUAL').trim() || 'DUAL';
+        nameInput.value = initial;
+        syncNameUI(initial);
+        nameInput.addEventListener('input', () => {
+          this.state.user = nameInput.value.trim() || 'DUAL';
+          syncNameUI(this.state.user);
+          this.save();
+        });
+        if (els.infodoseNameInput) {
+          els.infodoseNameInput.addEventListener('input', () => {
+            this.state.user = els.infodoseNameInput.value.trim() || 'DUAL';
+            syncNameUI(this.state.user);
+            this.save();
+          });
+        }
+      },
+      bindLongPressOrb(){
+        const orb = this.hooks.orb;
+        if (!orb) return;
+        let timer = null;
+        let held = false;
+        const start = () => {
+          held = false;
+          clearTimeout(timer);
+          timer = setTimeout(() => { held = true; this.dispatch('orb:hold'); }, 650);
+        };
+        const cancel = () => {
+          clearTimeout(timer);
+          if (!held) this.dispatch('orb:tap');
+        };
+        orb.addEventListener('pointerdown', start);
+        orb.addEventListener('pointerup', cancel);
+        orb.addEventListener('pointerleave', () => clearTimeout(timer));
+        orb.addEventListener('pointercancel', () => clearTimeout(timer));
+        orb.addEventListener('contextmenu', (e) => e.preventDefault());
+      },
+      bindSymbolBarDrag(){
+        const bar = this.hooks.symbolBar;
+        if (!bar) return;
+        let dragging = false, sx = 0, sy = 0, bx = 0, by = 0;
+        const isHandle = (el) => el.closest('#btn-arch, #toggleBtn, .drag-handle, .drawer-toggle');
+        const onDown = (ev) => {
+          if (!isHandle(ev.target)) return;
+          dragging = true;
+          const rect = bar.getBoundingClientRect();
+          sx = ev.clientX; sy = ev.clientY; bx = rect.left; by = rect.top;
+          bar.classList.add('is-dragging', 'floating');
+          ev.preventDefault();
+        };
+        const onMove = (ev) => {
+          if (!dragging) return;
+          const dx = ev.clientX - sx;
+          const dy = ev.clientY - sy;
+          bar.style.position = 'fixed';
+          bar.style.left = `${Math.max(6, bx + dx)}px`;
+          bar.style.top = `${Math.max(6, by + dy)}px`;
+          bar.style.right = 'auto';
+          bar.style.bottom = 'auto';
+          this.state.floatingBar = true;
+        };
+        const onUp = () => {
+          if (!dragging) return;
+          dragging = false;
+          bar.classList.remove('is-dragging');
+          this.save();
+        };
+        bar.addEventListener('pointerdown', onDown);
+        window.addEventListener('pointermove', onMove);
+        window.addEventListener('pointerup', onUp);
+      },
+      bindTTS(){
+        if (els.btnPlay) els.btnPlay.addEventListener('click', () => this.dispatch('tts:toggle'));
+        if (els.btnPrev) els.btnPrev.addEventListener('click', () => this.dispatch('tts:prev'));
+        if (els.btnStop) els.btnStop.addEventListener('click', () => this.dispatch('tts:stop'));
+      },
+      bindBackground(){
+        if (els.bgOpacity) els.bgOpacity.addEventListener('input', (e) => updateBgAttr('opacity', e.target.value));
+        if (els.bgBlend) els.bgBlend.addEventListener('change', (e) => updateBgAttr('blend', e.target.value));
+        $$('.preset-btn[data-bg-preset]').forEach(btn => btn.addEventListener('click', () => applyPreset(btn.dataset.bgPreset)));
+        $$('.preset-btn[data-fx-mode]').forEach(btn => btn.addEventListener('click', () => setFXMode(btn.dataset.fxMode)));
+        if (els.fileUpload) els.fileUpload.addEventListener('change', (e) => handleUpload(e.target));
+        if (els.fxUpload) els.fxUpload.addEventListener('change', (e) => loadFxUpload(e.target));
+        if (els.btnLoadFrame) els.btnLoadFrame.addEventListener('click', loadCurrentFrameToFX);
+        if (els.btnDownloadFx) els.btnDownloadFx.addEventListener('click', downloadFX);
+        if (els.btnApplyFx) els.btnApplyFx.addEventListener('click', applyFXToBackground);
+      },
+      bindVault(){
+        if (els.closeKeysBtn) els.closeKeysBtn.addEventListener('click', () => this.closeKeysModal());
+        if (els.addKeyBtn) els.addKeyBtn.addEventListener('click', () => this.addVaultKey());
+        if (els.lockVaultBtn) els.lockVaultBtn.addEventListener('click', () => this.lockVault());
+        if (els.vaultCancelBtn) els.vaultCancelBtn.addEventListener('click', () => this.closeVaultModal());
+        if (els.vaultUnlockBtn) els.vaultUnlockBtn.addEventListener('click', () => this.unlockVault());
+      },
+      bindKblxEditors(){
+        if (els.kblxBtnClose) els.kblxBtnClose.addEventListener('click', () => this.closeEditors());
+        if (els.kblxBtnSave) els.kblxBtnSave.addEventListener('click', () => this.saveKblxRoute());
+        if (els.kblxAddCancel) els.kblxAddCancel.addEventListener('click', () => this.closeAddButtonEditor());
+        if (els.kblxAddOk) els.kblxAddOk.addEventListener('click', () => this.addSymbolButton());
+        if (els.kblxSymInp) els.kblxSymInp.addEventListener('input', () => {
+          if (els.kblxSymPreview) els.kblxSymPreview.textContent = els.kblxSymInp.value || '☯';
+        });
+        document.addEventListener('pointerdown', (e) => {
+          const btn = e.target.closest('.symbol-button[data-url]');
+          if (!btn) return;
+          this.longPressStart(btn, e);
+        });
+        document.addEventListener('pointerup', () => this.longPressEnd());
+        document.addEventListener('pointercancel', () => this.longPressEnd());
+        document.addEventListener('pointerleave', () => this.longPressEnd());
+      },
+      refreshUI(){
+        syncNameUI(this.state.user);
+        this.applyMode(this.state.interfaceMode);
+        this.applyBackgroundState();
+        this.refreshKeys();
+        this.refreshIcons();
+        this.renderStatus();
+      },
+      dispatch(type, payload = {}){
+        this.state.lastEvent = type;
+        this.logEvent(type, payload);
+        const handlers = {
+          'oracle:ready': () => {},
+          'orb:tap': () => this.toggleFusionCard(),
+          'orb:hold': () => this.toggleFusionCard(true),
+          'symbol:toggle': () => this.toggleSymbolBar(),
+          'fusion:toggle': () => this.toggleFusionCard(),
+          'fusion:open': () => this.openFusionCard(),
+          'fusion:close': () => this.closeFusionCard(),
+          'tts:toggle': () => this.toggleTTS(),
+          'tts:play': () => this.playTTS(payload.text || this.readTTSInput()),
+          'tts:pause': () => this.pauseTTS(),
+          'tts:resume': () => this.resumeTTS(),
+          'tts:stop': () => this.stopTTS(),
+          'tts:prev': () => this.emit('tts:prev', payload),
+          'tts:next': () => this.emit('tts:next', payload),
+          'memory:set': () => this.setMemory(payload.layer, payload.key, payload.value),
+          'memory:get': () => this.getMemory(payload.layer, payload.key),
+          'memory:sync': () => this.save(),
+          'state:set': () => this.setState(payload.key, payload.value),
+          'state:toggle': () => this.toggleState(payload.key),
+          'archetype:set': () => this.setArchetype(payload.value),
+          'status:refresh': () => this.renderStatus(),
+          'ui:floating:on': () => this.setFloatingBar(true),
+          'ui:floating:off': () => this.setFloatingBar(false),
+          'mode:set': () => this.applyMode(payload.value),
+          'keys:open': () => this.toggleKeysModal(true),
+          'keys:close': () => this.closeKeysModal(),
+          'drawer:toggle': () => this.toggleDrawer(),
+          'drawer:open': () => this.openDrawer(),
+          'drawer:close': () => this.closeDrawer()
+        };
+        const fn = handlers[type];
+        if (fn) return fn();
+        this.emit(type, payload);
+        this.save();
+      },
+      emit(type, payload = {}){
+        const event = new CustomEvent(type, { detail: payload });
+        window.dispatchEvent(event);
+        document.dispatchEvent(event);
+        Object.values(this.modules).forEach(mod => {
+          try { if (typeof mod?.dispatch === 'function') mod.dispatch(type, payload, this); } catch {}
+        });
+      },
+      register(name, module){ this.modules[name] = module; return module; },
+      setState(key, value){ this.state[key] = value; this.save(); this.renderStatus(); return value; },
+      toggleState(key){ this.state[key] = !this.state[key]; this.save(); this.renderStatus(); return this.state[key]; },
+      setArchetype(value){ this.state.archetype = value; localStorage.setItem(LS.arch, value); this.emit('archetype:changed', { value }); this.save(); this.renderStatus(); },
+      setFloatingBar(on){ const bar = this.hooks.symbolBar; if (!bar) return; this.state.floatingBar = !!on; bar.classList.toggle('floating', !!on); bar.style.position = on ? 'fixed' : ''; this.save(); this.renderStatus(); },
+      toggleSymbolBar(force){ const bar = this.hooks.symbolBar; if (!bar) return; const next = typeof force === 'boolean' ? force : !bar.classList.contains('open'); bar.classList.toggle('open', next); bar.classList.toggle('floating', this.state.floatingBar); this.save(); this.renderStatus(); this.emit('symbol:changed', { open: next }); },
+      openFusionCard(){ const card = this.hooks.fusionCard; if (!card) return; card.hidden = false; card.classList.remove('closed'); this.state.fusionCardOpen = true; this.save(); this.renderStatus(); },
+      closeFusionCard(){ const card = this.hooks.fusionCard; if (!card) return; card.classList.add('closed'); this.state.fusionCardOpen = false; this.save(); this.renderStatus(); },
+      toggleFusionCard(forceFocus = false){ const shouldOpen = forceFocus ? true : !this.state.fusionCardOpen; if (shouldOpen) this.openFusionCard(); else this.closeFusionCard(); this.emit('fusion:changed', { open: this.state.fusionCardOpen }); },
+      readTTSInput(){ const el = this.hooks.ttsText; const text = el?.textContent || this.state.lastText || ''; return String(text).trim(); },
+      speak(text){
+        if (!text) return;
+        try { speechSynthesis.cancel(); } catch {}
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = localStorage.getItem('di_lang') || 'pt-BR';
+        utter.rate = Number(localStorage.getItem('di_ttsRate') || 1);
+        utter.pitch = Number(localStorage.getItem('di_ttsPitch') || 1);
+        utter.volume = Number(localStorage.getItem('di_ttsVolume') || 1);
+        utter.onstart = () => { this.state.ttsPlaying = true; this.state.ttsPaused = false; this.renderStatus(); };
+        utter.onend = () => { this.state.ttsPlaying = false; this.state.ttsPaused = false; this.renderStatus(); };
+        utter.onerror = () => { this.state.ttsPlaying = false; this.state.ttsPaused = false; this.renderStatus(); };
+        speechSynthesis.speak(utter);
+        this.state.lastText = text;
+        this.save();
+      },
+      playTTS(text){ const source = (text || this.readTTSInput() || this.state.lastText || '').trim(); if (!source) return; this.speak(source); this.emit('tts:playback', { text: source }); },
+      pauseTTS(){ try { if (speechSynthesis.speaking && !speechSynthesis.paused) { speechSynthesis.pause(); this.state.ttsPaused = true; this.state.ttsPlaying = true; } } catch {} this.save(); this.renderStatus(); },
+      resumeTTS(){ try { if (speechSynthesis.paused) { speechSynthesis.resume(); this.state.ttsPaused = false; this.state.ttsPlaying = true; } } catch {} this.save(); this.renderStatus(); },
+      stopTTS(){ try { speechSynthesis.cancel(); } catch {} this.state.ttsPlaying = false; this.state.ttsPaused = false; this.save(); this.renderStatus(); },
+      toggleTTS(){ if (speechSynthesis.paused) return this.resumeTTS(); if (speechSynthesis.speaking) return this.pauseTTS(); return this.playTTS(); },
+      setMemory(layer, key, value){ if (!this.memory[layer]) this.memory[layer] = {}; this.memory[layer][key] = value; if (layer === 'persistent') this.save(); if (layer === 'session') sessionStorage.setItem(`di_oracle_session_${key}`, JSON.stringify(value)); return value; },
+      getMemory(layer, key){ if (layer === 'persistent') return this.memory.persistent?.[key]; if (layer === 'runtime') return this.memory.runtime?.[key]; if (layer === 'session') return this.memory.session?.[key]; if (layer === 'external') return this.memory.external?.[key]; return undefined; },
+      load(){
+        try {
+          const raw = localStorage.getItem(LS.oracle);
+          if (raw) {
+            const parsed = JSON.parse(raw);
+            this.memory.persistent = parsed.memory?.persistent || {};
+            this.state = { ...this.state, ...(parsed.state || {}) };
+            this.log = Array.isArray(parsed.log) ? parsed.log : [];
+            if (Array.isArray(parsed.state?.keys)) this.state.keys = parsed.state.keys;
+          }
+        } catch {}
+        try {
+          Object.keys(sessionStorage).forEach(k => {
+            if (k.startsWith('di_oracle_session_')) {
+              const key = k.replace('di_oracle_session_', '');
+              this.memory.session[key] = safeJSON(sessionStorage.getItem(k), sessionStorage.getItem(k));
+            }
+          });
+        } catch {}
+        this.state.user = localStorage.getItem(LS.user) || this.state.user;
+        this.state.archetype = localStorage.getItem(LS.arch) || this.state.archetype;
+        this.state.model = localStorage.getItem(LS.model) || this.state.model;
+        this.state.theme = localStorage.getItem(LS.theme) || this.state.theme;
+      },
+      save(){
+        try {
+          const payload = { version: this.version, state: this.state, memory: { persistent: this.memory.persistent }, log: this.log.slice(-250) };
+          localStorage.setItem(LS.oracle, JSON.stringify(payload));
+          localStorage.setItem(LS.user, this.state.user || 'Convidado');
+          localStorage.setItem(LS.arch, this.state.archetype || 'Atlas');
+          localStorage.setItem(LS.model, this.state.model || 'default');
+          localStorage.setItem(LS.theme, this.state.theme || 'system');
+        } catch {}
+      },
+      logEvent(type, payload){
+        const item = { at: Date.now(), type, payload };
+        this.log.push(item);
+        if (!this.memory.persistent.history) this.memory.persistent.history = [];
+        this.memory.persistent.history.push(item);
+        this.memory.persistent.history = this.memory.persistent.history.slice(-250);
+      },
+      renderStatus(){
+        const statusText = this.state.ttsPaused ? 'PAUSADO' : (this.state.ttsPlaying ? 'TOCANDO' : 'PRONTO');
+        const symbolState = this.hooks.symbolBar?.classList.contains('open') ? 'ABERTA' : 'FECHADA';
+        const cardState = this.state.fusionCardOpen ? 'ABERTA' : 'FECHADA';
+        const orbitState = this.state.floatingBar ? 'FLOAT' : 'FIXA';
+        if (els.hudStatus) els.hudStatus.textContent = `ORACLE ${this.version} · ${this.state.archetype} · TTS ${statusText} · BAR ${symbolState} · CARD ${cardState} · ${orbitState}`;
+        if (els.actPre) {
+          els.actPre.textContent = [
+            `ORACLE::${this.version}`,
+            `USER::${this.state.user}`,
+            `ARCH::${this.state.archetype}`,
+            `MODEL::${this.state.model}`,
+            `MODE::${this.state.interfaceMode}`,
+            `TTS::${statusText}`,
+            `BAR::${symbolState}`,
+            `CARD::${cardState}`
+          ].join('\n');
+        }
+        if (els.smallText) els.smallText.textContent = this.state.user || 'Aguardando ativação...';
+      },
+      openUrlButton(btn){
+        const url = btn.dataset.url;
+        if (!url) return;
+        try {
+          if (/^https?:\/\//i.test(url) || url.endsWith('.html') || url.startsWith('/')) {
+            if (els.frame) els.frame.src = url;
+            this.setMemory('runtime', 'lastUrl', url);
+            toast(`Abrindo: ${url}`);
+          }
+        } catch {}
+      },
+      refreshIcons(){ DI_ICON_LOADER.refresh(); },
+      toggleKeysModal(force){
+        const open = typeof force === 'boolean' ? force : !els.keysModal.classList.contains('open');
+        els.keysModal.classList.toggle('open', open);
+        els.keysModal.setAttribute('aria-hidden', String(!open));
+        if (open) this.refreshKeys();
+      },
+      closeKeysModal(){ if (els.keysModal) { els.keysModal.classList.remove('open'); els.keysModal.setAttribute('aria-hidden', 'true'); } },
+      lockVault(){ this.state.vaultLocked = true; if (els.vaultModal) { els.vaultModal.classList.add('open'); els.vaultModal.setAttribute('aria-hidden', 'false'); } if (els.vaultStatusText) els.vaultStatusText.textContent = 'Cofre Bloqueado'; this.save(); },
+      unlockVault(){ this.state.vaultLocked = false; this.closeVaultModal(); if (els.vaultStatusText) els.vaultStatusText.textContent = 'Cofre Aberto'; this.save(); toast('Cofre desbloqueado.'); },
+      closeVaultModal(){ if (els.vaultModal) { els.vaultModal.classList.remove('open'); els.vaultModal.setAttribute('aria-hidden', 'true'); } },
+      refreshKeys(){
+        if (!els.keyList) return;
+        els.keyList.innerHTML = '';
+        this.state.keys.forEach((k, idx) => {
+          const row = document.createElement('div');
+          row.className = 'key-item';
+          row.innerHTML = `<div><strong>${escapeHtml(k.name || `Chave ${idx+1}`)}</strong><div style="font-size:.78rem;color:rgba(255,255,255,.55)">${k.token ? 'Token salvo' : 'Sem token'}</div></div>
+            <div style="display:flex;gap:8px"><button class="small-btn" data-key-act="set" data-idx="${idx}">Ativar</button><button class="small-btn danger" data-key-act="del" data-idx="${idx}">Excluir</button></div>`;
+          els.keyList.appendChild(row);
+        });
+        els.keyList.querySelectorAll('button[data-key-act]').forEach(btn => btn.addEventListener('click', () => {
+          const idx = Number(btn.dataset.idx);
+          const act = btn.dataset.keyAct;
+          if (act === 'set') this.setActiveKey(idx);
+          if (act === 'del') this.deleteKey(idx);
+        }));
+      },
+      addVaultKey(){
+        const name = (els.keyNameInput?.value || '').trim();
+        const token = (els.keyTokenInput?.value || '').trim();
+        if (!name) return toast('Digite um nome para a chave.');
+        this.state.keys.push({ name, token, active: this.state.keys.length === 0 });
+        if (els.keyNameInput) els.keyNameInput.value = '';
+        if (els.keyTokenInput) els.keyTokenInput.value = '';
+        this.save();
+        this.refreshKeys();
+        syncNameUI(this.state.user);
+        toast('Chave adicionada.');
+      },
+      setActiveKey(idx){
+        this.state.keys = this.state.keys.map((k, i) => ({ ...k, active: i === idx }));
+        this.save();
+        this.refreshKeys();
+        syncNameUI(this.state.user);
+        toast(`Ativada: ${this.state.keys[idx]?.name || 'chave'}`);
+      },
+      deleteKey(idx){
+        const removed = this.state.keys[idx];
+        this.state.keys.splice(idx, 1);
+        if (!this.state.keys.some(k => k.active) && this.state.keys[0]) this.state.keys[0].active = true;
+        this.save();
+        this.refreshKeys();
+        syncNameUI(this.state.user);
+        toast(`Removida: ${removed?.name || 'chave'}`);
+      },
+      saveSystem(){
+        this.state.user = (els.infodoseNameInput?.value || els.inputUser?.value || this.state.user || 'DUAL').trim() || 'DUAL';
+        this.state.model = els.modelSelect?.value || this.state.model;
+        localStorage.setItem('di_apiKey', els.apiKeyInput?.value || '');
+        localStorage.setItem(LS.model, this.state.model);
+        this.save();
+        syncNameUI(this.state.user);
+        toast('Configuração salva.');
+      },
+      applyMode(mode){
+        this.state.interfaceMode = mode;
+        ['btnModeCard','btnModeOrb','btnModeHud'].forEach(id => { const el = $('#'+id); if (el) el.classList.toggle('active-mode', el.dataset.mode === mode); });
+        if (els.mainCard) {
+          els.mainCard.style.display = (mode === 'orb') ? 'none' : '';
+        }
+        if (els.symbolBar) {
+          els.symbolBar.classList.toggle('floating', mode !== 'card');
+          this.state.floatingBar = mode !== 'card';
+        }
+        this.save();
+        this.renderStatus();
+      },
+      toggleDrawer(force){
+        const open = typeof force === 'boolean' ? force : !els.drawerPanel.classList.contains('open');
+        if (els.drawerPanel) els.drawerPanel.classList.toggle('open', open);
+        if (els.drawerOverlay) els.drawerOverlay.classList.toggle('open', open);
+      },
+      openDrawer(){ this.toggleDrawer(true); },
+      closeDrawer(){ this.toggleDrawer(false); },
+      closeEditors(){
+        if (els.kblxBack) els.kblxBack.classList.remove('open');
+        if (els.kblxAddBack) els.kblxAddBack.classList.remove('open');
+      },
+      saveKblxRoute(){
+        const value = (els.kblxInp?.value || '').trim();
+        const target = this.activeButtonForEditor;
+        if (target && value) {
+          target.dataset.url = value;
+          DI_ICON_LOADER.refresh();
+          this.save();
+          toast('data-url atualizado.');
+        }
+        this.closeEditors();
+      },
+      addSymbolButton(){
+        const sym = (els.kblxSymInp?.value || '☯').trim() || '☯';
+        const id = (els.kblxIdInp?.value || '').trim() || `btn-${Date.now().toString(36)}`;
+        const url = (els.kblxUrlInp?.value || '').trim();
+        if (!url) return toast('Digite uma URL/arquivo.');
+        const wrap = document.createElement('div');
+        wrap.className = 'symbol-wrap';
+        wrap.innerHTML = `<button class="symbol-button" data-id="${escapeHtml(id)}" data-url="${escapeHtml(url)}" data-fallback="${escapeHtml(sym)}">${escapeHtml(sym)}</button>`;
+        els.symbolBar.insertBefore(wrap, els.hudStatus);
+        this.closeEditors();
+        this.save();
+        DI_ICON_LOADER.refresh();
+        toast('Botão adicionado.');
+      },
+      longPressStart(btn, ev){
+        if (this._lpTimer) clearTimeout(this._lpTimer);
+        this.activeButtonForEditor = btn;
+        this._lpTimer = setTimeout(() => {
+          const isAdd = btn.dataset.add === '1';
+          if (isAdd) {
+            if (els.kblxAddBack) els.kblxAddBack.classList.add('open');
+          } else {
+            if (els.kblxBack) els.kblxBack.classList.add('open');
+            if (els.kblxTtl) els.kblxTtl.textContent = btn.dataset.id || btn.textContent.trim() || 'Botão';
+            if (els.kblxInp) els.kblxInp.value = btn.dataset.url || '';
+          }
+          this._lpTriggered = true;
+        }, 3000);
+      },
+      longPressEnd(){
+        clearTimeout(this._lpTimer);
+        this._lpTimer = null;
+      },
+      openFxCanvasFromImage(img){
+        const canvas = els.fxCanvas;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        const maxW = canvas.width;
+        const maxH = canvas.height;
+        const ratio = Math.min(maxW / img.width, maxH / img.height, 1);
+        const w = Math.floor(img.width * ratio);
+        const h = Math.floor(img.height * ratio);
+        const x = Math.floor((maxW - w) / 2);
+        const y = Math.floor((maxH - h) / 2);
+        ctx.clearRect(0,0,maxW,maxH);
+        ctx.drawImage(img, x, y, w, h);
+      },
+      bindTTSPre(){}
+    };
+
+    function escapeHtml(str){
+      return String(str).replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    const DI_ICON_LOADER = (() => {
+      const CACHE_KEY = LS.icons;
+      const cache = safeJSON(localStorage.getItem(CACHE_KEY) || '{}', {});
+      const saveCache = () => { try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); } catch {} };
+      const normKey = (url) => { try { return new URL(url, location.href).href; } catch { return url; } };
+      async function fetchText(url){ const res = await fetch(url, { mode:'cors', credentials:'omit' }); if (!res.ok) throw new Error(`HTTP ${res.status}`); return await res.text(); }
+      async function fetchJSON(url){ const res = await fetch(url, { mode:'cors', credentials:'omit' }); if (!res.ok) throw new Error(`HTTP ${res.status}`); return await res.json(); }
+      function pickBestIcon(icons=[]){
+        if (!Array.isArray(icons) || !icons.length) return null;
+        const parsed = icons.map(i => ({ ...i, sizeNum: (() => { const m = String(i.sizes || '').match(/(\d+)\s*x\s*(\d+)/i); return m ? Math.max(+m[1], +m[2]) : 0; })() }))
+          .sort((a,b) => b.sizeNum - a.sizeNum);
+        return parsed.find(i => String(i.sizes || '').includes('192')) || parsed.find(i => i.sizeNum >= 192) || parsed[0] || null;
+      }
+      async function resolveIcon(url){
+        const key = normKey(url);
+        if (cache[key]) return cache[key];
+        try {
+          const base = new URL(key);
+          const html = await fetchText(base.href);
+          const doc = new DOMParser().parseFromString(html, 'text/html');
+          const manifestLink = doc.querySelector('link[rel="manifest"]');
+          if (manifestLink) {
+            const manifestUrl = new URL(manifestLink.getAttribute('href'), base).href;
+            try {
+              const manifest = await fetchJSON(manifestUrl);
+              const icon = pickBestIcon(manifest?.icons);
+              if (icon?.src) {
+                const resolved = new URL(icon.src, manifestUrl).href;
+                cache[key] = resolved; saveCache(); return resolved;
+              }
+            } catch {}
+          }
+          const apple = doc.querySelector('link[rel="apple-touch-icon"], link[rel="apple-touch-icon-precomposed"]');
+          if (apple?.href) {
+            const resolved = new URL(apple.getAttribute('href'), base).href;
+            cache[key] = resolved; saveCache(); return resolved;
+          }
+          const shortcut = doc.querySelector('link[rel="shortcut icon"], link[rel="icon"]');
+          if (shortcut?.href) {
+            const resolved = new URL(shortcut.getAttribute('href'), base).href;
+            cache[key] = resolved; saveCache(); return resolved;
+          }
+          const fallback = new URL('/favicon.ico', base).href;
+          cache[key] = fallback; saveCache(); return fallback;
+        } catch {
+          try {
+            const fallback = new URL('/favicon.ico', new URL(key, location.href)).href;
+            cache[key] = fallback; saveCache(); return fallback;
+          } catch { return null; }
+        }
+      }
+      function paintButton(btn, iconUrl){
+        if (!btn) return;
+        btn.classList.add('di-icon-ready');
+        btn.innerHTML = '';
+        const img = document.createElement('img');
+        img.className = 'di-btn-icon-img';
+        img.alt = '';
+        img.loading = 'lazy';
+        img.decoding = 'async';
+        img.src = iconUrl;
+        img.onerror = () => {
+          const fallback = document.createElement('span');
+          fallback.className = 'di-btn-icon-fallback';
+          fallback.textContent = btn.dataset.fallback || '◉';
+          btn.innerHTML = '';
+          btn.appendChild(fallback);
+        };
+        btn.appendChild(img);
+      }
+      async function processButton(btn){
+        const url = btn.dataset.url;
+        if (!url) return;
+        const icon = await resolveIcon(url);
+        if (icon) paintButton(btn, icon);
+      }
+      async function run(){ await Promise.all($$('.symbol-button[data-url]').map(processButton)); }
+      function observeDynamicButtons(){
+        const root = document.body;
+        if (!root) return;
+        const mo = new MutationObserver(() => {
+          $$('.symbol-button[data-url]').forEach(btn => {
+            if (btn.dataset.diIconDone === '1') return;
+            btn.dataset.diIconDone = '1';
+            processButton(btn);
+          });
+        });
+        mo.observe(root, { childList:true, subtree:true });
+      }
+      return {
+        refresh: run,
+        clearCache(){ Object.keys(cache).forEach(k => delete cache[k]); saveCache(); }
+      };
+    })();
+
+    function updateBgAttr(kind, value){
+      if (kind === 'opacity') {
+        const v = clamp(Number(value) || 0, 0, 100);
+        document.documentElement.style.setProperty('--bg-opacity', String(v / 100));
+        if (els.valOp) els.valOp.textContent = `${v}%`;
+        ORACLE.memory.persistent.bgOpacity = v;
+      }
+      if (kind === 'blend') {
+        document.documentElement.style.setProperty('--bg-blend', value);
+        ORACLE.memory.persistent.bgBlend = value;
+      }
+      ORACLE.save();
+    }
+
+    function applyPreset(name){
+      ORACLE.state.bgPreset = name;
+      if (name === 'ghost') {
+        updateBgAttr('opacity', 8);
+        updateBgAttr('blend', 'soft-light');
+        if (els.bgLayer) els.bgLayer.style.backgroundImage = 'none';
+      } else if (name === 'vivid') {
+        updateBgAttr('opacity', 15);
+        updateBgAttr('blend', 'multiply');
+      } else if (name === 'deep') {
+        updateBgAttr('opacity', 22);
+        updateBgAttr('blend', 'overlay');
+      }
+      $$('.preset-btn[data-bg-preset]').forEach(btn => btn.classList.toggle('active', btn.dataset.bgPreset === name));
+      ORACLE.save();
+      toast(`Preset aplicado: ${name}`);
+    }
+
+    async function handleUpload(input){
+      const file = input.files?.[0];
+      if (!file) return;
+      const url = URL.createObjectURL(file);
+      ORACLE.state.currentBg = url;
+      if (els.bgLayer) els.bgLayer.style.backgroundImage = `url(${url})`;
+      ORACLE.memory.persistent.lastBg = url;
+      toast('Imagem carregada.');
+      ORACLE.save();
+    }
+
+    function applyFXMode(mode){
+      ORACLE.state.fxMode = mode;
+      $$('.preset-btn[data-fx-mode]').forEach(btn => btn.classList.toggle('active', btn.dataset.fxMode === mode));
+      ORACLE.save();
+    }
+
+    function setFXMode(mode){ applyFXMode(mode); }
+
+    function loadCurrentFrameToFX(){
+      const canvas = els.fxCanvas;
+      if (!canvas || !els.frame) return;
+      const ctx = canvas.getContext('2d');
+      ctx.clearRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#04070b';
+      ctx.fillRect(0,0,canvas.width,canvas.height);
+      ctx.fillStyle = '#fff';
+      ctx.font = 'bold 28px Montserrat';
+      ctx.fillText('Frame atual', 24, 48);
+      ctx.font = '18px JetBrains Mono';
+      ctx.fillText(els.frame.src || 'about:blank', 24, 92);
+      toast('Quadro carregado no FX.');
+    }
+
+    function loadFxUpload(input){
+      const file = input.files?.[0];
+      if (!file || !els.fxCanvas) return;
+      const url = URL.createObjectURL(file);
+      const img = new Image();
+      img.onload = () => ORACLE.openFxCanvasFromImage(img);
+      img.src = url;
+    }
+
+    function downloadFX(){
+      const canvas = els.fxCanvas;
+      if (!canvas) return;
+      const a = document.createElement('a');
+      a.download = 'fx-output.png';
+      a.href = canvas.toDataURL('image/png');
+      a.click();
+    }
+
+    function applyFXToBackground(){
+      const canvas = els.fxCanvas;
+      if (!canvas || !els.bgLayer) return;
+      const dataUrl = canvas.toDataURL('image/png');
+      els.bgLayer.style.backgroundImage = `url(${dataUrl})`;
+      ORACLE.state.currentBg = dataUrl;
+      ORACLE.save();
+      toast('FX aplicado no background.');
+    }
+
+    function refreshIcons(){ DI_ICON_LOADER.refresh(); }
+
+    function openKblxEditor(btn){
+      if (!els.kblxBack) return;
+      ORACLE.activeButtonForEditor = btn;
+      ORACLE._lpTriggered = false;
+      if (els.kblxTtl) els.kblxTtl.textContent = btn.dataset.id || btn.textContent.trim() || 'Botão';
+      if (els.kblxInp) els.kblxInp.value = btn.dataset.url || '';
+      els.kblxBack.classList.add('open');
+    }
+
+    function openAddButtonEditor(){
+      ORACLE._lpTriggered = false;
+      if (els.kblxAddBack) els.kblxAddBack.classList.add('open');
+    }
+
+    document.addEventListener('click', (ev) => {
+      const btn = ev.target.closest('.symbol-button[data-url]');
+      if (btn && ORACLE._lpTriggered) return;
+    });
+
+    function initLongPressEditors(){
+      document.addEventListener('pointerup', (e) => {
+        if (!ORACLE._lpTriggered) return;
+        const btn = ORACLE.activeButtonForEditor;
+        if (!btn) return;
+        if (btn.dataset.add === '1') openAddButtonEditor();
+        else openKblxEditor(btn);
+        ORACLE._lpTriggered = false;
+      });
+    }
+
+    ORACLE.register('icons', { dispatch(type, payload, oracle){ if (type === 'icons:refresh') DI_ICON_LOADER.refresh(); } });
+    window.DI = window.DI || {};
+    window.DI.applyRootVars = applyRootVars;
+    window.DI.makeOrbAvatar = makeOrbAvatar;
+    window.DI.renderOrb = renderOrb;
+    window.DI.syncNameUI = syncNameUI;
+    window.ORACLE = ORACLE;
+    window.DI_ICON_LOADER = DI_ICON_LOADER;
+    window.makeOrbAvatar = makeOrbAvatar;
+    window.makeMiniAvatar = (name) => makeOrbAvatar(name, 24);
+    window.updateBgAttr = updateBgAttr;
+    window.applyPreset = applyPreset;
+    window.handleUpload = handleUpload;
+    window.setFXMode = setFXMode;
+    window.loadCurrentFrameToFX = loadCurrentFrameToFX;
+    window.downloadFX = downloadFX;
+    window.applyFXToBackground = applyFXToBackground;
+    window.toggleDrawer = () => ORACLE.toggleDrawer();
+    window.updateInterface = syncNameUI;
+    window.toggleSection = (id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('activation-hidden');
+    };
+
+    function init(){
+      bindEls();
+      syncNameUI(localStorage.getItem(LS.user) || 'Convidado');
+      setTime();
+      ORACLE.init();
+      refreshIcons();
+      applyPreset(ORACLE.state.bgPreset);
+      applyFXMode(ORACLE.state.fxMode);
+      initLongPressEditors();
+      if (els.bgLayer && ORACLE.state.currentBg) els.bgLayer.style.backgroundImage = `url(${ORACLE.state.currentBg})`;
+      if (els.bgOpacity) updateBgAttr('opacity', els.bgOpacity.value);
+      if (els.bgBlend) updateBgAttr('blend', els.bgBlend.value);
+      document.addEventListener('DOMContentLoaded', () => {
+        if (window.lucide?.createIcons) window.lucide.createIcons();
+      });
+      toast('Sistema pronto.');
+    }
+
+    setInterval(setTime, 15000);
+    init();
+  })();
+  </script>
+
+<!-- Core UI helpers -->
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-000.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script>
+
+<!-- Orb / HQ / Core -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
+
+<!-- Main brains -->
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-878.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+
+<!-- Optional / support --
+<script src="https://kodux78k.github.io/oiDual--Y-/nxs.js"></script>
+<script src="https://unpkg.com/lucide@latest"></script>
+-->
+  <script>
+    console.log("te amo kob. Pronto.");
+  </script>
+</body>
+</html>
