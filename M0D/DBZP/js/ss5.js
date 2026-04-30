@@ -13,84 +13,84 @@
     // =========================
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/4kYzC5989f7f17PwlO",
+      url: "https://www.soundcloud.com/4kYzC5989f7f17PwlO",
       name: "[0×01h_]78K_Ativador_Guiado_396Hz_Vox",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/jPOAf1DLk4ZvgzAi6W",
+      url: "https://soundcloud.com/jPOAf1DLk4ZvgzAi6W",
       name: "[0×01]_KDX_78_Dm_SUBIR_A_SERRA",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/smzPDY9RjJXm6bVemC",
+      url: "https://soundcloud.com/smzPDY9RjJXm6bVemC",
       name: "[0×08]_Trilhas - Set governante",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/y3eNd0u4X56uiWzThJ",
+      url: "https://soundcloud.com/y3eNd0u4X56uiWzThJ",
       name: "[0×07]_Trilhas_Aroma_da_Paz_Set",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/EszycROQ67z8yt0EaL",
+      url: "https://soundcloud.com/EszycROQ67z8yt0EaL",
       name: "[0×06]_Trilhas Aroma do Novo",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/f4KrWeUUfatZ5ibffO",
+      url: "https://soundcloud.com/f4KrWeUUfatZ5ibffO",
       name: "[0×05]_Lofi Set - Amante - Aroma do Desejo",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/4MTtcMFkavoKeQZK14",
+      url: "https://soundcloud.com/4MTtcMFkavoKeQZK14",
       name: "[0×04]_Trilhas_Aroma_da_Mente",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/RBJAnfKbBCFNBGnl0r",
+      url: "https://soundcloud.com/RBJAnfKbBCFNBGnl0r",
       name: "[0×03]_Trilhas_Aroma_Das_Raizes",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/HIqNO76sdGNxbFLjV1",
+      url: "https://soundcloud.com/HIqNO76sdGNxbFLjV1",
       name: "[0×02]_Trilhas_do_Cuidador",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/YDIwwTt594hdrDPjHj",
+      url: "https://soundcloud.com/YDIwwTt594hdrDPjHj",
       name: "[0×01]_Trilhas_da_Magia_e_Prosperidade",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/GqTomAGApHMVs2h2tX",
+      url: "https://soundcloud.com/GqTomAGApHMVs2h2tX",
       name: "[0×01]_Trilhas_da_Magia_e_Prosperidade",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://on.soundcloud.com/wpjRd4rqggH4sVE7lV",
+      url: "https://soundcloud.com/wpjRd4rqggH4sVE7lV",
       name: "O_código_Python_que_compila_a_alma",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
