@@ -61,7 +61,8 @@
     }
 
     .bg-gradient-base {
-      position: fixed; inset: 0; z-index: -2;
+      position: fixed; inset: 0; 
+    z-index: 0;
       background:
         radial-gradient(circle at top left, rgba(255,79,163,.06), transparent 28%),
         radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
@@ -69,7 +70,9 @@
       pointer-events: none;
     }
 
-    .wrap { max-width: var(--max); margin: 0 auto; padding: 22px 18px 64px; position: relative; z-index: 1; }
+    .wrap { max-width: var(--max); margin: 0 auto; 
+        padding: 0px 0px 64px; 
+        position: relative; z-index: 0; }
 
     .topbar {
       display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
