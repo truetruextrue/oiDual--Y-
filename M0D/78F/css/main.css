@@ -72,7 +72,7 @@
 
     .wrap { max-width: var(--max); margin: 0 auto; 
         padding: 0px 0px 64px; 
-        position: relative; z-index: 1; }
+        position: relative; z-index: 0; }
 
     .topbar {
       display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap;
