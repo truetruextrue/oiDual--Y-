@@ -65,9 +65,9 @@
 
 /* Floating buttons adjustments (so they look good in horizontal mode) */
 .symbol-bar.horizontal .symbol-button {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 48px;
+  height: 48px;
+  gap: 6px;
 }
 
 /* Orb tweaks */
@@ -87,18 +87,18 @@
 /* Responsive constraint so docks never go completely off-screen */
 .symbol-bar[data-keep-inside="true"] { max-width: calc(100vw - 12px); }
 
-
+/*
 #symbolBar .symbol-wrap {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
-#symbolBar .symbol-button {
+*/
+/* #symbolBar .symbol-button {
   width: 44px;
   height: 44px;
   border-radius: 14px;
-}
+}*/
 
 #symbolBar .symbol-button--main {
   background: linear-gradient(135deg, #1a1d29, #05070a);
