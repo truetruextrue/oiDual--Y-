@@ -9,89 +9,147 @@
 
   const PRELOADED = [
     // =========================
-    // SOUNDCLOUD (NOVAS TRILHAS)
+    // YOUTUBE
+    // =========================
+    {
+      type: "youtube",
+      id: "Bt_rLbMjJDk",
+      url: "https://youtu.be/Bt_rLbMjJDk",
+      name: "Trilhas Potencializadoras dos Aromas",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "_0wVkryxanE",
+      url: "https://youtu.be/_0wVkryxanE",
+      name: "Desperte a magia dos 12 Arquétipos",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/_0wVkryxanE/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "Id2NI9tv1r4",
+      url: "https://youtu.be/Id2NI9tv1r4",
+      name: "Infodose • Pra quem merece saber",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/Id2NI9tv1r4/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "qldgs0aLdB0",
+      url: "https://youtu.be/qldgs0aLdB0",
+      name: "A Fórmula da Dopamina Sexy",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/qldgs0aLdB0/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "FbutKMpd8MY",
+      url: "https://youtu.be/FbutKMpd8MY",
+      name: "O Espaço da Mente",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/FbutKMpd8MY/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "1L9_rFmIGJ8",
+      url: "https://youtu.be/1L9_rFmIGJ8",
+      name: "A Recompensa",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/1L9_rFmIGJ8/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "koKhjQKGJSc",
+      url: "https://youtu.be/koKhjQKGJSc",
+      name: "O poder das cortinas",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/koKhjQKGJSc/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "KrtOVrk8aDk",
+      url: "https://youtu.be/KrtOVrk8aDk",
+      name: "Poder sob seus pés",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/KrtOVrk8aDk/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "NBWDV6xjUP0",
+      url: "https://youtu.be/NBWDV6xjUP0",
+      name: "Dopamina e Vícios",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/NBWDV6xjUP0/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "dGYbN8jgdNQ",
+      url: "https://youtu.be/dGYbN8jgdNQ",
+      name: "TDAH e Dopamina",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/dGYbN8jgdNQ/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "JBjFhAutIVk",
+      url: "https://youtu.be/JBjFhAutIVk",
+      name: "Manipule o Subconsciente",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/JBjFhAutIVk/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "hfQ1L6fCfAo",
+      url: "https://youtu.be/hfQ1L6fCfAo",
+      name: "A Deriva no Espaço da Mente",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/hfQ1L6fCfAo/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "DTDfkHwuMic",
+      url: "https://youtu.be/DTDfkHwuMic",
+      name: "Navegando no Universo",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/DTDfkHwuMic/hqdefault.jpg"
+    },
+    {
+      type: "youtube",
+      id: "OVfqxW_Xlhw",
+      url: "https://youtu.be/OVfqxW_Xlhw",
+      name: "Sinfonia Criativa",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/OVfqxW_Xlhw/hqdefault.jpg"
+    },
+
+    // =========================
+    // PLAYLIST YOUTUBE
+    // =========================
+    {
+      type: "youtube_playlist",
+      playlistId: "PL_XiIUPFx4DSKFuJZZiKCxVUy20PtDdaB",
+      url: "https://youtube.com/playlist?list=PL_XiIUPFx4DSKFuJZZiKCxVUy20PtDdaB",
+      name: "Playlist • Se chegou até você",
+      artist: "Infodose",
+      cover: "https://img.youtube.com/vi/Bt_rLbMjJDk/hqdefault.jpg"
+    },
+
+    // =========================
+    // SOUNDCLOUD
     // =========================
     {
       type: "soundcloud",
-      url: "https://www.soundcloud.com/4kYzC5989f7f17PwlO",
-      name: "[0×01h_]78K_Ativador_Guiado_396Hz_Vox",
+      url: "https://m.soundcloud.com/kobf-node-x-kobllux/op_piseiro_galo_c",
+      name: "op_piseiro_galo_c",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     },
     {
       type: "soundcloud",
-      url: "https://soundcloud.com/jPOAf1DLk4ZvgzAi6W",
-      name: "[0×01]_KDX_78_Dm_SUBIR_A_SERRA",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/smzPDY9RjJXm6bVemC",
-      name: "[0×08]_Trilhas - Set governante",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/y3eNd0u4X56uiWzThJ",
-      name: "[0×07]_Trilhas_Aroma_da_Paz_Set",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/EszycROQ67z8yt0EaL",
-      name: "[0×06]_Trilhas Aroma do Novo",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/f4KrWeUUfatZ5ibffO",
-      name: "[0×05]_Lofi Set - Amante - Aroma do Desejo",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/4MTtcMFkavoKeQZK14",
-      name: "[0×04]_Trilhas_Aroma_da_Mente",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/RBJAnfKbBCFNBGnl0r",
-      name: "[0×03]_Trilhas_Aroma_Das_Raizes",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/HIqNO76sdGNxbFLjV1",
-      name: "[0×02]_Trilhas_do_Cuidador",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/YDIwwTt594hdrDPjHj",
-      name: "[0×01]_Trilhas_da_Magia_e_Prosperidade",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/GqTomAGApHMVs2h2tX",
-      name: "[0×01]_Trilhas_da_Magia_e_Prosperidade",
-      artist: "Oi Dual × Info Dose",
-      cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
-    },
-    {
-      type: "soundcloud",
-      url: "https://soundcloud.com/wpjRd4rqggH4sVE7lV",
-      name: "O_código_Python_que_compila_a_alma",
+      url: "https://on.soundcloud.com/Ik165VFQsv6AZPKe0S",
+      name: "Short link SoundCloud",
       artist: "Oi Dual × Info Dose",
       cover: "https://i1.sndcdn.com/artworks-default-t500x500.jpg"
     }
@@ -101,6 +159,7 @@
   let currentTrackId = null;
   let isPlaying = false;
   let activeEngine = null;
+
   let ytPlayer = null;
   let scWidget = null;
   let ytReady = false;
@@ -132,7 +191,6 @@
       try {
         const u = new URL(url);
         if (u.hostname.startsWith("m.")) u.hostname = u.hostname.replace(/^m\./, "");
-        u.search = "";
         url = u.toString();
       } catch (e) {
         url = url.replace("://m.soundcloud.com", "://soundcloud.com");
@@ -168,7 +226,29 @@
           .replace("://youtube-nocookie.com", "://youtube.com");
       }
     }
+
     return url;
+  }
+
+  function extractYouTubeId(rawUrl = "") {
+    try {
+      const u = new URL(rawUrl);
+      if (u.hostname.includes("youtu.be")) return u.pathname.replace("/", "").trim();
+      if (u.pathname.startsWith("/watch")) return u.searchParams.get("v");
+      if (u.pathname.startsWith("/shorts/")) return u.pathname.split("/")[2];
+      if (u.pathname.startsWith("/embed/")) return u.pathname.split("/")[2];
+    } catch (e) {}
+    const m = String(rawUrl).match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([0-9A-Za-z_-]{11})/);
+    return m ? m[1] : null;
+  }
+
+  function extractYouTubePlaylistId(rawUrl = "") {
+    try {
+      const u = new URL(rawUrl);
+      return u.searchParams.get("list");
+    } catch (e) {}
+    const m = String(rawUrl).match(/[?&]list=([0-9A-Za-z_-]+)/);
+    return m ? m[1] : null;
   }
 
   function normalizeTrack(track) {
@@ -180,7 +260,8 @@
       artist: track.artist || "Web",
       cover: track.cover || "https://picsum.photos/100",
       blob: track.blob || null,
-      favorite: !!track.favorite
+      favorite: !!track.favorite,
+      playlistId: track.playlistId || null
     };
   }
 
@@ -199,9 +280,12 @@
   function ensureSystemPlaylists() {
     const hasAll = db.playlists.some(p => p.id === ALL_ID);
     const hasFav = db.playlists.some(p => p.id === FAVORITES_ID);
+
     if (!hasAll) db.playlists.unshift({ id: ALL_ID, name: "Todas", system: true, trackIds: [] });
     if (!hasFav) db.playlists.splice(1, 0, { id: FAVORITES_ID, name: "Favoritos", system: true, trackIds: [] });
+
     db.playlists = db.playlists.filter((p, i, arr) => arr.findIndex(x => x.id === p.id) === i);
+
     if (!db.activePlaylistId || !db.playlists.some(p => p.id === db.activePlaylistId)) {
       db.activePlaylistId = ALL_ID;
     }
@@ -238,6 +322,7 @@
         return;
       }
     }
+
     const legacy = localStorage.getItem(LEGACY_DB);
     if (legacy) {
       try {
@@ -251,6 +336,7 @@
         }
       } catch (e) {}
     }
+
     db = createDefaultDB();
     ensureSystemPlaylists();
     saveDB();
@@ -272,7 +358,7 @@
     const active = getActivePlaylist();
     if (!active || active.id === ALL_ID) return db.library.slice();
     if (active.id === FAVORITES_ID) return db.library.filter(t => t.favorite);
-    return active.trackIds.map(getTrackById).filter(Boolean);
+    return (active.trackIds || []).map(getTrackById).filter(Boolean);
   }
 
   function syncPreviewAndMain(track) {
@@ -281,10 +367,12 @@
       { title: "foot-title", artist: "foot-artist", cover: "foot-cover" },
       { title: "main-title", artist: "main-artist", cover: "main-cover" }
     ];
+
     fills.forEach(({ title, artist, cover }) => {
       const titleEl = document.getElementById(title);
       const artistEl = document.getElementById(artist);
       const coverEl = document.getElementById(cover);
+
       if (titleEl) titleEl.innerText = track?.name || "Oráculo";
       if (artistEl) artistEl.innerText = track?.artist || "Sistema KODUX v2.5";
       if (coverEl) coverEl.src = track?.cover || "https://picsum.photos/100";
@@ -294,31 +382,66 @@
   function syncIcons() {
     const icon = isPlaying ? "ph-pause-circle" : "ph-play-circle";
     const iconSimple = isPlaying ? "ph-pause" : "ph-play";
-    document.getElementById("prev-play-icon").className = `ph-fill ${icon} text-4xl`;
-    document.getElementById("foot-play-icon").className = `ph-fill ${icon} text-5xl`;
-    document.getElementById("main-play-icon").className = `ph-fill ${iconSimple} text-3xl ${isPlaying ? "" : "ml-1"}`;
+
+    const prevPlay = document.getElementById("prev-play-icon");
+    const footPlay = document.getElementById("foot-play-icon");
+    const mainPlay = document.getElementById("main-play-icon");
+
+    if (prevPlay) prevPlay.className = `ph-fill ${icon} text-4xl`;
+    if (footPlay) footPlay.className = `ph-fill ${icon} text-5xl`;
+    if (mainPlay) mainPlay.className = `ph-fill ${iconSimple} text-3xl ${isPlaying ? "" : "ml-1"}`;
+  }
+
+  function setPlaybackMode(track) {
+    const isVideo = !!track && (track.type === "youtube" || track.type === "youtube_playlist");
+    document.body.classList.toggle("mode-cinema", isVideo);
+    document.body.classList.toggle("mode-music", !isVideo);
+
+    const shell = document.getElementById("cinema-shell");
+    if (shell) shell.classList.toggle("hidden", !isVideo);
   }
 
   function stopCurrentPlayback() {
-    try { audioEl.pause(); } catch (e) {}
-    try { if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo(); } catch (e) {}
-    try { if (scWidget && scWidget.pause) scWidget.pause(); } catch (e) {}
+    try {
+      audioEl.pause();
+    } catch (e) {}
+
+    try {
+      if (ytPlayer && ytPlayer.stopVideo) ytPlayer.stopVideo();
+    } catch (e) {}
+
+    try {
+      if (scWidget && scWidget.pause) scWidget.pause();
+    } catch (e) {}
+
     isPlaying = false;
+    document.body.classList.remove("mode-cinema");
+    document.body.classList.add("mode-music");
+
+    const shell = document.getElementById("cinema-shell");
+    if (shell) shell.classList.add("hidden");
+
     syncIcons();
   }
 
   function updateWidgetState(newState) {
     widgetState = newState;
-    widget.className = `state-${newState}`;
-    Object.values(contents).forEach(el => el.classList.add("hidden-content"));
-    contents[newState].classList.remove("hidden-content");
+    if (widget) widget.className = `state-${newState}`;
+
+    Object.values(contents).forEach(el => {
+      if (el) el.classList.add("hidden-content");
+    });
+    if (contents[newState]) contents[newState].classList.remove("hidden-content");
+
+    if (!widget) return;
+
     if (newState === "ball") {
       widget.style.left = `${currentX}px`;
       widget.style.top = `${currentY}px`;
       widget.style.transform = "none";
       widget.style.bottom = "auto";
     } else if (newState === "preview") {
-      widget.style.left = currentX < window.innerWidth / 2 ? "10px" : (window.innerWidth - 250) + "px";
+      widget.style.left = currentX < window.innerWidth / 2 ? "10px" : `${window.innerWidth - 250}px`;
       widget.style.top = `${currentY}px`;
       widget.style.transform = "none";
       widget.style.bottom = "auto";
@@ -339,18 +462,23 @@
     const handleEls = [contents.ball, ...document.querySelectorAll(".drag-header")].filter(Boolean);
     let initialX = 0;
     let initialY = 0;
+
     const onStart = (e) => {
-      if (widgetState === "full" || e.target.closest("button, input, select")) return;
+      if (!widget) return;
+      if (widgetState === "full" || e.target.closest("button, input, select, textarea")) return;
+
       isDragging = false;
       const touch = e.type === "touchstart" ? e.touches[0] : e;
       initialX = touch.clientX - currentX;
       initialY = touch.clientY - currentY;
+
       widget.style.transition = "none";
       document.addEventListener("mousemove", onMove);
       document.addEventListener("mouseup", onEnd);
       document.addEventListener("touchmove", onMove, { passive: false });
       document.addEventListener("touchend", onEnd);
     };
+
     const onMove = (e) => {
       isDragging = true;
       e.preventDefault();
@@ -360,50 +488,93 @@
       widget.style.left = `${currentX}px`;
       widget.style.top = `${currentY}px`;
     };
+
     const onEnd = () => {
       document.removeEventListener("mousemove", onMove);
       document.removeEventListener("mouseup", onEnd);
       document.removeEventListener("touchmove", onMove);
       document.removeEventListener("touchend", onEnd);
+
+      if (!widget) return;
+
       widget.style.transition = "all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)";
+
       if (currentY > window.innerHeight - 120) updateWidgetState("footer");
       else if (isDragging) updateWidgetState("ball");
     };
+
     handleEls.forEach(h => {
       h.addEventListener("mousedown", onStart);
       h.addEventListener("touchstart", onStart);
     });
   }
 
-  function playYT(id) {
-    if (!ytReady) return setTimeout(() => playYT(id), 300);
-    if (!ytPlayer) {
-      ytPlayer = new YT.Player("yt-container", {
-        height: "0",
-        width: "0",
-        videoId: id,
-        playerVars: { autoplay: 1, playsinline: 1 },
-        events: {
-          onReady: (e) => {
-            e.target.playVideo();
-            isPlaying = true;
-            syncIcons();
-          },
-          onStateChange: (e) => {
-            if (e.data === YT.PlayerState.ENDED) playNext();
-            isPlaying = (e.data === YT.PlayerState.PLAYING);
-            syncIcons();
+  function ensureYTPlayer() {
+    if (ytPlayer) return ytPlayer;
+
+    ytPlayer = new YT.Player("yt-container", {
+      height: "100%",
+      width: "100%",
+      videoId: "",
+      playerVars: {
+        autoplay: 1,
+        playsinline: 1,
+        modestbranding: 1,
+        rel: 0
+      },
+      events: {
+        onReady: (e) => {
+          const track = currentTrackId ? getTrackById(currentTrackId) : null;
+          if (!track) return;
+
+          if (track.type === "youtube_playlist" && track.playlistId) {
+            e.target.loadPlaylist({ list: track.playlistId, index: 0 });
+          } else if (track.id) {
+            e.target.loadVideoById(track.id);
           }
+
+          e.target.playVideo();
+          isPlaying = true;
+          syncIcons();
+        },
+        onStateChange: (e) => {
+          if (e.data === YT.PlayerState.ENDED) playNext();
+          isPlaying = (e.data === YT.PlayerState.PLAYING);
+          syncIcons();
         }
-      });
+      }
+    });
+
+    return ytPlayer;
+  }
+
+  function playYT(track) {
+    if (!ytReady) return setTimeout(() => playYT(track), 300);
+    ensureYTPlayer();
+
+    if (track.type === "youtube_playlist" && track.playlistId) {
+      ytPlayer.loadPlaylist({ list: track.playlistId, index: 0 });
     } else {
-      ytPlayer.loadVideoById(id);
+      ytPlayer.loadVideoById(track.id);
     }
+
+    ytPlayer.playVideo();
+    isPlaying = true;
+    syncIcons();
   }
 
   function playSC(url) {
     const container = document.getElementById("sc-container");
-    container.innerHTML = `<iframe id="sc-frame" allow="autoplay" src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false"></iframe>`;
+    if (!container) return;
+
+    container.innerHTML = `
+      <iframe
+        id="sc-frame"
+        allow="autoplay"
+        src="https://w.soundcloud.com/player/?url=${encodeURIComponent(url)}&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false"
+      ></iframe>
+    `;
+
     scWidget = SC.Widget("sc-frame");
     scWidget.bind(SC.Widget.Events.READY, () => {
       scWidget.play();
@@ -411,19 +582,29 @@
       syncIcons();
     });
     scWidget.bind(SC.Widget.Events.FINISH, () => playNext());
-    scWidget.bind(SC.Widget.Events.PLAY, () => { isPlaying = true; syncIcons(); });
-    scWidget.bind(SC.Widget.Events.PAUSE, () => { isPlaying = false; syncIcons(); });
+    scWidget.bind(SC.Widget.Events.PLAY, () => {
+      isPlaying = true;
+      syncIcons();
+    });
+    scWidget.bind(SC.Widget.Events.PAUSE, () => {
+      isPlaying = false;
+      syncIcons();
+    });
   }
 
   function loadAndPlayById(trackId) {
     const track = getTrackById(trackId);
     if (!track) return;
+
     currentTrackId = trackId;
     activeEngine = track.type;
+
     stopCurrentPlayback();
     syncPreviewAndMain(track);
-    if (track.type === "youtube") {
-      playYT(track.id);
+    setPlaybackMode(track);
+
+    if (track.type === "youtube" || track.type === "youtube_playlist") {
+      playYT(track);
     } else if (track.type === "soundcloud") {
       playSC(track.url);
     } else if (track.type === "local") {
@@ -434,39 +615,48 @@
       isPlaying = true;
       syncIcons();
     }
+
     renderEverything();
   }
 
   function togglePlay(e) {
     if (e) e.stopPropagation();
+
     const visible = getVisibleTracks();
     if (!visible.length) return;
+
     if (!currentTrackId) {
       loadAndPlayById(visible[0].id);
       return;
     }
+
     const current = getTrackById(currentTrackId);
     if (!current) {
       loadAndPlayById(visible[0].id);
       return;
     }
+
     if (isPlaying) {
       if (activeEngine === "youtube" && ytPlayer) ytPlayer.pauseVideo();
       else if (activeEngine === "soundcloud" && scWidget) scWidget.pause();
       else audioEl.pause();
+
       isPlaying = false;
     } else {
       if (activeEngine === "youtube" && ytPlayer) ytPlayer.playVideo();
       else if (activeEngine === "soundcloud" && scWidget) scWidget.play();
       else if (activeEngine === "local") audioEl.play();
+
       isPlaying = true;
     }
+
     syncIcons();
   }
 
   function playNext() {
     const visible = getVisibleTracks();
     if (!visible.length) return;
+
     const idx = currentTrackId ? visible.findIndex(t => t.id === currentTrackId) : -1;
     const next = visible[(idx + 1) % visible.length];
     if (next) loadAndPlayById(next.id);
@@ -475,6 +665,7 @@
   function playPrev() {
     const visible = getVisibleTracks();
     if (!visible.length) return;
+
     const idx = currentTrackId ? visible.findIndex(t => t.id === currentTrackId) : 0;
     const prev = visible[(idx - 1 + visible.length) % visible.length];
     if (prev) loadAndPlayById(prev.id);
@@ -488,10 +679,14 @@
 
   function createPlaylist() {
     const input = document.getElementById("new-playlist-input");
+    if (!input) return;
+
     const name = input.value.trim();
     if (!name) return;
+
     const exists = db.playlists.some(p => p.name.toLowerCase() === name.toLowerCase());
     if (exists) return alert("Já existe uma playlist com esse nome.");
+
     db.playlists.push({ id: uid("pl"), name, system: false, trackIds: [] });
     input.value = "";
     saveDB();
@@ -501,7 +696,9 @@
   function deletePlaylist(playlistId) {
     const playlist = getPlaylistById(playlistId);
     if (!playlist || playlist.system) return;
+
     if (!confirm(`Remover a playlist "${playlist.name}"?`)) return;
+
     db.playlists = db.playlists.filter(p => p.id !== playlistId);
     if (db.activePlaylistId === playlistId) db.activePlaylistId = ALL_ID;
     saveDB();
@@ -520,6 +717,7 @@
     const playlist = getPlaylistById(playlistId);
     const track = getTrackById(trackId);
     if (!track || !playlist) return;
+
     if (playlist.id === ALL_ID) {
       db.activePlaylistId = ALL_ID;
     } else if (playlist.id === FAVORITES_ID) {
@@ -529,19 +727,22 @@
       if (!playlist.trackIds.includes(trackId)) playlist.trackIds.unshift(trackId);
       db.activePlaylistId = playlist.id;
     }
+
     saveDB();
     renderEverything();
   }
 
   function quickAddToSelectedPlaylist(trackId) {
-    const dest = document.getElementById("destination-select").value;
-    addTrackToPlaylist(trackId, dest);
+    const select = document.getElementById("destination-select");
+    if (!select) return;
+    addTrackToPlaylist(trackId, select.value);
   }
 
   function removeTrack(trackId) {
     const active = getActivePlaylist();
     const track = getTrackById(trackId);
     if (!track) return;
+
     if (active.id === FAVORITES_ID) {
       track.favorite = false;
     } else if (active.id === ALL_ID) {
@@ -554,12 +755,13 @@
         stopCurrentPlayback();
       }
     } else {
-      active.trackIds = active.trackIds.filter(id => id !== trackId);
+      active.trackIds = (active.trackIds || []).filter(id => id !== trackId);
       if (currentTrackId === trackId) {
         currentTrackId = null;
         stopCurrentPlayback();
       }
     }
+
     saveDB();
     renderEverything();
   }
@@ -568,30 +770,40 @@
     if (type === "youtube" && id) {
       return db.library.find(t => t.type === "youtube" && t.id === id) || null;
     }
+
+    if (type === "youtube_playlist" && id) {
+      return db.library.find(t => t.type === "youtube_playlist" && t.playlistId === id) || null;
+    }
+
     if (type === "soundcloud") {
       const norm = normalizeUrl(url);
       return db.library.find(t => t.type === "soundcloud" && normalizeUrl(t.url) === norm) || null;
     }
+
     return db.library.find(t => normalizeUrl(t.url) === normalizeUrl(url)) || null;
   }
 
   function normalizeAndInsertToLibrary(track) {
     const normalized = normalizeTrack(track);
-    const existing = findExistingTrackByUrl(normalized.url, normalized.type, normalized.id);
+    const existing = findExistingTrackByUrl(normalized.url, normalized.type, normalized.id || normalized.playlistId);
+
     if (existing) {
       existing.name = normalized.name || existing.name;
       existing.artist = normalized.artist || existing.artist;
       existing.cover = normalized.cover || existing.cover;
+      existing.playlistId = normalized.playlistId || existing.playlistId;
       if (normalized.type === "local" && normalized.blob) existing.blob = normalized.blob;
       return existing;
     }
+
     db.library.unshift(normalized);
     return normalized;
   }
 
   async function buildTrackFromUrl(url, base = {}) {
-    let cleanUrl = normalizeUrl(url);
+    const cleanUrl = normalizeUrl(url);
     if (!cleanUrl) throw new Error("Link vazio.");
+
     const track = {
       id: base.id || uid(),
       type: base.type || "local",
@@ -600,16 +812,34 @@
       artist: base.artist || "Web",
       cover: base.cover || "https://picsum.photos/100",
       blob: base.blob || null,
-      favorite: !!base.favorite
+      favorite: !!base.favorite,
+      playlistId: base.playlistId || null
     };
-    const isYT = cleanUrl.includes("youtube.com") || cleanUrl.includes("youtu.be") || cleanUrl.includes("youtube-nocookie.com");
+
+    const ytId = extractYouTubeId(cleanUrl);
+    const ytListId = extractYouTubePlaylistId(cleanUrl);
+    const isYT =
+      cleanUrl.includes("youtube.com") ||
+      cleanUrl.includes("youtu.be") ||
+      cleanUrl.includes("youtube-nocookie.com");
     const isSC = cleanUrl.includes("soundcloud.com") || cleanUrl.includes("on.soundcloud.com");
+
     if (isYT) {
-      const id = cleanUrl.match(/(?:v=|youtu\.be\/|shorts\/|embed\/)([0-9A-Za-z_-]{11})/)?.[1] || cleanUrl.match(/youtu\.be\/([0-9A-Za-z_-]{11})/)?.[1];
-      if (!id) throw new Error("Link YouTube inválido.");
+      if (ytListId && !ytId) {
+        track.type = "youtube_playlist";
+        track.playlistId = ytListId;
+        track.name = base.name || "YouTube Playlist";
+        track.artist = base.artist || "YouTube";
+        track.cover = base.cover || "https://picsum.photos/100";
+        return normalizeTrack(track);
+      }
+
+      if (!ytId) throw new Error("Link YouTube inválido.");
+
       track.type = "youtube";
-      track.id = id;
-      track.cover = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+      track.id = ytId;
+      track.cover = `https://img.youtube.com/vi/${ytId}/hqdefault.jpg`;
+
       try {
         const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(cleanUrl)}`);
         const data = await res.json();
@@ -621,6 +851,7 @@
       }
     } else if (isSC) {
       track.type = "soundcloud";
+
       try {
         const res = await fetch(`https://soundcloud.com/oembed?url=${encodeURIComponent(cleanUrl)}&format=json`);
         const data = await res.json();
@@ -637,21 +868,25 @@
       track.name = base.name || cleanUrl.split("/").pop() || "Arquivo local";
       track.artist = base.artist || "Local";
     }
+
     return normalizeTrack(track);
   }
 
   async function hydratePreloadedTracks() {
     const preloadedUrls = new Set(PRELOADED.map(t => normalizeUrl(t.url)));
     let changed = false;
+
     for (let i = 0; i < db.library.length; i++) {
       const tr = db.library[i];
       if (!preloadedUrls.has(normalizeUrl(tr.url))) continue;
+
       try {
         const fresh = await buildTrackFromUrl(tr.url, tr);
         db.library[i] = { ...tr, ...fresh, id: tr.id };
         changed = true;
       } catch (e) {}
     }
+
     if (changed) {
       saveDB();
       renderEverything();
@@ -660,22 +895,29 @@
 
   async function addLink() {
     const input = document.getElementById("link-input");
-    const destination = document.getElementById("destination-select").value;
+    const destination = document.getElementById("destination-select");
+
+    if (!input || !destination) return;
+
     const url = normalizeUrl(input.value.trim());
     if (!url) return;
+
     let newTrack;
     try {
       newTrack = await buildTrackFromUrl(url);
     } catch (e) {
       return alert(e.message || "Não consegui ler esse link.");
     }
+
     const inserted = normalizeAndInsertToLibrary(newTrack);
-    if (destination === FAVORITES_ID) {
+
+    if (destination.value === FAVORITES_ID) {
       inserted.favorite = true;
-    } else if (destination !== ALL_ID) {
-      const playlist = getPlaylistById(destination);
+    } else if (destination.value !== ALL_ID) {
+      const playlist = getPlaylistById(destination.value);
       if (playlist && !playlist.trackIds.includes(inserted.id)) playlist.trackIds.unshift(inserted.id);
     }
+
     input.value = "";
     saveDB();
     renderEverything();
@@ -683,29 +925,39 @@
 
   function renderTabs() {
     const tabs = document.getElementById("playlist-tabs");
+    if (!tabs) return;
+
     tabs.innerHTML = "";
+
     const ordered = [
       getPlaylistById(ALL_ID),
       getPlaylistById(FAVORITES_ID),
       ...db.playlists.filter(p => !p.system && p.id !== ALL_ID && p.id !== FAVORITES_ID)
     ].filter(Boolean);
+
     ordered.forEach(pl => {
-      const visibleCount = pl.id === ALL_ID
-        ? db.library.length
-        : pl.id === FAVORITES_ID
-          ? db.library.filter(t => t.favorite).length
-          : (pl.trackIds || []).length;
+      const visibleCount =
+        pl.id === ALL_ID
+          ? db.library.length
+          : pl.id === FAVORITES_ID
+            ? db.library.filter(t => t.favorite).length
+            : (pl.trackIds || []).length;
+
       const btn = document.createElement("button");
       btn.className = `mini-chip ${db.activePlaylistId === pl.id ? "active" : ""}`;
       btn.onclick = () => setActivePlaylist(pl.id);
       btn.innerHTML = `<i class="ph ${pl.id === ALL_ID ? "ph-stack" : pl.id === FAVORITES_ID ? "ph-heart" : "ph-playlist"}"></i><span>${pl.name}</span><span class="opacity-60">(${visibleCount})</span>`;
       tabs.appendChild(btn);
+
       if (!pl.system && pl.id !== ALL_ID && pl.id !== FAVORITES_ID) {
         const del = document.createElement("button");
         del.className = "mini-chip";
         del.style.padding = "0.55rem 0.7rem";
         del.title = "Remover playlist";
-        del.onclick = (e) => { e.stopPropagation(); deletePlaylist(pl.id); };
+        del.onclick = (e) => {
+          e.stopPropagation();
+          deletePlaylist(pl.id);
+        };
         del.innerHTML = `<i class="ph ph-trash"></i>`;
         tabs.appendChild(del);
       }
@@ -714,28 +966,44 @@
 
   function renderDestinationSelect() {
     const select = document.getElementById("destination-select");
+    if (!select) return;
+
     const prev = select.value || db.activePlaylistId || ALL_ID;
     const custom = db.playlists.filter(p => !p.system && p.id !== ALL_ID && p.id !== FAVORITES_ID);
-    select.innerHTML = `<option value="${ALL_ID}">Todas</option><option value="${FAVORITES_ID}">Favoritos</option>${custom.map(p => `<option value="${p.id}">${p.name}</option>`).join("")}`;
+
+    select.innerHTML =
+      `<option value="${ALL_ID}">Todas</option>` +
+      `<option value="${FAVORITES_ID}">Favoritos</option>` +
+      `${custom.map(p => `<option value="${p.id}">${p.name}</option>`).join("")}`;
+
     if ([ALL_ID, FAVORITES_ID, ...custom.map(p => p.id)].includes(prev)) select.value = prev;
     else select.value = db.activePlaylistId || ALL_ID;
   }
 
   function renderPlaylist() {
     const container = document.getElementById("playlist-container");
+    if (!container) return;
+
     const visible = getVisibleTracks();
     container.innerHTML = "";
+
     if (!visible.length) {
       const empty = document.createElement("div");
       empty.className = "p-5 rounded-2xl border border-white/10 bg-white/5 text-center";
-      empty.innerHTML = `<div class="text-[var(--primary)] text-3xl mb-2"><i class="ph ph-disc"></i></div><h4 class="text-sm font-bold text-white mb-1">Sem faixas aqui</h4><p class="text-[11px] text-[var(--muted)]">Adicione um link, crie uma playlist ou marque favoritos.</p>`;
+      empty.innerHTML = `
+        <div class="text-[var(--primary)] text-3xl mb-2"><i class="ph ph-disc"></i></div>
+        <h4 class="text-sm font-bold text-white mb-1">Sem faixas aqui</h4>
+        <p class="text-[11px] text-[var(--muted)]">Adicione um link, crie uma playlist ou marque favoritos.</p>
+      `;
       container.appendChild(empty);
       return;
     }
+
     visible.forEach(t => {
       const activeItem = t.id === currentTrackId;
       const item = document.createElement("div");
       item.className = `flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition ${activeItem ? "bg-[var(--primary)]/20 border border-[var(--primary)]/30" : "bg-white/5 hover:bg-white/10"}`;
+
       item.innerHTML = `
         <img src="${t.cover}" class="w-10 h-10 rounded-lg object-cover border border-white/10">
         <div class="flex-1 overflow-hidden min-w-0">
@@ -747,6 +1015,7 @@
         <button class="item-action" title="Excluir" onclick="event.stopPropagation(); removeTrack('${t.id}')"><i class="ph ph-trash"></i></button>
         ${activeItem && isPlaying ? '<i class="ph-fill ph-waveform text-[var(--primary)] animate-pulse ml-1"></i>' : ""}
       `;
+
       item.onclick = () => loadAndPlayById(t.id);
       container.appendChild(item);
     });
@@ -756,23 +1025,22 @@
     renderTabs();
     renderDestinationSelect();
     renderPlaylist();
+
     const current = currentTrackId ? getTrackById(currentTrackId) : null;
-    if (current) syncPreviewAndMain(current);
-    else syncPreviewAndMain(null);
+    syncPreviewAndMain(current);
     syncIcons();
   }
 
   function openFullFromPreview(e) {
-    e.stopPropagation();
+    if (e) e.stopPropagation();
     updateWidgetState("full");
   }
 
   function handleClickOutside(e) {
-    if (widgetState === "preview" && !widget.contains(e.target)) updateWidgetState("ball");
+    if (widgetState === "preview" && widget && !widget.contains(e.target)) {
+      updateWidgetState("ball");
+    }
   }
-
-  document.addEventListener("mousedown", handleClickOutside);
-  document.addEventListener("touchstart", handleClickOutside);
 
   window.openFullFromPreview = openFullFromPreview;
   window.updateWidgetState = updateWidgetState;
@@ -780,17 +1048,27 @@
   window.playNext = playNext;
   window.playPrev = playPrev;
   window.addLink = addLink;
-  window.collapseToBall = (e) => { if (e) e.stopPropagation(); updateWidgetState("ball"); };
+  window.collapseToBall = (e) => {
+    if (e) e.stopPropagation();
+    updateWidgetState("ball");
+  };
   window.toggleFavorite = toggleFavorite;
   window.removeTrack = removeTrack;
   window.quickAddToSelectedPlaylist = quickAddToSelectedPlaylist;
   window.createPlaylist = createPlaylist;
-  window.onYouTubeIframeAPIReady = () => { ytReady = true; };
-
-  document.getElementById("kodux-widget").onclick = (e) => {
-    if (isDragging) return;
-    if (widgetState === "ball") updateWidgetState("preview");
+  window.onYouTubeIframeAPIReady = () => {
+    ytReady = true;
   };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  document.addEventListener("touchstart", handleClickOutside);
+
+  if (widget) {
+    widget.onclick = (e) => {
+      if (isDragging) return;
+      if (widgetState === "ball") updateWidgetState("preview");
+    };
+  }
 
   const tag = document.createElement("script");
   tag.src = "https://www.youtube.com/iframe_api";
