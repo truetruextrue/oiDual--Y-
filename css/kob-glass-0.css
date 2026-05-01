@@ -57,7 +57,7 @@
 }
 
 #/
-
+/*
 .di-hybrid-orb{
   position: relative;
   overflow: hidden;
@@ -120,7 +120,17 @@
       color: rgba(255,255,255,0.5);
       font-family: monospace;
     }
+*/
 
+#symbolBar {
+  transition:
+    transform .22s cubic-bezier(.2,.9,.3,1),
+    opacity .22s ease,
+    box-shadow .22s ease,
+    border-color .22s ease,
+    filter .22s ease;
+  will-change: transform, opacity, box-shadow, filter;
+}
  #symbolBar {
       display: flex;
       flex-wrap: wrap;
