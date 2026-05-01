@@ -1439,7 +1439,7 @@ iframe {
     rgba(5, 7, 10, 0.5);
 }
 
-#btn-arch, #main-orbo{
+/*#btn-arch, #main-orbo{
        
         display: flex !important;
          padding: 0;
@@ -1447,7 +1447,7 @@ iframe {
        width: 48px; 
 height: 48px;
 
-    }
+    }*/
 
 /* Variações de Snap */
 .symbol-bar.snap-side {bottom:18% !important; flex-direction: column; border-radius: 0 20px 20px 0; border-left: 0; }
