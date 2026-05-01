@@ -14,7 +14,7 @@
 
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
 
-    <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
 
@@ -39,6 +39,41 @@
           --z-overlay: 1000;
           --z-system: 5000;
         }
+        
+        #symbolBar {
+      display: flex;
+      flex-wrap: wrap;
+
+
+      gap: 12px;
+      padding: 18px;
+      background: rgba(255,255,255,0.03) var(--kob-voice-bg-soft);
+      backdrop-filter: blur(12px);
+      border: none;
+      border-radius: 50px;
+      margin-left: -7px;
+
+      transition: box-shadow 0.3s ease;
+    }
+
+ .symbol-wrap.di-managed-wrap {
+      display: flex;
+    }
+
+    .hud-info {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.5);
+      font-family: monospace;
+    }
+
+    /* modal styles (ajuste para o engine) */
+    .di-symbol-engine-backdrop,
+    .di-symbol-engine-panel {
+      /* já estilizados pelo engine */
+    }
+
+        
         .main-toggle,
   #toggleBtn {color: var(--grad-a);
     width: 48px;
