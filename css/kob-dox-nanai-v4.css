@@ -1448,7 +1448,20 @@ iframe {
 height: 48px;
 
     }*/
+    
+    .symbol-button.di-icon-ready  { 
+border-radius: 50%;  
+ border: 1px solid var(--kob-voice-secondary);}
+#btn-arch { border-radius: 14px;  
+ border: 3px solid var(--border);
 
+width: 44px;
+  height: 44px;
+
+}
+    
+#main-orb{width: 56px;
+  height:56px;}
 /* Variações de Snap */
 .symbol-bar.snap-side {bottom:18% !important; flex-direction: column; border-radius: 0 20px 20px 0; border-left: 0; }
 
