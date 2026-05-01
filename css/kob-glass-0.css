@@ -90,26 +90,7 @@
 }
 
 
-/* Symbol Bar (gerenciada pelo engine) */
-    #symbolBar {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      gap: 12px;
-      padding: 16px;
-      background: rgba(255,255,255,0.03);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 50px;
-      margin-top: 8px;
-      transition: box-shadow 0.3s ease;
-    }
-    #symbolBar.di-fuse-glow {
-      box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
-      border-color: rgba(99, 102, 241, 0.5);
-    }
-
-    .symbol-button {
+.symbol-button {
       background: rgba(255,255,255,0.05);
       border: 1px solid rgba(255,255,255,0.08);
       border-radius: 40px;
@@ -130,6 +111,33 @@
       border-color: rgba(255,255,255,0.2);
     }
     .symbol-wrap.di-managed-wrap {
+      display: flex;
+    }
+
+    .hud-info {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.5);
+      font-family: monospace;
+    }
+
+ #symbolBar {
+      display: flex;
+      flex-wrap: wrap;
+
+
+      gap: 12px;
+      padding: 18px;
+      background: rgba(255,255,255,0.03) var(--kob-voice-bg-soft);
+      backdrop-filter: blur(12px);
+      border: none;
+      border-radius: 50px;
+      margin-left: -7px;
+
+      transition: box-shadow 0.3s ease;
+    }
+
+ .symbol-wrap.di-managed-wrap {
       display: flex;
     }
 
@@ -177,7 +185,6 @@
     display: none;
   }
 
-/*
 #main-orb svg {
   width: 100%;
   height: 100%;
@@ -187,7 +194,9 @@ background: var(--kob-voice-bg-soft);
 border: 4px;
 border-color: var(--ink);
 border-radius: 9999px;
-*/
+
+}
+
 
 .bg-gradient-base {
       position: fixed;
