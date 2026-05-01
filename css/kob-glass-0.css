@@ -1,4 +1,5 @@
 /* ===== DI FUSION LAYER — LOAD LAST ===== */
+/*
 #mainCard,
 #symbolBar {
   transition:
@@ -55,7 +56,7 @@
   100% { transform: scale(1); }
 }
 
-
+#/
 
 .di-hybrid-orb{
   position: relative;
