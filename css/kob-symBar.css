@@ -100,3 +100,65 @@
   .symbol-button.di-icon-ready .di-btn-icon-label{
     display: none;
   }
+
+  .symbol-button.di-icon-ready  { 
+border-radius: 50%;  
+ border: 1px solid var(--kob-voice-secondary);}
+#btn-arch { border-radius: 14px;  
+ border: 3px solid var(--border);
+
+width: 44px;
+  height: 44px;
+
+}
+
+.symbol-button {
+
+
+border-radius: 50px;  
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: rgba(255,255,255,0.05);
+  color: var(--text);
+  font-size: 20px;
+
+  cursor: pointer;
+  flex-shrink: 0;
+  position: relative;
+
+  transition: all 0.212s ease;
+}
+
+.symbol-button:hover {
+  background: rgba(255,255,255,0.12);
+  border-color: var(--kob-voice-secondary);
+  color: var(--grad-voice-primary);
+}
+
+.symbol-button:active {
+  transform: scale(0.9);                /* Sensação de pressão */
+}
+
+/* Botão principal – destaque com gradiente e glow da voz */
+.symbol-button.main-toggle {
+
+  background: rgba(255,255,255,0.01);
+
+  color: var(--kob-voice-primary);
+  border-color: rgba(255,255,255,0.02) var(--kob-voice-secondary);
+  font-weight: light;
+  box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+
+ /* orb */
+.orb {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  place-items: center;
+}
