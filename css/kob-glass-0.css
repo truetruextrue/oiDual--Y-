@@ -239,7 +239,7 @@ width: 44px;
   height:56px;}
 
 .symbol-button {
-
+ border: 0px solid var(--kob-voice-secondary);}
 
 border-radius: 50px;  
 
