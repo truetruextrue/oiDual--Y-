@@ -1,68 +1,42 @@
-/* =========================================================
-   1. VARIÁVEIS BASE E RESET (Fusão Plena)
-   ========================================================= */
+/* =====================================================================
+   ARQUITETURA VEEB – SISTEMA DE INTERFACE VIVA
+   12 ARQUÉTIPOS APLICADOS AO HUD MAGNÉTICO
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. ATLAS – FUNDAÇÃO E VARIÁVEIS GLOBAIS
+      O alicerce do sistema. Define o espaço, as forças primordiais
+      e as constantes que governam todos os elementos.
+   --------------------------------------------------------------------- */
 :root {
+  /* Cores base – matéria‑prima do universo visual */
   --bg-dark: #02040a;
-  --bg-gradient: radial-gradient(circle at 50% -10%, #1a224f 0%, #050714 60%, #000);
-  --grad-a: #78e3ff;
-  --grad-b: #b978ff;
-  --panel-bg: rgba(15, 18, 28, 0.6);
   --ink: #eaf6ff;
-
-  /* Arquétipos */
-  --kob-voice-primary: #00e28b;
-  --kob-voice-secondary: #0EA5E9;
-  --kob-voice-bg-soft: rgba(0, 226, 139, 0.15);
-
   --text: #f0f3f9;
   --muted: rgba(255, 255, 255, 0.45);
-  --border: rgba(255, 255, 255, 0.1);
+
+  /* Tipografia – a voz do sistema */
   --font-main: 'Inter', system-ui, -apple-system, sans-serif;
 
+  /* Campos magnéticos – limite de atracação (threshold) */
   --snap-threshold: 40px;
-}
 
-* { box-sizing: border-box; }
-
-html, body {
-  height: 100%;
-  margin: 0;
-  background: var(--bg-dark);
-  background-image: var(--bg-gradient);
-  color: var(--text);
-  font-family: var(--font-main);
-  overflow: auto;
-}
-
-:root {
-
-  /* ===============================
-     VOICE CORE
-     =============================== */
-
+  /* Arquétipo VEEB – Kob (voz primária e secundária) */
   --kob-voice-primary: #00e28b;
   --kob-voice-secondary: #0EA5E9;
 
+  /* Derivadas da voz – criadas com color-mix para consistência dinâmica */
   --kob-voice-bg-soft: color-mix(in srgb, var(--kob-voice-primary) 20%, transparent);
   --kob-voice-bg-strong: color-mix(in srgb, var(--kob-voice-primary) 40%, black);
-
   --kob-voice-glow: color-mix(in srgb, var(--kob-voice-primary) 60%, white);
 
-  /* ===============================
-     DERIVAÇÕES DO TEMA
-     =============================== */
-
-  --grad-a: var(--kob-voice-primary);
-  --grad-b: var(--kob-voice-secondary);
-
+  /* Painéis e superfícies – transparência controlada pela voz */
   --panel-bg: color-mix(in srgb, var(--kob-voice-primary) 10%, #0b0f18);
 
+  /* Bordas – vivas, mas sutis */
   --border: color-mix(in srgb, var(--kob-voice-primary) 30%, rgba(255,255,255,0.1));
 
-  --text: #f0f3f9;
-
-  --bg-dark: #02040a;
-
+  /* Gradiente de fundo – céu noturno com aurora da voz */
   --bg-gradient:
     radial-gradient(
       circle at 50% -10%,
@@ -70,48 +44,50 @@ html, body {
       #050714 60%,
       #000
     );
+
+  /* Gradiente para textos e destaques */
+  --grad-a: var(--kob-voice-primary);
+  --grad-b: var(--kob-voice-secondary);
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-
-  background:
-    var(--bg-dark),
-    var(--bg-gradient);
-
-  color: var(--text);
-  font-family: var(--font-main);
+/* Reset – limpeza do terreno */
+* {
+  box-sizing: border-box;
 }
-/* =========================================================
-   2. SISTEMA HUD FLUTUANTE VIVO (DH10 FINAL)
-   ========================================================= */
+
+
+/* ---------------------------------------------------------------------
+   2. NOVA – O HUD FLUTUANTE (MOVIMENTO)
+      O elemento que viaja pelo espaço da tela. Sua natureza é ser livre,
+      mas responde a campos gravitacionais.
+   --------------------------------------------------------------------- */
 .symbol-bar {
   position: fixed;
-  left: 20px;
+  left: 0px;
   top: auto;
   bottom: auto;
   right: auto;
-  transform: none;
-
   z-index: 9999;
-  display: flex;
-  gap: 10px;
-  padding: 12px;
 
+  display: flex;
+  gap: 12px;
+  padding: 18px;
   align-items: center;
   justify-content: center;
 
+  /* Estética – superfície vítrea */
   background: rgba(10, 12, 20, 0.85);
   backdrop-filter: blur(15px) saturate(180%);
   -webkit-backdrop-filter: blur(15px) saturate(180%);
   border: 1px solid var(--border);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+  border-radius: 228px;
 
-  border-radius: 28px;
+  /* Comportamento – arrasto nativo desabilitado */
   user-select: none;
   touch-action: none;
 
+  /* Transições – base para o movimento elástico (Vitalis) */
   transition:
     opacity 0.6s ease,
     top 0.35s cubic-bezier(0.175,0.885,0.32,1.275),
@@ -121,34 +97,61 @@ html, body {
     border-color 0.5s ease;
 }
 
-/* Estados */
-.symbol-bar.idle { opacity: 0.2; }
-.symbol-bar.idle:hover { opacity: 1; }
+/* ---------------------------------------------------------------------
+   3. VITALIS – TRANSIÇÕES ELÁSTICAS E VIDA ORGÂNICA
+      A curva cúbica que simula uma mola física. Faz o HUD parecer vivo,
+      como se fosse puxado por campos magnéticos.
+   --------------------------------------------------------------------- */
+/* As transições já estão definidas no bloco .symbol-bar; aqui apenas
+   documentamos o arquétipo. O cubic-bezier(0.175,0.885,0.32,1.275)
+   gera um efeito de “estica‑e‑encaixa”, essencial para o snap vetorial. */
+
+/* ---------------------------------------------------------------------
+   4. PULSE – ESTADOS DE INTERAÇÃO E RESPOSTA IMEDIATA
+      O HUD reage à presença do usuário: fica mais visível ao hover,
+      opaco quando ocioso, e perde transições durante o arrasto.
+   --------------------------------------------------------------------- */
+.symbol-bar.idle {
+  opacity: 0.2;
+}
+.symbol-bar.idle:hover {
+  opacity: 1;
+}
 
 .symbol-bar.is-dragging {
   opacity: 0.9;
-  transition: none !important;
+  transition: none !important;          /* Remove qualquer animação durante o arrasto */
   transform: none !important;
-  will-change: top, left;
+  will-change: top, left;                /* Otimização para movimento fluido */
 }
 
-/* Snaps */
+/* ---------------------------------------------------------------------
+   5. ARTEMIS – ESTADOS DE ENCAIXE (SNAP)
+      Classes que transformam a aparência do HUD conforme a borda dominante.
+      Elas são ativadas pelo campo vetorial calculado em JavaScript.
+   --------------------------------------------------------------------- */
+/* Snap à esquerda – formato vertical, borda esquerda zero */
 .symbol-bar.snap-side {
   flex-direction: column;
-  border-radius: 0 24px 24px 0;
+  border-radius: 0 224px 224px 0;
   border-left: 0;
 }
+
+/* Snap à direita – espelho do anterior */
 .symbol-bar.snap-side-right {
   flex-direction: column;
   border-radius: 24px 0 0 24px;
   border-right: 0;
 }
+
+/* Snap ao topo – horizontal, sem borda superior */
 .symbol-bar.snap-top {
   flex-direction: row;
   border-radius: 0 0 24px 24px;
   border-top: 0;
 }
 
+/* Limites para evitar overflow */
 .symbol-bar.snap-side,
 .symbol-bar.snap-side-right,
 .symbol-bar.snap-top {
@@ -156,14 +159,18 @@ html, body {
   max-height: 90vh;
 }
 
-/* Estado flutuante puro */
+/* Estado totalmente livre – flutuante puro */
 .symbol-bar.floating {
   flex-direction: column;
   border-radius: 28px;
   inset: auto;
 }
 
-/* Colapso */
+/* ---------------------------------------------------------------------
+   6. SERENA – COLAPSO E ECONOMIA DE ESPAÇO
+      O HUD pode se contrair a um pequeno núcleo, escondendo os símbolos.
+      Útil para quando se quer apenas o ponto de referência visual.
+   --------------------------------------------------------------------- */
 .symbol-bar.collapsed {
   min-width: 44px;
   min-height: 44px;
@@ -176,6 +183,7 @@ html, body {
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.4,0,0.2,1);
 }
+
 .symbol-bar.collapsed .symbol-wrap {
   width: 0;
   height: 0;
@@ -185,13 +193,20 @@ html, body {
   transform: scale(0);
 }
 
-/* =========================================================
-   3. BOTÕES E INDICADORES
-   ========================================================= */
+/* ---------------------------------------------------------------------
+   7. KAOS – BOTÕES E AÇÕES TÁTEIS
+      Elementos que o usuário toca, com feedbacks imediatos.
+      Pequenas explosões de cor e escala.
+   --------------------------------------------------------------------- */
+#btn-arch {  border-radius: 14px;  
+ border: 1px solid var(--border);
+}
 .symbol-button {
   width: 44px;
   height: 44px;
-  border-radius: 14px;
+
+border-radius: 50px;  
+
   border: 1px solid var(--border);
 
   display: flex;
@@ -216,17 +231,86 @@ html, body {
 }
 
 .symbol-button:active {
-  transform: scale(0.9);
+  transform: scale(0.9);                /* Sensação de pressão */
 }
 
+/* Botão principal – destaque com gradiente e glow da voz */
+
+/*  background: linear-gradient(135deg,#1a1d29,#05070a); */
 .symbol-button.main-toggle {
-  background: linear-gradient(135deg,#1a1d29,#05070a);
+
   color: var(--kob-voice-primary);
   border-color: var(--kob-voice-primary);
   font-weight: bold;
   box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
+
+ /* orb */
+.orb {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: flex;
+  place-items: center;
+}
+
+/* núcleo animado */
+.orb-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+
+  background:
+    radial-gradient(circle at 30% 30%, var(--orb-accent), transparent 60%),
+    radial-gradient(circle at 70% 70%, var(--orb-primary), var(--orb-secondary));
+
+  box-shadow:
+    0 0 18px var(--orb-primary),
+    0 0 36px rgba(120,227,255,0.4);
+
+  animation: orbSpin var(--orb-speed) linear infinite;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+/* animações */
+@keyframes orbSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes orbPulse {
+  from { transform: scale(1); }
+  to { transform: scale(1.15); }
+}
+
+/* estado speaking */
+#orb-root.speaking .orb-core {
+  animation:
+    orbSpin 2s linear infinite,
+    orbPulse 0.5s ease-in-out infinite alternate;
+}
+
+
+/* ---------------------------------------------------------------------
+   8. LUMINE – INDICADORES LUMINOSOS E FEEDBACK VISUAL
+      Pequenos pontos de luz que mostram estado ativo, como a voz falando.
+   --------------------------------------------------------------------- */
 .voice-indicator {
   position: absolute;
   bottom: -2px;
@@ -240,6 +324,7 @@ html, body {
   transition: background 0.5s ease, box-shadow 0.5s ease;
 }
 
+/* Informação textual complementar – como um sussurro */
 .hud-info {
   font-size: 10px;
   color: var(--kob-voice-primary);
@@ -254,11 +339,14 @@ html, body {
   pointer-events: none;
 }
 
-.symbol-bar.snap-top .hud-info { display: none; }
+.symbol-bar.snap-top .hud-info {
+  display: none;                        /* Esconde info no topo para economizar espaço */
+}
 
-/* =========================================================
-   4. OUTLINE E TTS
-   ========================================================= */
+/* ---------------------------------------------------------------------
+   9. SOLUS – FOCO NO TEXTO E LEITURA (TTS)
+      O elemento que “fala” é destacado por um outline vivo.
+   --------------------------------------------------------------------- */
 #kob-tts-outline {
   position: absolute;
   z-index: 9998;
@@ -270,9 +358,10 @@ html, body {
   box-shadow: 0 0 15px var(--kob-voice-primary);
 
   transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-  display: none;
+  display: none;                         /* Só aparece quando ativo */
 }
 
+/* Atributo que marca o elemento sendo lido */
 [data-tts-current="true"] {
   background: var(--kob-voice-bg-soft);
   border-radius: 8px;
@@ -284,132 +373,159 @@ html, body {
   transition: all 0.3s ease;
 }
 
-/* =========================================================
-       2. LAYOUT PRINCIPAL E PAINÉIS
-       ========================================================= */
-    .app-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 20px;
-      border-bottom: 1px solid var(--border);
-      margin-bottom: 20px;
-    }
+/* ---------------------------------------------------------------------
+   10. RHEA – ESTRUTURA DE PAINÉIS E CONTEÚDO
+       Os blocos que organizam a informação de forma adaptável.
+   --------------------------------------------------------------------- */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 20px;
+}
 
-    .system-title {
-      font-weight: 800;
-      font-size: 1.2rem;
-      background: -webkit-linear-gradient(0deg, var(--grad-a), var(--grad-b));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      letter-spacing: 2px;
-    }
+.system-title {
+  font-weight: 800;
+  font-size: 1.2rem;
+  background: -webkit-linear-gradient(0deg, var(--grad-a), var(--grad-b));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 2px;
+}
 
-    #clock {
-      font-family: monospace;
-      font-size: 1.1rem;
-      color: var(--kob-voice-primary);
-      transition: color 0.5s ease;
-    }
+#clock {
+  font-family: monospace;
+  font-size: 1.1rem;
+  color: var(--kob-voice-primary);
+  transition: color 0.5s ease;
+}
 
-    .content-box {
-      max-width: 278px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 15px;
-    }
+.content-box {
+  max-width: 278px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
 
-    /* Accordions (Módulo Arch13) */
-    .accordion {
-      background: var(--panel-bg);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
-    }
+/* ---------------------------------------------------------------------
+   11. GENUS – ACORDEÕES MODULARES
+       Componentes expansíveis que se adaptam ao conteúdo.
+   --------------------------------------------------------------------- */
+.accordion {
+  background: var(--panel-bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
 
-    .accordion-header {
-      padding: 15px 20px;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-weight: 600;
-      user-select: none;
-    }
+.accordion-header {
+  padding: 15px 20px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  user-select: none;
+}
 
-    .accordion-header:hover {
-      background: rgba(255, 255, 255, 0.05);
-    }
+.accordion-header:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
 
-    .accordion-content {
-      max-height: 0;
-      padding: 0 20px;
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    }
+.accordion-content {
+  max-height: 0;
+  padding: 0 20px;
+  opacity: 0;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
 
-    .accordion.open .accordion-content {
-      max-height: 2500px;
-      padding: 15px 20px;
-      opacity: 1;
-      border-top: 1px solid var(--border);
-    }
+.accordion.open .accordion-content {
+  max-height: 2500px;                    /* Suficiente para qualquer conteúdo */
+  padding: 15px 20px;
+  opacity: 1;
+  border-top: 1px solid var(--border);
+}
 
-    .indicator {
-      transition: transform 0.3s ease;
-    }
+.indicator {
+  transition: transform 0.3s ease;
+}
 
-    .accordion.open .indicator {
-      transform: rotate(180deg);
-    }
+.accordion.open .indicator {
+  transform: rotate(180deg);
+}
 
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      color: white;
-      font-family: var(--font-main);
-      margin-bottom: 15px;
-      margin-top: 5px;
-    }
+/* ---------------------------------------------------------------------
+   12. AION – CAMPOS DE ENTRADA E INTERAÇÕES FINAS
+       Elementos que recebem dados do usuário, com feedback da voz.
+   --------------------------------------------------------------------- */
+input[type="text"] {
+  width: 100%;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: white;
+  font-family: var(--font-main);
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
 
-    input[type="text"]:focus {
-      outline: none;
-      border-color: var(--kob-voice-primary);
-    }
+input[type="text"]:focus {
+  outline: none;
+  border-color: var(--kob-voice-primary);
+}
 
-    /* =========================================================
-       3. ÁREA DE TEXTO E LEITURA TTS
-       ========================================================= */
-    #reader-content p {
-      padding: 12px 16px;
-      margin-bottom: 10px;
-      border-radius: 8px;
-      border: 1px solid transparent;
-      transition: all 0.3s ease;
-    }
+/* ---------------------------------------------------------------------
+   ÁREA DE TEXTO PARA LEITURA TTS
+   (Mantida como referência, pode ser estendida pelos 12 arquétipos)
+   --------------------------------------------------------------------- */
+#reader-content p {
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
 
-    #reader-content p strong {
-      color: var(--kob-voice-primary);
-      transition: color 0.5s ease;
-    }
+#reader-content p strong {
+  color: var(--kob-voice-primary);
+  transition: color 0.5s ease;
+}
 
+/* =====================================================================
+   FIM DA ARQUITETURA VEEB
+   Cada seção incorpora um dos 12 arquétipos, formando um sistema coeso
+   onde o HUD se move, atraca e reage como um organismo vivo.
+   ===================================================================== */
 .kob-tts-dock{
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
 }
 
- #main-orb {
-  display: grid;
-  place-items: center;
-
+#main-orb svg {
   width: 100%;
   height: 100%;
+  display: block;
+}
 
-  position: relative;
-}  
+
+.orb-container {
+  display: flex;
+  place-items: center;
+  
+  width: 90%;
+  height: 90%;
+  
+  margin: 0; /* remove o offset manual */
+}
+
+.symbol-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
