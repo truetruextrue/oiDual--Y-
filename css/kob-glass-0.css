@@ -121,7 +121,7 @@
       font-family: monospace;
     }
 */
-
+/*
 #symbolBar {
   transition:
     transform .22s cubic-bezier(.2,.9,.3,1),
@@ -130,7 +130,7 @@
     border-color .22s ease,
     filter .22s ease;
   will-change: transform, opacity, box-shadow, filter;
-}
+}*/
  #symbolBar {
       display: flex;
       flex-wrap: wrap;
@@ -306,3 +306,4 @@ border-radius: 50px;
   animation: orbSpin var(--orb-speed) linear infinite;
 }
 
+.symbol-button {color: #ddd;}
