@@ -14,8 +14,8 @@
 <!-- Manifest -->
 <link rel="manifest" href="./manifest.json">
 
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
 
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@200;400;600;900&amp;family=JetBrains+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
   <script src="https://unpkg.com/lucide@latest"></script>
@@ -73,8 +73,83 @@
           --z-widget: 500;
           --z-overlay: 1000;
           --z-system: 5000;
+        }style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
         }
-      </style><style>
+        
+        #symbolBar {
+      display: flex;
+      flex-wrap: wrap;
+
+
+      gap: 12px;
+      padding: 18px;
+      background: rgba(255,255,255,0.03) var(--kob-voice-bg-soft);
+      backdrop-filter: blur(12px);
+      border: none;
+      border-radius: 50px;
+      margin-left: -7px;
+
+      transition: box-shadow 0.3s ease;
+    }
+
+ .symbol-wrap.di-managed-wrap {
+      display: flex;
+    }
+
+    .hud-info {
+      margin-left: auto;
+      font-size: 0.7rem;
+      color: rgba(255,255,255,0.5);
+      font-family: monospace;
+    }
+
+    /* modal styles (ajuste para o engine) */
+    .di-symbol-engine-backdrop,
+    .di-symbol-engine-panel {
+      /* já estilizados pelo engine */
+    }
+
+        
+        .main-toggle,
+  #toggleBtn {color: var(--grad-a);
+    width: 48px;
+    height: 48px;border:12px;box-shadow: var(--grad-b);
+    background-color: rgba(0, 0, 0, 0.1);  }  
+
+#bg-layer-fixed {
+      position: fixed;
+      inset: 0;
+
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacityu);
+      mix-blend-mode: var(--bg-blue);
+      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
+      filter: saturate(1.05) contrast(1.02);
+      pointer-events: none;
+    }
+
+  .bg-gradient-base {
+      position: fixed; inset: 0; 
+    z-index: 1;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.06), var(--kob-voice-primary) transparent 88%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--grad-a) 100%) !impprtant;
+      pointer-events: none;
+    }
+      </style>
+      
+      
+      
+      <style>
  /* orb */
 .orb {
   width: 40%;
@@ -138,7 +213,7 @@
 </style></head>
 
 
-        <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
+
 
   
   <body> 
@@ -170,12 +245,11 @@
       <div class="orb-menu-trigger" id="orbMenuTrigger" title="Menu Rápido">●●●</div>
       <div class="drag-handle"></div>
 
-
-     <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
+      <div class="small-preview" id="smallPreview" title="Gerenciar Chaves">
         <div class="mini-avatar" id="smallMiniAvatar"></div>
         <div class="small-text" id="smallText">Aguardando ativação...</div>
         <div class="ident-badge" id="smallIdent">--</div>
-      </div>  
+      </div>
 
       <div class="card-body" id="cardBody">
         <!-- Main Input User -->
@@ -246,10 +320,10 @@
                 <button class="trigger-btn mode-btn active-mode" id="btnModeCard" onclick="setMode('card')" style="flex:1" title="Modo Padrão">CARD</button>
                 <button class="trigger-btn mode-btn" id="btnModeOrb" onclick="setMode('orb')" style="flex:1" title="Flutuante">ORB</button>
                 <button class="trigger-btn mode-btn" id="btnModeHud" onclick="setMode('hud')" style="flex:1" title="Barra de Topo">HUD</button>
-            </div> 
+            </div>
         </div>
 
-      </div> 
+      </div>
     </div>
   </div>
 
@@ -426,18 +500,17 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://unpkg.com/@phosphor-icons/web"></script>
   <script src="https://w.soundcloud.com/player/api.js"></script>
-
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-sw.css">
-
+  
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
 
+    <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
-
   <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
 
-        <link rel="stylesheet" href="https://kodux78k.github.io/oi-Dual/css/main.css">
-
-  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/css/ss5.css">
+    
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
 
 
 
@@ -446,17 +519,17 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
 
 <!-- 
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-sw.css">
 
 
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr-0.js"></script> 
 
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-2.js"></script>
 
 -->
 
-<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-2.js"></script>
 
   <style>
     :root {
@@ -480,14 +553,14 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
     [data-idle-target]{
       transition: transform .35s ease, opacity .65s ease;
       will-change: transform, opacity;
-      box-shadow: none !important; z-index:0;
+      box-shadow: none !important;
     }
 
     .kob-tts-dock.idle,
     #kodux-widget.idle,
     [data-idle-target].idle{
       opacity: .18;
-      transform: scale(.78);
+      transform: scale(.87);
     }
 
     .kob-tts-dock:hover,
@@ -550,59 +623,77 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
       <div id="bg-fake-custom"></div>
       <div class="wrap">
         <div class="content">
-          <iframe id="frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/VWRDI/index.html"></iframe>
+          <iframe id="frame" src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/index.html"></iframe>
           <div id="kob-tts-outline"></div>
         </div>
 
-        <div class="symbol-bar floating" id="symbolBar">
-          <div class="toggle-wrap">
-            <button class="symbol-button tts-orb-mini main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
-          </div>
-
+          <!-- HUD Inteligente -->
+  <div class="symbol-bar floating" id="symbolBar">
           <div class="symbol-wrap">
-            <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
-          </div>
 
-          <div class="symbol-wrap">
-            <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
-          </div>
-
-          <div class="symbol-wrap">
-            <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
-          </div>
-
-          <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
-            <div class="orb-microphone-container">
-              <div class="tts-orb-mini">
-                <div class="orb" id="main-orb">
-                  <div class="orb-core"></div>
-                </div>
-              </div>
-            </div>
-          </button>
-
- <div class="symbol-wrap">
-          <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">Φ</button>
-        </div>
-        <div class="symbol-wrap">
-          <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/editor-mix/">꩜</button>
-        </div>
-        <div class="symbol-wrap">
-          <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
-        </div>
-        <div class="symbol-wrap">
-          <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+          <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
         </div>
 
-        <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
-      </div>
+  
+    <!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggl" id="toggleBtn" title="Menu / Iniciar">≡</button>
     </div>
 
-    <!-- === OVERLAY DE ARQUÉTIPOS (áudio/tts) === -->
-    <div id="arch-overlay"></div>
+    <!-- Controles de Navegação de Leitura -->
+  <!--  <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+    </div> -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+    </div>
+   <!--  <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
+    </div> -->
 
+     <div class="symbol-wrap">
+    <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+  </div>
 
+    <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
         </div>
+<!--
+        <div class="voice-indicator" id="voiceIndicator"></div> -->
+
+      </div>
+    </button>
+
+    <!-- Outros atalhos -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">🌌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">🛋️</button>
+    </div>
+  
+
+ <div class="symbol-wrap">
+      <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+    </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+       <div id="arch-overlay"></div>  
+<!-- Scripts -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+</div>
+
       
     
 
@@ -735,10 +826,8 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
 
 
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
-
 <!-- SCRIPT ORIGINAL (Mantido) -->
-
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/DBZP/js/ss5.js"></script>
 
   <!-- OVERRIDE JS: Sistema Avançado de Seek e Tempos -->
   <script>
@@ -941,7 +1030,6 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
 
 
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
@@ -996,7 +1084,7 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
 #main-orb svg {
   width: 100%;
   height: 100%;
-  display: flex;
+  display: block;
 color: var(--kob-voice-primary);
 background: var(--kob-voice-bg-soft);
 border: 4px;
@@ -1086,7 +1174,7 @@ height: 56px;
     di_setText('#lblName', safe);
     di_setText('#actName', safe);
   //  di_setText('#smallText', safe);
-  //  di_setText('#hudStatus', safe);
+    di_setText('#hudStatus', safe);
 
     const activeKey = window.STATE?.keys?.find?.(k => k.active);
     di_setText('#smallIdent', activeKey ? activeKey.name : '--');
@@ -1116,7 +1204,7 @@ height: 56px;
   function di_bindLiveName() {
     const inputs = [
       document.querySelector('#inputUser'),
-      // document.querySelector('#infodoseNameInput')
+      document.querySelector('#infodoseNameInput')
     ].filter(Boolean);
 
     const initial = di_getSafeName();
@@ -1311,16 +1399,26 @@ function updateInterface(name){
 }
 
 </script>
+
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
+  
+
+
 <script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-mestre-878.css">
 
   <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-878.js"></script>
   
 <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-bg.js"></script>
 
-      
-      <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
-      <script>
+<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+<script>
 const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
 </script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
       </body></html>
