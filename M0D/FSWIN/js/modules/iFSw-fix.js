@@ -281,10 +281,31 @@
     }
   }
 
-  function setFreeMode(win) {
+  /*function setFreeMode(win) {
     win.classList.remove('collapsed', 'peeked', 'maximized');
     win.classList.add('resizing');
-  }
+  }*/
+
+function unlockFromMaximized(win) {
+  if (!win.classList.contains('maximized')) return;
+
+  const rect = win.getBoundingClientRect();
+
+  // win.classList.remove('maximized');
+  win.style.top = `${rect.top}px`;
+  win.style.left = `${rect.left}px`;
+  win.style.right = 'auto';
+  win.style.bottom = 'auto';
+  win.style.width = `${rect.width}px`;
+  win.style.height = `${rect.height}px`;
+  win.style.maxWidth = 'none';
+}
+
+function setFreeMode(win) {
+  unlockFromMaximized(win);
+  win.classList.remove('collapsed', 'peeked');
+  win.classList.add('resizing');
+}
 
   function finishResize(win) {
     win.classList.remove('resizing');
