@@ -443,7 +443,7 @@ function setFreeMode(win) {
         ev.preventDefault();
 
         const dx = ev.clientX - startX;
-        const dy = startY - ev.clientY;
+        const dy = ev.clientY - startY;
 
         let nextW = clamp(startW + dx, MIN_W, getMaxW());
         let nextH = clamp(startH + dy, MIN_H, getMaxH());
