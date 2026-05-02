@@ -59,7 +59,7 @@
 
   /* -----------------------------
      Archetypes (keep structure compat)
-     ----------------------------- */
+     ----------------------------- *
   const ARCHETYPES = [
     { id: 'kobllux', name: 'KOBLLUX', voice: 'Luciana', lang: 'pt-BR', rate: 0.98, pitch: 0.48, color: '#22D3EE' },
     { id: 'kodux', name: 'KODUX', voice: 'Luciana', lang: 'pt-BR', rate: 0.86, pitch: 0.68, color: '#F97316' },
@@ -87,7 +87,7 @@
      ----------------------------- */
   let state = {
     archIdx: 0,
-    isSpeaking: false,
+    isSpeaking: true,
     blocks: [],
     currentBlockIdx: 0,
     isCollapsed: localStorage.getItem('kob_collapsed') === 'true'
@@ -140,7 +140,7 @@
     if (synth.paused) {
       try { synth.resume(); } catch (e) {}
       state.isSpeaking = true;
-      updatePlayButton(true);
+      updatePlayButton(false);
       return;
     }
 
@@ -439,7 +439,7 @@
      ----------------------------- */
   function scanBlocks() {
     try {
-      const sel = 'h1,h2,h3,p,li,blockquote,pre,td,th';
+      const sel = 'h1,h2,h3,p,li,blockquote,pre,td,th,';
       if (frame && frame.contentWindow) {
         const doc = frame.contentDocument || frame.contentWindow.document;
         const nodes = [...doc.querySelectorAll(sel)].filter(n => (n.innerText || '').trim().length > 0);
