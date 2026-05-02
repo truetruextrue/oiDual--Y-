@@ -1,0 +1,144 @@
+/* ===== iFSw OVERRIDE — LOAD LAST ===== */
+
+:root {
+  --ifsw-radius: 22px;
+  --ifsw-min-w: 280px;
+  --ifsw-min-h: 180px;
+  --ifsw-max-w: 100vw;
+  --ifsw-max-h: calc(100dvh - var(--topbar-h) - var(--safe-top) - 10px);
+
+  --ifsw-handle-hit: 32px;
+  --ifsw-handle-thickness: 8px;
+  --ifsw-handle-color: rgba(255,255,255,.22);
+  --ifsw-handle-glow: rgba(0,242,255,.18);
+}
+
+/* janela */
+.session-window {
+  position: relative;
+  border-radius: var(--ifsw-radius);
+  overflow: hidden; /* arredonda o iframe */
+  box-sizing: border-box;
+}
+
+/* iframe: herda o raio do container */
+.session-window .win-frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  border-radius: inherit;
+  overflow: hidden;
+  background: transparent;
+}
+
+/* estados */
+.session-window.resizing,
+.session-window.resizing * {
+  cursor: nwse-resize !important;
+  user-select: none !important;
+}
+
+.session-window.resizing {
+  transition: none !important;
+  box-shadow: 0 14px 36px rgba(0,0,0,.55);
+}
+
+/* handles base */
+.session-window .ifsw-handle-y,
+.session-window .ifsw-handle-x,
+.session-window .ifsw-handle-corner {
+  position: absolute;
+  z-index: 20;
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  background: transparent;
+}
+
+/* handle da altura: faixa inferior */
+.session-window .ifsw-handle-y {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: var(--ifsw-handle-hit);
+  cursor: ns-resize;
+}
+
+/* handle da largura: faixa direita */
+.session-window .ifsw-handle-x {
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--ifsw-handle-hit);
+  cursor: ew-resize;
+}
+
+/* handle diagonal: canto inferior direito */
+.session-window .ifsw-handle-corner {
+  right: 0;
+  bottom: 0;
+  width: 42px;
+  height: 42px;
+  cursor: nwse-resize;
+}
+
+/* grip visual */
+.session-window .ifsw-handle-y::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 10px;
+  width: 44px;
+  height: var(--ifsw-handle-thickness);
+  border-radius: 999px;
+  transform: translateX(-50%);
+  background: var(--ifsw-handle-color);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 0 16px var(--ifsw-handle-glow);
+  pointer-events: none;
+}
+
+.session-window .ifsw-handle-x::before {
+  content: "";
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  width: var(--ifsw-handle-thickness);
+  height: 44px;
+  border-radius: 999px;
+  transform: translateY(-50%);
+  background: var(--ifsw-handle-color);
+  box-shadow: 0 0 0 1px rgba(255,255,255,.04), 0 0 16px var(--ifsw-handle-glow);
+  pointer-events: none;
+}
+
+.session-window .ifsw-handle-corner::before {
+  content: "";
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  width: 16px;
+  height: 16px;
+  border-right: 3px solid rgba(255,255,255,.28);
+  border-bottom: 3px solid rgba(255,255,255,.28);
+  border-radius: 0 0 8px 0;
+  opacity: .9;
+  pointer-events: none;
+}
+
+/* Mobile: deixa o resize vertical mais fácil de acertar */
+@media (hover: none) and (pointer: coarse) {
+  .session-window .ifsw-handle-y {
+    height: 44px;
+  }
+
+  .session-window .ifsw-handle-y::before {
+    top: 14px;
+  }
+
+  .session-window .ifsw-handle-corner {
+    width: 54px;
+    height: 54px;
+  }
+}
