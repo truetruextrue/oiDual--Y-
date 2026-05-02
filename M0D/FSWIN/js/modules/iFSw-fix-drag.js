@@ -1,6 +1,6 @@
 (() => {
   const MIN_W = 280;
-  const MIN_H = 180;
+  const MIN_H = 69;
   const EDGE_PAD = 10;
 
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
@@ -74,56 +74,54 @@
   }
 
   function bindResizeY(win, handle) {
-    let active = false;
-    let startY = 0;
-    let startH = 0;
-    let pid = null;
+  let active = false;
+  let startY = 0;
+  let startH = 0;
+  let pid = null;
 
-    handle.addEventListener('pointerdown', (e) => {
-      if (e.button != null && e.button !== 0) return;
-      if (e.target.closest('button, a, input, textarea, select')) return;
+  handle.addEventListener('pointerdown', (e) => {
+    if (e.button != null && e.button !== 0) return;
+    if (e.target.closest('button, a, input, textarea, select')) return;
 
-      active = true;
-      pid = e.pointerId;
-      startY = e.clientY;
-      startH = win.getBoundingClientRect().height;
+    active = true;
+    pid = e.pointerId;
+    startY = e.clientY;
+    startH = win.getBoundingClientRect().height;
 
-      setFreeMode(win);
-      handle.setPointerCapture?.(e.pointerId);
-      e.preventDefault();
+    setFreeMode(win);
+    handle.setPointerCapture?.(e.pointerId);
+    e.preventDefault();
 
-      const move = (ev) => {
-        if (!active || ev.pointerId !== pid) return;
-        ev.preventDefault();
+    const move = (ev) => {
+      if (!active || ev.pointerId !== pid) return;
+      ev.preventDefault();
 
-        const dy = startY - ev.clientY;
-        let nextH = startH + dy;
+      const dy = ev.clientY - startY;   // <- corrigido
+      let nextH = startH + dy;
 
-        const minH = MIN_H;
-        const maxH = getMaxH();
+      const minH = MIN_H;               // <- menor
+      const maxH = getMaxH();
 
-        nextH = clamp(nextH, minH, maxH);
+      nextH = clamp(nextH, minH, maxH);
 
-        win.style.height = `${nextH}px`;
-        win.style.top = 'auto';
-        win.style.left = win.style.left || '';
-        win.style.right = win.style.right || '';
-      };
+      win.style.height = `${nextH}px`;
+      win.style.top = 'auto';
+    };
 
-      const up = (ev) => {
-        if (ev && ev.pointerId !== pid) return;
-        active = false;
-        window.removeEventListener('pointermove', move);
-        window.removeEventListener('pointerup', up);
-        window.removeEventListener('pointercancel', up);
-        finishResize(win);
-      };
+    const up = (ev) => {
+      if (ev && ev.pointerId !== pid) return;
+      active = false;
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+      window.removeEventListener('pointercancel', up);
+      finishResize(win);
+    };
 
-      window.addEventListener('pointermove', move, { passive: false });
-      window.addEventListener('pointerup', up, { passive: true });
-      window.addEventListener('pointercancel', up, { passive: true });
-    }, { passive: false });
-  }
+    window.addEventListener('pointermove', move, { passive: false });
+    window.addEventListener('pointerup', up, { passive: true });
+    window.addEventListener('pointercancel', up, { passive: true });
+  }, { passive: false });
+}
 
   function bindResizeX(win, handle) {
     let active = false;
