@@ -1,6 +1,6 @@
 
 /**
- * KOBLLUX Engine - Versão Classe ES6
+ * KOBLLUX Engine - Versão Classe ES6 
  * Design modular para integração em ecossistemas modernos.
  */
 export class KoblluxFractalEngine {
