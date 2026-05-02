@@ -73,83 +73,8 @@
           --z-widget: 500;
           --z-overlay: 1000;
           --z-system: 5000;
-        }style>
-        :root {
-          --z-base: 0;
-          --z-content: 100;
-          --z-widget: 500;
-          --z-overlay: 1000;
-          --z-system: 5000;
         }
-        
-        #symbolBar {
-      display: flex;
-      flex-wrap: wrap;
-
-
-      gap: 12px;
-      padding: 18px;
-      background: rgba(255,255,255,0.03) var(--kob-voice-bg-soft);
-      backdrop-filter: blur(12px);
-      border: none;
-      border-radius: 50px;
-      margin-left: -7px;
-
-      transition: box-shadow 0.3s ease;
-    }
-
- .symbol-wrap.di-managed-wrap {
-      display: flex;
-    }
-
-    .hud-info {
-      margin-left: auto;
-      font-size: 0.7rem;
-      color: rgba(255,255,255,0.5);
-      font-family: monospace;
-    }
-
-    /* modal styles (ajuste para o engine) */
-    .di-symbol-engine-backdrop,
-    .di-symbol-engine-panel {
-      /* já estilizados pelo engine */
-    }
-
-        
-        .main-toggle,
-  #toggleBtn {color: var(--grad-a);
-    width: 48px;
-    height: 48px;border:12px;box-shadow: var(--grad-b);
-    background-color: rgba(0, 0, 0, 0.1);  }  
-
-#bg-layer-fixed {
-      position: fixed;
-      inset: 0;
-
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      opacity: var(--bg-opacityu);
-      mix-blend-mode: var(--bg-blue);
-      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
-      filter: saturate(1.05) contrast(1.02);
-      pointer-events: none;
-    }
-
-  .bg-gradient-base {
-      position: fixed; inset: 0; 
-    z-index: 1;
-      background:
-        radial-gradient(circle at top left, rgba(255,79,163,.06), var(--kob-voice-primary) transparent 88%),
-        radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
-        linear-gradient(180deg, #fbfcff 0%, var(--grad-a) 100%) !impprtant;
-      pointer-events: none;
-    }
-      </style>
-      
-      
-      
-      <style>
+      </style><style>
  /* orb */
 .orb {
   width: 40%;
@@ -217,6 +142,9 @@
 
   
   <body> 
+
+
+
   <!-- Ambient Blobs -->
   <div class="ambient-light"><div class="blob blob-1"></div><div class="blob blob-2"></div></div>
   <div id="snap-zone"></div>
@@ -628,7 +556,12 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
         </div>
 
         <div class="symbol-bar floating" id="symbolBar">
-          <div class="toggle-wrap">
+      <div class="symbol-wrap">
+
+          <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
+        </div>    
+
+ <div class="toggle-wrap">
             <button class="symbol-button main-toggle" id="toggleBtn" title="Menu / Iniciar">≡</button>
           </div>
 
@@ -643,6 +576,11 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
           <div class="symbol-wrap">
             <button class="symbol-button" id="btn-next" title="Próximo Bloco">▶▶</button>
           </div>
+
+      <div class="symbol-wrap">
+            <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+          </div>
+
 
           <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
             <div class="orb-microphone-container">
@@ -679,10 +617,172 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
       
     
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
+
+<div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+ // <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+
+  <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+        <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-bg-preset="ghost" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" data-bg-preset="deep" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+        <div class="fx-stage">
+          <div class="fx-actions">
+            <button class="btn-mini" onclick="loadCurrentFrameToFX()">Carregar quadro atual</button>
+            <label class="btn-mini" style="justify-content:center;">
+              Upload imagem
+              <input type="file" id="fx-upload" accept="image/*" hidden>
+            </label>
+            <button class="btn-download" onclick="downloadFX()">Download PNG</button>
+          </div>
+
+          <div class="fx-canvas-wrap">
+            <canvas id="fxCanvas" width="1200" height="800"></canvas>
+          </div>
+
+          <div class="preset-grid">
+            <button class="preset-btn active" data-fx-mode="texture" onclick="setFXMode('texture')">Textura</button>
+            <button class="preset-btn" data-fx-mode="liquid" onclick="setFXMode('liquid')">Líquido</button>
+            <button class="preset-btn" data-fx-mode="paint" onclick="setFXMode('paint')">Tinta</button>
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+            <input id="fxBlur" type="range" min="0" max="24" value="4">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+            <input id="fxIntensity" type="range" min="0" max="100" value="55">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+            <input id="fxLiquify" type="range" min="0" max="100" value="0">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+            <input id="fxGrain" type="range" min="0" max="100" value="35">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+            <input id="fxContrast" type="range" min="80" max="140" value="108">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+            <input id="fxSaturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+          <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+     
+
+    
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script>
 
 
+<style>
+        :root {
+          --z-base: 0;
+          --z-content: 100;
+          --z-widget: 500;
+          --z-overlay: 1000;
+          --z-system: 5000;
+        }
+        .main-toggle,
+  #toggleBtn {color: var(--grad-a);
+    width: 48px;
+    height: 48px;border:12px;box-shadow: var(--grad-b);
+    background-color: rgba(0, 0, 0, 0.1);  }  
 
+#bg-layer-fixed {
+      position: fixed;
+      inset: 0;
 
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      opacity: var(--bg-opacityu);
+      mix-blend-mode: var(--bg-blue);
+      transition: opacity 0.35s ease, background-image 0.45s ease, mix-blend-mode 0.35s ease;
+      filter: saturate(1.05) contrast(1.02);
+      pointer-events: none;
+    }
+
+  .bg-gradient-base{
+      position: fixed; inset: 0; 
+    z-index: 1;
+      background:
+        radial-gradient(circle at top left, rgba(255,79,163,.06), var(--kob-voice-primary) transparent 88%),
+        radial-gradient(circle at 92% 10%, rgba(42,183,255,.06), transparent 22%),
+        linear-gradient(180deg, #fbfcff 0%, var(--grad-a) 100%) !impprtant;
+      pointer-events: none;
+    }
+
+.drawer-body{z-index:100; box-shadow:none; }
+      </style>
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
 
     <div id="yt-container" class="absolute -left-[9999px]"></div>
@@ -1014,7 +1114,8 @@ window.makeOrbAvatar = makeOrbAvatar;</script>
 
 
 
-  <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script>
+ <!-- <script src="https://kodux78k.github.io/oiDual--Y-/js/kob-LVb.js"></script> -->
+
   <script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
@@ -1385,10 +1486,16 @@ function updateInterface(name){
 
 </script>
 
+  
+
+  <script>
+    console.log("Sistema operacional SÜMBÜS Pronto.");
+  </script>
 
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
   
 
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
 
 <script src="https://kodux78k.github.io/oiDual--Y-/js/78F-bgPanel.js"></script>
 
