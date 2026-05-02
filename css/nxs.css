@@ -15,7 +15,7 @@
   --kblx-btn-sz:   44px;   /* fallback; JS sobrescreve com o tamanho real */
   --kblx-visible:  1;      /* máximo de botões visíveis */
   --kblx-vp-w: calc(var(--kblx-btn-sz) * var(--kblx-visible));
-}
+
 /* ===== VARIÁVEIS GLOBAIS ===== */
 
   --bg-dark: #05070a;
@@ -35,19 +35,15 @@
 
   --orb-speed: 7.8s;
   --transition: 0.3s cubic-bezier(0.2, 0, 0, 1);
-}
- --bg: linear-gradient(to bottom, #000, #1a1a1a);
+
+  --bg: linear-gradient(to bottom, #000, #1a1a1a);
   --text: #d7d7d7;
   --fast: 0.4s;
   --med: 0.8s;
   --slow: 1.8s;
 }
 
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+
 /* ===== ARQUÉTIPOS (19 cores) ===== */
 body[data-voice-arch="kobllux"] { --kob-voice-primary: #22D3EE; --kob-voice-secondary: #0E7C9E; }
 body[data-voice-arch="kodux"]   { --kob-voice-primary: #F97316; --kob-voice-secondary: #C2410C; }
