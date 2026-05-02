@@ -59,7 +59,7 @@
 
   /* -----------------------------
      Archetypes (keep structure compat)
-     ----------------------------- *
+     ----------------------------- */
   const ARCHETYPES = [
     { id: 'kobllux', name: 'KOBLLUX', voice: 'Luciana', lang: 'pt-BR', rate: 0.98, pitch: 0.48, color: '#22D3EE' },
     { id: 'kodux', name: 'KODUX', voice: 'Luciana', lang: 'pt-BR', rate: 0.86, pitch: 0.68, color: '#F97316' },
