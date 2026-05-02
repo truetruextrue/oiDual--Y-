@@ -1,0 +1,172 @@
+:root {
+      --bg-dark: #05070a;
+      --panel-bg: rgba(15, 20, 28, 0.85);
+      --accent: #00f2ff;
+      --accent-dim: rgba(0, 242, 255, 0.2);
+      --text-main: #e0e6ed;
+      --topbar-h: 50px;
+      --dock-h: 65px;
+      --safe-top: env(safe-area-inset-top);
+      --radius: 12px;
+    }
+
+    body, html {
+      margin: 0; padding: 0;
+      background: var(--bg-dark);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      overflow: hidden;
+      height: 100vh;
+    }
+
+    /* Topbar Evoluída */
+    .os-topbar {
+      height: var(--topbar-h);
+      background: rgba(10, 12, 16, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: fixed;
+      top: 0; width: 100%;
+      z-index: 100000;
+    }
+
+    .os-brand {
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .os-brand small {
+      font-weight: 400;
+      font-size: 0.65rem;
+      background: var(--accent-dim);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    .sys-status {
+      font-size: 0.85rem;
+      display: flex;
+      gap: 15px;
+      opacity: 0.8;
+    }
+
+    /* Janelas com Glassmorphism */
+    .session-window {
+      background: var(--panel-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1), opacity 0.2s;
+    }
+
+    .session-window.focused {
+      border-color: var(--accent-dim);
+      box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
+    }
+
+    .win-hdr {
+      background: rgba(255,255,255,0.03);
+      height: 42px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .win-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      flex-grow: 1;
+    }
+
+    /* Botões Modernos */
+    .win-controls button {
+      background: rgba(255,255,255,0.08);
+      border: none;
+      color: white;
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      margin-left: 5px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .win-controls button:hover {
+      background: var(--accent-dim);
+      color: var(--accent);
+    }
+
+    /* Dock Estilizado */
+    #dock {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      height: var(--dock-h);
+      background: rgba(15, 20, 28, 0.8);
+      backdrop-filter: blur(15px);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      padding: 0 15px;
+      gap: 10px;
+      border: 1px solid rgba(255,255,255,0.1);
+      z-index: 99999;
+    }
+
+    .dock-bubble {
+      width: 45px; height: 45px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .dock-bubble:hover {
+      transform: translateY(-5px);
+      background: var(--accent-dim);
+    }
+
+    .dock-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -6px; width: 4px; height: 4px;
+      background: var(--accent);
+      border-radius: 50%;
+      opacity: 0;
+    }
+
+    .dock-bubble.active::after { opacity: 1; }
+
+    /* Fix para redimensionamento */
+    .session-window.maximized .ifsw-handle-y,
+    .session-window.maximized .ifsw-handle-x,
+    .session-window.maximized .ifsw-handle-corner {
+      display: none; /* Esconde ao maximizar */
+    }
+
+    .top-actions button {
+      background: var(--accent);
+      color: black;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 0.8rem;
+      cursor: pointer;
+    }
