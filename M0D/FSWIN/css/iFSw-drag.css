@@ -380,3 +380,29 @@
 .session-window.bottom-sheet.maximized {
   border-radius: 0;
     }
+    
+    
+    /* HANDLE de resize (bottom) */
+.session-window.bottom-sheet .resize-handle-y {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 28px;
+  cursor: ns-resize;
+  touch-action: none;
+  z-index: 5;
+}
+
+/* feedback visual leve (opcional) */
+.session-window.bottom-sheet .resize-handle-y::before {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 36px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgba(255,255,255,.18);
+  transform: translateX(-50%);
+}
