@@ -3,7 +3,17 @@
       --safe-right: env(safe-area-inset-right);
       --safe-bottom: env(safe-area-inset-bottom);
       --safe-left: env(safe-area-inset-left);
+  --ifsw-radius: 22px;
+  --ifsw-min-w: 280px;
+  --ifsw-min-h: 180px;
+  --ifsw-max-w: 100vw;
+  --ifsw-max-h: calc(100dvh - var(--topbar-h) - var(--safe-top) - 10px);
 
+  --ifsw-handle-hit: 32px;
+  --ifsw-handle-thickness: 8px;
+  --ifsw-handle-color: rgba(255,255,255,.22);
+  --ifsw-handle-glow: rgba(0,242,255,.18);
+}
  --sheet-collapsed-h: 56px;
   --sheet-peek-h: 34vh;
   --sheet-full-top-gap: 12px;
@@ -409,18 +419,7 @@
 
 /* ===== iFSw OVERRIDE — LOAD LAST ===== */
 
-:root {
-  --ifsw-radius: 22px;
-  --ifsw-min-w: 280px;
-  --ifsw-min-h: 180px;
-  --ifsw-max-w: 100vw;
-  --ifsw-max-h: calc(100dvh - var(--topbar-h) - var(--safe-top) - 10px);
 
-  --ifsw-handle-hit: 32px;
-  --ifsw-handle-thickness: 8px;
-  --ifsw-handle-color: rgba(255,255,255,.22);
-  --ifsw-handle-glow: rgba(0,242,255,.18);
-}
 
 /* janela */
 .session-window {
