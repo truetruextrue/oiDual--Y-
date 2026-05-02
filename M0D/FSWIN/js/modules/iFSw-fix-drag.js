@@ -1,6 +1,6 @@
 (() => {
-  const MIN_W = 280;
-  const MIN_H = 69;
+  const MIN_W = 39;
+  const MIN_H = 39;
   const EDGE_PAD = 10;
 
   const clamp = (v, min, max) => Math.max(min, Math.min(max, v));
@@ -17,7 +17,7 @@
 
   function getMaxH() {
     const top = getShellTop();
-    return Math.max(220, window.innerHeight - top - EDGE_PAD);
+    return Math.max(43, window.innerHeight - top - EDGE_PAD);
   }
 
   function ensureHandles(win) {
