@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>Feeling Decor · Universo 3x3 | Viviani Costa</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;800&family=Playfair+Display:ital,wght@0,400;0,900;1,400;1,900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --brand-gold: #c5a059;
+      --brand-dark: #05070a;
+      --glass: rgba(255, 255, 255, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.3);
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #fff;
+      color: var(--brand-dark);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      position: fixed;
+    }
+
+    .font-serif { font-family: 'Playfair Display', serif; }
+    .font-tech { font-family: 'Space Mono', monospace; }
+
+    /* UNIVERSO 3x3 */
+    #universe-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 300vw;
+      height: 300vh;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(3, 1fr);
+      transition: transform 0.4s cubic-bezier(0.2, 0.9, 0.4, 1);
+      will-change: transform;
+    }
+
+    /* Cada tela: scroll vertical interno suave */
+    .screen {
+      width: 100vw;
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      background: #fff;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    /* Estilos internos (reaproveitados do seu projeto) */
+    .hero-title { font-size: clamp(2.8rem, 10vw, 6rem); line-height: 0.9; letter-spacing: -0.04em; }
+    .sub-title { font-size: clamp(1.5rem, 4vw, 3.5rem); line-height: 1.1; }
+    .btn-lux { background: black; color: white; padding: 1rem 2rem; border-radius: 99px; font-weight: 800; letter-spacing: 0.1em; transition: all 0.3s; display: inline-block; text-decoration: none; cursor: pointer; }
+    .btn-lux:hover { background: var(--brand-gold); transform: scale(1.02); }
+    .btn-line { border: 1px solid #ccc; background: transparent; padding: 1rem 2rem; border-radius: 99px; font-weight: 600; transition: 0.2s; cursor: pointer; }
+    .video-container { width: 100%; max-width: 800px; aspect-ratio: 16/9; border-radius: 32px; overflow: hidden; margin: 0 auto; }
+    .glass-card { background: var(--glass); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 24px; }
+    .mandala { position: absolute; width: 30vw; opacity: 0.05; animation: rotate 80s linear infinite; pointer-events: none; }
+    @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+    /* Player universal flutuante */
+    #global-player {
+      position: fixed; bottom: 20px; right: 20px; left: auto; z-index: 2000;
+      background: rgba(0,0,0,0.9); border-radius: 20px; backdrop-filter: blur(10px);
+      transition: all 0.3s ease; width: 360px; max-width: calc(100% - 40px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    }
+    .player-hidden { transform: translateY(120%); opacity: 0; pointer-events: none; }
+
+    /* Navegação dots 3x3 */
+    .nav-matrix {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      background: rgba(0,0,0,0.6);
+      backdrop-filter: blur(12px);
+      padding: 10px 16px;
+      border-radius: 60px;
+      z-index: 1000;
+    }
+    .matrix-dot {
+      width: 10px;
+      height: 10px;
+      background: rgba(255,255,255,0.5);
+      border-radius: 50%;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+    .matrix-dot.active {
+      background: var(--brand-gold);
+      transform: scale(1.5);
+      box-shadow: 0 0 12px var(--brand-gold);
+    }
+
+    /* Feed cards */
+    .feed-card { transition: transform 0.2s; cursor: pointer; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.15); border-radius: 1.5rem; }
+    .feed-card:hover { transform: scale(1.02); background: rgba(0,0,0,0.8); }
+
+    /* Scroll personalizado */
+    .screen::-webkit-scrollbar { width: 4px; }
+    .screen::-webkit-scrollbar-track { background: #e0e0e0; border-radius: 4px; }
+    .screen::-webkit-scrollbar-thumb { background: var(--brand-gold); border-radius: 4px; }
+
+    /* Ajuste para evitar conteúdo cortado */
+    .screen > div {
+      min-height: 100%;
+      padding-bottom: 12vh;
+    }
+
+    @media (max-width: 700px) {
+      .nav-matrix { gap: 8px; padding: 6px 12px; }
+      .matrix-dot { width: 8px; height: 8px; }
+      .btn-lux, .btn-line { padding: 0.7rem 1.2rem; font-size: 0.8rem; }
+      .screen > div { padding-bottom: 8vh; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- UNIVERSO 3x3 -->
+  <div id="universe-grid"></div>
+
+  <!-- Dots navigation 3x3 -->
+  <div class="nav-matrix" id="navMatrix"></div>
+
+  <!-- PLAYER UNIVERSAL -->
+  <div id="global-player" class="player-hidden">
+    <div class="flex justify-end p-2"><button id="closePlayer" class="text-white bg-white/20 rounded-full w-6 h-6 text-xs">✕</button></div>
+    <div id="playerFrame" class="aspect-video w-full"></div>
+  </div>
+
+  <script>
+    // ======================== CONFIGURAÇÕES DOS CONTEÚDOS (9 TELAS) ========================
+    // Posições: [linha][coluna]  (0 a 2) — (1,1) é HOME central.
+    const screensData = [
+      [ // linha 0
+        { // (0,0) - Apresentação / Marca
+          content: `
+            <div class="flex flex-col items-center justify-start pt-20 text-center p-6 bg-white" style="min-height: 100%;">
+              <div class="max-w-2xl">
+                <span class="font-tech text-xs uppercase tracking-[0.3em] text-brand-gold">Frequência Decorativa</span>
+                <h1 class="font-serif text-6xl md:text-7xl leading-tight mt-4">Design que <span class="italic">respira.</span></h1>
+                <p class="text-gray-500 text-lg mt-6">Transformamos espaços comuns em refúgios sensoriais através de cortinas fluidas, mobiliário orgânico e curadoria intencional.</p>
+                <div class="mt-8 flex flex-wrap gap-4 justify-center">
+                  <a onclick="navigateTo(1,1)" class="btn-lux">Explorar Curadoria</a>
+                  <a onclick="navigateTo(2,1)" class="btn-line">Ver Projetos</a>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        { // (0,1) - Filosofia / Onde o invisível se torna emoção
+          content: `
+            <div class="bg-[#05070a] text-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <div class="max-w-3xl text-center">
+                <h2 class="sub-title font-serif italic mb-8">Onde o <span class="font-black not-italic">invisível</span> <br> se torna <span class="text-brand-gold">emoção.</span></h2>
+                <p class="text-xl text-white/70 leading-relaxed">Não trabalhamos apenas com decoração. Trabalhamos com ritmo, proporção e sensação. O ambiente certo não grita; ele acolhe, organiza e faz o espaço conversar com quem vive nele.</p>
+                <div class="mt-8"><video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/destaque/apt.mp4" class="rounded-2xl w-full shadow-2xl" autoplay muted loop playsinline></video></div>
+              </div>
+            </div>
+          `
+        },
+        { // (0,2) - Metodologia / Leitura de ambiente
+          content: `
+            <div class="bg-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <div class="max-w-4xl grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                  <span class="font-tech text-xs uppercase tracking-widest text-brand-gold">Leitura de ambiente</span>
+                  <h2 class="font-serif text-4xl mt-2">Clareza que dá forma ao cotidiano</h2>
+                  <p class="text-gray-600 mt-4 leading-relaxed">A proposta nasce da observação do espaço, das rotinas e do que o ambiente precisa transmitir. O resultado é uma composição leve, refinada e funcional.</p>
+                </div>
+                <video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" class="rounded-3xl shadow-xl" autoplay muted loop playsinline></video>
+              </div>
+            </div>
+          `
+        }
+      ],
+      [ // linha 1
+        { // (1,0) - Curadoria Instagram (cards laterais)
+          content: `
+            <div class="bg-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <div class="max-w-6xl mx-auto">
+                <h2 class="hero-title font-serif font-black mb-12">Curadoria <span class="italic text-brand-gold">Exclusiva.</span></h2>
+                <div class="grid md:grid-cols-3 gap-6">
+                  <div class="group"><a href="https://www.instagram.com/feeling.decor_/reel/DCbYsZHRIYZ/" target="_blank"><div class="aspect-[4/5] rounded-2xl overflow-hidden"><video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4" class="w-full h-full object-cover group-hover:scale-105 transition" autoplay muted loop playsinline></video></div><h3 class="font-serif text-xl mt-3">Fluidez Intencional</h3></a></div>
+                  <div class="group"><a href="https://www.instagram.com/feeling.decor_/p/DCvJ1wwxFQ2/" target="_blank"><div class="aspect-[4/5] rounded-2xl overflow-hidden"><img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg" class="w-full h-full object-cover group-hover:scale-105 transition"></div><h3 class="font-serif text-xl mt-3">Essência Viva</h3></a></div>
+                  <div class="group"><a href="https://www.instagram.com/feeling.decor_/reel/DCbZPpNxk0L/" target="_blank"><div class="aspect-[4/5] rounded-2xl overflow-hidden"><img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img3.jpg" class="w-full h-full object-cover group-hover:scale-105 transition"></div><h3 class="font-serif text-xl mt-3">Curadoria Orgânica</h3></a></div>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        { // (1,1) - HOME CENTRAL
+          content: `
+            <div class="relative overflow-hidden flex flex-col items-center justify-center text-center bg-cover bg-center" style="background-image: url('https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg'); min-height: 100%;">
+              <div class="absolute inset-0 bg-black/40"></div>
+              <div class="relative z-10 text-white px-4 py-20">
+                <h1 class="hero-title font-serif font-black">Design <br><span class="italic font-normal">Sensorial.</span></h1>
+                <p class="font-tech text-sm mt-6 uppercase tracking-[0.5em]">Frequência • Harmonia • Fluidez</p>
+                <div class="mt-12 flex gap-4 justify-center flex-wrap">
+                  <a onclick="navigateTo(1,0)" class="btn-lux bg-white text-black hover:bg-brand-gold hover:text-white">Curadoria</a>
+                  <a onclick="navigateTo(2,1)" class="btn-line border-white text-white hover:bg-white/20">Projetos</a>
+                </div>
+              </div>
+              <img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/hero/mandala.png" class="mandala right-[-10vw] bottom-0 pointer-events-none">
+            </div>
+          `
+        },
+        { // (1,2) - CATÁLOGO VIVO (GitHub JSON) + Player
+          content: `
+            <div class="bg-[#0a0a0a] text-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <div class="max-w-6xl mx-auto w-full">
+                <div class="text-center mb-8"><h2 class="sub-title font-serif italic">Catálogo <span class="font-black text-brand-gold">Vivo</span></h2><p class="text-white/50 text-sm font-tech">Sincronizado via GitHub · Frequência 672Hz</p></div>
+                <div class="flex justify-end mb-4"><button id="btnCarregarFeed" class="btn-lux text-sm px-4 py-2 bg-brand-gold text-black hover:bg-white">⟳ Carregar Catálogo</button></div>
+                <div id="feedContainer" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+                <div id="mensagemFeed" class="text-center text-white/40 mt-8 hidden">Nenhuma mídia encontrada.</div>
+              </div>
+            </div>
+          `
+        }
+      ],
+      [ // linha 2
+        { // (2,0) - Bastidores (vídeos)
+          content: `
+            <div class="bg-black text-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <h2 class="sub-title font-serif italic mb-8">Bastidores da <span class="font-black not-italic text-brand-gold">Perfeição.</span></h2>
+              <div class="video-container mb-6"><video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso0.mp4" class="w-full h-full object-cover" autoplay muted loop playsinline></video></div>
+              <div class="video-container"><iframe class="w-full h-full" src="https://www.youtube.com/embed/koKhjQKGJSc" frameborder="0" allowfullscreen></iframe></div>
+            </div>
+          `
+        },
+        { // (2,1) - Projetos / Galeria
+          content: `
+            <div class="bg-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <div class="max-w-6xl mx-auto">
+                <h2 class="hero-title font-serif font-black mb-6">Imagens que <span class="italic">respiram presença</span></h2>
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div class="rounded-3xl overflow-hidden shadow-lg"><img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img2.jpg" class="w-full h-auto"></div>
+                  <div class="rounded-3xl overflow-hidden shadow-lg"><img src="https://kodux78k.github.io/oiDual-Vivivi-1/media/conceito/img1.jpg" class="w-full h-auto"></div>
+                </div>
+                <p class="text-gray-500 text-center mt-8 max-w-2xl mx-auto">O objetivo não é impressionar pelo excesso. É criar uma experiência silenciosa, onde tudo parece estar no lugar certo.</p>
+              </div>
+            </div>
+          `
+        },
+        { // (2,2) - Contato
+          content: `
+            <div class="bg-[#0b0c10] text-white flex flex-col items-center justify-start pt-20 p-6" style="min-height: 100%;">
+              <div class="max-w-4xl text-center">
+                <h2 class="hero-title font-serif font-black italic mb-6 text-brand-gold">Fale conosco.</h2>
+                <address class="not-italic text-3xl font-serif mb-8">São Paulo, SP · Brasil</address>
+                <div class="flex flex-wrap gap-6 justify-center">
+                  <a href="#" class="text-xl font-bold border-b-2 border-brand-gold pb-1 hover:text-brand-gold transition">WhatsApp Oficial</a>
+                  <a href="https://www.instagram.com/feeling.decor_/" class="text-xl font-bold border-b-2 border-brand-gold pb-1 hover:text-brand-gold">Instagram Feed</a>
+                </div>
+                <div class="mt-12"><video src="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/piso1.mp4" class="rounded-3xl w-full max-w-md mx-auto" autoplay muted loop playsinline></video></div>
+              </div>
+            </div>
+          `
+        }
+      ]
+    ];
+
+    // ESTADO DE NAVEGAÇÃO
+    let currentRow = 1, currentCol = 1;  // centro
+    const totalRows = 3, totalCols = 3;
+
+    // Construir o grid dinamicamente
+    const gridContainer = document.getElementById('universe-grid');
+    function buildGrid() {
+      gridContainer.innerHTML = '';
+      for (let r = 0; r < totalRows; r++) {
+        for (let c = 0; c < totalCols; c++) {
+          const screenDiv = document.createElement('div');
+          screenDiv.className = 'screen';
+          screenDiv.setAttribute('data-row', r);
+          screenDiv.setAttribute('data-col', c);
+          const data = screensData[r]?.[c];
+          if (data) {
+            screenDiv.innerHTML = `<div class="relative w-full">${data.content}</div>`;
+          } else {
+            screenDiv.innerHTML = `<div class="flex items-center justify-center h-full bg-gray-100">Conteúdo em breve</div>`;
+          }
+          gridContainer.appendChild(screenDiv);
+        }
+      }
+    }
+    buildGrid();
+
+    // Atualizar transform do grid
+    function updateTransform() {
+      const translateX = -currentCol * 100;
+      const translateY = -currentRow * 100;
+      gridContainer.style.transform = `translate(${translateX}vw, ${translateY}vh)`;
+      document.querySelectorAll('.matrix-dot').forEach((dot, idx) => {
+        const r = Math.floor(idx / 3);
+        const c = idx % 3;
+        dot.classList.toggle('active', r === currentRow && c === currentCol);
+      });
+    }
+
+    // Navegação pública
+    window.navigateTo = function(row, col) {
+      if (row < 0 || row >= totalRows || col < 0 || col >= totalCols) return;
+      currentRow = row;
+      currentCol = col;
+      updateTransform();
+    };
+
+    // Criar botões de navegação 3x3
+    const navMatrix = document.getElementById('navMatrix');
+    for (let i = 0; i < 9; i++) {
+      const dot = document.createElement('div');
+      dot.className = 'matrix-dot';
+      const r = Math.floor(i / 3);
+      const c = i % 3;
+      dot.addEventListener('click', () => navigateTo(r, c));
+      navMatrix.appendChild(dot);
+    }
+
+    // ======================== GESTOS INTELIGENTES (SWIPE vs SCROLL) ========================
+    let touchStart = { x: 0, y: 0, time: 0 };
+    let isSwiping = false;
+    const SWIPE_THRESHOLD = 50;      // distância mínima em px
+    const SWIPE_MAX_TIME = 300;      // tempo máximo em ms para considerar swipe rápido
+
+    gridContainer.addEventListener('touchstart', (e) => {
+      touchStart.x = e.touches[0].clientX;
+      touchStart.y = e.touches[0].clientY;
+      touchStart.time = Date.now();
+      isSwiping = true;
+    }, { passive: true });
+
+    gridContainer.addEventListener('touchmove', (e) => {
+      if (!isSwiping) return;
+      // Não bloqueamos o scroll nativo com preventDefault()
+      // Apenas detectamos se o movimento ultrapassou o limiar para eventualmente cancelar o swipe
+    }, { passive: true });
+
+    gridContainer.addEventListener('touchend', (e) => {
+      if (!isSwiping) return;
+      const endX = e.changedTouches[0].clientX;
+      const endY = e.changedTouches[0].clientY;
+      const diffX = endX - touchStart.x;
+      const diffY = endY - touchStart.y;
+      const deltaTime = Date.now() - touchStart.time;
+      const absX = Math.abs(diffX);
+      const absY = Math.abs(diffY);
+
+      // Só considera swipe se o movimento foi rápido (tempo curto) e distância mínima
+      if (deltaTime < SWIPE_MAX_TIME && (absX > SWIPE_THRESHOLD || absY > SWIPE_THRESHOLD)) {
+        if (absX > absY && absX > SWIPE_THRESHOLD) {
+          // Swipe horizontal
+          if (diffX > 0) navigateTo(currentRow, currentCol - 1);
+          else navigateTo(currentRow, currentCol + 1);
+        } else if (absY > absX && absY > SWIPE_THRESHOLD) {
+          // Swipe vertical
+          if (diffY > 0) navigateTo(currentRow - 1, currentCol);
+          else navigateTo(currentRow + 1, currentCol);
+        }
+      }
+      isSwiping = false;
+    });
+
+    // ======================== PLAYER UNIVERSAL ========================
+    const playerDiv = document.getElementById('global-player');
+    const playerFrame = document.getElementById('playerFrame');
+    const closePlayer = document.getElementById('closePlayer');
+    function detectMediaType(src) {
+      if (/\.(mp3|ogg|wav|m4a)(\?|$)/i.test(src)) return 'audio';
+      if (/\.(mp4|webm|mov)(\?|$)/i.test(src)) return 'video';
+      if (/youtube\.com\/embed\/|youtu\.be|youtube\.com\/watch/.test(src)) {
+        let id = src.match(/(?:embed\/|v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        if (id) return { type: 'yt', id: id[1] };
+      }
+      if (/\.(jpg|jpeg|png|gif|webp)(\?|$)/i.test(src)) return 'image';
+      return 'none';
+    }
+    window.Player = {
+      play(src, title) {
+        let type = detectMediaType(src);
+        let html = '';
+        if (type === 'yt' || (type && type.type === 'yt')) {
+          let ytId = type.id || src;
+          html = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${ytId}?autoplay=1" frameborder="0" allow="autoplay; encrypted-media"></iframe>`;
+        } else if (type === 'video') {
+          html = `<video src="${src}" class="w-full h-full" controls autoplay></video>`;
+        } else if (type === 'audio') {
+          html = `<audio src="${src}" class="w-full" controls autoplay></audio><div class="text-white text-center text-sm p-2">${title || 'Áudio'}</div>`;
+        } else if (type === 'image') {
+          html = `<img src="${src}" class="w-full h-full object-contain"><div class="text-white text-center text-sm p-2">${title || 'Imagem'}</div>`;
+        } else {
+          toast('Formato não suportado');
+          return;
+        }
+        playerFrame.innerHTML = html;
+        playerDiv.classList.remove('player-hidden');
+      },
+      close() {
+        playerDiv.classList.add('player-hidden');
+        playerFrame.innerHTML = '';
+      }
+    };
+    closePlayer.onclick = () => Player.close();
+
+    function toast(msg) {
+      const div = document.createElement('div');
+      div.className = 'fixed bottom-24 left-1/2 -translate-x-1/2 bg-black/80 text-white text-xs px-4 py-2 rounded-full z-[2000]';
+      div.innerText = msg;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 2000);
+    }
+
+    // ======================== CATÁLOGO GITHUB JSON (tela 1,2) ========================
+    const FEED_URL = 'https://raw.githubusercontent.com/Kodux78k/oiDual-Vivivi-1/main/feeling-feed.json';
+    async function carregarCatalogo() {
+      const container = document.getElementById('feedContainer');
+      const mensagem = document.getElementById('mensagemFeed');
+      if (!container) return;
+      container.innerHTML = '<div class="col-span-full text-center text-white/50">✨ Sincronizando...</div>';
+      try {
+        const res = await fetch(FEED_URL);
+        if (!res.ok) throw new Error();
+        const data = await res.json();
+        renderizarCatalogo(data);
+      } catch {
+        container.innerHTML = '<div class="col-span-full text-center text-red-400">⚠️ Erro ao carregar. Verifique o JSON.</div>';
+        if (mensagem) mensagem.classList.remove('hidden');
+      }
+    }
+
+    function renderizarCatalogo(data) {
+      const container = document.getElementById('feedContainer');
+      const mensagem = document.getElementById('mensagemFeed');
+      let cardsHtml = '';
+      let total = 0;
+      if (data.categories) {
+        data.categories.forEach(cat => {
+          (cat.vids || []).forEach(vid => {
+            total++;
+            let thumb = '';
+            let isImage = /\.(jpg|jpeg|png|gif|webp)/i.test(vid);
+            let isVideo = /\.(mp4|webm|mov)/i.test(vid);
+            if (!isImage && !isVideo) {
+              let ytId = vid.match(/(?:embed\/|v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+              if (ytId) thumb = `https://img.youtube.com/vi/${ytId[1]}/mqdefault.jpg`;
+            }
+            cardsHtml += `
+              <div class="feed-card p-4 cursor-pointer group" onclick="Player.play('${vid.replace(/'/g, "\\'")}', '${cat.cat.replace(/'/g, "\\'")}')">
+                <div class="aspect-video rounded-xl overflow-hidden bg-black/50">
+                  ${thumb ? `<img src="${thumb}" class="w-full h-full object-cover group-hover:scale-105 transition">` : (isImage ? `<img src="${vid}" class="w-full h-full object-cover">` : `<div class="w-full h-full flex items-center justify-center text-3xl">🎬</div>`)}
+                </div>
+                <div class="p-3"><h3 class="font-serif text-xl font-bold text-brand-gold">${cat.cat}</h3><p class="text-white/60 text-xs font-tech truncate">${vid.length > 50 ? vid.slice(0,50)+'…' : vid}</p></div>
+              </div>`;
+          });
+        });
+      }
+      if (data.podcasts) {
+        data.podcasts.forEach(catPod => {
+          (catPod.eps || []).forEach(ep => {
+            total++;
+            cardsHtml += `
+              <div class="feed-card p-4 cursor-pointer group" onclick="Player.play('${ep.url.replace(/'/g, "\\'")}', '${ep.title.replace(/'/g, "\\'")}')">
+                <div class="flex gap-4 items-center">
+                  <div class="w-16 h-16 rounded-xl overflow-hidden bg-black/50 flex-shrink-0">${ep.cover ? `<img src="${ep.cover}" class="w-full h-full object-cover">` : '<div class="w-full h-full flex items-center justify-center text-2xl">🎧</div>'}</div>
+                  <div><h3 class="font-serif text-xl font-bold text-brand-gold">${ep.title}</h3><p class="text-white/60 text-xs font-tech">${catPod.cat}</p></div>
+                </div>
+              </div>`;
+          });
+        });
+      }
+      if (total === 0) {
+        container.innerHTML = '<div class="col-span-full text-center text-white/50">Adicione vídeos/podcasts ao JSON</div>';
+        if (mensagem) mensagem.classList.remove('hidden');
+      } else {
+        container.innerHTML = cardsHtml;
+        if (mensagem) mensagem.classList.add('hidden');
+      }
+    }
+
+    // Botão de carregar feed (existe na tela 1,2)
+    document.addEventListener('click', (e) => {
+      if (e.target.id === 'btnCarregarFeed') carregarCatalogo();
+    });
+    // Carregamento automático ao montar a tela
+    setTimeout(() => { if (document.getElementById('feedContainer')) carregarCatalogo(); }, 500);
+
+    // Inicializar na tela central (1,1)
+    navigateTo(1, 1);
+  </script>
+</body>
+  </html> 
