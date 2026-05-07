@@ -1,4 +1,6 @@
-
+.symbol-button {
+  font-family: monospace !important;
+}
 .mainOrb,
 .symbol-button {
   user-select: none;
