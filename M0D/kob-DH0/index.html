@@ -213,16 +213,97 @@ resetIdle();
 
 
 <div id="kblx-back">
+
   <div id="kblx-panel">
-    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
-    <div class="p-title" id="kblx-ttl">Botão</div>
-    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
-    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
-    <div class="kblx-row">
-      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
-      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+
+    <!-- HEADER -->
+    <header class="kblx-head">
+      <div class="p-chip">
+        ⌘ KOBLLUX HUD · EDITOR DE ROTA
+      </div>
+
+      <button class="kblx-icon-btn" id="kblx-btn-close">
+        ✕
+      </button>
+    </header>
+
+    <!-- TITLE -->
+    <div class="kblx-title-wrap">
+      <h2 class="p-title" id="kblx-ttl">
+        Botão
+      </h2>
+
+      <p class="kblx-sub">
+        Editar destino do SymbolButton
+      </p>
     </div>
+
+    <!-- INPUT -->
+    <section class="kblx-section">
+
+      <label class="p-lbl" for="kblx-inp">
+        Novo valor para <code>data-url</code>
+      </label>
+
+      <input
+        id="kblx-inp"
+        type="text"
+        placeholder="arquivo.html ou https://..."
+        spellcheck="false"
+        autocomplete="off"
+      >
+
+      <!-- preview -->
+      <div class="kblx-preview" id="kblx-preview">
+        Nenhuma rota definida
+      </div>
+
+    </section>
+
+    <!-- PRESETS -->
+    <section class="kblx-section">
+
+      <div class="kblx-sec-head">
+        <span>Presets</span>
+      </div>
+
+      <div class="kblx-presets">
+
+        <button class="kblx-preset" data-url="index.html">
+          Home
+        </button>
+
+        <button class="kblx-preset" data-url="hub.html">
+          Hub
+        </button>
+
+        <button class="kblx-preset" data-url="render-response.html">
+          Render
+        </button>
+
+        <button class="kblx-preset" data-url="https://google.com">
+          URL
+        </button>
+
+      </div>
+
+    </section>
+
+    <!-- ACTIONS -->
+    <footer class="kblx-row">
+
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">
+        ⊙ Salvar no botão
+      </button>
+
+      <button class="kblx-btn kblx-clear" id="kblx-btn-clear">
+        ⌫ Limpar
+      </button>
+
+    </footer>
+
   </div>
+
 </div>
 
 
@@ -230,7 +311,7 @@ resetIdle();
 
 <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
 
-<div class="bg-gradient-base"></div>
+<div class="bg-gradient-base" style="opacity:0.3;"></div>
   <div id="bg-layer-fixed"></div>
 
   <div id="drawerOverlay" onclick="toggleDrawer()"></div>
