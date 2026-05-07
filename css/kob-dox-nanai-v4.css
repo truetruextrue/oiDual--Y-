@@ -1557,4 +1557,24 @@ img {
 
   -webkit-user-drag: none;
 }
+.symbol-button,
+.symbol-button * {
+  font-family:
+    "Montserrat",
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Helvetica Neue",
+    sans-serif !important;
 
+  font-variant-emoji: text !important;
+
+  -webkit-font-smoothing: antialiased;
+
+  text-rendering: geometricPrecision;
+
+  -webkit-user-select: none;
+  user-select: none;
+
+  -webkit-touch-callout: none;
+}
