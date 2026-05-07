@@ -118,7 +118,8 @@ html, body {
 }
 
 body {
-  font-family: 'Montserrat', sans-serif;
+/*  font-family: 'Montserrat', sans-serif;
+*/ 
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
@@ -133,7 +134,7 @@ body {
 /* ------------------------------------------
    💫 ANIMAÇÕES GLOBAIS
    ------------------------------------------ */
-@keyframes fadeIn {
+@keyframes fadeIns {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -2138,7 +2139,7 @@ border-radius: 50px;
 
   background: rgba(255,255,255,0.05);
   color: var(--text);
-  font-size: 20px;
+
 
   cursor: pointer;
   flex-shrink: 0;
