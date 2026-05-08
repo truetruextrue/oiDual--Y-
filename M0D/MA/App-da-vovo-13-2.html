@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Feira da Vovó Maria Antonieta 🥰🍎</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap');
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0; padding: 0;
+    font-family: 'Quicksand', sans-serif;
+    background: #f9f7f1;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  header {
+    background: #70a288;
+    color: white;
+    text-align: center;
+    padding: 1rem;
+    font-weight: 600;
+    font-size: 1.5rem;
+    letter-spacing: 1.5px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+  nav {
+    display: flex;
+    justify-content: space-around;
+    background: #a9d7b8;
+  }
+  nav button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #3a6351;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-bottom: 3px solid transparent;
+  }
+  nav button[aria-selected="true"] {
+    background: #70a288;
+    color: white;
+    border-bottom-color: #f9f7f1;
+  }
+  nav button:focus {
+    outline: 3px solid #496a54;
+  }
+
+  main {
+    flex: 1;
+    padding: 1rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  section {
+    display: none;
+  }
+  section.active {
+    display: block;
+  }
+
+  /* Feira (lista de botões frutas/verduras etc) */
+  .categoria-container {
+    margin-bottom: 1.2rem;
+  }
+  .categoria-container h2 {
+    margin-bottom: 0.6rem;
+    font-weight: 700;
+    color: #2e5236;
+    border-left: 5px solid #70a288;
+    padding-left: 0.5rem;
+  }
+  .botoes-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  button.item-btn {
+    background: #8fbc8f;
+    border-radius: 25px;
+    border: none;
+    padding: 8px 14px;
+    font-size: 1rem;
+    cursor: pointer;
+    color: #1b361b;
+    user-select: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    white-space: nowrap;
+  }
+  button.item-btn.long {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+  }
+  button.item-btn:hover, button.item-btn:focus {
+    background: #6e956e;
+    color: white;
+    transform: scale(1.05);
+    outline: none;
+  }
+
+  /* Lista de compras */
+  #listaCompras {
+    background: #d3e6d3;
+    padding: 1rem;
+    border-radius: 12px;
+    min-height: 150px;
+  }
+  #listaCompras ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  #listaCompras li {
+    background: #fff;
+    margin-bottom: 8px;
+    border-radius: 10px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    font-size: 1rem;
+  }
+  #listaCompras li span {
+    flex: 1;
+  }
+  .qty-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 10px;
+  }
+  .qty-btn {
+    background: #70a288;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: background-color 0.25s ease;
+  }
+  .qty-btn:hover, .qty-btn:focus {
+    background: #547e56;
+    outline: none;
+  }
+  .qty-input {
+    width: 40px;
+    text-align: center;
+    border: 2px solid #70a288;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2e5236;
+  }
+  .qty-input:focus {
+    outline: 3px solid #496a54;
+  }
+  .remove-btn {
+    background: #e57373;
+    border: none;
+    color: white;
+    font-weight: 900;
+    font-size: 1.3rem;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    transition: background-color 0.25s ease;
+  }
+  .remove-btn:hover, .remove-btn:focus {
+    background: #b84242;
+    outline: none;
+  }
+
+  /* Botões de ação na lista */
+  #acoesLista {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+  #acoesLista button {
+    flex: 1 1 48%;
+    background: #70a288;
+    border: none;
+    color: white;
+    font-weight: 700;
+    font-size: 1.1rem;
+    padding: 10px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+  }
+  #acoesLista button:hover, #acoesLista button:focus {
+    background: #547e56;
+    outline: none;
+  }
+
+  /* Dropdown compartilhar */
+  #dropdownShare {
+    position: absolute;
+    background: white;
+    border: 1px solid #70a288;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: none;
+    right: 10px;
+    top: 100%;
+    z-index: 10;
+    min-width: 160px;
+  }
+  #dropdownShare button {
+    background: #70a288;
+    border: none;
+    width: 100%;
+    color: white;
+    font-weight: 700;
+    padding: 8px 0;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  #dropdownShare button:last-child {
+    margin-bottom: 0;
+  }
+  #dropdownShare button:hover, #dropdownShare button:focus {
+    background: #547e56;
+    outline: none;
+  }
+
+  /* Sucos e receitas */
+  #sucosReceitas {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .juice-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+  .juice-card:hover, .juice-card:focus-within {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+  }
+  .juice-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #2e5236;
+    margin-bottom: 0.3rem;
+  }
+  .juice-benefit {
+    font-style: italic;
+    color: #547e56;
+    margin-bottom: 0.5rem;
+  }
+  .juice-ingredients {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+  .juice-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .juice-actions button {
+    flex: 1 1 48%;
+    background: #70a288;
+    border: none;
+    padding: 8px 10px;
+    color: white;
+    font-weight: 600;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  .juice-actions button:hover, .juice-actions button:focus {
+    background: #547e56;
+    outline: none;
+  }
+
+  /* Form combos personalizados */
+  #formCombos {
+    background: #e6f2e6;
+    padding: 1rem;
+    border-radius: 12px;
+    box-shadow: inset 0 0 10px #c0d6c0;
+    margin-top: 1rem;
+  }
+  #formCombos label {
+    display: block;
+    font-weight: 700;
+    margin-top: 8px;
+    margin-bottom: 4px;
+    color: #2e5236;
+  }
+  #formCombos input[type="text"],
+  #formCombos textarea {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 2px solid #70a288;
+    font-size: 1rem;
+    resize: vertical;
+  }
+  #formCombos textarea {
+    min-height: 60px;
+  }
+  #formCombos button {
+    margin-top: 10px;
+    background: #70a288;
+    border: none;
+    color: white;
+    font-weight: 700;
+    padding: 10px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1.1rem;
+    transition: background-color 0.3s ease;
+  }
+  #formCombos button:hover, #formCombos button:focus {
+    background: #547e56;
+    outline: none;
+  }
+
+  /* Botão gravar voz */
+  #btnRecord, #btnRecordCombo {
+    background: #f9c74f;
+    border: none;
+    border-radius: 50%;
+    width: 56px;
+    height: 56px;
+    font-size: 2rem;
+    cursor: pointer;
+    color: #444;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+    user-select: none;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  #btnRecord.recording, #btnRecordCombo.recording {
+    background: #e63946;
+    color: white;
+    animation: pulse 1.5s infinite;
+    transform: scale(1.1);
+  }
+  #btnRecord:hover:not(.recording), #btnRecordCombo:hover:not(.recording),
+  #btnRecord:focus:not(.recording), #btnRecordCombo:focus:not(.recording) {
+    background: #f4d35e;
+    outline: none;
+    transform: scale(1.05);
+  }
+  @keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(230, 57, 70, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(230, 57, 70, 0); }
+  }
+
+  /* Responsividade */
+  @media (max-width: 480px) {
+    nav button {
+      font-size: 0.9rem;
+      padding: 0.8rem 0;
+    }
+    button.item-btn {
+      font-size: 0.85rem;
+      padding: 6px 12px;
+    }
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      font-size: 1.1rem;
+    }
+    .qty-input {
+      width: 35px;
+      font-size: 0.9rem;
+    }
+    #acoesLista button {
+      font-size: 1rem;
+      padding: 8px 0;
+    }
+    #btnRecord, #btnRecordCombo {
+      width: 48px;
+      height: 48px;
+      font-size: 1.7rem;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>Feira & Receitas da Vovó Maria Antonieta 🥰</header>
+
+<nav role="tablist" aria-label="Navegação principal">
+  <button role="tab" aria-selected="true" id="tabFeira" tabindex="0">Feira 🍎🍅</button>
+  <button role="tab" aria-selected="false" id="tabLista" tabindex="-1">Minha Lista 🛒</button>
+  <button role="tab" aria-selected="false" id="tabSucos" tabindex="-1">Sucos & Receitas 🥤</button>
+</nav>
+
+<main>
+  <!-- Feira -->
+  <section id="sectionFeira" tabindex="-1" class="active" role="tabpanel" aria-labelledby="tabFeira">
+    <div class="categoria-container" aria-label="Frutas">
+      <h2>Frutas 🍎🍌🍇</h2>
+      <div id="frutasOptions" class="botoes-container"></div>
+    </div>
+    <div class="categoria-container" aria-label="Verduras">
+      <h2>Verduras 🥬🥒🥦</h2>
+      <div id="verdurasOptions" class="botoes-container"></div>
+    </div>
+    <div class="categoria-container" aria-label="Legumes">
+      <h2>Legumes 🥔🥕🌽</h2>
+      <div id="legumesOptions" class="botoes-container"></div>
+    </div>
+    <div class="categoria-container" aria-label="Temperos">
+      <h2>Temperos 🌿🌶</h2>
+      <div id="temperosOptions" class="botoes-container"></div>
+    </div>
+
+    <button id="btnRecord" aria-pressed="false" aria-label="Gravar voz para adicionar itens">🎤</button>
+  </section>
+
+  <!-- Lista de Compras -->
+  <section id="sectionLista" tabindex="-1" role="tabpanel" aria-labelledby="tabLista">
+    <div id="listaCompras" aria-live="polite" aria-relevant="additions removals">
+      <ul id="listaUl"></ul>
+    </div>
+    <div id="acoesLista">
+      <button id="btnClear" aria-label="Limpar lista de compras">Limpar Lista</button>
+      <button id="btnSpeak" aria-label="Ouvir lista de compras">Ouvir Lista 🔊</button>
+      <div style="position: relative;">
+        <button id="btnShare" aria-haspopup="true" aria-expanded="false" aria-controls="dropdownShare" aria-label="Compartilhar lista">Compartilhar</button>
+        <div id="dropdownShare" role="menu" aria-hidden="true" tabindex="-1">
+          <button id="exportTxt" role="menuitem">Salvar como TXT</button>
+          <button id="exportMd" role="menuitem">Salvar como Markdown</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Sucos & Receitas -->
+  <section id="sectionSucos" tabindex="-1" role="tabpanel" aria-labelledby="tabSucos">
+    <div id="sucosReceitas">
+      <div id="juiceSuggestions" aria-live="polite"></div>
+
+      <form id="formCombos" aria-label="Adicionar combinação personalizada">
+        <h2>Adicionar Combinação de Suco Personalizada</h2>
+        <label for="comboTitulo">Título do Suco/Receita</label>
+        <input type="text" id="comboTitulo" name="comboTitulo" placeholder="Ex: Suco para Ficar Forte" required />
+        <label for="comboIngredientes">Ingredientes (separados por vírgula)</label>
+        <textarea id="comboIngredientes" name="comboIngredientes" placeholder="Ex: Banana, Morango, Cenoura" required></textarea>
+        <label for="comboBeneficio">Benefício/Descrição (opcional)</label>
+        <textarea id="comboBeneficio" name="comboBeneficio" placeholder="Ex: Fortalece o corpo e dá energia."></textarea>
+        <button type="submit">Salvar Combinação</button>
+      </form>
+
+      <button id="btnRecordCombo" aria-pressed="false" aria-label="Gravar combinação por voz">🎙️</button>
+    </div>
+  </section>
+</main>
+
+<script>
+(() => {
+  // Dados Feira
+  const categorias = {
+    frutas: [
+      "🍎 Maçã", "🍌 Banana", "🍓 Morango", "🍊 Laranja", "🍉 Melancia",
+      "🍇 Uva", "🥭 Manga", "🍍 Abacaxi", "🥝 Kiwi", "🍒 Cereja",
+      "🍑 Pêssego", "🍐 Pera", "🥥 Coco", "🍋 Limão", "🍈 Melão",
+      "🍏 Maçã Verde", "🥭 Manga Palmer", "🍎 Maçã Fuji", "🍓 Morango Doce",
+      "🍇 Uva Itália", "🍉 Melancia Pequena", "🥭 Manga Rosa", "🍍 Abacaxi Pérola",
+      "🍌 Banana Prata", "🍊 Laranja Bahia", "🥝 Kiwi Gold", "🍒 Cereja Vermelha",
+      "🍑 Pêssego Amarelo", "🍐 Pera Rocha", "🥥 Coco Verde", "🍋 Limão Tahiti",
+      "🍈 Melão Cantaloupe", "🍏 Maçã Gala", "🥭 Manga Haden", "🍎 Maçã Verde Granny",
+      "🍓 Morango Silvestre", "🍇 Uva Crimson", "🍉 Melancia Seedless", "🥭 Manga Tommy",
+      "🍍 Abacaxi Smoothie", "🍌 Banana Nanica", "🍊 Laranja Lima", "🥝 Kiwi Pequeno",
+      "🍒 Cereja Orgânica", "🍑 Pêssego Branco", "🍐 Pera Verde"
+    ],
+    verduras: [
+      "🥬 Alface Americana", "🥬 Alface Crespa", "🥬 Alface Romana", "🥒 Pepino",
+      "🥦 Brócolis", "🥬 Couve", "🥒 Abobrinha", "🥦 Couve-flor", "🥕 Cenoura",
+      "🥬 Rúcula", "🥬 Espinafre", "🥒 Chuchu", "🥔 Batata Doce", "🥔 Batata",
+      "🥬 Repolho", "🥬 Acelga", "🥬 Agrião", "🥦 Ervilha Torta", "🥬 Almeirão",
+      "🥬 Mostarda", "🥬 Chicória", "🥦 Jiló", "🥬 Couve Manteiga", "🥒 Maxixe",
+      "🥕 Mandioquinha", "🥦 Nabo", "🥔 Inhame", "🥬 Salsa", "🥬 Cebolinha"
+    ],
+    legumes: [
+      "🌽 Milho Verde", "🌶 Pimenta", "🌶 Pimenta Vermelha", "🧄 Alho", "🧅 Cebola",
+      "🌰 Castanha", "🌰 Amêndoas", "🥔 Batata Inglesa", "🥕 Cenoura Baby",
+      "🌽 Milho Doce", "🌶 Pimenta Dedo de Moça", "🧄 Alho Torrado",
+      "🧅 Cebola Roxa", "🌽 Milho para Pipoca", "🌶 Pimenta Malagueta"
+    ],
+    temperos: [
+      "🌿 Manjericão", "🌿 Orégano", "🌿 Alecrim", "🌿 Coentro", "🌿 Hortelã",
+      "🌿 Salsa", "🌶 Pimenta do Reino", "🌿 Louro", "🌿 Tomilho", "🌿 Cebolinha",
+      "🌿 Cominho", "🌿 Açafrão", "🌿 Gengibre", "🌿 Canela"
+    ]
+  };
+
+  // Estado lista
+  let lista = [];
+
+  // Combos default de sucos e vitaminas
+  const combosDefault = [
+    {
+      titulo: "Suco para Ficar Forte 💪",
+      beneficio: "Fortalece o corpo e aumenta a imunidade.",
+      ingredientes: ["Banana", "Morango", "Laranja", "Mel"]
+    },
+    {
+      titulo: "Vitamina para Foco 🧠",
+      beneficio: "Ajuda a concentração e memória.",
+      ingredientes: ["Abacate", "Mamão", "Linhaça"]
+    },
+    {
+      titulo: "Suco Detox 🍃",
+      beneficio: "Limpa o organismo e aumenta a energia.",
+      ingredientes: ["Couve", "Limão", "Gengibre", "Maçã"]
+    },
+    {
+      titulo: "Suco Anti-Dor 🌿",
+      beneficio: "Alivia dores e inflamações.",
+      ingredientes: ["Abacaxi", "Gengibre", "Cúrcuma", "Limão"]
+    },
+    {
+      titulo: "Vitamina do Café da Manhã ☀️",
+      beneficio: "Deliciosa e nutritiva para começar o dia.",
+      ingredientes: ["Banana", "Morango", "Aveia", "Leite"]
+    },
+    {
+      titulo: "Suco para Energia ⚡",
+      beneficio: "Aumenta a disposição para o dia.",
+      ingredientes: ["Laranja", "Beterraba", "Gengibre", "Mel"]
+    },
+    {
+      titulo: "Suco de Imunidade 🛡️",
+      beneficio: "Protege contra resfriados e gripes.",
+      ingredientes: ["Laranja", "Limão", "Gengibre", "Mel"]
+    },
+  ];
+
+  let combosPersonalizados = [];
+
+  // Elementos DOM
+  const frutasContainer = document.getElementById("frutasOptions");
+  const verdurasContainer = document.getElementById("verdurasOptions");
+  const legumesContainer = document.getElementById("legumesOptions");
+  const temperosContainer = document.getElementById("temperosOptions");
+
+  const listaUl = document.getElementById("listaUl");
+  const btnClear = document.getElementById("btnClear");
+  const btnSpeak = document.getElementById("btnSpeak");
+  const btnShare = document.getElementById("btnShare");
+  const dropdownShare = document.getElementById("dropdownShare");
+  const exportTxt = document.getElementById("exportTxt");
+  const exportMd = document.getElementById("exportMd");
+
+  const juiceSuggestions = document.getElementById("juiceSuggestions");
+  const comboForm = document.getElementById("formCombos");
+  const comboTitulo = document.getElementById("comboTitulo");
+  const comboIngredientes = document.getElementById("comboIngredientes");
+  const comboBeneficio = document.getElementById("comboBeneficio");
+  const btnRecord = document.getElementById("btnRecord");
+  const btnRecordCombo = document.getElementById("btnRecordCombo");
+
+  // Navegação entre abas
+  const tabs = [
+    {btn: document.getElementById("tabFeira"), section: document.getElementById("sectionFeira")},
+    {btn: document.getElementById("tabLista"), section: document.getElementById("sectionLista")},
+    {btn: document.getElementById("tabSucos"), section: document.getElementById("sectionSucos")}
+  ];
+
+  tabs.forEach(({btn, section}) => {
+    btn.addEventListener("click", () => {
+      tabs.forEach(({btn, section}) => {
+        btn.setAttribute("aria-selected", "false");
+        btn.tabIndex = -1;
+        section.classList.remove("active");
+      });
+      btn.setAttribute("aria-selected", "true");
+      btn.tabIndex = 0;
+      section.classList.add("active");
+      section.focus();
+    });
+  });
+
+  // Normalizar string para comparação
+  function normalizeString(str) {
+    return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+  }
+
+  // Falar texto via SpeechSynthesis
+  function falar(texto) {
+    if (!window.speechSynthesis) return;
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel();
+    }
+    const utterance = new SpeechSynthesisUtterance(texto);
+    utterance.lang = "pt-BR";
+    utterance.rate = 1;
+    speechSynthesis.speak(utterance);
+  }
+
+  // Criar botão para cada item da feira
+  function criarBotaoItem(nome) {
+    const btn = document.createElement("button");
+    btn.className = "item-btn";
+    if (nome.length > 12) btn.classList.add("long");
+    btn.textContent = nome;
+    btn.setAttribute("aria-label", `Adicionar ${nome} à lista`);
+    btn.addEventListener("click", () => {
+      adicionarItem(nome);
+    });
+    return btn;
+  }
+
+  // Inicializar Feira
+  function initFoodOptions() {
+    categorias.frutas.forEach(f => frutasContainer.appendChild(criarBotaoItem(f)));
+    categorias.verduras.forEach(v => verdurasContainer.appendChild(criarBotaoItem(v)));
+    categorias.legumes.forEach(l => legumesContainer.appendChild(criarBotaoItem(l)));
+    categorias.temperos.forEach(t => temperosContainer.appendChild(criarBotaoItem(t)));
+  }
+
+  // Adicionar item na lista
+  function adicionarItem(nome) {
+    const index = lista.findIndex(i => normalizeString(i.nome) === normalizeString(nome));
+    if (index === -1) {
+      lista.push({ nome, quantidade: 1 });
+    } else {
+      lista[index].quantidade++;
+    }
+    salvarLocalStorage();
+    atualizarLista();
+    falar(`${nome} adicionado à lista.`);
+    notificar("Item Adicionado", `${nome} foi adicionado à sua lista.`);
+  }
+
+  // Remover item da lista
+  function removerItem(nome) {
+    lista = lista.filter(i => normalizeString(i.nome) !== normalizeString(nome));
+    salvarLocalStorage();
+    atualizarLista();
+    falar(`${nome} removido da lista.`);
+    notificar("Item Removido", `${nome} foi removido da sua lista.`);
+  }
+
+  // Atualizar quantidade de item
+  function atualizarQuantidade(nome, novaQtd) {
+    const item = lista.find(i => normalizeString(i.nome) === normalizeString(nome));
+    if (item) {
+      if (novaQtd < 1) {
+        removerItem(nome);
+      } else {
+        item.quantidade = novaQtd;
+        salvarLocalStorage();
+        atualizarLista();
+        falar(`Quantidade de ${nome} atualizada para ${novaQtd}.`);
+      }
+    }
+  }
+
+  // Atualizar visual da lista
+  function atualizarLista() {
+    listaUl.innerHTML = "";
+    if (lista.length === 0) {
+      const li = document.createElement("li");
+      li.textContent = "Sua lista está vazia. Adicione itens na aba Feira.";
+      li.style.fontStyle = "italic";
+      li.style.color = "#496a54";
+      listaUl.appendChild(li);
+      return;
+    }
+    lista.forEach(({nome, quantidade}) => {
+      const li = document.createElement("li");
+      const spanNome = document.createElement("span");
+      spanNome.textContent = nome;
+      li.appendChild(spanNome);
+
+      const qtyControls = document.createElement("div");
+      qtyControls.className = "qty-controls";
+
+      const btnMenos = document.createElement("button");
+      btnMenos.className = "qty-btn";
+      btnMenos.setAttribute("aria-label", `Diminuir quantidade de ${nome}`);
+      btnMenos.textContent = "−";
+      btnMenos.addEventListener("click", () => {
+        atualizarQuantidade(nome, quantidade - 1);
+      });
+
+      const inputQty = document.createElement("input");
+      inputQty.className = "qty-input";
+      inputQty.type = "number";
+      inputQty.min = "1";
+      inputQty.value = quantidade;
+      inputQty.setAttribute("aria-label", `Quantidade de ${nome}`);
+      inputQty.addEventListener("change", () => {
+        const val = parseInt(inputQty.value, 10);
+        if (isNaN(val) || val < 1) {
+          inputQty.value = quantidade;
+        } else {
+          atualizarQuantidade(nome, val);
+        }
+      });
+
+      const btnMais = document.createElement("button");
+      btnMais.className = "qty-btn";
+      btnMais.setAttribute("aria-label", `Aumentar quantidade de ${nome}`);
+      btnMais.textContent = "+";
+      btnMais.addEventListener("click", () => {
+        atualizarQuantidade(nome, quantidade + 1);
+      });
+
+      qtyControls.appendChild(btnMenos);
+      qtyControls.appendChild(inputQty);
+      qtyControls.appendChild(btnMais);
+      li.appendChild(qtyControls);
+
+      const btnRemover = document.createElement("button");
+      btnRemover.className = "remove-btn";
+      btnRemover.setAttribute("aria-label", `Remover ${nome} da lista`);
+      btnRemover.textContent = "×";
+      btnRemover.addEventListener("click", () => {
+        if (confirm(`Remover ${nome} da lista?`)) {
+          removerItem(nome);
+        }
+      });
+      li.appendChild(btnRemover);
+
+      listaUl.appendChild(li);
+    });
+  }
+
+  // Limpar lista
+  btnClear.addEventListener("click", () => {
+    if (lista.length === 0) {
+      falar("Sua lista já está vazia.");
+      return;
+    }
+    if (confirm("Tem certeza que deseja limpar a lista inteira?")) {
+      lista = [];
+      salvarLocalStorage();
+      atualizarLista();
+      falar("Lista limpa.");
+      notificar("Lista Limpa", "Sua lista de compras foi limpa.");
+    }
+  });
+
+  // Ouvir lista
+  btnSpeak.addEventListener("click", () => {
+    if (lista.length === 0) {
+      falar("Sua lista está vazia.");
+      return;
+    }
+    let texto = "Sua lista de compras contém: ";
+    lista.forEach(({nome, quantidade}, i) => {
+      texto += `${quantidade} de ${nome}`;
+      if (i < lista.length - 1) texto += ", ";
+      else texto += ".";
+    });
+    falar(texto);
+  });
+
+  // Compartilhar lista (dropdown)
+  btnShare.addEventListener("click", () => {
+    const isExpanded = btnShare.getAttribute("aria-expanded") === "true";
+    btnShare.setAttribute("aria-expanded", String(!isExpanded));
+    dropdownShare.style.display = isExpanded ? "none" : "block";
+    if (!isExpanded) {
+      dropdownShare.focus();
+    }
+  });
+
+  // Fecha dropdown ao clicar fora
+  document.addEventListener("click", e => {
+    if (!btnShare.contains(e.target) && !dropdownShare.contains(e.target)) {
+      dropdownShare.style.display = "none";
+      btnShare.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  // Exportar lista TXT
+  exportTxt.addEventListener("click", () => {
+    if (lista.length === 0) {
+      alert("Sua lista está vazia.");
+      return;
+    }
+    const texto = lista.map(i => `${i.quantidade}x ${i.nome}`).join("\n");
+    baixarArquivo("lista-da-vovo.txt", texto);
+    dropdownShare.style.display = "none";
+    btnShare.setAttribute("aria-expanded", "false");
+    falar("Arquivo TXT gerado para download.");
+  });
+
+  // Exportar lista Markdown
+  exportMd.addEventListener("click", () => {
+    if (lista.length === 0) {
+      alert("Sua lista está vazia.");
+      return;
+    }
+    const texto = lista.map(i => `- [ ] ${i.quantidade}x ${i.nome}`).join("\n");
+    baixarArquivo("lista-da-vovo.md", texto);
+    dropdownShare.style.display = "none";
+    btnShare.setAttribute("aria-expanded", "false");
+    falar("Arquivo Markdown gerado para download.");
+  });
+
+  function baixarArquivo(nomeArquivo, conteudo) {
+    const blob = new Blob([conteudo], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = nomeArquivo;
+    a.style.display = "none";
+    document.body.appendChild(a);
+    a.click();
+    URL.revokeObjectURL(url);
+    a.remove();
+  }
+
+  // Renderizar combos (sucos & receitas)
+  function renderSugestoesSucos() {
+    juiceSuggestions.innerHTML = "";
+    [...combosDefault, ...combosPersonalizados].forEach(({titulo, beneficio, ingredientes}, idx) => {
+      const card = document.createElement("article");
+      card.className = "juice-card";
+      card.tabIndex = 0;
+
+      const h3 = document.createElement("h3");
+      h3.className = "juice-title";
+      h3.textContent = titulo;
+      card.appendChild(h3);
+
+      if (beneficio) {
+        const pBeneficio = document.createElement("p");
+        pBeneficio.className = "juice-benefit";
+        pBeneficio.textContent = beneficio;
+        card.appendChild(pBeneficio);
+      }
+      const pIng = document.createElement("p");
+      pIng.className = "juice-ingredients";
+      pIng.textContent = "Ingredientes: " + ingredientes.join(", ");
+      card.appendChild(pIng);
+
+      const acoes = document.createElement("div");
+      acoes.className = "juice-actions";
+
+      const btnAdicionar = document.createElement("button");
+      btnAdicionar.type = "button";
+      btnAdicionar.textContent = "Adicionar ingredientes à lista 🛒";
+      btnAdicionar.addEventListener("click", () => {
+        ingredientes.forEach(nome => {
+          // Procurar item no catálogo com emoji para consistência
+          const item = procurarItemPorNome(nome.toLowerCase()) || nome;
+          adicionarItem(item);
+        });
+        falar(`Ingredientes do suco ${titulo} adicionados à lista.`);
+      });
+      acoes.appendChild(btnAdicionar);
+
+      const btnOuvir = document.createElement("button");
+      btnOuvir.type = "button";
+      btnOuvir.textContent = "Ouvir receita 🔊";
+      btnOuvir.addEventListener("click", () => {
+        let texto = `${titulo}. Benefícios: ${beneficio || "Nenhum descrito"}. Ingredientes: ${ingredientes.join(", ")}.`;
+        falar(texto);
+      });
+      acoes.appendChild(btnOuvir);
+
+      // Para combos personalizados, botão remover
+      if (idx >= combosDefault.length) {
+        const btnRemoverCombo = document.createElement("button");
+        btnRemoverCombo.type = "button";
+        btnRemoverCombo.textContent = "Remover 🗑️";
+        btnRemoverCombo.style.backgroundColor = "#e57373";
+        btnRemoverCombo.style.marginLeft = "8px";
+        btnRemoverCombo.addEventListener("click", () => {
+          if (confirm(`Remover a combinação "${titulo}"?`)) {
+            combosPersonalizados.splice(idx - combosDefault.length, 1);
+            salvarCombos();
+            renderSugestoesSucos();
+            falar(`Combinação ${titulo} removida.`);
+          }
+        });
+        acoes.appendChild(btnRemoverCombo);
+      }
+
+      card.appendChild(acoes);
+      juiceSuggestions.appendChild(card);
+    });
+  }
+
+  // Procurar nome com emoji correto nas categorias
+  function procurarItemPorNome(nomeBusca) {
+    for (const cat in categorias) {
+      const achado = categorias[cat].find(item => normalizeString(item).includes(normalizeString(nomeBusca)));
+      if (achado) return achado;
+    }
+    return null;
+  }
+
+  // Salvar lista e combos no localStorage
+  function salvarLocalStorage() {
+    localStorage.setItem("listaVovo", JSON.stringify(lista));
+  }
+  function carregarLocalStorage() {
+    const dados = localStorage.getItem("listaVovo");
+    if (dados) {
+      try {
+        lista = JSON.parse(dados);
+      } catch {
+        lista = [];
+      }
+    }
+  }
+  function salvarCombos() {
+    localStorage.setItem("combosVovo", JSON.stringify(combosPersonalizados));
+  }
+  function carregarCombos() {
+    const dados = localStorage.getItem("combosVovo");
+    if (dados) {
+      try {
+        combosPersonalizados = JSON.parse(dados);
+      } catch {
+        combosPersonalizados = [];
+      }
+    }
+  }
+
+  // Gravação por voz (Web Speech API)
+  let recognition;
+  let recognizing = false;
+  if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+    recognition.lang = "pt-BR";
+    recognition.interimResults = false;
+    recognition.continuous = false;
+
+    recognition.onstart = () => {
+      recognizing = true;
+      btnRecord.classList.add("recording");
+      btnRecord.setAttribute("aria-pressed", "true");
+      falar("Gravação iniciada. Fale agora.");
+    };
+    recognition.onend = () => {
+      recognizing = false;
+      btnRecord.classList.remove("recording");
+      btnRecord.setAttribute("aria-pressed", "false");
+      falar("Gravação finalizada.");
+    };
+    recognition.onerror = (e) => {
+      recognizing = false;
+      btnRecord.classList.remove("recording");
+      btnRecord.setAttribute("aria-pressed", "false");
+      alert("Erro na gravação: " + e.error);
+    };
+    recognition.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      processarVozParaLista(transcript);
+    };
+  } else {
+    btnRecord.disabled = true;
+    btnRecord.title = "Seu navegador não suporta gravação por voz.";
+  }
+
+  // Gravação combos personalizada (segunda gravação)
+  let recognitionCombo;
+  let recognizingCombo = false;
+  if (recognition) {
+    recognitionCombo = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    recognitionCombo.lang = "pt-BR";
+    recognitionCombo.interimResults = false;
+    recognitionCombo.continuous = false;
+
+    recognitionCombo.onstart = () => {
+      recognizingCombo = true;
+      btnRecordCombo.classList.add("recording");
+      btnRecordCombo.setAttribute("aria-pressed", "true");
+      falar("Gravação de combinação iniciada. Fale o título, ingredientes e benefícios.");
+    };
+    recognitionCombo.onend = () => {
+      recognizingCombo = false;
+      btnRecordCombo.classList.remove("recording");
+      btnRecordCombo.setAttribute("aria-pressed", "false");
+      falar("Gravação de combinação finalizada.");
+    };
+    recognitionCombo.onerror = (e) => {
+      recognizingCombo = false;
+      btnRecordCombo.classList.remove("recording");
+      btnRecordCombo.setAttribute("aria-pressed", "false");
+      alert("Erro na gravação: " + e.error);
+    };
+    recognitionCombo.onresult = (e) => {
+      const transcript = e.results[0][0].transcript;
+      processarVozParaCombo(transcript);
+    };
+  } else {
+    btnRecordCombo.disabled = true;
+    btnRecordCombo.title = "Seu navegador não suporta gravação por voz.";
+  }
+
+  btnRecord.addEventListener("click", () => {
+    if (recognizing) {
+      recognition.stop();
+      return;
+    }
+    recognition.start();
+  });
+
+  btnRecordCombo.addEventListener("click", () => {
+    if (recognizingCombo) {
+      recognitionCombo.stop();
+      return;
+    }
+    recognitionCombo.start();
+  });
+
+  // Processa voz para adicionar itens na lista
+  function processarVozParaLista(texto) {
+    // Simples split por "e", "virgula", "ponto"
+    let partes = texto.split(/,| e |\.|;/gi);
+    let adicionados = [];
+    partes.forEach(p => {
+      const item = procurarItemPorNome(p.trim());
+      if (item) {
+        adicionarItem(item);
+        adicionados.push(item);
+      }
+    });
+    if (adicionados.length === 0) {
+      falar("Nenhum item válido reconhecido na sua fala.");
+    } else {
+      falar(`Adicionados ${adicionados.length} itens à sua lista.`);
+    }
+  }
+
+  // Processa voz para criar combo personalizado
+  // Estrutura esperada: "Suco para ficar forte: banana, morango e laranja. Benefício: fortalece o corpo e a imunidade."
+  function processarVozParaCombo(texto) {
+    // Simplificação: separa título até dois pontos, depois ingredientes até ponto, depois benefício opcional
+    let titulo = "", ingredientes = [], beneficio = "";
+    const parts = texto.split(/:|benefício|beneficio/gi);
+    if (parts.length >= 2) {
+      titulo = parts[0].trim();
+      const ingPart = parts[1].split(/[.]/)[0];
+      ingredientes = ingPart.split(/,| e /gi).map(s => s.trim()).filter(Boolean);
+      if (parts.length >= 3) {
+        beneficio = parts[2].trim();
+      }
+      if (!titulo || ingredientes.length === 0) {
+        alert("Não foi possível extrair título ou ingredientes da fala.");
+        return;
+      }
+      combosPersonalizados.push({ titulo, ingredientes, beneficio });
+      salvarCombos();
+      renderSugestoesSucos();
+      falar(`Combinação ${titulo} adicionada com sucesso.`);
+      comboForm.reset();
+    } else {
+      alert("Formato de fala inválido. Use: Título: ingrediente1, ingrediente2 e ingrediente3. Benefício: descrição.");
+    }
+  }
+
+  // Form combo submit
+  comboForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const titulo = comboTitulo.value.trim();
+    const ingredientes = comboIngredientes.value.split(",").map(i => i.trim()).filter(Boolean);
+    const beneficio = comboBeneficio.value.trim();
+
+    if (!titulo || ingredientes.length === 0) {
+      alert("Preencha título e ingredientes corretamente.");
+      return;
+    }
+    combosPersonalizados.push({ titulo, ingredientes, beneficio });
+    salvarCombos();
+    renderSugestoesSucos();
+    falar(`Combinação ${titulo} adicionada.`);
+    comboForm.reset();
+  });
+
+  // Notificações Web
+  function notificar(titulo, corpo) {
+    if (!("Notification" in window)) return;
+    if (Notification.permission === "granted") {
+      new Notification(titulo, { body: corpo, icon: "https://cdn-icons-png.flaticon.com/512/4159/4159067.png" });
+    } else if (Notification.permission !== "denied") {
+      Notification.requestPermission().then(perm => {
+        if (perm === "granted") {
+          new Notification(titulo, { body: corpo, icon: "https://cdn-icons-png.flaticon.com/512/4159/4159067.png" });
+        }
+      });
+    }
+  }
+
+  // Inicialização
+  function init() {
+    carregarLocalStorage();
+    carregarCombos();
+    initFoodOptions();
+    atualizarLista();
+    renderSugestoesSucos();
+    falar("Bem-vindo ao app da Vovó Maria Antonieta. Seja muito bem-vindo!");
+  }
+
+  // Invoca init ao carregar
+  window.addEventListener("load", init);
+
+  // Fechar dropdown com ESC
+  dropdownShare.addEventListener("keydown", e => {
+    if (e.key === "Escape") {
+      dropdownShare.style.display = "none";
+      btnShare.setAttribute("aria-expanded", "false");
+      btnShare.focus();
+    }
+  });
+
+  // Fechar dropdown quando perder foco (tab)
+  dropdownShare.addEventListener("focusout", e => {
+    if (!dropdownShare.contains(e.relatedTarget)) {
+      dropdownShare.style.display = "none";
+      btnShare.setAttribute("aria-expanded", "false");
+    }
+  });
+
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>App da Vovó</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: 'Roboto', sans-serif;
+        }
+
+        .phone-frame {
+            width: 375px;
+            height: 812px;
+            background-color: #2e5c46;
+            border-radius: 40px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+        }
+
+        .app-container {
+            background-color: #f7f9f2;
+            border-radius: 25px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .app-title {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .app-title h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2e5c46;
+            margin: 0;
+        }
+
+        .app-title p {
+            font-size: 16px;
+            color: #555;
+            margin: 0;
+        }
+
+        .header-icon {
+            width: 30px;
+            height: 30px;
+            background-color: #2e5c46;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .header-icon.left {
+            margin-right: 15px;
+        }
+        
+        .header-icon.right {
+            margin-left: 15px;
+        }
+
+        .tabs {
+            display: flex;
+            background-color: #e0e8d9;
+            border-radius: 20px;
+            padding: 5px;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            flex-grow: 1;
+            text-align: center;
+            padding: 10px;
+            border-radius: 15px;
+            font-weight: 700;
+            color: #555;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .tab.active {
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            color: #2e5c46;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: none; /* Firefox */
+        }
+
+        .content-grid::-webkit-scrollbar {
+            display: none; /* Chrome, Safari, Opera */
+        }
+
+        .grid-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .item-image {
+            width: 60px;
+            height: 60px;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 5px;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .item-name {
+            font-size: 14px;
+            color: #555;
+            font-weight: 400;
+        }
+
+        /* Simplified background images for demonstration */
+        .banana { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍌</text></svg>'); }
+        .apple { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍎</text></svg>'); }
+        .peach { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍑</text></svg>'); }
+        .pear { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍐</text></svg>'); }
+        .orange { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍊</text></svg>'); }
+        .grape { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍇</text></svg>'); }
+        .strawberry { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍓</text></svg>'); }
+        .cherry { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍒</text></svg>'); }
+        .pineapple { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍍</text></svg>'); }
+        .lemon { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍋</text></svg>'); }
+        .kiwi { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🥝</text></svg>'); }
+        .tomato { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🍅</text></svg>'); }
+        .carrot { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🥕</text></svg>'); }
+        .pepper { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🫑</text></svg>'); }
+        .beet { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🫚</text></svg>'); } /* Using ginger for a beetroot look-alike for simplicity */
+        .lettuce { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🥬</text></svg>'); }
+        .spinach { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🌱</text></svg>'); } /* Using sprout for spinach look-alike */
+        .broccoli { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🥦</text></svg>'); }
+        .cauliflower { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🪷</text></svg>'); } /* Using lotus for cauliflower look-alike */
+        .onion { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🧅</text></svg>'); }
+        .potato { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🥔</text></svg>'); }
+        .cilantro { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🌿</text></svg>'); } /* Using herb for cilantro look-alike */
+        .pumpkin { background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y="90" font-size="90">🎃</text></svg>'); }
+
+
+        .footer {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            gap: 15px;
+        }
+
+        .button {
+            flex-grow: 1;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .button.voice {
+            background-color: #2e5c46;
+            color: #fff;
+        }
+        
+        .button.voice i {
+            margin-right: 10px;
+        }
+
+        .button.add {
+            background-color: #e0e8d9;
+            color: #2e5c46;
+            border: 2px dashed #2e5c46;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <div class="app-container">
+            <div class="header">
+                <div class="header-icon left">💬</div>
+                <div class="app-title">
+                    <h1>App da Vovó</h1>
+                    <p>Maria Antonieta</p>
+                </div>
+                <div class="header-icon right">⚙️</div>
+            </div>
+
+            <div class="tabs">
+                <div class="tab active">Feira</div>
+                <div class="tab">Minha Lista</div>
+                <div class="tab">Sucos & Receita</div>
+            </div>
+
+            <div class="content-grid">
+                <div class="grid-item">
+                    <div class="item-image banana"></div>
+                    <span class="item-name">Banana</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image apple"></div>
+                    <span class="item-name">Maçã</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image peach"></div>
+                    <span class="item-name">Pêssego</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image pear"></div>
+                    <span class="item-name">Pera</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image orange"></div>
+                    <span class="item-name">Laranja</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image grape"></div>
+                    <span class="item-name">Uva</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image strawberry"></div>
+                    <span class="item-name">Morango</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image cherry"></div>
+                    <span class="item-name">Cereja</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image pineapple"></div>
+                    <span class="item-name">Abacaxi</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image pineapple"></div>
+                    <span class="item-name">Abacaxi</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image lemon"></div>
+                    <span class="item-name">Limão</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image kiwi"></div>
+                    <span class="item-name">Limão</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image tomato"></div>
+                    <span class="item-name">Tomate</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image carrot"></div>
+                    <span class="item-name">Cenoura</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image pepper"></div>
+                    <span class="item-name">Pimentão</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image beet"></div>
+                    <span class="item-name">Beterraba</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image lettuce"></div>
+                    <span class="item-name">Alface</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image spinach"></div>
+                    <span class="item-name">Espinafre</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image broccoli"></div>
+                    <span class="item-name">Brócolis</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image cauliflower"></div>
+                    <span class="item-name">Couve-</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image onion"></div>
+                    <span class="item-name">Cebola</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image potato"></div>
+                    <span class="item-name">Batata</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image cilantro"></div>
+                    <span class="item-name">Adentra</span>
+                </div>
+                <div class="grid-item">
+                    <div class="item-image pumpkin"></div>
+                    <span class="item-name">Abobora</span>
+                </div>
+            </div>
+
+            <div class="footer">
+                <div class="button voice">
+                    <i>🎙️</i>
+                    <span>Gravar voz</span>
+                </div>
+                <div class="button add">
+                    <i>+</i>
+                    <span>Adicionar</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
