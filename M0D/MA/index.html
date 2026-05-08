@@ -1,572 +1,776 @@
- <!-- ========================================== -->
-  <!-- KODUX DEV PANEL IMPLEMENTATION (UI)        -->
-  <!-- ========================================== -->
-  
-  <!DOCTYPE html>
-<html><head>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f4ef" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="500 Receitas para Diabéticos" />
+  <meta name="application-name" content="500 Receitas para Diabéticos" />
+  <title>🍰 500 Receitas de Sobremesas para Diabéticos</title>
+  <style>
+    :root{
+      --bg:#f7f4ef;
+      --bg2:#ffffff;
+      --card:#ffffff;
+      --line:#e7ded0;
+      --text:#1f2430;
+      --muted:#5d6677;
+      --accent:#c28a3d;
+      --accent2:#8c6a2f;
+      --soft:#fbfaf7;
+      --shadow:0 18px 40px rgba(31,36,48,.08);
+    }
 
-<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<link rel="manifest" href="manifest.json"> <meta name="theme-color" content="#05070a"> <link rel="apple-touch-icon" href="icon-192.png">
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(194,138,61,.12), transparent 25%),
+        radial-gradient(circle at top right, rgba(140,106,47,.08), transparent 22%),
+        linear-gradient(180deg, #fffdf9, var(--bg));
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+      overscroll-behavior: none;
+    }
 
+    body {
+      position: fixed;
+      inset: 0;
+    }
 
-<link rel="stylesheet" href="./css/main.css"></head><body><button id="dev-btn" onclick="KDevPanel.toggle()" class="fixed bottom-6 left-6 z-[99998] bg-black/80 backdrop-blur-xl border border-white/10 text-white/70 hover:text-white p-3 rounded-2xl shadow-2xl transition-all hover:scale-105 hover:border-blue-500/50 group flex items-center gap-2">
+    a { color: inherit; }
+    button { font: inherit; }
+
+    .grid {
+      position: fixed;
+      inset: 0;
+      width: 300%;
+      height: 300%;
+      display: grid;
+      grid-template-columns: repeat(3, 33.3333%);
+      grid-template-rows: repeat(3, 33.3333%);
+      transition: transform .55s cubic-bezier(.25,.85,.35,1);
+      will-change: transform;
+    }
+
+    .screen {
+      width: 100vw;
+      height: 100vh;
+      overflow-y: auto;
+      overflow-x: hidden;
+      position: relative;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.82), rgba(255,255,255,.96)),
+        radial-gradient(circle at 20% 10%, rgba(194,138,61,.12), transparent 18%);
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-y: contain;
+    }
+
+    .screen::-webkit-scrollbar { width: 5px; }
+    .screen::-webkit-scrollbar-track { background: transparent; }
+    .screen::-webkit-scrollbar-thumb { background: rgba(194,138,61,.55); border-radius: 999px; }
+
+    .inner {
+      min-height: 100%;
+      padding: 30px 18px 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .wrap {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+    }
+
+    .hero {
+      text-align: center;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(194,138,61,.10);
+      border: 1px solid rgba(194,138,61,.20);
+      color: var(--accent2);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    h1, h2 {
+      line-height: .94;
+      letter-spacing: -.04em;
+    }
+
+    .title {
+      font-size: clamp(2.4rem, 7vw, 6.8rem);
+      font-weight: 900;
+      margin-top: 18px;
+    }
+
+    .subtitle {
+      font-size: clamp(1.9rem, 4.5vw, 3.8rem);
+      font-weight: 900;
+    }
+
+    .lead {
+      font-size: clamp(1rem, 2.8vw, 1.15rem);
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+    }
+
+    .stack {
+      display: grid;
+      gap: 18px;
+    }
+
+    .grid-2, .grid-3 {
+      display: grid;
+      gap: 16px;
+    }
+
+    @media (min-width: 768px) {
+      .grid-2 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .box {
+      padding: 22px;
+      border-radius: 22px;
+      background: #fff;
+      border: 1px solid #ece4d7;
+      box-shadow: 0 10px 24px rgba(31,36,48,.05);
+    }
+
+    .box h3 {
+      font-size: 1.04rem;
+      margin-bottom: 10px;
+      color: var(--text);
+    }
+
+    .box p, .box li, .mini, .note {
+      color: var(--muted);
+      line-height: 1.7;
+      font-size: .98rem;
+    }
+
+    .list {
+      padding-left: 18px;
+      display: grid;
+      gap: 8px;
+    }
+
+    .price {
+      font-size: clamp(1.9rem, 6vw, 4rem);
+      font-weight: 900;
+      color: var(--text);
+      letter-spacing: -.05em;
+    }
+    .price strong { color: var(--accent); }
+
+    .btn {
+      appearance: none;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px 22px;
+      border-radius: 999px;
+      font-weight: 800;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+      text-align: center;
+      box-shadow: 0 10px 24px rgba(31,36,48,.08);
+    }
+
+    .btn:hover { transform: translateY(-1px) scale(1.01); }
+    .btn-primary {
+      background: linear-gradient(180deg, #ffffff, #f4efe6);
+      color: var(--text);
+      border: 1px solid #e7ded0;
+    }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #d8d0c3;
+      color: var(--text);
+      box-shadow: none;
+    }
+    .btn-whats {
+      background: #25D366;
+      color: #fff;
+      box-shadow: 0 10px 26px rgba(37,211,102,.24);
+    }
+
+    .footer-note {
+      color: rgba(31,36,48,.58);
+      font-size: .82rem;
+      line-height: 1.6;
+    }
+
+    .nav-matrix {
+      position: fixed;
+      left: 50%;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      transform: translateX(-50%);
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(194,138,61,.16);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      z-index: 50;
+      box-shadow: 0 14px 30px rgba(31,36,48,.08);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: rgba(31,36,48,.20);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+      cursor: pointer;
+    }
+    .dot.active {
+      background: var(--accent);
+      transform: scale(1.5);
+      box-shadow: 0 0 12px rgba(194,138,61,.45);
+    }
+
+    .hint {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 60;
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(31,36,48,.34);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .tagline {
+      font-size: clamp(1.1rem, 3vw, 1.45rem);
+      line-height: 1.75;
+      color: var(--muted);
+      max-width: 820px;
+    }
+
+    .accent { color: var(--accent); }
+    .accent-bg {
+      background: linear-gradient(180deg, rgba(194,138,61,.11), rgba(194,138,61,.05));
+      border: 1px solid rgba(194,138,61,.18);
+    }
+
+    .divider {
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(194,138,61,.22), transparent);
+      margin: 10px 0;
+    }
+
+    .callout {
+      padding: 22px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, #fff, #fcf8f2);
+      border: 1px solid #eadfcf;
+      box-shadow: 0 14px 30px rgba(31,36,48,.06);
+    }
+
+    .muted-topline {
+      font-size: .78rem;
+      text-transform: uppercase;
+      letter-spacing: .18em;
+      color: rgba(31,36,48,.42);
+      font-weight: 800;
+    }
+
+    .small-strong {
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .recipe-title {
+      font-size: clamp(1.8rem, 4.6vw, 3rem);
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .recipe-step {
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid #ece4d7;
+      background: #fff;
+    }
+
+    @media (max-width: 720px) {
+      .inner { padding: 22px 14px 116px; }
+      .nav-matrix { gap: 8px; padding: 9px 12px; }
+      .dot { width: 9px; height: 9px; }
+    }
+  </style>
 </head>
- <body>
- <i data-lucide="terminal" class="w-5 h-5 group-hover:text-blue-400 transition-colors"></i>
-    <span class="text-[10px] font-mono font-bold uppercase tracking-widest hidden md:block">Dev Panel</span>
-  </button>
+<body>
+  <div class="hint">SWIPE • SETAS • TOQUE</div>
+  <div class="grid" id="grid"></div>
+  <div class="nav-matrix" id="navMatrix"></div>
 
-  <!-- Panel Drawer -->
-  <div id="dev-panel" class="fixed inset-y-0 left-0 w-[90%] md:w-[420px] bg-[#050505]/95 backdrop-blur-3xl border-r border-white/10 z-[99999] transform -translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col shadow-[20px_0_50px_rgba(0,0,0,0.5)]">
-     
-     <!-- Header -->
-     <div class="p-6 border-b border-white/5 flex justify-between items-center bg-white/[0.02]">
-         <div>
-             <h3 class="text-white font-display font-bold tracking-widest uppercase text-xs flex items-center gap-2">
-                <i data-lucide="cpu" class="w-4 h-4 text-blue-500"></i> Fusion DevOS
-             </h3>
-             <p class="text-[9px] text-white/30 font-mono mt-1">Inspeção de Assets &amp; Variáveis</p>
-         </div>
-         <button onclick="KDevPanel.toggle()" class="text-white/30 hover:text-white bg-white/5 p-2 rounded-lg transition-colors"><i data-lucide="x" class="w-4 h-4"></i></button>
-     </div>
-     
-     <!-- Content -->
-     <div class="p-6 flex-1 overflow-y-auto dev-scroll space-y-8">
-         
-         <!-- Theme Variables -->
-         <div>
-             <h4 class="text-[10px] uppercase text-white/40 font-bold tracking-[0.2em] mb-4 flex items-center gap-2">
-                 <i data-lucide="palette" class="w-3 h-3"></i> Variáveis CSS Globais
-             </h4>
-             <div class="space-y-3 bg-white/[0.02] p-4 rounded-xl border border-white/5">
-                 
-                 <div class="flex justify-between items-center group">
-                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--bg (Fundo Topo)</span>
-                     <div class="flex items-center gap-2">
-                         <span id="val--bg" class="text-[9px] text-white/30 font-mono">#050505</span>
-                         <input type="color" value="#050505" oninput="KDevPanel.updateVar('--bg', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
-                     </div>
-                 </div>
-                 
-                 <div class="flex justify-between items-center group">
-                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--bg-dark (Fundo Base)</span>
-                     <div class="flex items-center gap-2">
-                         <span id="val--bg-dark" class="text-[9px] text-white/30 font-mono">#000000</span>
-                         <input type="color" value="#000000" oninput="KDevPanel.updateVar('--bg-dark', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
-                     </div>
-                 </div>
-                 
-                 <div class="flex justify-between items-center group">
-                     <span class="text-[10px] font-mono text-white/70 group-hover:text-white transition-colors">--active-color</span>
-                     <div class="flex items-center gap-2">
-                         <span id="val--active-color" class="text-[9px] text-white/30 font-mono">#3b82f6</span>
-                         <input type="color" value="#3b82f6" oninput="KDevPanel.updateVar('--active-color', this.value)" class="w-6 h-6 rounded cursor-pointer bg-transparent border-none outline-none">
-                     </div>
-                 </div>
-                 
-             </div>
-         </div>
-
-         <!-- Active Links/Scripts -->
-         <div>
-             <div class="flex justify-between items-center mb-4">
-                 <h4 class="text-[10px] uppercase text-white/40 font-bold tracking-[0.2em] flex items-center gap-2">
-                     <i data-lucide="link" class="w-3 h-3"></i> Recursos (Links &amp; Scripts)
-                 </h4>
-                 <button onclick="KDevPanel.scan()" class="text-blue-400 hover:text-white transition p-1"><i data-lucide="refresh-cw" class="w-3 h-3"></i></button>
-             </div>
-             
-             <!-- Add New Resource -->
-             <div class="flex gap-2 mb-4">
-                 <select id="dev-new-type" class="bg-white/5 border border-white/10 rounded-lg text-[10px] text-white px-2 outline-none">
-                     <option value="css">CSS</option>
-                     <option value="js">JS</option>
-                 </select>
-                 <input id="dev-new-url" type="text" placeholder="https://..." class="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-[10px] text-white outline-none focus:border-blue-500/50">
-                 <button onclick="KDevPanel.addResource()" class="bg-blue-500/20 text-blue-400 px-3 rounded-lg border border-blue-500/30 hover:bg-blue-500/40 transition">
-                     <i data-lucide="plus" class="w-3 h-3"></i>
-                 </button>
-             </div>
-
-             <!-- Resources List -->
-             <div id="dev-resources-list" class="space-y-2">
-                 <!-- Injected by JS -->
-             </div>
-         </div>
-
-     </div>
-     
-     <!-- Footer Controls -->
-     <div class="p-6 border-t border-white/5 bg-black/50">
-         <button onclick="KDevPanel.exportHTML()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-3 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all flex items-center justify-center gap-2 shadow-[0_0_15px_rgba(37,99,235,0.3)]">
-             <i data-lucide="download" class="w-4 h-4"></i> Exportar HTML Final
-         </button>
-         <p class="text-center text-[8px] text-white/30 mt-3 font-mono">O painel será removido automaticamente do código exportado.</p>
-     </div>
-  </div>
-
-
-  <!-- ORIGINAL SCRIPTS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://unpkg.com/lucide@latest"></script>
-  
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0B.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-1.js"></script>
-  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0K.js"></script>
-
-  <!-- ========================================== -->
-  <!-- KODUX DEV PANEL IMPLEMENTATION (LOGIC)     -->
-  <!-- ========================================== -->
   <script>
-    const KDevPanel = {
-        isOpen: false,
-        resources: [],
-        
-        init() {
-            // Initialize lucide icons if not already done by main scripts
-            if (window.lucide) lucide.createIcons();
-            this.scan();
+    const waLink = "https://wa.me/55SEUNUMEROAQUI?text=Quero%20receber%20as%20500%20receitas%20de%20sobremesas%20para%20diab%C3%A9ticos";
+
+    const screensData = [
+      [
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap hero stack">
+                <span class="chip">🍰 Oferta especial</span>
+                <h1 class="title">500 Receitas de Sobremesas para Diabéticos</h1>
+                <p class="lead">
+                  Coma sem medo e sem erro! Receitas fáceis, práticas e seguras para o dia a dia. Receba antes, pague depois. Apenas R$ 9,90.
+                </p>
+
+                <div class="panel accent-bg" style="padding:24px;">
+                  <div class="price">Apenas <strong>R$ 9,90</strong></div>
+                  <p class="mini" style="margin-top:10px;">Oferta por tempo limitado • Receita leve, prática e organizada para a rotina</p>
+                </div>
+
+                <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top:8px;">
+                  <a class="btn btn-whats" href="${waLink}" target="_blank" rel="noopener">Quero receber no WhatsApp</a>
+                  <button class="btn btn-secondary" onclick="navigateTo(1,1)">Ver o conteúdo</button>
+                </div>
+
+                <p class="footer-note">
+                  Este material tem finalidade informativa e culinária. Ele não substitui orientação médica ou nutricional individual.
+                </p>
+              </div>
+            </div>
+          `
         },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">O que você vai encontrar</div>
+                <h2 class="subtitle">Receitas para aproveitar doces com mais equilíbrio</h2>
+                <p class="tagline">
+                  Um material completo com receitas de sobremesas para diabéticos, pensado para quem quer aproveitar doces com mais equilíbrio, praticidade e sabor no dia a dia.
+                </p>
 
-        toggle() {
-            const panel = document.getElementById('dev-panel');
-            this.isOpen = !this.isOpen;
-            if(this.isOpen) {
-                this.scan(); // Rescan dom for dynamic injected elements
-                panel.classList.remove('-translate-x-full');
-            } else {
-                panel.classList.add('-translate-x-full');
-            }
+                <div class="grid-2">
+                  <div class="box">
+                    <h3>Receitas macias</h3>
+                    <p>Receitas macias, saborosas e com opções mais leves para a rotina.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Tortas doces</h3>
+                    <p>Tortas doces pensadas para quem busca equilíbrio sem abrir mão do sabor.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Sobremesas cremosas</h3>
+                    <p>Sobremesas cremosas, práticas e fáceis de preparar.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Mais variedade</h3>
+                    <p>Ideias para variar o cardápio com mais segurança e praticidade.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
         },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Destaques do conteúdo</div>
+                <h2 class="subtitle">Categorias principais do guia</h2>
 
-        updateVar(varName, value) {
-            document.documentElement.style.setProperty(varName, value);
-            // Update the display text next to the color picker
-            const displaySpan = document.getElementById(`val${varName}`);
-            if(displaySpan) displaySpan.innerText = value;
-        },
-
-        scan() {
-            this.resources = [];
-            // Catch all stylesheets and external scripts
-            const elements = document.querySelectorAll('link[rel="stylesheet"], script[src]');
-            
-            elements.forEach((el, index) => {
-                const type = el.tagName.toLowerCase() === 'link' ? 'css' : 'js';
-                const url = type === 'css' ? el.href : el.src;
-                
-                // Exclude tailwind/lucide from easy accidental deletion, but keep them in list
-                const isCore = url.includes('tailwindcss') || url.includes('lucide');
-                const isKodux = url.includes('kodux');
-                
-                // To safely toggle CSS without destroying it, we use disabled property.
-                // For JS it's harder, but we'll manipulate the DOM node.
-                let active = true;
-                if(type === 'css') active = !el.disabled;
-                else active = el.getAttribute('data-dev-disabled') !== 'true';
-
-                this.resources.push({ el, type, url, active, isCore, isKodux });
-            });
-            
-            this.render();
-        },
-
-        render() {
-            const container = document.getElementById('dev-resources-list');
-            container.innerHTML = '';
-            
-            if (this.resources.length === 0) {
-                container.innerHTML = '<p class="text-[10px] text-white/30 text-center py-4">Nenhum recurso encontrado.</p>';
-                return;
-            }
-
-            this.resources.forEach((res, i) => {
-                const isCSS = res.type === 'css';
-                const bgClass = res.isKodux ? 'bg-blue-900/10 border-blue-500/30' : 'bg-white/[0.02] border-white/5';
-                const badgeColor = isCSS ? 'text-pink-400 bg-pink-400/10' : 'text-yellow-400 bg-yellow-400/10';
-                
-                const html = `
-                    <div class="p-3 mb-2 border rounded-xl ${bgClass} transition-all duration-300 ${!res.active ? 'opacity-50 grayscale' : ''}" id="res-card-${i}">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${badgeColor}">${res.type}</span>
-                                ${res.isKodux ? '<span class="text-[8px] font-bold tracking-widest text-blue-400 uppercase"><i data-lucide="shield-check" class="w-3 h-3 inline pb-0.5"></i> Kodux</span>' : ''}
-                            </div>
-                            
-                            <!-- Toggle Switch -->
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer" ${res.active ? 'checked' : ''} onchange="KDevPanel.toggleResource(${i}, this.checked)">
-                                <div class="w-7 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-500"></div>
-                            </label>
-                        </div>
-                        
-                        <div class="flex items-center gap-2">
-                            <input type="text" value="${res.url}" onchange="KDevPanel.updateUrl(${i}, this.value)" class="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1.5 text-[9px] font-mono text-white/70 outline-none focus:border-blue-500/50 focus:text-white transition-colors">
-                            <button onclick="KDevPanel.deleteResource(${i})" class="text-white/20 hover:text-red-400 transition p-1" title="Remover Tag"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', html);
-            });
-            if (window.lucide) lucide.createIcons();
-        },
-
-        toggleResource(i, isActive) {
-            const res = this.resources[i];
-            res.active = isActive;
-            
-            if (res.type === 'css') {
-                res.el.disabled = !isActive;
-            } else {
-                // JS disable hack for DOM (won't stop already running JS, but stops it on export/reload)
-                if (!isActive) {
-                    res.el.setAttribute('data-dev-disabled', 'true');
-                    res.el.type = 'javascript/blocked'; // Break execution if added dynamically
-                } else {
-                    res.el.removeAttribute('data-dev-disabled');
-                    res.el.type = 'text/javascript';
-                    
-                    // To actually run it NOW, we need to clone and replace
-                    const newScript = document.createElement('script');
-                    newScript.src = res.url;
-                    res.el.parentNode.replaceChild(newScript, res.el);
-                    res.el = newScript; // update ref
-                }
-            }
-            
-            const card = document.getElementById(`res-card-${i}`);
-            if(isActive) {
-                card.classList.remove('opacity-50', 'grayscale');
-            } else {
-                card.classList.add('opacity-50', 'grayscale');
-            }
-        },
-
-        updateUrl(i, newUrl) {
-            const res = this.resources[i];
-            res.url = newUrl;
-            if (res.type === 'css') {
-                res.el.href = newUrl;
-            } else {
-                // Changing JS URL requires replacing the tag to execute
-                const newScript = document.createElement('script');
-                newScript.src = newUrl;
-                res.el.parentNode.replaceChild(newScript, res.el);
-                res.el = newScript;
-            }
-            this.scan(); // Refresh UI
-        },
-
-        addResource() {
-            const type = document.getElementById('dev-new-type').value;
-            const url = document.getElementById('dev-new-url').value;
-            
-            if(!url) return;
-
-            if (type === 'css') {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = url;
-                document.head.appendChild(link);
-            } else {
-                const script = document.createElement('script');
-                script.src = url;
-                document.body.appendChild(script);
-            }
-            
-            document.getElementById('dev-new-url').value = '';
-            this.scan();
-        },
-
-        deleteResource(i) {
-            const res = this.resources[i];
-            res.el.remove();
-            this.scan();
-        },
-
-        exportHTML() {
-            // 1. Clone the current document
-            const cloneDoc = document.documentElement.cloneNode(true);
-            
-            // 2. Remove Dev Panel UI from the clone
-            const panelToRemove = cloneDoc.querySelector('#dev-panel');
-            const btnToRemove = cloneDoc.querySelector('#dev-btn');
-            // Remove the dev panel script block itself by looking for KDevPanel
-            const scriptTags = cloneDoc.querySelectorAll('script');
-            scriptTags.forEach(script => {
-                if(script.innerHTML.includes('KDevPanel')) {
-                    script.remove();
-                }
-            });
-
-            if(panelToRemove) panelToRemove.remove();
-            if(btnToRemove) btnToRemove.remove();
-            
-            // 3. Clean up blocked JS tags from toggles
-            const blockedScripts = cloneDoc.querySelectorAll('script[data-dev-disabled="true"]');
-            blockedScripts.forEach(s => s.remove());
-
-            // 4. Inject current inline CSS variables into head so they persist!
-            const computedBg = document.documentElement.style.getPropertyValue('--bg');
-            if (computedBg) {
-               const styleTag = document.createElement('style');
-               styleTag.innerHTML = `
-                :root {
-                    --bg: ${document.documentElement.style.getPropertyValue('--bg')};
-                    --bg-dark: ${document.documentElement.style.getPropertyValue('--bg-dark')};
-                    --active-color: ${document.documentElement.style.getPropertyValue('--active-color')};
-                }
-               `;
-               cloneDoc.querySelector('head').appendChild(styleTag);
-            }
-
-            // 5. Generate File
-            const htmlContent = '<!DOCTYPE html>\n' + cloneDoc.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'FusionOS_Export.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+                <div class="grid-3">
+                  <div class="box">
+                    <h3>🍰 Bolos deliciosos</h3>
+                    <p>Receitas macias, saborosas e com opções mais leves para a rotina.</p>
+                  </div>
+                  <div class="box">
+                    <h3>🥧 Tortas irresistíveis</h3>
+                    <p>Tortas doces pensadas para quem busca equilíbrio sem abrir mão do sabor.</p>
+                  </div>
+                  <div class="box">
+                    <h3>🍮 Pudins e mousses</h3>
+                    <p>Sobremesas cremosas, práticas e fáceis de preparar.</p>
+                  </div>
+                  <div class="box">
+                    <h3>🍨 Doces especiais</h3>
+                    <p>Ideias para variar o cardápio com mais segurança e praticidade.</p>
+                  </div>
+                  <div class="box">
+                    <h3>📘 Organização</h3>
+                    <p>O material pode ser organizado por categorias para facilitar o uso.</p>
+                  </div>
+                  <div class="box">
+                    <h3>✨ Simplicidade</h3>
+                    <p>Receitas pensadas para serem entendidas sem complicação.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
         }
+      ],
+      [
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Vantagens de ter este guia</div>
+                <h2 class="subtitle">Praticidade, variedade e clareza</h2>
+
+                <div class="grid-2">
+                  <div class="box">
+                    <h3>Praticidade</h3>
+                    <p>Receitas fáceis de seguir e rápidas para o dia a dia.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Mais equilíbrio</h3>
+                    <p>Ideias pensadas para quem quer doces com mais organização na rotina.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Variedade</h3>
+                    <p>Mais opções para o café, sobremesas e momentos especiais.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Receita por categoria</h3>
+                    <p>Um guia que pode ser organizado por tipos de sobremesas para facilitar o uso.</p>
+                  </div>
+                </div>
+
+                <div class="callout">
+                  <p class="mini"><span class="small-strong">Importante:</span> este material não substitui orientação médica ou nutricional individual.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack" style="text-align:center;">
+                <span class="chip">Oferta especial</span>
+                <h2 class="subtitle">Receba agora por apenas <span class="accent">R$ 9,90</span></h2>
+                <p class="tagline">
+                  Aproveite antes que a promoção acabe.
+                </p>
+
+                <div class="panel accent-bg" style="padding:28px;">
+                  <h3 style="font-size:1.18rem; margin-bottom:10px;">👉 Aperte no botão abaixo do WhatsApp e receba as receitas em 30 segundos.</h3>
+                  <p class="mini">📲 Participe da conversa agora mesmo.</p>
+                  <div style="margin-top:18px;">
+                    <a class="btn btn-whats" href="${waLink}" target="_blank" rel="noopener">Quero receber no WhatsApp</a>
+                  </div>
+                </div>
+
+                <p class="footer-note">
+                  Este material tem finalidade informativa e culinária. Ele não substitui orientação médica ou nutricional individual.
+                </p>
+              </div>
+            </div>
+          `
+        },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Exemplo de organização do conteúdo</div>
+                <h2 class="subtitle">Estrutura sugerida do ebook</h2>
+
+                <div class="panel" style="padding:22px;">
+                  <ol class="list">
+                    <li>Bolo de cenoura para diabéticos</li>
+                    <li>Bolo de chocolate funcional</li>
+                    <li>Torta de maçã leve</li>
+                    <li>Torta de limão para diabéticos</li>
+                    <li>Pudim caseiro leve</li>
+                    <li>Mousse especial</li>
+                    <li>Pavê de colher</li>
+                    <li>Docinhos rápidos</li>
+                    <li>Sobremesas geladas</li>
+                    <li>Sobremesas para o café</li>
+                  </ol>
+                </div>
+
+                <div class="callout">
+                  <p class="mini">
+                    O material pode ser organizado por categorias para facilitar a navegação, a leitura e a venda.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Para quem é este material</div>
+                <h2 class="subtitle">Ideal para quem deseja mais variedade na rotina</h2>
+
+                <div class="grid-2">
+                  <div class="box">
+                    <h3>Mais praticidade</h3>
+                    <p>Receitas simples para usar na rotina sem complicação.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Mais variedade</h3>
+                    <p>Alternativas para variar sobremesas com mais organização.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Mais equilíbrio</h3>
+                    <p>Opções pensadas para quem quer aproveitar doces com mais atenção ao dia a dia.</p>
+                  </div>
+                  <div class="box">
+                    <h3>Mais segurança culinária</h3>
+                    <p>Um guia pensado para apoiar escolhas mais práticas na cozinha.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ],
+      [
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Como funciona</div>
+                <h2 class="subtitle">Passo a passo simples</h2>
+
+                <div class="grid-2">
+                  <div class="recipe-step">
+                    <h3>1. Escolha a receita</h3>
+                    <p>Selecione a receita que combina com o momento e com os ingredientes que você tem em casa.</p>
+                  </div>
+                  <div class="recipe-step">
+                    <h3>2. Separe os ingredientes</h3>
+                    <p>Deixe tudo organizado antes de começar para facilitar o preparo.</p>
+                  </div>
+                  <div class="recipe-step">
+                    <h3>3. Siga o passo a passo</h3>
+                    <p>As instruções foram escritas de forma simples, para ajudar desde quem está começando até quem já cozinha bem.</p>
+                  </div>
+                  <div class="recipe-step">
+                    <h3>4. Sirva ou armazene</h3>
+                    <p>Finalize a receita e conserve corretamente para aproveitar melhor a sobremesa.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Oferta especial</div>
+                <h2 class="subtitle">Botão de acesso</h2>
+                <p class="tagline">
+                  👉 Aperte no botão abaixo do WhatsApp e receba as receitas em 30 segundos. 📲 Participe da conversa agora mesmo.
+                </p>
+                <div style="display:flex; justify-content:center; margin-top:8px;">
+                  <a class="btn btn-whats" href="${waLink}" target="_blank" rel="noopener">QUERO RECEBER NO WHATSAPP</a>
+                </div>
+
+                <div class="callout">
+                  <p class="mini">
+                    Receba antes, pague depois. Apenas R$ 9,90. Oferta por tempo limitado.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <div class="muted-topline">Observação importante</div>
+                <h2 class="subtitle">Texto curto para chamada</h2>
+
+                <div class="panel accent-bg" style="padding:26px;">
+                  <p class="lead" style="margin:0 auto; color: var(--text);">
+                    Coma sem medo e sem erro! Receitas fáceis, práticas e seguras para o dia a dia. Receba antes, pague depois. Apenas R$ 9,90.
+                  </p>
+                </div>
+
+                <div class="callout">
+                  <p class="mini">
+                    Este material tem finalidade informativa e culinária. Ele não substitui orientação médica ou nutricional individual.
+                  </p>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ]
+    ];
+
+    let currentRow = 1;
+    let currentCol = 1;
+    const ROWS = 3, COLS = 3;
+    let isAnimating = false;
+
+    const grid = document.getElementById("grid");
+
+    function buildGrid() {
+      grid.innerHTML = "";
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const screen = document.createElement("div");
+          screen.className = "screen";
+          screen.dataset.row = r;
+          screen.dataset.col = c;
+          screen.innerHTML = screensData[r][c].html;
+          grid.appendChild(screen);
+        }
+      }
+    }
+
+    function buildNav() {
+      const nav = document.getElementById("navMatrix");
+      nav.innerHTML = "";
+      for (let i = 0; i < 9; i++) {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        const r = Math.floor(i / 3);
+        const c = i % 3;
+        dot.addEventListener("click", () => navigateTo(r, c));
+        nav.appendChild(dot);
+      }
+    }
+
+    function updateView() {
+      const tx = -currentCol * (100 / 3);
+      const ty = -currentRow * (100 / 3);
+      grid.style.transform = `translate(${tx}%, ${ty}%)`;
+
+      document.querySelectorAll(".dot").forEach((dot, i) => {
+        dot.classList.toggle("active", Math.floor(i / 3) === currentRow && i % 3 === currentCol);
+      });
+    }
+
+    window.navigateTo = function(row, col) {
+      if (row < 0 || row >= ROWS || col < 0 || col >= COLS) return;
+      if (row === currentRow && col === currentCol) return;
+      if (isAnimating) return;
+      isAnimating = true;
+      currentRow = row;
+      currentCol = col;
+      updateView();
+      setTimeout(() => { isAnimating = false; }, 560);
     };
 
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
-        KDevPanel.init();
+    function handleSwipe(dx, dy) {
+      const ax = Math.abs(dx), ay = Math.abs(dy);
+      const SWIPE_DIST = 45;
+      if (ax > ay && ax > SWIPE_DIST) {
+        dx < 0 ? navigateTo(currentRow, currentCol + 1) : navigateTo(currentRow, currentCol - 1);
+      } else if (ay > ax && ay > SWIPE_DIST) {
+        dy < 0 ? navigateTo(currentRow + 1, currentCol) : navigateTo(currentRow - 1, currentCol);
+      }
+    }
+
+    const drag = { x: 0, y: 0, t: 0, active: false };
+    const SWIPE_TIME = 350;
+
+    document.addEventListener("touchstart", e => {
+      drag.x = e.touches[0].clientX;
+      drag.y = e.touches[0].clientY;
+      drag.t = Date.now();
+      drag.active = true;
+    }, { passive: true });
+
+    document.addEventListener("touchend", e => {
+      if (!drag.active) return;
+      const dx = e.changedTouches[0].clientX - drag.x;
+      const dy = e.changedTouches[0].clientY - drag.y;
+      const dt = Date.now() - drag.t;
+      drag.active = false;
+      if (dt > SWIPE_TIME) return;
+      handleSwipe(dx, dy);
+    }, { passive: true });
+
+    document.addEventListener("mousedown", e => {
+      drag.x = e.clientX;
+      drag.y = e.clientY;
+      drag.t = Date.now();
+      drag.active = true;
     });
-  </script>
 
-
-
-
-<script src="https://cdn.tailwindcss.com"></script><script src="https://unpkg.com/lucide@latest"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0B.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-1.js"></script><script src="https://kodux78k.github.io/oiDual--Y-/M0D/diHome/js/modules/inline-0K.js"></script><script>
-    const KDevPanel = {
-        isOpen: false,
-        resources: [],
-        
-        init() {
-            // Initialize lucide icons if not already done by main scripts
-            if (window.lucide) lucide.createIcons();
-            this.scan();
-        },
-
-        toggle() {
-            const panel = document.getElementById('dev-panel');
-            this.isOpen = !this.isOpen;
-            if(this.isOpen) {
-                this.scan(); // Rescan dom for dynamic injected elements
-                panel.classList.remove('-translate-x-full');
-            } else {
-                panel.classList.add('-translate-x-full');
-            }
-        },
-
-        updateVar(varName, value) {
-            document.documentElement.style.setProperty(varName, value);
-            // Update the display text next to the color picker
-            const displaySpan = document.getElementById(`val${varName}`);
-            if(displaySpan) displaySpan.innerText = value;
-        },
-
-        scan() {
-            this.resources = [];
-            // Catch all stylesheets and external scripts
-            const elements = document.querySelectorAll('link[rel="stylesheet"], script[src]');
-            
-            elements.forEach((el, index) => {
-                const type = el.tagName.toLowerCase() === 'link' ? 'css' : 'js';
-                const url = type === 'css' ? el.href : el.src;
-                
-                // Exclude tailwind/lucide from easy accidental deletion, but keep them in list
-                const isCore = url.includes('tailwindcss') || url.includes('lucide');
-                const isKodux = url.includes('kodux');
-                
-                // To safely toggle CSS without destroying it, we use disabled property.
-                // For JS it's harder, but we'll manipulate the DOM node.
-                let active = true;
-                if(type === 'css') active = !el.disabled;
-                else active = el.getAttribute('data-dev-disabled') !== 'true';
-
-                this.resources.push({ el, type, url, active, isCore, isKodux });
-            });
-            
-            this.render();
-        },
-
-        render() {
-            const container = document.getElementById('dev-resources-list');
-            container.innerHTML = '';
-            
-            if (this.resources.length === 0) {
-                container.innerHTML = '<p class="text-[10px] text-white/30 text-center py-4">Nenhum recurso encontrado.</p>';
-                return;
-            }
-
-            this.resources.forEach((res, i) => {
-                const isCSS = res.type === 'css';
-                const bgClass = res.isKodux ? 'bg-blue-900/10 border-blue-500/30' : 'bg-white/[0.02] border-white/5';
-                const badgeColor = isCSS ? 'text-pink-400 bg-pink-400/10' : 'text-yellow-400 bg-yellow-400/10';
-                
-                const html = `
-                    <div class="p-3 mb-2 border rounded-xl ${bgClass} transition-all duration-300 ${!res.active ? 'opacity-50 grayscale' : ''}" id="res-card-${i}">
-                        <div class="flex justify-between items-center mb-2">
-                            <div class="flex items-center gap-2">
-                                <span class="px-2 py-0.5 rounded text-[8px] font-bold uppercase ${badgeColor}">${res.type}</span>
-                                ${res.isKodux ? '<span class="text-[8px] font-bold tracking-widest text-blue-400 uppercase"><i data-lucide="shield-check" class="w-3 h-3 inline pb-0.5"></i> Kodux</span>' : ''}
-                            </div>
-                            
-                            <!-- Toggle Switch -->
-                            <label class="relative inline-flex items-center cursor-pointer">
-                                <input type="checkbox" class="sr-only peer" ${res.active ? 'checked' : ''} onchange="KDevPanel.toggleResource(${i}, this.checked)">
-                                <div class="w-7 h-4 bg-white/10 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-blue-500"></div>
-                            </label>
-                        </div>
-                        
-                        <div class="flex items-center gap-2">
-                            <input type="text" value="${res.url}" onchange="KDevPanel.updateUrl(${i}, this.value)" class="flex-1 bg-black/40 border border-white/10 rounded px-2 py-1.5 text-[9px] font-mono text-white/70 outline-none focus:border-blue-500/50 focus:text-white transition-colors">
-                            <button onclick="KDevPanel.deleteResource(${i})" class="text-white/20 hover:text-red-400 transition p-1" title="Remover Tag"><i data-lucide="trash-2" class="w-3 h-3"></i></button>
-                        </div>
-                    </div>
-                `;
-                container.insertAdjacentHTML('beforeend', html);
-            });
-            if (window.lucide) lucide.createIcons();
-        },
-
-        toggleResource(i, isActive) {
-            const res = this.resources[i];
-            res.active = isActive;
-            
-            if (res.type === 'css') {
-                res.el.disabled = !isActive;
-            } else {
-                // JS disable hack for DOM (won't stop already running JS, but stops it on export/reload)
-                if (!isActive) {
-                    res.el.setAttribute('data-dev-disabled', 'true');
-                    res.el.type = 'javascript/blocked'; // Break execution if added dynamically
-                } else {
-                    res.el.removeAttribute('data-dev-disabled');
-                    res.el.type = 'text/javascript';
-                    
-                    // To actually run it NOW, we need to clone and replace
-                    const newScript = document.createElement('script');
-                    newScript.src = res.url;
-                    res.el.parentNode.replaceChild(newScript, res.el);
-                    res.el = newScript; // update ref
-                }
-            }
-            
-            const card = document.getElementById(`res-card-${i}`);
-            if(isActive) {
-                card.classList.remove('opacity-50', 'grayscale');
-            } else {
-                card.classList.add('opacity-50', 'grayscale');
-            }
-        },
-
-        updateUrl(i, newUrl) {
-            const res = this.resources[i];
-            res.url = newUrl;
-            if (res.type === 'css') {
-                res.el.href = newUrl;
-            } else {
-                // Changing JS URL requires replacing the tag to execute
-                const newScript = document.createElement('script');
-                newScript.src = newUrl;
-                res.el.parentNode.replaceChild(newScript, res.el);
-                res.el = newScript;
-            }
-            this.scan(); // Refresh UI
-        },
-
-        addResource() {
-            const type = document.getElementById('dev-new-type').value;
-            const url = document.getElementById('dev-new-url').value;
-            
-            if(!url) return;
-
-            if (type === 'css') {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
-                link.href = url;
-                document.head.appendChild(link);
-            } else {
-                const script = document.createElement('script');
-                script.src = url;
-                document.body.appendChild(script);
-            }
-            
-            document.getElementById('dev-new-url').value = '';
-            this.scan();
-        },
-
-        deleteResource(i) {
-            const res = this.resources[i];
-            res.el.remove();
-            this.scan();
-        },
-
-        exportHTML() {
-            // 1. Clone the current document
-            const cloneDoc = document.documentElement.cloneNode(true);
-            
-            // 2. Remove Dev Panel UI from the clone
-            const panelToRemove = cloneDoc.querySelector('#dev-panel');
-            const btnToRemove = cloneDoc.querySelector('#dev-btn');
-            // Remove the dev panel script block itself by looking for KDevPanel
-            const scriptTags = cloneDoc.querySelectorAll('script');
-            scriptTags.forEach(script => {
-                if(script.innerHTML.includes('KDevPanel')) {
-                    script.remove();
-                }
-            });
-
-            if(panelToRemove) panelToRemove.remove();
-            if(btnToRemove) btnToRemove.remove();
-            
-            // 3. Clean up blocked JS tags from toggles
-            const blockedScripts = cloneDoc.querySelectorAll('script[data-dev-disabled="true"]');
-            blockedScripts.forEach(s => s.remove());
-
-            // 4. Inject current inline CSS variables into head so they persist!
-            const computedBg = document.documentElement.style.getPropertyValue('--bg');
-            if (computedBg) {
-               const styleTag = document.createElement('style');
-               styleTag.innerHTML = `
-                :root {
-                    --bg: ${document.documentElement.style.getPropertyValue('--bg')};
-                    --bg-dark: ${document.documentElement.style.getPropertyValue('--bg-dark')};
-                    --active-color: ${document.documentElement.style.getPropertyValue('--active-color')};
-                }
-               `;
-               cloneDoc.querySelector('head').appendChild(styleTag);
-            }
-
-            // 5. Generate File
-            const htmlContent = '<!DOCTYPE html>\n' + cloneDoc.outerHTML;
-            const blob = new Blob([htmlContent], { type: 'text/html' });
-            const url = URL.createObjectURL(blob);
-            
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'FusionOS_Export.html';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-    };
-
-    // Initialize on load
-    document.addEventListener('DOMContentLoaded', () => {
-        KDevPanel.init();
+    document.addEventListener("mouseup", e => {
+      if (!drag.active) return;
+      const dx = e.clientX - drag.x;
+      const dy = e.clientY - drag.y;
+      const dt = Date.now() - drag.t;
+      drag.active = false;
+      if (dt > SWIPE_TIME || (Math.abs(dx) < 45 && Math.abs(dy) < 45)) return;
+      handleSwipe(dx, dy);
     });
+
+    document.addEventListener("keydown", e => {
+      switch (e.key) {
+        case "ArrowRight": navigateTo(currentRow, currentCol + 1); break;
+        case "ArrowLeft": navigateTo(currentRow, currentCol - 1); break;
+        case "ArrowDown": navigateTo(currentRow + 1, currentCol); break;
+        case "ArrowUp": navigateTo(currentRow - 1, currentCol); break;
+        case "Home": navigateTo(1, 1); break;
+      }
+    });
+
+    let wheelCooldown = false;
+    document.addEventListener("wheel", e => {
+      if (wheelCooldown) return;
+      wheelCooldown = true;
+      setTimeout(() => { wheelCooldown = false; }, 700);
+
+      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+        e.deltaY > 0 ? navigateTo(currentRow + 1, currentCol) : navigateTo(currentRow - 1, currentCol);
+      } else {
+        e.deltaX > 0 ? navigateTo(currentRow, currentCol + 1) : navigateTo(currentRow, currentCol - 1);
+      }
+    }, { passive: true });
+
+    buildGrid();
+    buildNav();
+    updateView();
   </script>
 </body>
 </html>
