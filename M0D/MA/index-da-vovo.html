@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#f7f4ef" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <title>Matriz de Receitas & App de Compras</title>
+
+  <style>
+    /* ==========================================================================
+       VARIÁVEIS GLOBAIS & RESET (GRID + APP)
+       ========================================================================== */
+    :root {
+      /* Cores do Grid */
+      --bg: #f7f4ef;
+      --card: #ffffff;
+      --line: #e7ded0;
+      --text: #1f2430;
+      --muted: #5d6677;
+      --accent: #c28a3d;
+      --accent2: #8c6a2f;
+      --shadow: 0 18px 40px rgba(31,36,48,.08);
+
+      /* Cores do App da Vovó (Escopadas) */
+      --app-bg: rgba(255, 255, 255, 0.6);
+      --app-border: rgba(255, 255, 255, 0.4);
+      --app-primary: #c28a3d;
+      --app-primary-dark: #8c6a2f;
+      --app-primary-light: #d8a664;
+      --app-input-bg: rgba(255, 255, 255, 0.8);
+      --app-btn-text: #fff;
+    }
+
+    /* Dark Mode Global */
+    body.dark {
+      --bg: #1a1a1a;
+      --card: #2a2a2a;
+      --line: #3a3a3a;
+      --text: #e2dedb;
+      --muted: #a0a0a0;
+      --accent: #d8a664;
+      --app-bg: rgba(40, 40, 40, 0.7);
+      --app-border: rgba(255, 255, 255, 0.1);
+      --app-input-bg: rgba(30, 30, 30, 0.8);
+      --app-btn-text: #1a1a1a;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    html, body {
+      width: 100%; height: 100%; overflow: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+    
+    body { position: fixed; inset: 0; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+
+    /* ==========================================================================
+       ESTRUTURA DO GRID 3x3
+       ========================================================================== */
+    .grid {
+      position: fixed; inset: 0; width: 300%; height: 300%;
+      display: grid;
+      grid-template-columns: repeat(3, 33.3333%);
+      grid-template-rows: repeat(3, 33.3333%);
+      transition: transform .6s cubic-bezier(.25,.85,.35,1);
+      will-change: transform;
+    }
+
+    .screen {
+      width: 100vw; height: 100vh; overflow-y: auto; overflow-x: hidden;
+      position: relative;
+      background: radial-gradient(circle at 20% 10%, rgba(194,138,61,.08), transparent 25%);
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .screen::-webkit-scrollbar { width: 5px; }
+    .screen::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 99px; }
+
+    .inner {
+      min-height: 100%; padding: 30px 18px 110px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .wrap { width: 100%; max-width: 900px; margin: 0 auto; }
+    .stack { display: grid; gap: 18px; }
+    
+    /* Tipografia e Componentes do Grid */
+    .title { font-size: clamp(2rem, 5vw, 4rem); font-weight: 900; line-height: 1.1; }
+    .subtitle { font-size: clamp(1.5rem, 3vw, 2.5rem); font-weight: 800; color: var(--accent); }
+    .lead { font-size: 1.1rem; color: var(--muted); line-height: 1.6; }
+    .chip { display: inline-flex; padding: 6px 12px; border-radius: 99px; background: rgba(194,138,61,.15); color: var(--accent2); font-weight: 800; font-size: 12px; text-transform: uppercase; }
+    
+    .panel {
+      background: var(--card); border: 1px solid var(--line);
+      border-radius: 24px; padding: 24px; box-shadow: var(--shadow);
+      transition: background 0.3s, border 0.3s;
+    }
+    
+    .recipe-step { background: var(--card); border: 1px solid var(--line); border-radius: 16px; padding: 16px; margin-bottom: 10px; }
+    .recipe-step h3 { color: var(--accent); margin-bottom: 6px; }
+    .ingredients-list { list-style: none; padding-left: 0; color: var(--text); }
+    .ingredients-list li { padding: 6px 0; border-bottom: 1px solid var(--line); font-size: 0.95rem; }
+    .ingredients-list li:last-child { border-bottom: none; }
+
+    /* Navegação */
+    .nav-matrix {
+      position: fixed; left: 50%; bottom: 25px; transform: translateX(-50%);
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+      padding: 12px; border-radius: 99px;
+      background: var(--app-bg); border: 1px solid var(--app-border);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      z-index: 50; box-shadow: var(--shadow);
+    }
+    .dot { width: 10px; height: 10px; border-radius: 50%; background: var(--muted); cursor: pointer; transition: 0.3s; }
+    .dot.active { background: var(--accent); transform: scale(1.5); }
+    .hint { position: fixed; top: 16px; right: 16px; z-index: 60; font-size: 11px; letter-spacing: .1em; color: var(--muted); pointer-events: none; }
+
+    /* ==========================================================================
+       APP DA VOVÓ (Lista de Compras Glassmorphism)
+       ========================================================================== */
+    .app-container {
+      max-width: 480px; width: 100%; margin: 0 auto;
+      background: var(--app-bg); border: 1px solid var(--app-border);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-radius: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+      padding: 2rem; display: flex; flex-direction: column;
+    }
+    .app-container h1 { font-size: 1.6rem; color: var(--accent); text-align: center; margin-bottom: 1.5rem; }
+
+    .app-categories { display: flex; gap: 8px; margin-bottom: 1.2rem; }
+    .app-cat-btn {
+      flex: 1; padding: 10px; border-radius: 16px; border: none;
+      background: var(--card); color: var(--text); font-weight: 700; cursor: pointer;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s;
+    }
+    .app-cat-btn.active { background: var(--app-primary); color: var(--app-btn-text); transform: scale(1.05); }
+
+    .app-search {
+      width: 100%; padding: 12px 16px; border-radius: 16px; margin-bottom: 1rem;
+      border: 1px solid var(--line); background: var(--app-input-bg); color: var(--text);
+      font-size: 1rem; outline: none; transition: 0.3s;
+    }
+    .app-search:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(194,138,61,0.2); }
+
+    .app-list {
+      max-height: 300px; overflow-y: auto; list-style: none;
+      background: var(--app-input-bg); border-radius: 16px; padding: 10px; border: 1px solid var(--line);
+    }
+    .app-list::-webkit-scrollbar { width: 5px; }
+    .app-list::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 10px; }
+
+    .app-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px; border-bottom: 1px solid var(--line); color: var(--text);
+    }
+    .app-item:last-child { border-bottom: none; }
+    .app-item-left { display: flex; align-items: center; gap: 12px; cursor: pointer; }
+    .app-checkbox { width: 20px; height: 20px; accent-color: var(--accent); cursor: pointer; }
+
+    .app-qty-box { display: flex; align-items: center; gap: 8px; }
+    .app-qty-btn {
+      width: 28px; height: 28px; border-radius: 50%; border: none;
+      background: var(--accent); color: var(--app-btn-text); font-weight: bold; cursor: pointer;
+    }
+    .app-qty-input {
+      width: 40px; text-align: center; border: 1px solid var(--line);
+      border-radius: 8px; padding: 4px; background: var(--card); color: var(--text);
+    }
+
+    .app-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem; }
+    .app-btn {
+      padding: 12px; border-radius: 16px; border: none; font-weight: bold; cursor: pointer;
+      background: var(--card); color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,0.05); transition: 0.2s;
+    }
+    .app-btn:hover { transform: translateY(-2px); }
+    .app-btn-primary { grid-column: span 2; background: var(--accent); color: var(--app-btn-text); font-size: 1.1rem; }
+
+    /* Floating Elements */
+    .toggle-darkmode {
+      position: fixed; top: 16px; left: 16px; z-index: 2000;
+      background: var(--card); border: 1px solid var(--line); border-radius: 50%;
+      width: 45px; height: 45px; font-size: 1.2rem; cursor: pointer; box-shadow: var(--shadow);
+    }
+    #save-feedback {
+      position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%);
+      background: var(--accent); color: #fff; padding: 8px 16px; border-radius: 20px;
+      font-weight: bold; opacity: 0; pointer-events: none; transition: 0.3s; z-index: 1500;
+    }
+    #save-feedback.show { opacity: 1; }
+
+    /* Modal do App */
+    .app-modal {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px);
+      display: none; align-items: center; justify-content: center; z-index: 3000;
+    }
+    .app-modal.show { display: flex; }
+    .app-modal-content {
+      background: var(--card); width: 90%; max-width: 400px; padding: 24px;
+      border-radius: 24px; position: relative; max-height: 80vh; overflow-y: auto;
+    }
+    .app-modal-close {
+      position: absolute; top: 15px; right: 20px; background: none; border: none;
+      font-size: 1.5rem; cursor: pointer; color: var(--text);
+    }
+  </style>
+</head>
+<body>
+  <button class="toggle-darkmode" id="btnDarkMode">🌙</button>
+  <div class="hint">SWIPE • SETAS • TOQUE</div>
+  
+  <div class="grid" id="grid"></div>
+  <div class="nav-matrix" id="navMatrix"></div>
+  <div id="save-feedback"></div>
+
+  <div class="app-modal" id="modalBg">
+    <div class="app-modal-content">
+      <button class="app-modal-close" id="modalCloseBtn">×</button>
+      <h2 class="subtitle" style="text-align:center; font-size:1.5rem; margin-bottom:15px;">Resumo da Lista</h2>
+      <ul id="modalList" class="ingredients-list"></ul>
+    </div>
+  </div>
+
+  <script>
+    // ==========================================================================
+    // DADOS DO GRID ESPACIAL (3x3)
+    // ==========================================================================
+    const screensData = [
+      [
+        // [0][0] - INTRODUÇÃO
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack" style="text-align:center;">
+                <span class="chip">O Ecossistema Completo</span>
+                <h1 class="title">Cozinha Inteligente & Saudável</h1>
+                <p class="lead">Navegue pelas receitas para diabéticos ao redor desta matriz e use o <strong>App Central</strong> para gerar sua lista de compras.</p>
+                <button class="app-btn" onclick="navigateTo(1,1)" style="margin: 20px auto; width: 200px; background:var(--accent); color:#fff;">Ir para a Lista</button>
+              </div>
+            </div>
+          `
+        },
+        // [0][1] - RECEITA 1
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <span class="chip">Bolos</span>
+                <h2 class="subtitle">Bolo de Cenoura Zero</h2>
+                <div class="panel">
+                  <div class="recipe-step">
+                    <h3>Ingredientes</h3>
+                    <ul class="ingredients-list">
+                      <li>3 cenouras médias</li>
+                      <li>3 ovos</li>
+                      <li>1 xícara de farinha de aveia</li>
+                      <li>1/2 xícara de adoçante eritritol</li>
+                      <li>1/3 xícara de óleo de coco</li>
+                      <li>1 colher (sopa) de fermento</li>
+                    </ul>
+                  </div>
+                  <p class="lead"><strong>Preparo:</strong> Bata no liquidificador a cenoura, os ovos e o óleo. Em uma tigela, misture a farinha e o eritritol. Despeje o líquido, misture bem e adicione o fermento. Asse a 180°C por 35 min.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        // [0][2] - RECEITA 2
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <span class="chip">Sobremesas</span>
+                <h2 class="subtitle">Pudim de Leite Diet</h2>
+                <div class="panel">
+                  <div class="recipe-step">
+                    <h3>Ingredientes</h3>
+                    <ul class="ingredients-list">
+                      <li>500ml de leite desnatado</li>
+                      <li>1 lata de leite condensado diet</li>
+                      <li>4 ovos</li>
+                      <li>1 colher (chá) de essência de baunilha</li>
+                    </ul>
+                  </div>
+                  <p class="lead"><strong>Preparo:</strong> Bata todos os ingredientes no liquidificador por 3 minutos. Despeje em uma forma caramelizada (com adoçante culinário). Asse em banho-maria a 180°C por cerca de 1 hora.</p>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ],
+      [
+        // [1][0] - RECEITA 3
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <span class="chip">Sobremesas</span>
+                <h2 class="subtitle">Mousse de Maracujá</h2>
+                <div class="panel">
+                  <div class="recipe-step">
+                    <h3>Ingredientes</h3>
+                    <ul class="ingredients-list">
+                      <li>1 xícara de suco de maracujá concentrado</li>
+                      <li>2 caixas de creme de leite light</li>
+                      <li>1 lata de leite condensado diet</li>
+                      <li>1 sachê de gelatina sem sabor</li>
+                    </ul>
+                  </div>
+                  <p class="lead"><strong>Preparo:</strong> Hidrate a gelatina. Bata no liquidificador o suco, o creme de leite e o leite condensado diet. Adicione a gelatina e bata mais um pouco. Leve à geladeira por 4 horas.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        // [1][1] - O CENTRO (APP DA VOVÓ)
+        {
+          html: `
+            <div class="inner">
+              <div class="app-container">
+                <h1>Lista da Vó Maria 🛒</h1>
+                
+                <div class="app-categories">
+                  <button class="app-cat-btn active" data-cat="bolos">🍰 Bolos</button>
+                  <button class="app-cat-btn" data-cat="doces">🍮 Doces</button>
+                  <button class="app-cat-btn" data-cat="outros">🛒 Outros</button>
+                </div>
+
+                <input type="search" class="app-search" id="searchInput" placeholder="Buscar ingrediente..." />
+                
+                <ul class="app-list" id="productsList"></ul>
+
+                <div class="app-actions">
+                  <button class="app-btn" id="btnClear">🗑️ Limpar</button>
+                  <button class="app-btn" id="btnSave">💾 Salvar</button>
+                  <button class="app-btn app-btn-primary" id="btnFinalize">🛍️ Resumo da Compra</button>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        // [1][2] - RECEITA 4
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <span class="chip">Bolos & Tortas</span>
+                <h2 class="subtitle">Torta de Maçã Simples</h2>
+                <div class="panel">
+                  <div class="recipe-step">
+                    <h3>Ingredientes</h3>
+                    <ul class="ingredients-list">
+                      <li>3 maçãs picadas</li>
+                      <li>1 xícara de farinha de aveia</li>
+                      <li>3 ovos</li>
+                      <li>1 colher (sopa) de canela em pó</li>
+                      <li>1/2 xícara de adoçante xilitol</li>
+                    </ul>
+                  </div>
+                  <p class="lead"><strong>Preparo:</strong> Misture as maçãs picadas com a canela. Bata os ovos com o adoçante e a aveia. Despeje sobre as maçãs em uma forma untada e asse a 200°C por 30 minutos.</p>
+                </div>
+              </div>
+            </div>
+          `
+        }
+      ],
+      [
+        // [2][0] - RECEITA 5
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <span class="chip">Docinhos</span>
+                <h2 class="subtitle">Brigadeiro Fake</h2>
+                <div class="panel">
+                  <div class="recipe-step">
+                    <h3>Ingredientes</h3>
+                    <ul class="ingredients-list">
+                      <li>1 lata de leite condensado diet</li>
+                      <li>2 colheres (sopa) de cacau em pó 100%</li>
+                      <li>1 colher (sopa) de manteiga</li>
+                      <li>Coco ralado sem açúcar para enrolar</li>
+                    </ul>
+                  </div>
+                  <p class="lead"><strong>Preparo:</strong> Leve o leite condensado diet, o cacau e a manteiga ao fogo baixo. Mexa sem parar até desgrudar do fundo da panela. Deixe esfriar, enrole e passe no coco ralado.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        // [2][1] - RECEITA 6
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack">
+                <span class="chip">Biscoitos</span>
+                <h2 class="subtitle">Biscoito de Aveia e Cacau</h2>
+                <div class="panel">
+                  <div class="recipe-step">
+                    <h3>Ingredientes</h3>
+                    <ul class="ingredients-list">
+                      <li>1 xícara de farinha de aveia</li>
+                      <li>2 colheres (sopa) de cacau em pó</li>
+                      <li>1 ovo</li>
+                      <li>2 colheres (sopa) de óleo de coco</li>
+                      <li>3 colheres (sopa) de xilitol</li>
+                    </ul>
+                  </div>
+                  <p class="lead"><strong>Preparo:</strong> Misture todos os ingredientes até formar uma massa modelável. Faça pequenas bolinhas, achate na assadeira e asse a 180°C por cerca de 15 minutos.</p>
+                </div>
+              </div>
+            </div>
+          `
+        },
+        // [2][2] - CONCLUSÃO
+        {
+          html: `
+            <div class="inner">
+              <div class="wrap stack" style="text-align:center;">
+                <span class="chip">Pronto!</span>
+                <h2 class="subtitle">Bom apetite com saúde</h2>
+                <p class="lead">Agora que você tem as receitas e a lista de compras gerada pelo sistema no centro da matriz, é só ir ao mercado!</p>
+                <button class="app-btn" onclick="navigateTo(1,1)" style="margin: 20px auto; width: 200px;">Voltar ao App</button>
+              </div>
+            </div>
+          `
+        }
+      ]
+    ];
+
+    // ==========================================================================
+    // LÓGICA DO GRID ESPACIAL
+    // ==========================================================================
+    let currentRow = 1, currentCol = 1;
+    const ROWS = 3, COLS = 3;
+    let isAnimating = false;
+    const grid = document.getElementById("grid");
+
+    function buildGrid() {
+      grid.innerHTML = "";
+      for (let r = 0; r < ROWS; r++) {
+        for (let c = 0; c < COLS; c++) {
+          const screen = document.createElement("div");
+          screen.className = "screen";
+          screen.innerHTML = screensData[r][c].html;
+          grid.appendChild(screen);
+        }
+      }
+    }
+
+    function buildNav() {
+      const nav = document.getElementById("navMatrix");
+      nav.innerHTML = "";
+      for (let i = 0; i < 9; i++) {
+        const dot = document.createElement("div");
+        dot.className = "dot";
+        dot.addEventListener("click", () => navigateTo(Math.floor(i / 3), i % 3));
+        nav.appendChild(dot);
+      }
+    }
+
+    function updateView() {
+      const tx = -currentCol * (100 / 3);
+      const ty = -currentRow * (100 / 3);
+      grid.style.transform = `translate(${tx}%, ${ty}%)`;
+      document.querySelectorAll(".dot").forEach((dot, i) => {
+        dot.classList.toggle("active", Math.floor(i / 3) === currentRow && i % 3 === currentCol);
+      });
+    }
+
+    window.navigateTo = function(row, col) {
+      if (row < 0 || row >= ROWS || col < 0 || col >= COLS || isAnimating) return;
+      isAnimating = true; currentRow = row; currentCol = col;
+      updateView();
+      setTimeout(() => { isAnimating = false; }, 600);
+    };
+
+    // Swipes e teclado (simplificado)
+    document.addEventListener("keydown", e => {
+      if (e.target.tagName === "INPUT") return;
+      if (e.key === "ArrowRight") navigateTo(currentRow, currentCol + 1);
+      if (e.key === "ArrowLeft") navigateTo(currentRow, currentCol - 1);
+      if (e.key === "ArrowDown") navigateTo(currentRow + 1, currentCol);
+      if (e.key === "ArrowUp") navigateTo(currentRow - 1, currentCol);
+    });
+
+    // ==========================================================================
+    // LÓGICA DO APP DA VOVÓ (Executada após montar o Grid)
+    // ==========================================================================
+    function initAppDaVovo() {
+      // Dados sincronizados com as receitas da matriz
+      const productsByCategory = {
+        bolos: ["Cenouras", "Farinha de Aveia", "Adoçante Eritritol", "Adoçante Xilitol", "Ovos", "Óleo de Coco", "Fermento em pó", "Maçãs", "Canela em pó"],
+        doces: ["Leite Desnatado", "Leite Condensado Diet", "Essência de Baunilha", "Cacau em pó 100%", "Manteiga", "Coco Ralado"],
+        outros: ["Suco de Maracujá Concentrado", "Creme de Leite Light", "Gelatina sem Sabor"]
+      };
+
+      let selectedItems = { bolos: {}, doces: {}, outros: {} };
+      let currentCategory = "bolos";
+
+      const catButtons = document.querySelectorAll(".app-cat-btn");
+      const productsList = document.getElementById("productsList");
+      const searchInput = document.getElementById("searchInput");
+      const btnClear = document.getElementById("btnClear");
+      const btnSave = document.getElementById("btnSave");
+      const btnFinalize = document.getElementById("btnFinalize");
+      const modalBg = document.getElementById("modalBg");
+      const modalList = document.getElementById("modalList");
+      const modalCloseBtn = document.getElementById("modalCloseBtn");
+      const saveFeedback = document.getElementById("save-feedback");
+      const btnDarkMode = document.getElementById("btnDarkMode");
+
+      function showFeedback(msg) {
+        saveFeedback.textContent = msg;
+        saveFeedback.classList.add("show");
+        setTimeout(() => saveFeedback.classList.remove("show"), 2000);
+      }
+
+      function renderProducts(filter = "") {
+        const filterLower = filter.trim().toLowerCase();
+        const products = productsByCategory[currentCategory].filter(p => p.toLowerCase().includes(filterLower)).sort();
+        
+        productsList.innerHTML = "";
+        products.forEach(prod => {
+          const qty = selectedItems[currentCategory][prod] || 0;
+          const li = document.createElement("li");
+          li.className = "app-item";
+          
+          li.innerHTML = `
+            <div class="app-item-left">
+              <input type="checkbox" class="app-checkbox" ${qty > 0 ? "checked" : ""}>
+              <span>${prod}</span>
+            </div>
+            <div class="app-qty-box">
+              <button class="app-qty-btn minus" ${qty <= 1 ? "disabled" : ""}>−</button>
+              <input type="number" class="app-qty-input" value="${qty > 0 ? qty : 1}" min="1">
+              <button class="app-qty-btn plus">+</button>
+            </div>
+          `;
+
+          const cb = li.querySelector(".app-checkbox");
+          const inputQty = li.querySelector(".app-qty-input");
+          const btnMinus = li.querySelector(".minus");
+          const btnPlus = li.querySelector(".plus");
+
+          const updateState = (newQty, isChecked) => {
+            if (isChecked) {
+              selectedItems[currentCategory][prod] = newQty;
+              btnMinus.disabled = newQty <= 1;
+            } else {
+              delete selectedItems[currentCategory][prod];
+              btnMinus.disabled = true;
+            }
+          };
+
+          cb.addEventListener("change", () => {
+            updateState(parseInt(inputQty.value) || 1, cb.checked);
+          });
+
+          btnPlus.addEventListener("click", () => {
+            let val = (parseInt(inputQty.value) || 1) + 1;
+            inputQty.value = val; cb.checked = true; updateState(val, true);
+          });
+
+          btnMinus.addEventListener("click", () => {
+            let val = parseInt(inputQty.value) || 1;
+            if (val > 1) { val--; inputQty.value = val; cb.checked = true; updateState(val, true); }
+          });
+
+          productsList.appendChild(li);
+        });
+      }
+
+      catButtons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          catButtons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+          currentCategory = btn.getAttribute("data-cat");
+          searchInput.value = "";
+          renderProducts();
+        });
+      });
+
+      searchInput.addEventListener("input", e => renderProducts(e.target.value));
+
+      btnClear.addEventListener("click", () => {
+        selectedItems = { bolos: {}, doces: {}, outros: {} };
+        renderProducts(searchInput.value);
+        showFeedback("Lista limpa!");
+      });
+
+      btnSave.addEventListener("click", () => { showFeedback("Lista salva na memória!"); });
+
+      btnFinalize.addEventListener("click", () => {
+        modalList.innerHTML = "";
+        let hasItems = false;
+        for (const cat in selectedItems) {
+          const items = Object.entries(selectedItems[cat]).filter(([_, q]) => q > 0);
+          if (items.length > 0) {
+            hasItems = true;
+            modalList.innerHTML += `<li style="font-weight:bold; color:var(--accent); border:none; padding-top:10px;">${cat.toUpperCase()}</li>`;
+            items.forEach(([item, qty]) => {
+              modalList.innerHTML += `<li>- ${item} (x${qty})</li>`;
+            });
+          }
+        }
+        if (!hasItems) modalList.innerHTML = "<li>Nenhum ingrediente selecionado.</li>";
+        modalBg.classList.add("show");
+      });
+
+      modalCloseBtn.addEventListener("click", () => modalBg.classList.remove("show"));
+      
+      btnDarkMode.addEventListener("click", () => {
+        const isDark = document.body.classList.toggle("dark");
+        btnDarkMode.textContent = isDark ? "☀️" : "🌙";
+      });
+
+      renderProducts();
+    }
+
+    // Inicializa o sistema
+    buildGrid();
+    buildNav();
+    updateView();
+    initAppDaVovo();
+
+  </script>
+</body>
+</html>
