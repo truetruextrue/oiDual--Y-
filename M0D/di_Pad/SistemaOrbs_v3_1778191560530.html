@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#05070a" />
+  <title>KOBLLUX · Start System</title>
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+
+  <style>
+    :root{
+      --kob-bg-1:#00040a;
+      --kob-bg-2:#09111c;
+      --kob-text:rgba(255,255,255,.82);
+      --kob-muted:rgba(255,255,255,.52);
+      --kob-line:rgba(255,255,255,.11);
+      --kob-accent:#00f0ff;
+      --kob-accent-2:#7a5cff;
+      --kob-good:#8cffc7;
+      --kob-warn:#ffd166;
+      --kob-danger:#ff5f8f;
+
+      --orb-size:136px;
+      --orb-size-main:192px;
+      --orb-gap:18px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --panel-radius:24px;
+      --panel-blur:18px;
+      --shadow-glow: 0 0 18px rgba(0,240,255,.22), 0 0 46px rgba(122,92,255,.18);
+    }
+
+    * { box-sizing:border-box; }
+    html, body {
+      width:100%;
+      height:100%;
+      margin:0;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at 50% 32%, rgba(0,240,255,.08), transparent 28%),
+        radial-gradient(circle at 50% 68%, rgba(122,92,255,.10), transparent 30%),
+        linear-gradient(180deg, var(--kob-bg-2), var(--kob-bg-1));
+      color:var(--kob-text);
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select:none;
+    }
+
+    body.voice-active {
+      --kob-accent: #7dffe3;
+      --kob-accent-2:#9d7bff;
+    }
+
+    #root {
+      position:relative;
+      width:100%;
+      height:100%;
+      overflow:hidden;
+      isolation:isolate;
+    }
+
+    .halo {
+      position:absolute;
+      inset:50% auto auto 50%;
+      width:min(84vw, 760px);
+      height:min(84vw, 760px);
+      transform:translate(-50%, -50%);
+      border-radius:50%;
+      pointer-events:none;
+      background:
+        radial-gradient(circle, rgba(255,255,255,.09), rgba(255,255,255,0) 62%);
+      filter: blur(10px);
+      opacity:.88;
+      animation: haloPulse 5s ease-in-out infinite;
+    }
+
+    @keyframes haloPulse{
+      0%,100% { transform:translate(-50%, -50%) scale(.96); opacity:.76; }
+      50% { transform:translate(-50%, -50%) scale(1.03); opacity:1; }
+    }
+
+    .bg-fake-custom,
+    #bg-fake-custom {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:1;
+      background:
+        radial-gradient(circle at 50% 25%, rgba(255,255,255,.045), transparent 22%),
+        radial-gradient(circle at 15% 80%, rgba(0,240,255,.06), transparent 18%),
+        radial-gradient(circle at 82% 72%, rgba(122,92,255,.06), transparent 20%);
+      mix-blend-mode:screen;
+    }
+
+    .status-shell {
+      position:absolute;
+      left:50%;
+      bottom:calc(20px + var(--safe-bottom));
+      transform:translateX(-50%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:8px;
+      pointer-events:none;
+      z-index:30;
+    }
+
+    #statusText {
+      font-size:.78rem;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+      color:var(--kob-muted);
+      text-shadow:0 0 12px rgba(255,255,255,.08);
+    }
+
+    #activeMeta {
+      font-size:.72rem;
+      letter-spacing:.14em;
+      color:rgba(255,255,255,.6);
+    }
+
+    .symbol-bar {
+      position:absolute;
+      top:calc(12px + var(--safe-top));
+      left:50%;
+      transform:translateX(-50%);
+      display:flex;
+      align-items:center;
+      gap:10px;
+      padding:10px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:999px;
+      background:rgba(9,13,19,.50);
+      backdrop-filter: blur(var(--panel-blur));
+      -webkit-backdrop-filter: blur(var(--panel-blur));
+      box-shadow: var(--shadow-glow);
+      z-index:50;
+      max-width:calc(100vw - 16px);
+      overflow:auto;
+    }
+
+    .symbol-button {
+      appearance:none;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      color:var(--kob-text);
+      border-radius:999px;
+      min-height:44px;
+      min-width:44px;
+      padding:0 14px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+      box-shadow:0 10px 30px rgba(0,0,0,.24);
+      cursor:pointer;
+      transition: transform .18s ease, border-color .18s ease, opacity .18s ease, background .18s ease;
+      white-space:nowrap;
+    }
+
+    .symbol-button:active {
+      transform:scale(.96);
+    }
+
+    .symbol-button:hover,
+    .symbol-button.is-hot {
+      border-color:rgba(0,240,255,.35);
+      background:linear-gradient(180deg, rgba(0,240,255,.08), rgba(122,92,255,.05));
+    }
+
+    .symbol-button .btn-text {
+      font-size:.75rem;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .symbol-button.icon-only {
+      width:44px;
+      padding:0;
+      justify-content:center;
+    }
+
+    .symbol-button.primary {
+      border-color:rgba(0,240,255,.28);
+    }
+
+    .symbol-button.secondary {
+      border-color:rgba(122,92,255,.22);
+    }
+
+    #stage {
+      position:absolute;
+      inset:0;
+      display:grid;
+      place-items:center;
+      padding:96px 18px 110px;
+      z-index:10;
+    }
+
+    #orbStack {
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:var(--orb-gap);
+      flex-wrap:wrap;
+      max-width:min(100%, 760px);
+    }
+
+    .orb {
+      position:relative;
+      width:var(--orb-size);
+      height:var(--orb-size);
+      border:none;
+      border-radius:50%;
+      display:grid;
+      place-items:center;
+      background:transparent;
+      cursor:pointer;
+      outline:none;
+      padding:0;
+      transform:translateZ(0);
+      transition:
+        transform .22s cubic-bezier(.2,.9,.25,1),
+        opacity .22s ease,
+        filter .22s ease;
+    }
+
+    .orb::before {
+      content:"";
+      position:absolute;
+      inset:-10px;
+      border-radius:50%;
+      background:radial-gradient(circle, rgba(255,255,255,.14), transparent 66%);
+      opacity:0;
+      transform:scale(.92);
+      transition:opacity .22s ease, transform .22s ease;
+      pointer-events:none;
+      filter: blur(2px);
+    }
+
+    .orb .orb-core {
+      width:100%;
+      height:100%;
+      border-radius:50%;
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,.92), rgba(255,255,255,0) 27%),
+        radial-gradient(circle at 70% 72%, var(--orb-primary, #00f0ff), var(--orb-secondary, #7a5cff) 64%);
+      box-shadow:
+        0 0 16px rgba(0,240,255,.34),
+        0 0 38px rgba(122,92,255,.26),
+        inset 0 0 24px rgba(255,255,255,.11);
+      position:relative;
+      overflow:hidden;
+      animation: orbSpin 14s linear infinite;
+    }
+
+    .orb .orb-core::after {
+      content:"";
+      position:absolute;
+      inset:10%;
+      border-radius:50%;
+      background: radial-gradient(circle at 35% 30%, rgba(255,255,255,.10), transparent 54%);
+      mix-blend-mode:screen;
+    }
+
+    @keyframes orbSpin {
+      to { transform:rotate(360deg); }
+    }
+
+    .orb .orb-label {
+      position:absolute;
+      left:50%;
+      bottom:-28px;
+      transform:translateX(-50%);
+      font-size:.72rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.56);
+      text-shadow:0 0 8px rgba(0,0,0,.28);
+      pointer-events:none;
+      white-space:nowrap;
+    }
+
+    .orb.is-active {
+      transform:scale(1.12);
+      filter:saturate(1.15);
+    }
+
+    .orb.is-active::before {
+      opacity:1;
+      transform:scale(1);
+    }
+
+    .orb.is-active .orb-core {
+      box-shadow:
+        0 0 18px rgba(0,240,255,.52),
+        0 0 44px rgba(122,92,255,.34),
+        0 0 80px rgba(0,240,255,.18),
+        inset 0 0 24px rgba(255,255,255,.11);
+      animation-duration:10s;
+    }
+
+    .orb.is-absorbed {
+      opacity:0;
+      transform:scale(.15);
+      pointer-events:none;
+    }
+
+    .orb.is-fusing {
+      filter:blur(.5px) saturate(1.25);
+      transform:scale(.82);
+    }
+
+    .orb[data-ring="1"] .orb-core {
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,.92), rgba(255,255,255,0) 27%),
+        radial-gradient(circle at 70% 72%, #00f0ff, #7a5cff 64%);
+    }
+    .orb[data-ring="2"] .orb-core {
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,.92), rgba(255,255,255,0) 27%),
+        radial-gradient(circle at 70% 72%, #8cffc7, #00f0ff 64%);
+    }
+    .orb[data-ring="3"] .orb-core {
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,.92), rgba(255,255,255,0) 27%),
+        radial-gradient(circle at 70% 72%, #ffd166, #ff5f8f 64%);
+    }
+
+    .micro-row {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .mini-avatar, #actMiniAvatar {
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,.95), rgba(255,255,255,0) 23%),
+        radial-gradient(circle at 70% 72%, rgba(0,240,255,.95), rgba(122,92,255,.95));
+      box-shadow:0 0 18px rgba(0,240,255,.22);
+      flex:none;
+    }
+
+    .avatar-slot, #avatarTarget {
+      width:48px;
+      height:48px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display:grid;
+      place-items:center;
+      box-shadow:0 10px 26px rgba(0,0,0,.24);
+    }
+
+    #arch-overlay {
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      opacity:0;
+      transition:opacity .25s ease;
+      background:radial-gradient(circle at center, rgba(255,255,255,.08), transparent 58%);
+      z-index:12;
+    }
+
+    #arch-overlay.show {
+      opacity:1;
+    }
+
+    #fusionCard {
+      position:absolute;
+      left:50%;
+      bottom:calc(14px + var(--safe-bottom));
+      transform:translateX(-50%) translateY(110%);
+      width:min(720px, calc(100vw - 16px));
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:calc(var(--panel-radius) + 6px);
+      background:rgba(6,9,15,.78);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow:0 20px 60px rgba(0,0,0,.42), 0 0 40px rgba(0,240,255,.08);
+      z-index:60;
+      overflow:hidden;
+      transition: transform .34s cubic-bezier(.2,.9,.2,1), opacity .24s ease;
+      opacity:0;
+      pointer-events:none;
+    }
+
+    #fusionCard.open {
+      transform:translateX(-50%) translateY(0);
+      opacity:1;
+      pointer-events:auto;
+    }
+
+    .fusion-top {
+      padding:14px 16px 12px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+
+    .fusion-title {
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .fusion-title strong {
+      font-size:.92rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .fusion-title span {
+      font-size:.72rem;
+      color:var(--kob-muted);
+      letter-spacing:.10em;
+    }
+
+    .fusion-body {
+      padding:14px 16px 16px;
+      display:grid;
+      gap:14px;
+    }
+
+    .fusion-grid {
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0, 1fr));
+      gap:10px;
+    }
+
+    .fusion-chip {
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      border-radius:16px;
+      padding:12px 10px;
+      min-height:66px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:4px;
+    }
+
+    .fusion-chip .k {
+      font-size:.66rem;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--kob-muted);
+    }
+
+    .fusion-chip .v {
+      font-size:.88rem;
+      letter-spacing:.08em;
+      color:var(--kob-text);
+      word-break:break-word;
+    }
+
+    .fusion-actions {
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .chip-btn {
+      border:1px solid rgba(255,255,255,.11);
+      background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+      color:var(--kob-text);
+      border-radius:999px;
+      padding:10px 14px;
+      font-size:.74rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .chip-btn.primary {
+      border-color:rgba(0,240,255,.28);
+    }
+
+    .chip-btn.secondary {
+      border-color:rgba(122,92,255,.28);
+    }
+
+    .chip-btn.danger {
+      border-color:rgba(255,95,143,.25);
+    }
+
+    .legend {
+      position:absolute;
+      right:14px;
+      top:calc(64px + var(--safe-top));
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      z-index:40;
+      pointer-events:none;
+    }
+
+    .legend-item {
+      padding:8px 10px;
+      border-radius:999px;
+      background:rgba(8,11,16,.52);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      font-size:.68rem;
+      letter-spacing:.12em;
+      color:rgba(255,255,255,.68);
+      text-transform:uppercase;
+      text-align:right;
+      max-width:220px;
+    }
+
+    @media (max-width: 640px){
+      :root { --orb-size:108px; --orb-size-main:168px; }
+      #stage { padding-top:88px; padding-bottom:104px; }
+      .symbol-bar { gap:8px; padding:8px; }
+      .symbol-button { min-height:40px; }
+      .fusion-grid { grid-template-columns:1fr; }
+      .legend { display:none; }
+    }
+  </style>
+</head>
+
+<body>
+  <div id="root">
+    <div class="bg-fake-custom" id="bg-fake-custom"></div>
+    <div class="halo"></div>
+    <div id="arch-overlay"></div>
+
+    <div class="symbol-bar" id="symbolBar">
+      <button class="symbol-button primary icon-only" id="btnHome" title="Home">
+        ⌂
+      </button>
+
+      <button class="symbol-button secondary" id="btnOpenFusion" title="Abrir Fusion Card">
+        <span class="btn-text">Fusion</span>
+      </button>
+
+      <button class="symbol-button secondary" id="btnCycleOrb" title="Trocar Arquétipo">
+        <span class="btn-text">Orb</span>
+      </button>
+
+      <div class="micro-row">
+        <div class="mini-avatar" id="actMiniAvatar" title="Avatar Ativo"></div>
+        <div class="avatar-slot" id="avatarTarget" title="Gerenciar Chaves (Cofre)"></div>
+      </div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">single tap · next orb</div>
+      <div class="legend-item">double tap · home</div>
+      <div class="legend-item">hold · fusion card</div>
+    </div>
+
+    <main id="stage">
+      <section id="orbStack" aria-label="Controle Orb">
+        <button class="orb is-active" data-ring="1" data-index="0" data-archetype="atlas" aria-label="Orb Atlas">
+          <div class="orb-core"></div>
+          <div class="orb-label">Atlas</div>
+        </button>
+
+        <button class="orb" data-ring="2" data-index="1" data-archetype="nova" aria-label="Orb Nova">
+          <div class="orb-core"></div>
+          <div class="orb-label">Nova</div>
+        </button>
+
+        <button class="orb" data-ring="3" data-index="2" data-archetype="vitalis" aria-label="Orb Vitalis">
+          <div class="orb-core"></div>
+          <div class="orb-label">Vitalis</div>
+        </button>
+      </section>
+    </main>
+
+    <div class="status-shell">
+      <div id="statusText">AGUARDANDO CONEXÃO</div>
+      <div id="activeMeta">ORB · ATIVO</div>
+    </div>
+
+    <section id="fusionCard" aria-hidden="true">
+      <div class="fusion-top">
+        <div class="fusion-title">
+          <strong>Fusion Card // Core Controller</strong>
+          <span id="fusionSubtitle">estado, arquétipo e avatar</span>
+        </div>
+        <button class="chip-btn danger" id="btnCloseFusion" type="button">Fechar</button>
+      </div>
+
+      <div class="fusion-body">
+        <div class="fusion-grid">
+          <div class="fusion-chip">
+            <div class="k">Arquétipo</div>
+            <div class="v" id="fusionArchetype">atlas</div>
+          </div>
+          <div class="fusion-chip">
+            <div class="k">Avatar</div>
+            <div class="v" id="fusionAvatar">ativo</div>
+          </div>
+          <div class="fusion-chip">
+            <div class="k">Orb Index</div>
+            <div class="v" id="fusionIndex">0</div>
+          </div>
+        </div>
+
+        <div class="fusion-actions">
+          <button class="chip-btn primary" id="btnFuseCurrent" type="button">Fusar Ativo</button>
+          <button class="chip-btn secondary" id="btnResetFusion" type="button">Desfazer Fusão</button>
+          <button class="chip-btn secondary" id="btnSaveState" type="button">Salvar Estado</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/inline-0.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/dikob0000.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>
+  <script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
+
+  <script>
+    (() => {
+      const LS = {
+        activeOrb: 'di_activeOrb',
+        activeArchetype: 'di_activeArchetype',
+        userName: 'di_userName',
+        voice: 'di_voice_primary',
+        model: 'di_modelName'
+      };
+
+      const ARCHETYPES = [
+        'atlas','nova','vitalis','pulse','kaos','kodux','lumine','aion',
+        'kobllux','artemis','serena','genus','solus','rhea','uno','dual',
+        'trinity','infodose','horus','bllue'
+      ];
+
+      const THEME = {
+        atlas:   { primary:'#00f0ff', secondary:'#7a5cff', label:'Atlas' },
+        nova:    { primary:'#8cffc7', secondary:'#00f0ff', label:'Nova' },
+        vitalis: { primary:'#7dffe3', secondary:'#4ea7ff', label:'Vitalis' },
+        pulse:   { primary:'#ffd166', secondary:'#ff5f8f', label:'Pulse' },
+        kaos:    { primary:'#ff5f8f', secondary:'#b34cff', label:'Kaos' },
+        kodux:   { primary:'#ffffff', secondary:'#00f0ff', label:'Kodux' },
+        lumine:  { primary:'#f5f7ff', secondary:'#7a5cff', label:'Lumine' },
+        aion:    { primary:'#c9d4ff', secondary:'#7b8cff', label:'Aion' },
+        kobllux: { primary:'#00f0ff', secondary:'#ffffff', label:'Kobllux' },
+        artemis: { primary:'#a7ffda', secondary:'#9d7bff', label:'Artemis' },
+        serena:  { primary:'#d7fbff', secondary:'#7a5cff', label:'Serena' },
+        genus:   { primary:'#c8c8ff', secondary:'#00f0ff', label:'Genus' },
+        solus:   { primary:'#ffffff', secondary:'#ffd166', label:'Solus' },
+        rhea:    { primary:'#8cffc7', secondary:'#ffffff', label:'Rhea' },
+        uno:     { primary:'#ffffff', secondary:'#00f0ff', label:'Uno' },
+        dual:    { primary:'#7a5cff', secondary:'#00f0ff', label:'Dual' },
+        trinity: { primary:'#00f0ff', secondary:'#ff5f8f', label:'Trinity' },
+        infodose:{ primary:'#ffd166', secondary:'#00f0ff', label:'Infodose' },
+        horus:   { primary:'#ffffff', secondary:'#8cffc7', label:'Horus' },
+        bllue:   { primary:'#4ea7ff', secondary:'#00f0ff', label:'Bllue' }
+      };
+
+      const state = {
+        currentIndex: Number(localStorage.getItem(LS.activeOrb) || 0) || 0,
+        currentArchetype: localStorage.getItem(LS.activeArchetype) || 'atlas',
+        isActivated: false,
+        longPressTimer: null,
+        longPressFired: false,
+        doubleTapTimer: null,
+        tapCount: 0,
+        fusionOpen: false,
+        fused: false
+      };
+
+      const els = {
+        body: document.body,
+        root: document.getElementById('root'),
+        statusText: document.getElementById('statusText'),
+        activeMeta: document.getElementById('activeMeta'),
+        archOverlay: document.getElementById('arch-overlay'),
+        orbStack: document.getElementById('orbStack'),
+        orbs: [...document.querySelectorAll('.orb')],
+        fusionCard: document.getElementById('fusionCard'),
+        fusionArchetype: document.getElementById('fusionArchetype'),
+        fusionAvatar: document.getElementById('fusionAvatar'),
+        fusionIndex: document.getElementById('fusionIndex'),
+        fusionSubtitle: document.getElementById('fusionSubtitle'),
+        actMiniAvatar: document.getElementById('actMiniAvatar'),
+        avatarTarget: document.getElementById('avatarTarget'),
+        btnHome: document.getElementById('btnHome'),
+        btnOpenFusion: document.getElementById('btnOpenFusion'),
+        btnCycleOrb: document.getElementById('btnCycleOrb'),
+        btnCloseFusion: document.getElementById('btnCloseFusion'),
+        btnFuseCurrent: document.getElementById('btnFuseCurrent'),
+        btnResetFusion: document.getElementById('btnResetFusion'),
+        btnSaveState: document.getElementById('btnSaveState')
+      };
+
+      function setVoiceState(active){
+        document.body.classList.toggle('voice-active', !!active);
+      }
+
+      function safeCall(path, ...args){
+        try {
+          const segments = path.split('.');
+          let ref = window;
+          for (const seg of segments) {
+            ref = ref?.[seg];
+            if (ref == null) return false;
+          }
+          if (typeof ref === 'function') {
+            ref(...args);
+            return true;
+          }
+          return false;
+        } catch (_) {
+          return false;
+        }
+      }
+
+      function getTheme(archetype){
+        return THEME[archetype] || THEME.atlas;
+      }
+
+      function applyTheme(archetype){
+        const t = getTheme(archetype);
+        document.documentElement.style.setProperty('--orb-primary', t.primary);
+        document.documentElement.style.setProperty('--orb-secondary', t.secondary);
+        document.documentElement.style.setProperty('--kob-accent', t.primary);
+        document.documentElement.style.setProperty('--kob-accent-2', t.secondary);
+        els.actMiniAvatar.style.background = `radial-gradient(circle at 30% 28%, rgba(255,255,255,.95), rgba(255,255,255,0) 23%), radial-gradient(circle at 70% 72%, ${t.primary}, ${t.secondary})`;
+        els.fusionSubtitle.textContent = `${t.label.toLowerCase()} · estado integrado`;
+      }
+
+      function updateAvatarSlot(archetype){
+        const t = getTheme(archetype);
+        els.avatarTarget.style.background = `radial-gradient(circle at 30% 28%, rgba(255,255,255,.95), rgba(255,255,255,0) 23%), radial-gradient(circle at 70% 72%, ${t.primary}, ${t.secondary})`;
+        els.avatarTarget.title = `Avatar: ${t.label}`;
+      }
+
+      function updateFusionCard(){
+        els.fusionArchetype.textContent = state.currentArchetype;
+        els.fusionAvatar.textContent = localStorage.getItem(LS.userName) || 'ativo';
+        els.fusionIndex.textContent = String(state.currentIndex);
+      }
+
+      function updateStatus(text){
+        els.statusText.textContent = text;
+      }
+
+      function syncOrbUI(){
+        const archetype = state.currentArchetype;
+        const t = getTheme(archetype);
+
+        els.orbs.forEach((orb, i) => {
+          const active = i === state.currentIndex;
+          orb.classList.toggle('is-active', active);
+          orb.dataset.archetype = active ? archetype : orb.dataset.archetype || archetype;
+          orb.style.setProperty('--orb-primary', active ? t.primary : getTheme(orb.dataset.archetype || 'atlas').primary);
+          orb.style.setProperty('--orb-secondary', active ? t.secondary : getTheme(orb.dataset.archetype || 'atlas').secondary);
+        });
+
+        applyTheme(archetype);
+        updateAvatarSlot(archetype);
+        updateFusionCard();
+        updateStatus(`SISTEMA · ${archetype.toUpperCase()}`);
+        els.activeMeta.textContent = `ORB · ${String(state.currentIndex + 1).padStart(2,'0')} · ${archetype.toUpperCase()}`;
+      }
+
+      function setActiveOrb(index, archetypeOverride = null){
+        const total = els.orbs.length;
+        state.currentIndex = ((index % total) + total) % total;
+
+        const picked = archetypeOverride || ARCHETYPES[state.currentIndex % ARCHETYPES.length] || 'atlas';
+        state.currentArchetype = picked;
+
+        localStorage.setItem(LS.activeOrb, String(state.currentIndex));
+        localStorage.setItem(LS.activeArchetype, picked);
+
+        syncOrbUI();
+
+        const activeOrb = els.orbs[state.currentIndex];
+        const t = getTheme(picked);
+
+        if (activeOrb) {
+          activeOrb.dataset.archetype = picked;
+          activeOrb.style.setProperty('--orb-primary', t.primary);
+          activeOrb.style.setProperty('--orb-secondary', t.secondary);
+        }
+
+        if (window.KOBLLUX && typeof window.KOBLLUX.onOrbChange === 'function') {
+          try { window.KOBLLUX.onOrbChange({ index: state.currentIndex, archetype: picked, element: activeOrb }); } catch (_) {}
+        }
+
+        safeCall('kobllux.onOrbChange', { index: state.currentIndex, archetype: picked, element: activeOrb });
+        safeCall('KOBLLUX.onOrbChange', { index: state.currentIndex, archetype: picked, element: activeOrb });
+      }
+
+      function nextOrb(){
+        setActiveOrb(state.currentIndex + 1);
+      }
+
+      function openFusionCard(){
+        state.fusionOpen = true;
+        els.fusionCard.classList.add('open');
+        els.fusionCard.setAttribute('aria-hidden', 'false');
+        els.archOverlay.classList.add('show');
+        updateFusionCard();
+      }
+
+      function closeFusionCard(){
+        state.fusionOpen = false;
+        els.fusionCard.classList.remove('open');
+        els.fusionCard.setAttribute('aria-hidden', 'true');
+        els.archOverlay.classList.remove('show');
+      }
+
+      function activateSystem(){
+        if (state.isActivated) return;
+        state.isActivated = true;
+        updateStatus('SISTEMA ONLINE');
+        setVoiceState(true);
+        els.archOverlay.classList.add('show');
+
+        setTimeout(() => {
+          setVoiceState(false);
+          if (!state.fusionOpen) els.archOverlay.classList.remove('show');
+        }, 2000);
+      }
+
+      function fuseOrbs(targetIndex = state.currentIndex){
+        state.fused = true;
+        els.orbs.forEach((orb, i) => {
+          if (i !== targetIndex) {
+            orb.classList.add('is-fusing');
+            requestAnimationFrame(() => orb.classList.add('is-absorbed'));
+          }
+        });
+
+        setActiveOrb(targetIndex);
+        updateStatus(`FUSÃO · ORB ${targetIndex + 1}`);
+        openFusionCard();
+      }
+
+      function resetFusion(){
+        state.fused = false;
+        els.orbs.forEach(orb => {
+          orb.classList.remove('is-absorbed', 'is-fusing');
+        });
+        syncOrbUI();
+        updateStatus(`FUSÃO RESTAURADA · ${state.currentArchetype.toUpperCase()}`);
+      }
+
+      function saveState(){
+        localStorage.setItem('di_kobllux_saved_state', JSON.stringify({
+          index: state.currentIndex,
+          archetype: state.currentArchetype,
+          ts: Date.now()
+        }));
+        updateStatus('ESTADO SALVO');
+      }
+
+      function goHome(){
+        const handled =
+          safeCall('KOBLLUX.goHome') ||
+          safeCall('kobllux.goHome') ||
+          safeCall('window.goHome') ||
+          safeCall('window.navigateHome');
+
+        if (!handled) {
+          window.location.href = './';
+        }
+      }
+
+      function handleTapAction(){
+        state.tapCount += 1;
+
+        if (state.tapCount === 1) {
+          state.doubleTapTimer = setTimeout(() => {
+            if (!state.longPressFired) nextOrb();
+            state.tapCount = 0;
+            state.longPressFired = false;
+          }, 240);
+          return;
+        }
+
+        if (state.tapCount === 2) {
+          clearTimeout(state.doubleTapTimer);
+          state.tapCount = 0;
+          state.longPressFired = false;
+          goHome();
+        }
+      }
+
+      function startPressTimer(){
+        clearTimeout(state.longPressTimer);
+        state.longPressFired = false;
+        state.longPressTimer = setTimeout(() => {
+          state.longPressFired = true;
+          openFusionCard();
+        }, 520);
+      }
+
+      function stopPressTimer(){
+        clearTimeout(state.longPressTimer);
+      }
+
+      function orbPointerDown(ev){
+        activateSystem();
+        startPressTimer();
+      }
+
+      function orbPointerUp(ev){
+        stopPressTimer();
+        if (!state.longPressFired) handleTapAction();
+      }
+
+      function orbPointerCancel(){
+        stopPressTimer();
+      }
+
+      function setOrbHandlers(orb, index){
+        orb.addEventListener('pointerdown', orbPointerDown, { passive:true });
+        orb.addEventListener('pointerup', orbPointerUp, { passive:true });
+        orb.addEventListener('pointerleave', orbPointerCancel, { passive:true });
+        orb.addEventListener('pointercancel', orbPointerCancel, { passive:true });
+
+        orb.addEventListener('click', (e) => {
+          e.preventDefault();
+          if (!('PointerEvent' in window)) nextOrb();
+        });
+
+        orb.addEventListener('dblclick', (e) => {
+          e.preventDefault();
+          goHome();
+        });
+      }
+
+      function initSymbolBar(){
+        els.btnHome.addEventListener('click', goHome);
+        els.btnOpenFusion.addEventListener('click', openFusionCard);
+        els.btnCycleOrb.addEventListener('click', nextOrb);
+        els.btnCloseFusion.addEventListener('click', closeFusionCard);
+        els.btnFuseCurrent.addEventListener('click', () => fuseOrbs(state.currentIndex));
+        els.btnResetFusion.addEventListener('click', resetFusion);
+        els.btnSaveState.addEventListener('click', saveState);
+
+        els.archOverlay.addEventListener('click', closeFusionCard);
+      }
+
+      function loadState(){
+        const saved = localStorage.getItem('di_kobllux_saved_state');
+        if (saved) {
+          try {
+            const parsed = JSON.parse(saved);
+            if (typeof parsed.index === 'number') state.currentIndex = parsed.index;
+            if (typeof parsed.archetype === 'string') state.currentArchetype = parsed.archetype;
+          } catch (_) {}
+        }
+      }
+
+      function integrateExternalModules(){
+        window.KOBLLUX = window.KOBLLUX || {};
+        window.KOBLLUX.state = state;
+        window.KOBLLUX.setActiveOrb = setActiveOrb;
+        window.KOBLLUX.nextOrb = nextOrb;
+        window.KOBLLUX.openFusionCard = openFusionCard;
+        window.KOBLLUX.closeFusionCard = closeFusionCard;
+        window.KOBLLUX.fuseOrbs = fuseOrbs;
+        window.KOBLLUX.resetFusion = resetFusion;
+        window.KOBLLUX.saveState = saveState;
+        window.KOBLLUX.goHome = goHome;
+        window.KOBLLUX.activateSystem = activateSystem;
+      }
+
+      function init(){
+        loadState();
+        integrateExternalModules();
+
+        els.orbs.forEach(setOrbHandlers);
+        initSymbolBar();
+
+        setActiveOrb(state.currentIndex, state.currentArchetype);
+        activateSystem();
+
+        if (typeof window.activateSystem !== 'function') {
+          window.activateSystem = activateSystem;
+        }
+
+        if (typeof window.setVoiceState !== 'function') {
+          window.setVoiceState = setVoiceState;
+        }
+
+        document.body.addEventListener('click', () => {
+          if (!state.isActivated) activateSystem();
+        }, { once:true });
+
+        updateFusionCard();
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init, { once:true });
+      } else {
+        init();
+      }
+    })();
+  </script>
+</body>
+</html>

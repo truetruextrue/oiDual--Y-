@@ -1,0 +1,315 @@
+<!-- ═══════════════════════════════════════════════ -->
+<!-- OVERRIDE PANEL · DIV EXTRACTOR -->
+<!-- Cole ANTES do </body> -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<style>
+  #dualExtractorToggle{
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:999999;
+    width:58px;
+    height:58px;
+    border:none;
+    border-radius:18px;
+    background:rgba(0,0,0,.75);
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    backdrop-filter:blur(16px);
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+
+  #dualExtractorPanel{
+    position:fixed;
+    inset:0;
+    z-index:999998;
+    background:rgba(0,0,0,.82);
+    backdrop-filter:blur(20px);
+    opacity:0;
+    pointer-events:none;
+    transition:.35s;
+    display:flex;
+    justify-content:flex-end;
+  }
+
+  #dualExtractorPanel.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .dual-side{
+    width:min(520px,100%);
+    height:100%;
+    background:#05070a;
+    border-left:1px solid rgba(255,255,255,.08);
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .dual-head{
+    padding:20px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .dual-head h2{
+    color:#fff;
+    font-size:18px;
+    font-family:monospace;
+    letter-spacing:.08em;
+  }
+
+  .dual-close{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+  }
+
+  .dual-content{
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .dual-card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    overflow:hidden;
+  }
+
+  .dual-card button{
+    width:100%;
+    border:none;
+    background:none;
+    color:#fff;
+    text-align:left;
+    padding:16px;
+    cursor:pointer;
+    font-family:monospace;
+    font-size:12px;
+    letter-spacing:.05em;
+  }
+
+  .dual-card textarea{
+    width:100%;
+    min-height:220px;
+    resize:vertical;
+    background:#000;
+    color:#00ff9d;
+    border:none;
+    padding:16px;
+    font-size:11px;
+    line-height:1.5;
+    font-family:monospace;
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+
+  .dual-actions{
+    display:flex;
+    gap:10px;
+    padding:12px;
+    flex-wrap:wrap;
+  }
+
+  .dual-actions button{
+    flex:1;
+    min-width:120px;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    cursor:pointer;
+    background:#c5a059;
+    color:#000;
+    font-weight:700;
+  }
+
+  .dual-highlight{
+    outline:3px solid #c5a059!important;
+    outline-offset:-3px;
+  }
+</style>
+
+<button id="dualExtractorToggle">🧩</button>
+
+<div id="dualExtractorPanel">
+  <div class="dual-side">
+
+    <div class="dual-head">
+      <h2>DIV EXTRACTOR</h2>
+      <button class="dual-close">✕</button>
+    </div>
+
+    <div class="dual-content" id="dualExtractorList"></div>
+
+  </div>
+</div>
+
+<script>
+(() => {
+
+  const toggle = document.getElementById('dualExtractorToggle');
+  const panel  = document.getElementById('dualExtractorPanel');
+  const close  = document.querySelector('.dual-close');
+  const list   = document.getElementById('dualExtractorList');
+
+  toggle.onclick = () => {
+    panel.classList.toggle('active');
+    renderExtractor();
+  };
+
+  close.onclick = () => {
+    panel.classList.remove('active');
+  };
+
+  function getSmartSelector(el){
+    if(el.id) return '#' + el.id;
+
+    let cls = [...el.classList].slice(0,3).join('.');
+    return el.tagName.toLowerCase() + (cls ? '.' + cls : '');
+  }
+
+  function extractSections(){
+
+    const selectors = [
+      '.screen',
+      '.media-grid',
+      '.video-wrap',
+      '.feed-card',
+      '.glass-card',
+      'section',
+      '[class*="hero"]',
+      '[class*="grid"]'
+    ];
+
+    const found = [];
+
+    selectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        if(found.includes(el)) return;
+        found.push(el);
+      });
+    });
+
+    return found;
+  }
+
+  function copy(txt){
+    navigator.clipboard.writeText(txt);
+
+    const toast = document.createElement('div');
+    toast.innerText = 'COPIADO';
+    toast.style.cssText = `
+      position:fixed;
+      bottom:30px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#000;
+      color:#fff;
+      padding:12px 18px;
+      border-radius:999px;
+      z-index:9999999;
+      font-family:monospace;
+      border:1px solid rgba(255,255,255,.15);
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(()=>toast.remove(),1500);
+  }
+
+  function renderExtractor(){
+
+    const blocks = extractSections();
+
+    list.innerHTML = '';
+
+    blocks.forEach((el, index) => {
+
+      const card = document.createElement('div');
+      card.className = 'dual-card';
+
+      const selector = getSmartSelector(el);
+
+      const btn = document.createElement('button');
+      btn.innerHTML = `
+        <div style="font-size:13px;color:#c5a059;margin-bottom:6px;">
+          BLOCO ${index + 1}
+        </div>
+
+        <div>${selector}</div>
+      `;
+
+      btn.onclick = () => {
+
+        document.querySelectorAll('.dual-highlight')
+          .forEach(e => e.classList.remove('dual-highlight'));
+
+        el.classList.add('dual-highlight');
+
+        el.scrollIntoView({
+          behavior:'smooth',
+          block:'center'
+        });
+      };
+
+      const textarea = document.createElement('textarea');
+      textarea.value = el.outerHTML.trim();
+
+      const actions = document.createElement('div');
+      actions.className = 'dual-actions';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.innerText = 'Copiar HTML';
+
+      copyBtn.onclick = () => {
+        copy(textarea.value);
+      };
+
+      const replaceBtn = document.createElement('button');
+      replaceBtn.innerText = 'Aplicar Alteração';
+
+      replaceBtn.onclick = () => {
+
+        try{
+
+          const temp = document.createElement('div');
+          temp.innerHTML = textarea.value.trim();
+
+          const newEl = temp.firstElementChild;
+
+          if(!newEl) return;
+
+          el.replaceWith(newEl);
+
+          renderExtractor();
+
+        }catch(err){
+          alert('Erro no HTML');
+        }
+
+      };
+
+      actions.append(copyBtn, replaceBtn);
+
+      card.append(btn, textarea, actions);
+
+      list.appendChild(card);
+
+    });
+
+  }
+
+})();
+</script>

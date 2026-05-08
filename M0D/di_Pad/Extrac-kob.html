@@ -1,0 +1,650 @@
+<html lang="pt-BR"><head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>KOBLLUX TTS Dock - Standalone</title>
+
+  <!-- Fontes e CSS Externos --
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&amp;display=swap" rel="stylesheet">
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-root-aa.css">
+    
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/base1.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-hud.css">
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kxt-solar.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai.css">
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/V-core/css/main-root.css">
+    <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/kob-aura.css">
+
+
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-framefix.css">
+
+-->
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/css/0x01_pulsar_V_D5-2.css">
+  
+
+ <style>
+.main-toggle,
+  #toggleBtn {color: var(--kob-voice-secondary);
+    width: 48px;
+    height: 48px;border:12px;box-shadow: var(--kob-voice-primary);
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+</style>
+
+</head>
+<body>
+
+<div id="root">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-dox-nanai-v4.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-glass-0.css">
+
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/css/kob-u878.css">
+
+<div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+<div class="wrap">
+  <div class="content">
+    <iframe id="frame" src="about:blank"></iframe>
+    <div id="kob-tts-outline"></div>
+  </div>
+
+
+
+  <!-- HUD Inteligente -->
+  <div class="symbol-bar floating" id="symbolBar">
+          <div class="symbol-wrap">
+
+          <div class="drawer-toggle" onclick="toggleDrawer()" title="Abrir Engine de Background">🎛️</div>
+        </div>
+
+  
+    <!-- Botão Menu -->
+    <div class="toggle-wrap">
+      <button class="symbol-button main-toggl" id="toggleBtn" title="Menu / Iniciar">≡</button>
+    </div>
+
+    <!-- Controles de Navegação de Leitura -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-prev" title="Voltar Bloco">◀</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" id="btn-play" title="Play/Pause">▶</button>
+    </div>
+     <div class="symbol-wrap">
+    <button class="symbol-button" id="tts-stop" title="Parar">■</button>
+  </div>
+
+    <!-- Troca de Arquétipo com ORB integrado (Sempre visível) -->
+    <button class="symbol-button" id="btn-arch" title="Trocar Arquétipo de Voz">
+      <div class="orb-microphone-container">
+        <div class="tts-orb-mini">
+          <div class="orb" id="main-orb">
+            <div class="orb-core"></div>
+          </div>
+        </div>
+<!--
+        <div class="voice-indicator" id="voiceIndicator"></div> -->
+
+      </div>
+    </button>
+
+    <!-- Outros atalhos -->
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="phi" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78F/">🌌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="viv" data-url="https://kodux78k.github.io/oiDual--Y-/M0D/78FFD/">🛋️</button>
+    </div>
+  
+
+ <div class="symbol-wrap">
+      <button class="symbol-button" data-id="home" data-url="https://kodux78k.github.io/oiDual-idHome/">◌</button>
+    </div>
+    <div class="symbol-wrap">
+      <button class="symbol-button" data-id="doc" data-url="https://kodux78k.github.io/info-Doc/index.html">◘</button>
+    </div>
+
+    <div class="hud-info" id="hudStatus">KOBLLUX · ORB NEXUS</div>
+  </div>
+</div>
+       <div id="arch-overlay"></div>  
+<!-- Scripts -->
+<script type="module" src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kobdh0-main.js"></script>
+
+</div>
+
+
+
+
+
+<script>
+
+const dock = document.querySelector('.kob-tts-dock');
+
+let idleTimer;
+
+function resetIdle(){
+  dock.classList.remove('idle');
+
+  clearTimeout(idleTimer);
+  idleTimer = setTimeout(()=>{
+    dock.classList.add('idle');
+  }, 1870); // 1870  mili segundos parado
+}
+
+/* eventos que despertam o dock */
+['pointerdown','pointermove','touchstart','mousemove']
+.forEach(ev=>{
+  document.addEventListener(ev, resetIdle, {passive:true});
+});
+
+resetIdle();
+</script>
+
+
+<!-- ╔══════════════════════════════════════════╗
+     ║  KOBLLUX · LONG-PRESS URL EDITOR        ║
+     ║  Segurar 3s → edita data-url do botão   ║
+     ║  Clique curto → sistema externo cuida   ║
+     ╚══════════════════════════════════════════╝ -->
+
+
+<div id="kblx-back">
+  <div id="kblx-panel">
+    <div class="p-chip">⌘ KOBLLUX HUD · EDITOR DE ROTA</div>
+    <div class="p-title" id="kblx-ttl">Botão</div>
+    <label class="p-lbl" for="kblx-inp">Novo valor para data-url</label>
+    <input id="kblx-inp" type="text" placeholder="arquivo.html  ou  https://..." spellcheck="false" autocomplete="off">
+    <div class="kblx-row">
+      <button class="kblx-btn kblx-save" id="kblx-btn-save">⊙ Salvar no botão</button>
+      <button class="kblx-btn kblx-close" id="kblx-btn-close">✕ Fechar</button>
+    </div>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main.css">
+
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/78F/css/main-ovr.css">
+
+<div class="bg-gradient-base"></div>
+  <div id="bg-layer-fixed"></div>
+
+  <div id="drawerOverlay" onclick="toggleDrawer()"></div>
+
+  <aside class="drawer" id="drawerPanel" aria-label="Background Engine">
+    <div class="drawer-header">
+      <h2>⚙️ Background Engine</h2>
+      <button class="drawer-close" onclick="toggleDrawer()" title="Fechar">×</button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="panel-section">
+        <label class="section-label"><span>Background</span><span id="bgStatusText">Nenhum</span></label>
+        <div class="tiny-note">Ajuste a camada fixa do app e sincronize com localStorage.</div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Opacidade</span><span id="val-op">15%</span></label>
+        <input id="bgOpacity" type="range" min="0" max="100" value="15" oninput="updateBgAttr('opacity', this.value)">
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Mix Blend Mode</span><span>CSS</span></label>
+        <select id="bgBlend" onchange="updateBgAttr('blend', this.value)">
+          <option value="normal">Normal</option>
+          <option value="multiply">Multiply (Escurecer)</option>
+          <option value="screen">Screen (Clarear)</option>
+          <option value="overlay" selected>Overlay (Realçar)</option>
+          <option value="soft-light">Soft Light (Suave)</option>
+          <option value="luminosity">Luminosity (Fantasma)</option>
+        </select>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Presets de Estilo</span><span>BG</span></label>
+        <div class="preset-grid">
+          <button class="preset-btn" data-bg-preset="ghost" onclick="applyPreset('ghost')">Fantasma</button>
+          <button class="preset-btn active" data-bg-preset="vivid" onclick="applyPreset('vivid')">Vívido</button>
+          <button class="preset-btn" data-bg-preset="deep" onclick="applyPreset('deep')">Profundo</button>
+        </div>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>Biblioteca Local</span><span id="libCount">0</span></label>
+        <div class="bg-thumbs" id="thumb-list"></div>
+        <label class="btn-upload">
+          + Fazer Upload de Imagem
+          <input type="file" id="file-upload" accept="image/*" hidden onchange="handleUpload(this)">
+        </label>
+      </div>
+
+      <div class="panel-section">
+        <label class="section-label"><span>FX Lab</span><span>Upload / Frame</span></label>
+        <div class="fx-stage">
+          <div class="fx-actions">
+            <button class="btn-mini" onclick="loadCurrentFrameToFX()">Carregar quadro atual</button>
+            <label class="btn-mini" style="justify-content:center;">
+              Upload imagem
+              <input type="file" id="fx-upload" accept="image/*" hidden>
+            </label>
+            <button class="btn-download" onclick="downloadFX()">Download PNG</button>
+          </div>
+
+          <div class="fx-canvas-wrap">
+            <canvas id="fxCanvas" width="1200" height="800"></canvas>
+          </div>
+
+          <div class="preset-grid">
+            <button class="preset-btn active" data-fx-mode="texture" onclick="setFXMode('texture')">Textura</button>
+            <button class="preset-btn" data-fx-mode="liquid" onclick="setFXMode('liquid')">Líquido</button>
+            <button class="preset-btn" data-fx-mode="paint" onclick="setFXMode('paint')">Tinta</button>
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Blur gaussiano</span><span id="fxBlurVal">4</span></label>
+            <input id="fxBlur" type="range" min="0" max="24" value="4">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Intensidade</span><span id="fxIntensityVal">55</span></label>
+            <input id="fxIntensity" type="range" min="0" max="100" value="55">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Liquify</span><span id="fxLiquifyVal">0</span></label>
+            <input id="fxLiquify" type="range" min="0" max="100" value="0">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Grain / textura</span><span id="fxGrainVal">35</span></label>
+            <input id="fxGrain" type="range" min="0" max="100" value="35">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Contraste</span><span id="fxContrastVal">108</span></label>
+            <input id="fxContrast" type="range" min="80" max="140" value="108">
+          </div>
+
+          <div class="panel-section" style="padding:14px;">
+            <label class="section-label"><span>Saturação</span><span id="fxSaturationVal">102</span></label>
+            <input id="fxSaturation" type="range" min="60" max="150" value="102">
+          </div>
+
+          <button class="btn-action" onclick="applyFXToBackground()">Aplicar FX no Background</button>
+          <div class="tiny-note">Se a imagem for muito grande, o motor reduz a área para manter o render leve.</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+     
+
+    
+
+ <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/modules/inline-0.js"></script>
+
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/78F/js/inline-bg.js"></script>
+
+  
+
+  <script>
+    console.log("Sistema operacional SÜMBÜS Pronto.");
+  </script>
+
+<script>
+const ARCHETYPES = ["atlas","nova","vitalis","pulse","kaos","kodux","lumine","aion","kobllux","artemis","serena","genus","solus","rhea","uno","dual","trinity","infodose","horus","bllue", localStorage.getItem("di_userName")];
+</script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x03_expandir_V_D7.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/0x07_selar_B_D3.js"></script>
+
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-mstr.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kob-mestre-878.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kard/js/modules/o0.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/koblluxv30.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kodbrain-66.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/kobllux-fusion.js"></script>     
+
+<script src="https://kodux78k.github.io/oiDual--Y-/M0D/kob-DH0/js/kob-outline-uni.js"></script>
+
+<script src="https://kodux78k.github.io/oiDual--Y-/js/di-icon-btn.js"></script>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- OVERRIDE PANEL · DIV EXTRACTOR -->
+<!-- Cole ANTES do </body> -->
+<!-- ═══════════════════════════════════════════════ -->
+
+<style>
+  #dualExtractorToggle{
+    position:fixed;
+    top:20px;
+    left:20px;
+    z-index:999999;
+    width:58px;
+    height:58px;
+    border:none;
+    border-radius:18px;
+    background:rgba(0,0,0,.75);
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    backdrop-filter:blur(16px);
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+  }
+
+  #dualExtractorPanel{
+    position:fixed;
+    inset:0;
+    z-index:999998;
+    background:rgba(0,0,0,.82);
+    backdrop-filter:blur(20px);
+    opacity:0;
+    pointer-events:none;
+    transition:.35s;
+    display:flex;
+    justify-content:flex-end;
+  }
+
+  #dualExtractorPanel.active{
+    opacity:1;
+    pointer-events:auto;
+  }
+
+  .dual-side{
+    width:min(520px,100%);
+    height:100%;
+    background:#05070a;
+    border-left:1px solid rgba(255,255,255,.08);
+    overflow:auto;
+    display:flex;
+    flex-direction:column;
+  }
+
+  .dual-head{
+    padding:20px;
+    border-bottom:1px solid rgba(255,255,255,.08);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .dual-head h2{
+    color:#fff;
+    font-size:18px;
+    font-family:monospace;
+    letter-spacing:.08em;
+  }
+
+  .dual-close{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:12px;
+    background:rgba(255,255,255,.08);
+    color:#fff;
+    cursor:pointer;
+    font-size:18px;
+  }
+
+  .dual-content{
+    padding:18px;
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+
+  .dual-card{
+    background:rgba(255,255,255,.04);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:18px;
+    overflow:hidden;
+  }
+
+  .dual-card button{
+    width:100%;
+    border:none;
+    background:none;
+    color:#fff;
+    text-align:left;
+    padding:16px;
+    cursor:pointer;
+    font-family:monospace;
+    font-size:12px;
+    letter-spacing:.05em;
+  }
+
+  .dual-card textarea{
+    width:100%;
+    min-height:220px;
+    resize:vertical;
+    background:#000;
+    color:#00ff9d;
+    border:none;
+    padding:16px;
+    font-size:11px;
+    line-height:1.5;
+    font-family:monospace;
+    border-top:1px solid rgba(255,255,255,.08);
+  }
+
+  .dual-actions{
+    display:flex;
+    gap:10px;
+    padding:12px;
+    flex-wrap:wrap;
+  }
+
+  .dual-actions button{
+    flex:1;
+    min-width:120px;
+    border:none;
+    border-radius:12px;
+    padding:12px;
+    cursor:pointer;
+    background:#c5a059;
+    color:#000;
+    font-weight:700;
+  }
+
+  .dual-highlight{
+    outline:3px solid #c5a059!important;
+    outline-offset:-3px;
+  }
+</style>
+
+<button id="dualExtractorToggle">🧩</button>
+
+<div id="dualExtractorPanel">
+  <div class="dual-side">
+
+    <div class="dual-head">
+      <h2>DIV EXTRACTOR</h2>
+      <button class="dual-close">✕</button>
+    </div>
+
+    <div class="dual-content" id="dualExtractorList"></div>
+
+  </div>
+</div>
+
+<script>
+(() => {
+
+  const toggle = document.getElementById('dualExtractorToggle');
+  const panel  = document.getElementById('dualExtractorPanel');
+  const close  = document.querySelector('.dual-close');
+  const list   = document.getElementById('dualExtractorList');
+
+  toggle.onclick = () => {
+    panel.classList.toggle('active');
+    renderExtractor();
+  };
+
+  close.onclick = () => {
+    panel.classList.remove('active');
+  };
+
+  function getSmartSelector(el){
+    if(el.id) return '#' + el.id;
+
+    let cls = [...el.classList].slice(0,3).join('.');
+    return el.tagName.toLowerCase() + (cls ? '.' + cls : '');
+  }
+
+  function extractSections(){
+
+    const selectors = [
+      '.screen',
+      '.media-grid',
+      '.video-wrap',
+      '.feed-card',
+      '.glass-card',
+      'section',
+      '[class*="hero"]',
+      '[class*="grid"]'
+    ];
+
+    const found = [];
+
+    selectors.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        if(found.includes(el)) return;
+        found.push(el);
+      });
+    });
+
+    return found;
+  }
+
+  function copy(txt){
+    navigator.clipboard.writeText(txt);
+
+    const toast = document.createElement('div');
+    toast.innerText = 'COPIADO';
+    toast.style.cssText = `
+      position:fixed;
+      bottom:30px;
+      left:50%;
+      transform:translateX(-50%);
+      background:#000;
+      color:#fff;
+      padding:12px 18px;
+      border-radius:999px;
+      z-index:9999999;
+      font-family:monospace;
+      border:1px solid rgba(255,255,255,.15);
+    `;
+    document.body.appendChild(toast);
+
+    setTimeout(()=>toast.remove(),1500);
+  }
+
+  function renderExtractor(){
+
+    const blocks = extractSections();
+
+    list.innerHTML = '';
+
+    blocks.forEach((el, index) => {
+
+      const card = document.createElement('div');
+      card.className = 'dual-card';
+
+      const selector = getSmartSelector(el);
+
+      const btn = document.createElement('button');
+      btn.innerHTML = `
+        <div style="font-size:13px;color:#c5a059;margin-bottom:6px;">
+          BLOCO ${index + 1}
+        </div>
+
+        <div>${selector}</div>
+      `;
+
+      btn.onclick = () => {
+
+        document.querySelectorAll('.dual-highlight')
+          .forEach(e => e.classList.remove('dual-highlight'));
+
+        el.classList.add('dual-highlight');
+
+        el.scrollIntoView({
+          behavior:'smooth',
+          block:'center'
+        });
+      };
+
+      const textarea = document.createElement('textarea');
+      textarea.value = el.outerHTML.trim();
+
+      const actions = document.createElement('div');
+      actions.className = 'dual-actions';
+
+      const copyBtn = document.createElement('button');
+      copyBtn.innerText = 'Copiar HTML';
+
+      copyBtn.onclick = () => {
+        copy(textarea.value);
+      };
+
+      const replaceBtn = document.createElement('button');
+      replaceBtn.innerText = 'Aplicar Alteração';
+
+      replaceBtn.onclick = () => {
+
+        try{
+
+          const temp = document.createElement('div');
+          temp.innerHTML = textarea.value.trim();
+
+          const newEl = temp.firstElementChild;
+
+          if(!newEl) return;
+
+          el.replaceWith(newEl);
+
+          renderExtractor();
+
+        }catch(err){
+          alert('Erro no HTML');
+        }
+
+      };
+
+      actions.append(copyBtn, replaceBtn);
+
+      card.append(btn, textarea, actions);
+
+      list.appendChild(card);
+
+    });
+
+  }
+
+})();
+</script>
+
+</body></html>
