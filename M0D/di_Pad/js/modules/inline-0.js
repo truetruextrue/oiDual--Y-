@@ -10,7 +10,10 @@
       ],
       [
         { html: `<div class="inner"><div class="wrap stack"><div class="blank-slot">Seção 4 · cole seu HTML aqui</div></div></div>` },
-        { html: `<div class="inner"><div class="wrap stack"><div class="blank-slot"> <body class="ui-safe-vertical">
+        { html: `<div class="winner">
+          <div class="wrap">
+          <div class="blank-slot"> 
+          <body class="ui-safe-vertical">
   <div id="kxtsk-shell">
     <div class="os-topbar">
       <div class="os-brand">
