@@ -19,6 +19,12 @@
 <body>
   <div class="hint">SWIPE • SETAS • TOQUE</div>
 
+
+  <div id="slide-indicator"></div>
+
+
+  <div id="universe-grid"></div>
+
   <div class="grid" id="grid"></div>
   <div class="nav-matrix" id="navMatrix"></div>
 
@@ -39,12 +45,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="500 Receitas para Diabéticos">
   <meta name="application-name" content="500 Receitas para Diabéticos">
+<!-- Open Graph -->
+  <meta property="og:title" content="Feeling Decor · Design Sensorial">
+  <meta property="og:description" content="Universo 3x3 — Frequência • Harmonia • Fluidez">
+  <meta property="og:image" content="https://kodux78k.github.io/oiDual-Vivivi-1/media/portifolio/img5.jpg">
 
+  <!-- Manifest inline via JS (evita arquivo separado) -->
   <link rel="apple-touch-icon" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/icon-192.png">
   <link rel="manifest" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/manifest.json">
 
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/main-2.css">
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/main.css"></head>
   
-<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/main.css"><style>
+<link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/css/main-00.css">
+<style>
         :root {
           --z-base: 0;
           --z-content: 100;
@@ -57,9 +71,25 @@
 <body>
 
 
+
+    
+    
+  <!-- Indicador de slide -->
+
+
+  <!-- UNIVERSO 3×3 -->
+  <div id="universe-grid"></div>
   <div class="grid" id="grid"></div>
   <div class="nav-matrix" id="navMatrix"></div>
 
+<!-- PLAYER UNIVERSAL -->
+  <div id="global-player" class="player-hidden">
+    <div class="flex items-center justify-between px-4 py-3">
+      <span class="font-tech text-xs text-white/50 uppercase tracking-widest">▶ Player</span>
+      <button id="closePlayer" class="text-white/60 hover:text-white bg-white/10 hover:bg-white/20 rounded-full w-7 h-7 text-xs transition flex items-center justify-center">✕</button>
+    </div>
+    <div id="playerFrame" class="w-full aspect-video rounded-b-2xl overflow-hidden"></div>
+  </div>
   
   <script src="https://kodux78k.github.io/oiDual--Y-/M0D/di_Pad/js/modules/inline-0.js"></script>
 
@@ -176,8 +206,8 @@
   <!-- KODUX DEV PANEL IMPLEMENTATION (LOGIC)     -->
   <!-- ========================================== -->
   
-
-
+  <script src="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/js/modules/iFSw-fix.js"></script>
+  <link rel="stylesheet" href="https://kodux78k.github.io/oiDual--Y-/M0D/FSWIN/css/iFSw-fix.css">
 
 
 </body></html>
