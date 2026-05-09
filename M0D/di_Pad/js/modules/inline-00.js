@@ -13,7 +13,7 @@
         { html: `<div class="winner">
           <div class="wrap">
           <div class="blank-slot"> 
-          <body class="ui-safe-vertical">
+
   <div id="kxtsk-shell">
     <div class="os-topbar">
       <div class="os-brand">
